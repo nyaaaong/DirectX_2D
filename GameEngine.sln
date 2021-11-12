@@ -12,6 +12,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\Include\GameEngine.vcxproj", "{03019A87-FF31-4372-B53B-691C000E6B77}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client2D", "Client2D\Include\Client2D.vcxproj", "{6283AD30-B6D0-41DA-9221-90F51888A540}"
+	ProjectSection(ProjectDependencies) = postProject
+		{03019A87-FF31-4372-B53B-691C000E6B77} = {03019A87-FF31-4372-B53B-691C000E6B77}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

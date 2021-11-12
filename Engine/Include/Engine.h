@@ -9,10 +9,18 @@ private:
 	HWND		m_hWnd;
 	Resolution	m_tRS;
 	static bool m_bLoop;
+	float		m_fClearColor[4];
 
 public:
 	bool Init(HINSTANCE hInst, const TCHAR* cName, unsigned int iWidth, unsigned int iHeight, int iIconID, bool bWindowMode = true);
+	bool Init(HINSTANCE hInst, HWND hWnd, unsigned int iWidth, unsigned int iHeight, bool bWindowMode = true);
 	int Run();
+	void Logic();
+
+private:
+	bool Update(float fTime);
+	bool PostUpdate(float fTime);
+	bool Render(float fTime);
 
 private:
 	ATOM Register(const TCHAR* cName, int IconID);

@@ -16,6 +16,12 @@
     <Filter Include="00. Engine">
       <UniqueIdentifier>{ec634f14-860f-43c8-9000-0840ebbbd8d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00. Engine\00. Device">
+      <UniqueIdentifier>{bbc0791f-4898-463c-9b2a-a158a571e5c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. Engine\01. Math">
+      <UniqueIdentifier>{e59fbea0-ad73-4351-9956-608bf1e39fd4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameInfo.h">
@@ -24,10 +30,43 @@
     <ClInclude Include="Engine.h">
       <Filter>00. Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Device.h">
+      <Filter>00. Engine\00. Device</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineMath.h">
+      <Filter>00. Engine\01. Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>00. Engine\01. Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>00. Engine\01. Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>00. Engine\01. Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector4.h">
+      <Filter>00. Engine\01. Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
       <Filter>00. Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Device.cpp">
+      <Filter>00. Engine\00. Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix.cpp">
+      <Filter>00. Engine\01. Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>00. Engine\01. Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3.cpp">
+      <Filter>00. Engine\01. Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector4.cpp">
+      <Filter>00. Engine\01. Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
