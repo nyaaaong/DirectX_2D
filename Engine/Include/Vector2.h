@@ -76,6 +76,7 @@ struct Vector2
 	float Distance(const Vector2& v)	const;
 	void Normalize();
 	float Dot(const Vector2& v)	const;
+	float Angle(const Vector2& v)	const;
 
 	XMVECTOR Convert()	const;
 	void Convert(const XMVECTOR& v);

@@ -331,6 +331,10 @@ float Vector2::Dot(const Vector2& v) const
 	return XMVectorGetX(XMVector2Dot(Convert(), v.Convert()));
 }
 
+float Vector2::Angle(const Vector2& v) const
+{
+	return 0.0f;
+}
 
 XMVECTOR Vector2::Convert()	const
 {
