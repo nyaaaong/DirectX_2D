@@ -175,6 +175,11 @@
     <ClInclude Include="Flag.h" />
     <ClInclude Include="GameInfo.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="Ref.h" />
+    <ClInclude Include="Resource\Mash.h" />
+    <ClInclude Include="Resource\ResourceManager.h" />
+    <ClInclude Include="Resource\SpriteMesh.h" />
+    <ClInclude Include="SharedPtr.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector4.h" />
@@ -183,6 +188,10 @@
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="Ref.cpp" />
+    <ClCompile Include="Resource\Mash.cpp" />
+    <ClCompile Include="Resource\ResourceManager.cpp" />
+    <ClCompile Include="Resource\SpriteMesh.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Vector4.cpp" />

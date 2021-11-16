@@ -22,6 +22,18 @@
     <Filter Include="00. Engine\01. Math">
       <UniqueIdentifier>{e59fbea0-ad73-4351-9956-608bf1e39fd4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00. Engine\02. Ref">
+      <UniqueIdentifier>{c58e5195-90a1-4d39-b7e7-385eb5d2dd12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. Engine\03. SharedPtr">
+      <UniqueIdentifier>{d1cce318-f104-44d4-baa6-ed6d138dc6de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource">
+      <UniqueIdentifier>{75be4871-57be-4458-b408-ab0521b1433d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\00. Mesh">
+      <UniqueIdentifier>{169c72d5-31c9-4895-911e-d67a1c8080b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameInfo.h">
@@ -51,6 +63,21 @@
     <ClInclude Include="Flag.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Ref.h">
+      <Filter>00. Engine\02. Ref</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedPtr.h">
+      <Filter>00. Engine\03. SharedPtr</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\ResourceManager.h">
+      <Filter>01. Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Mash.h">
+      <Filter>01. Resource\00. Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\SpriteMesh.h">
+      <Filter>01. Resource\00. Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -70,6 +97,18 @@
     </ClCompile>
     <ClCompile Include="Vector4.cpp">
       <Filter>00. Engine\01. Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Ref.cpp">
+      <Filter>00. Engine\02. Ref</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\ResourceManager.cpp">
+      <Filter>01. Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Mash.cpp">
+      <Filter>01. Resource\00. Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\SpriteMesh.cpp">
+      <Filter>01. Resource\00. Mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

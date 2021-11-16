@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "Device.h"
+#include "Resource/ResourceManager.h"
 
 DEFINITION_SINGLE(CEngine)
 
@@ -18,6 +19,7 @@ CEngine::CEngine()	:
 
 CEngine::~CEngine()
 {
+	CResourceManager::DestroyInst();
 	CDevice::DestroyInst();
 }
 
@@ -43,6 +45,9 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd, unsigned int iWidth, unsigned int
 	m_tRS.iHeight = iHeight;
 
 	if (!CDevice::GetInst()->Init(hWnd, iWidth, iHeight, bWindowMode))
+		return false;
+
+	if (!CResourceManager::GetInst()->Init())
 		return false;
 
     return true;

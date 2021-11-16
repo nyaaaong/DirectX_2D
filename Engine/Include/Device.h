@@ -14,6 +14,27 @@ private:
 	Resolution	m_tRS;
 
 public:
+	ID3D11Device* GetDevice()	const
+	{
+		return m_pDevice;
+	}
+
+	ID3D11DeviceContext* GetContext()	const
+	{
+		return m_pContext;
+	}
+
+	IDXGISwapChain* GetSwapChain()	const
+	{
+		return m_pSwapChain;
+	}
+
+	const Resolution& GetResolution()	const
+	{
+		return m_tRS;
+	}
+
+public:
 	bool Init(HWND hWnd, unsigned int iWidth, unsigned int iHeight, bool bWindowMode);
 	void ClearRenderTarget(float fClearColor[4]);
 	void ClearDepthStencil(float fDepth, unsigned char fStencil);

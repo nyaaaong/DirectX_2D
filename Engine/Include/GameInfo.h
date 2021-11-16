@@ -50,3 +50,66 @@ struct Resolution
 	unsigned int	iWidth;
 	unsigned int	iHeight;
 };
+
+struct VertexColor
+{
+	Vector3	tPos;
+	Vector4	tColor;
+
+	VertexColor()
+	{
+	}
+
+	VertexColor(const Vector3& _tPos, const Vector4& _tColor)	:
+		tPos(_tPos),
+		tColor(_tColor)
+	{
+	}
+};
+
+struct VertexBuffer
+{
+	ID3D11Buffer* pBuffer;
+	int		iSize;
+	int		iCount;
+
+	VertexBuffer() :
+		pBuffer(nullptr),
+		iSize(0),
+		iCount(0)
+	{
+	}
+
+	~VertexBuffer()
+	{
+		SAFE_RELEASE(pBuffer);
+	}
+};
+
+struct IndexBuffer
+{
+	ID3D11Buffer* pBuffer;
+	int		iSize;
+	int		iCount;
+	DXGI_FORMAT	eFmt;
+
+	IndexBuffer() :
+		pBuffer(nullptr),
+		iSize(0),
+		iCount(0),
+		eFmt(DXGI_FORMAT_UNKNOWN)
+	{
+	}
+
+	~IndexBuffer()
+	{
+		SAFE_RELEASE(pBuffer);
+	}
+};
+
+struct MeshContainer
+{
+	VertexBuffer	tVB;
+	std::vector<IndexBuffer>	vecIB;
+	D3D11_PRIMITIVE_TOPOLOGY	ePrimitive;
+};
