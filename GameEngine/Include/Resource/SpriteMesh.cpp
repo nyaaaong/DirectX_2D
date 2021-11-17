@@ -25,6 +25,9 @@ bool CSpriteMesh::Init()
 		VertexColor(Vector3(0.5f, -0.5f, 0.f), Vector4(1.f, 0.f, 1.f, 1.f))
 	};
 
+	if (!CreateBuffer(Buffer_Type::Vertex, tColor, sizeof(VertexColor), 4, D3D11_USAGE_IMMUTABLE, &tContainer.tVB.pBuffer))
+		return false;
+
 	IndexBuffer	tIndexBuffer;
 
 	tIndexBuffer.iSize = 2;
@@ -37,6 +40,8 @@ bool CSpriteMesh::Init()
 		return false;
 
 	tContainer.vecIB.push_back(tIndexBuffer);
+
+	m_vecContainer.push_back(tContainer);
 
 	return true;
 }

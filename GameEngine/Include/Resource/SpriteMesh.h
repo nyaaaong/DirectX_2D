@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Mash.h"
+#include "Mesh.h"
 
 class CSpriteMesh :
-    public CMash
+    public CMesh
 {
 	friend class CResourceManager;
 

@@ -9,6 +9,14 @@ public:
 	{
 	}
 
+	CSharedPtr(T* pPtr)
+	{
+		m_pPtr = pPtr;
+
+		if (m_pPtr)
+			m_pPtr->AddRef();
+	}
+
 	CSharedPtr(const CSharedPtr<T>& pPtr)
 	{
 		m_pPtr = pPtr.m_pPtr;

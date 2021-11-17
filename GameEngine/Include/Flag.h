@@ -14,3 +14,9 @@ enum class Buffer_Type
 	Vertex,
 	Index
 };
+
+enum class Shader_Type
+{
+	Graphic,
+	Compute
+};

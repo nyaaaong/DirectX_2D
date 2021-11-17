@@ -34,6 +34,21 @@
     <Filter Include="01. Resource\00. Mesh">
       <UniqueIdentifier>{169c72d5-31c9-4895-911e-d67a1c8080b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00. Engine\04. Path">
+      <UniqueIdentifier>{b91fe6cf-720a-4667-9126-e2b258713e44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader">
+      <UniqueIdentifier>{7f15aae4-d4be-40d8-83a2-344038e28bfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\00. HLSL">
+      <UniqueIdentifier>{3e279c32-2aaf-4f0b-bffc-ebce45d3a1a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\01. Shader">
+      <UniqueIdentifier>{02d79097-c52e-49cb-84f5-71abc31ab3a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\01. Shader\00. ColorMesh">
+      <UniqueIdentifier>{a2d2377f-c584-4a85-a8cc-6d6880c9bc20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameInfo.h">
@@ -72,11 +87,26 @@
     <ClInclude Include="Resource\ResourceManager.h">
       <Filter>01. Resource</Filter>
     </ClInclude>
-    <ClInclude Include="Resource\Mash.h">
+    <ClInclude Include="Resource\Mesh.h">
       <Filter>01. Resource\00. Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Resource\SpriteMesh.h">
       <Filter>01. Resource\00. Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="PathManager.h">
+      <Filter>00. Engine\04. Path</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\Shader.h">
+      <Filter>01. Resource\01. Shader\01. Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\GraphicShader.h">
+      <Filter>01. Resource\01. Shader\01. Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\ComputeShader.h">
+      <Filter>01. Resource\01. Shader\01. Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\ColorMeshShader.h">
+      <Filter>01. Resource\01. Shader\01. Shader\00. ColorMesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -104,14 +134,37 @@
     <ClCompile Include="Resource\ResourceManager.cpp">
       <Filter>01. Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Resource\Mash.cpp">
+    <ClCompile Include="Resource\Mesh.cpp">
       <Filter>01. Resource\00. Mesh</Filter>
     </ClCompile>
     <ClCompile Include="Resource\SpriteMesh.cpp">
       <Filter>01. Resource\00. Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="PathManager.cpp">
+      <Filter>00. Engine\04. Path</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\Shader.cpp">
+      <Filter>01. Resource\01. Shader\01. Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\GraphicShader.cpp">
+      <Filter>01. Resource\01. Shader\01. Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ComputeShader.cpp">
+      <Filter>01. Resource\01. Shader\01. Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ColorMeshShader.cpp">
+      <Filter>01. Resource\01. Shader\01. Shader\00. ColorMesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Copy.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\Shader\ColorMesh.fx">
+      <Filter>01. Resource\01. Shader\00. HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\ShaderInfo.fx">
+      <Filter>01. Resource\01. Shader\00. HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
