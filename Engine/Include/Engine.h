@@ -10,6 +10,7 @@ private:
 	Resolution	m_tRS;
 	static bool m_bLoop;
 	float		m_fClearColor[4];
+	class CTimer* m_pTimer;
 
 public:
 	bool Init(HINSTANCE hInst, const TCHAR* cName, unsigned int iWidth, unsigned int iHeight, int iIconID, bool bWindowMode = true);

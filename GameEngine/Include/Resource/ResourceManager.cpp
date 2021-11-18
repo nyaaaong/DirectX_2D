@@ -1,38 +1,41 @@
 
 #include "ResourceManager.h"
-#include "SpriteMesh.h"
 
 DEFINITION_SINGLE(CResourceManager)
 
-CResourceManager::CResourceManager()
+CResourceManager::CResourceManager()	:
+	m_pMeshManager(nullptr),
+	m_pShaderManager(nullptr)
 {
 }
 
 CResourceManager::~CResourceManager()
 {
+	SAFE_DELETE(m_pShaderManager);
+	SAFE_DELETE(m_pMeshManager);
 }
 
 bool CResourceManager::Init()
 {
-	CMesh* pSpriteMesh = new CSpriteMesh;
+	m_pMeshManager = new CMeshManager;
 
-	if (!pSpriteMesh->Init())
-	{
-		SAFE_RELEASE(pSpriteMesh);
+	if (!m_pMeshManager->Init())
 		return false;
-	}
 
-	m_mapMesh.insert(std::make_pair("SpriteMesh", pSpriteMesh));
+	m_pShaderManager = new CShaderManager;
+
+	if (!m_pShaderManager->Init())
+		return false;
 
 	return true;
 }
 
 CMesh* CResourceManager::FindMesh(const std::string& strName)
 {
-	auto	iter = m_mapMesh.find(strName);
+	return m_pMeshManager->FindMash(strName);
+}
 
-	if (iter == m_mapMesh.end())
-		return nullptr;
-
-    return iter->second;
+CShader* CResourceManager::FindShader(const std::string& strName)
+{
+	return m_pShaderManager->FindShader(strName);
 }

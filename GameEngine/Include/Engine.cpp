@@ -1,5 +1,8 @@
 #include "Engine.h"
 #include "Device.h"
+#include "Timer.h"
+#include "PathManager.h"
+#include "Scene/SceneManager.h"
 #include "Resource/ResourceManager.h"
 
 DEFINITION_SINGLE(CEngine)
@@ -10,7 +13,8 @@ CEngine::CEngine()	:
 	m_hInst(0),
 	m_hWnd(0),
 	m_tRS{},
-	m_fClearColor{}
+	m_fClearColor{},
+	m_pTimer(nullptr)
 {
 	m_fClearColor[0] = 0.64f;
 	m_fClearColor[1] = 0.8f;
@@ -19,8 +23,11 @@ CEngine::CEngine()	:
 
 CEngine::~CEngine()
 {
+	CSceneManager::DestroyInst();
+	CPathManager::DestroyInst();
 	CResourceManager::DestroyInst();
 	CDevice::DestroyInst();
+	SAFE_DELETE(m_pTimer);
 }
 
 bool CEngine::Init(HINSTANCE hInst, const TCHAR* cName, unsigned int iWidth, unsigned int iHeight, int iIconID, bool bWindowMode)
@@ -44,10 +51,18 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd, unsigned int iWidth, unsigned int
 	m_tRS.iWidth = iWidth;
 	m_tRS.iHeight = iHeight;
 
+	m_pTimer = new CTimer;
+
 	if (!CDevice::GetInst()->Init(hWnd, iWidth, iHeight, bWindowMode))
 		return false;
 
+	if (!CPathManager::GetInst()->Init())
+		return false;
+
 	if (!CResourceManager::GetInst()->Init())
+		return false;
+
+	if (!CSceneManager::GetInst()->Init())
 		return false;
 
     return true;
@@ -76,19 +91,33 @@ int CEngine::Run()
 
 void CEngine::Logic()
 {
-	Update(0.f);
-	PostUpdate(0.f);
-	Render(0.f);
+	m_pTimer->Update();
+
+	float fTime = m_pTimer->GetDeltaTime();
+
+	if (Update(fTime))
+		return;
+
+	if (PostUpdate(fTime))
+		return;
+
+	Render(fTime);
 }
 
 bool CEngine::Update(float fTime)
 {
-    return true;
+	if (CSceneManager::GetInst()->Update(fTime))
+		return true;
+
+    return false;
 }
 
 bool CEngine::PostUpdate(float fTime)
 {
-    return true;
+	if (CSceneManager::GetInst()->PostUpdate(fTime))
+		return true;
+
+    return false;
 }
 
 bool CEngine::Render(float fTime)

@@ -5,6 +5,8 @@
 class CGraphicShader :
     public CShader
 {
+	friend class CShaderManager;
+
 protected:
 	CGraphicShader();
 	virtual ~CGraphicShader() = 0;
@@ -12,10 +14,10 @@ protected:
 private:
 	ID3D11InputLayout* m_pInputLayout;
 	ID3D11VertexShader* m_pVS;
-	ID3D11VertexShader* m_pPS;
-	ID3D11VertexShader* m_pHS;
-	ID3D11VertexShader* m_pDS;
-	ID3D11VertexShader* m_pGS;
+	ID3D11PixelShader* m_pPS;
+	ID3D11HullShader* m_pHS;
+	ID3D11DomainShader* m_pDS;
+	ID3D11GeometryShader* m_pGS;
 	ID3DBlob* m_pVSBlob;
 	ID3DBlob* m_pPSBlob;
 	ID3DBlob* m_pHSBlob;

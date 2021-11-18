@@ -56,7 +56,7 @@ bool CPathManager::Init()
 
 bool CPathManager::AddPath(const std::string& strName, const TCHAR* cPath, const std::string& strBaseName)
 {
-	if (!FindPath(strName))
+	if (FindPath(strName))
 		return false;
 
 	const PathInfo* pBaseInfo = FindPath(strBaseName);

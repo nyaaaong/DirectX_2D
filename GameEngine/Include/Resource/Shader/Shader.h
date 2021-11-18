@@ -5,6 +5,8 @@
 class CShader :
 	public CRef
 {
+	friend class CShaderManager;
+
 protected:
 	CShader();
 	virtual ~CShader() = 0;
