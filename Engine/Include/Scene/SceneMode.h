@@ -11,6 +11,9 @@ protected:
 	CSceneMode();
 	virtual ~CSceneMode();
 
+private:
+	class CScene* m_pScene;
+
 public:
 	virtual bool Init();
 	virtual void Update(float fTime);

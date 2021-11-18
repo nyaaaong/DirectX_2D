@@ -13,6 +13,7 @@ protected:
 	int		m_iRefCount;
 	bool	m_bEnable;
 	bool	m_bActive;
+	size_t	m_iTypeID;
 
 public:
 	void Enable()
@@ -77,6 +78,18 @@ public:
 	const std::string& GetName()	const
 	{
 		return m_strName;
+	}
+
+	template <typename T>
+	void SetTypeID()
+	{
+		m_iTypeID = typeid(T).hash_code();
+	}
+
+	template <typename T>
+	bool CheckType()
+	{
+		return m_iTypeID == typeid(T).hash_code();
 	}
 };
 

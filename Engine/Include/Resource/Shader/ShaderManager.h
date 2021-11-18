@@ -14,6 +14,9 @@ private:
 	std::unordered_map<std::string, CSharedPtr<class CShader>>	m_mapShader;
 
 public:
+	void ReleaseShader(const std::string& strName);
+
+public:
 	class CShader* FindShader(const std::string& strName);
 
 public:

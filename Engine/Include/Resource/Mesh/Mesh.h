@@ -5,7 +5,7 @@
 class CMesh :
     public CRef
 {
-	friend class CResourceManager;
+	friend class CMeshManager;
 
 protected:
 	CMesh();

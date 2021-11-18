@@ -20,3 +20,9 @@ enum class Shader_Type
 	Graphic,
 	Compute
 };
+
+enum class Component_Type
+{
+	SceneComponent,
+	ObjectComponent
+};

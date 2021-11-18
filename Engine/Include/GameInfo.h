@@ -23,6 +23,8 @@
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
+#define ASSERT(msg)	assert(!TEXT(msg))
+
 #define	ROOT_PATH	"Root"
 #define SHADER_PATH	"Shader"
 

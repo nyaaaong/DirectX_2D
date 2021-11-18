@@ -10,6 +10,17 @@ CMeshManager::~CMeshManager()
 {
 }
 
+void CMeshManager::ReleaseMesh(const std::string& strName)
+{
+	auto	iter = m_mapMesh.find(strName);
+
+	if (iter != m_mapMesh.end())
+	{
+		if (iter->second->GetRefCount() == 1)
+			m_mapMesh.erase(iter);
+	}
+}
+
 CMesh* CMeshManager::FindMash(const std::string& strName)
 {
 	auto	iter = m_mapMesh.find(strName);

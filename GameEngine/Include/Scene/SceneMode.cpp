@@ -1,8 +1,10 @@
 
 #include "SceneMode.h"
 
-CSceneMode::CSceneMode()
+CSceneMode::CSceneMode()	:
+	m_pScene(nullptr)
 {
+	SetTypeID<CSceneMode>();
 }
 
 CSceneMode::~CSceneMode()

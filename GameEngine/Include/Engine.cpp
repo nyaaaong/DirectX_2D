@@ -54,16 +54,16 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd, unsigned int iWidth, unsigned int
 	m_pTimer = new CTimer;
 
 	if (!CDevice::GetInst()->Init(hWnd, iWidth, iHeight, bWindowMode))
-		return false;
+		ASSERT("if (!CDevice::GetInst()->Init(hWnd, iWidth, iHeight, bWindowMode))");
 
 	if (!CPathManager::GetInst()->Init())
-		return false;
+		ASSERT("if (!CPathManager::GetInst()->Init())");
 
 	if (!CResourceManager::GetInst()->Init())
-		return false;
+		ASSERT("if (!CResourceManager::GetInst()->Init())");
 
 	if (!CSceneManager::GetInst()->Init())
-		return false;
+		ASSERT("if (!CSceneManager::GetInst()->Init())");
 
     return true;
 }

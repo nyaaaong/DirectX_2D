@@ -3,6 +3,7 @@
 
 CColorMeshShader::CColorMeshShader()
 {
+	SetTypeID<CColorMeshShader>();
 }
 
 CColorMeshShader::~CColorMeshShader()

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SceneMode.h"
+#include "SceneResource.h"
 #include "../GameObject/GameObject.h"
 
 class CScene
@@ -13,7 +14,14 @@ private:
 
 private:
 	CSharedPtr<CSceneMode>	m_pMode;
+	CSceneResource* m_pResource;
 	std::list<CSharedPtr<CGameObject>>	m_ObjList;
+
+public:
+	CSceneResource* GetResource()	const
+	{
+		return m_pResource;
+	}
 
 public:
 	void Update(float fTime);
