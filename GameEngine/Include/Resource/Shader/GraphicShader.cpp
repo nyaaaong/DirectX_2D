@@ -1,260 +1,280 @@
 
 #include "GraphicShader.h"
-#include "../../PathManager.h"
 #include "../../Device.h"
+#include "../../PathManager.h"
 
 CGraphicShader::CGraphicShader()	:
-	m_pInputLayout(nullptr),
-	m_pVS(nullptr),
-	m_pPS(nullptr),
-	m_pHS(nullptr),
-	m_pDS(nullptr),
-	m_pGS(nullptr),
-	m_pVSBlob(nullptr),
-	m_pPSBlob(nullptr),
-	m_pHSBlob(nullptr),
-	m_pDSBlob(nullptr),
-	m_pGSBlob(nullptr),
-	m_iInputSize(0)
+	m_InputLayout(nullptr),
+	m_InputSize(0),
+    m_VS(nullptr),
+    m_PS(nullptr),
+    m_HS(nullptr),
+    m_DS(nullptr),
+    m_GS(nullptr),
+    m_VSBlob(nullptr),
+    m_PSBlob(nullptr),
+    m_HSBlob(nullptr),
+    m_DSBlob(nullptr),
+    m_GSBlob(nullptr)
 {
-	m_eType = Shader_Type::Graphic;
+	m_Type = Shader_Type::Graphic;
 }
 
 CGraphicShader::~CGraphicShader()
 {
-	SAFE_RELEASE(m_pInputLayout);
+	SAFE_RELEASE(m_InputLayout);
 
-	SAFE_RELEASE(m_pVS);
-	SAFE_RELEASE(m_pPS);
-	SAFE_RELEASE(m_pHS);
-	SAFE_RELEASE(m_pDS);
-	SAFE_RELEASE(m_pGS);
+    SAFE_RELEASE(m_VS);
+    SAFE_RELEASE(m_PS);
+    SAFE_RELEASE(m_HS);
+    SAFE_RELEASE(m_DS);
+    SAFE_RELEASE(m_GS);
 
-	SAFE_RELEASE(m_pVSBlob);
-	SAFE_RELEASE(m_pPSBlob);
-	SAFE_RELEASE(m_pHSBlob);
-	SAFE_RELEASE(m_pDSBlob);
-	SAFE_RELEASE(m_pGSBlob);
+    SAFE_RELEASE(m_VSBlob);
+    SAFE_RELEASE(m_PSBlob);
+    SAFE_RELEASE(m_HSBlob);
+    SAFE_RELEASE(m_DSBlob);
+    SAFE_RELEASE(m_GSBlob);
 }
 
-void CGraphicShader::AddInputDesc(const char* cName, unsigned int iIndex, DXGI_FORMAT eFmt, unsigned int iSlot, unsigned int iSize, D3D11_INPUT_CLASSIFICATION eSlotClass, unsigned int iInstanceDataStep)
+void CGraphicShader::AddInputDesc(const char* Name, unsigned int Index,
+    DXGI_FORMAT Fmt, unsigned int Slot, unsigned int Size,
+    D3D11_INPUT_CLASSIFICATION SlotClass, unsigned int InstanceDataStep)
 {
-	D3D11_INPUT_ELEMENT_DESC    tDesc = {};
+    D3D11_INPUT_ELEMENT_DESC    Desc = {};
 
-	tDesc.SemanticName = cName;
-	tDesc.SemanticIndex = iIndex;
-	tDesc.Format = eFmt;
-	tDesc.InputSlot = iSlot;
-	tDesc.InputSlotClass = eSlotClass;
-	tDesc.InstanceDataStepRate = iInstanceDataStep;
+    Desc.SemanticName = Name;
+    Desc.SemanticIndex = Index;
+    Desc.Format = Fmt;
+    Desc.InputSlot = Slot;
+    Desc.InputSlotClass = SlotClass;
+    Desc.InstanceDataStepRate = InstanceDataStep;
 
-	tDesc.AlignedByteOffset = m_iInputSize;
+    Desc.AlignedByteOffset = m_InputSize;
 
-	m_iInputSize += iSize;
+    m_InputSize += Size;
 
-	m_vecInputDesc.push_back(tDesc);
+    m_vecInputDesc.push_back(Desc);
 }
 
 bool CGraphicShader::CreateInputLayout()
 {
-	if (FAILED(CDevice::GetInst()->GetDevice()->CreateInputLayout(&m_vecInputDesc[0], (UINT)m_vecInputDesc.size(), m_pVSBlob->GetBufferPointer(), m_pVSBlob->GetBufferSize(), &m_pInputLayout)))
-		return false;
+    if (FAILED(CDevice::GetInst()->GetDevice()->CreateInputLayout(&m_vecInputDesc[0],
+        (UINT)m_vecInputDesc.size(), m_VSBlob->GetBufferPointer(), m_VSBlob->GetBufferSize(),
+        &m_InputLayout)))
+        return false;
 
-	return true;
+    return true;
 }
 
 void CGraphicShader::SetShader()
 {
-	CDevice::GetInst()->GetContext()->VSSetShader(m_pVS, nullptr, 0);
-	CDevice::GetInst()->GetContext()->PSSetShader(m_pPS, nullptr, 0);
-	CDevice::GetInst()->GetContext()->HSSetShader(m_pHS, nullptr, 0);
-	CDevice::GetInst()->GetContext()->DSSetShader(m_pDS, nullptr, 0);
-	CDevice::GetInst()->GetContext()->GSSetShader(m_pGS, nullptr, 0);
+    CDevice::GetInst()->GetContext()->VSSetShader(m_VS, nullptr, 0);
+    CDevice::GetInst()->GetContext()->PSSetShader(m_PS, nullptr, 0);
+    CDevice::GetInst()->GetContext()->HSSetShader(m_HS, nullptr, 0);
+    CDevice::GetInst()->GetContext()->DSSetShader(m_DS, nullptr, 0);
+    CDevice::GetInst()->GetContext()->GSSetShader(m_GS, nullptr, 0);
 
-	CDevice::GetInst()->GetContext()->IASetInputLayout(m_pInputLayout);
+    CDevice::GetInst()->GetContext()->IASetInputLayout(m_InputLayout);
 }
 
-bool CGraphicShader::LoadVertexShader(const char* cEntryName, const TCHAR* cFileName, const std::string& strPathName)
+bool CGraphicShader::LoadVertexShader(const char* EntryName, 
+    const TCHAR* FileName, const std::string& PathName)
 {
-	SAFE_RELEASE(m_pVS);
-	SAFE_RELEASE(m_pVSBlob);
+    SAFE_RELEASE(m_VS);
+    SAFE_RELEASE(m_VSBlob);
 
-	unsigned int iFlag = 0;
+    unsigned int Flag = 0;
 
 #ifdef _DEBUG
-	iFlag = D3DCOMPILE_DEBUG;
+    Flag = D3DCOMPILE_DEBUG;
 #endif // _DEBUG
 
-	TCHAR   cFullPath[MAX_PATH] = {};
+    TCHAR   FullPath[MAX_PATH] = {};
 
-	const PathInfo* pInfo = CPathManager::GetInst()->FindPath(strPathName);
+    const PathInfo* Info = CPathManager::GetInst()->FindPath(PathName);
 
-	if (pInfo)
-		lstrcpy(cFullPath, pInfo->cPath);
+    if (Info)
+        lstrcpy(FullPath, Info->Path);
 
-	lstrcat(cFullPath, cFileName);
+    lstrcat(FullPath, FileName);
 
-	ID3DBlob* pError = nullptr;
+    ID3DBlob* Error = nullptr;
 
-	if (FAILED(D3DCompileFromFile(cFullPath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, cEntryName, "vs_5_0", iFlag, 0, &m_pVSBlob, &pError)))
-	{
-		OutputDebugStringA((char*)pError->GetBufferPointer());
-		OutputDebugStringA("\n");
+    if (FAILED(D3DCompileFromFile(FullPath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
+        EntryName, "vs_5_0", Flag, 0, &m_VSBlob, &Error)))
+    {
+        OutputDebugStringA((char*)Error->GetBufferPointer());
+        OutputDebugStringA("\n");
 
-		return false;
-	}
+        return false;
+    }
 
-	// 컴파일된 코드를 이용해서 Shader를 만든다.
-	if (FAILED(CDevice::GetInst()->GetDevice()->CreateVertexShader(m_pVSBlob->GetBufferPointer(), m_pVSBlob->GetBufferSize(), nullptr, &m_pVS)))
-		return false;
+    // 컴파일된 코드를 이용해서 Shader를 만든다.
+    if (FAILED(CDevice::GetInst()->GetDevice()->CreateVertexShader(m_VSBlob->GetBufferPointer(),
+        m_VSBlob->GetBufferSize(), nullptr, &m_VS)))
+        return false;
 
-	return true;
+
+    return true;
 }
 
-bool CGraphicShader::LoadPixelShader(const char* cEntryName, const TCHAR* cFileName, const std::string& strPathName)
+bool CGraphicShader::LoadPixelShader(const char* EntryName, const TCHAR* FileName, const std::string& PathName)
 {
-	SAFE_RELEASE(m_pPS);
-	SAFE_RELEASE(m_pPSBlob);
+    SAFE_RELEASE(m_PS);
+    SAFE_RELEASE(m_PSBlob);
 
-	unsigned int iFlag = 0;
+    unsigned int Flag = 0;
 
 #ifdef _DEBUG
-	iFlag = D3DCOMPILE_DEBUG;
+    Flag = D3DCOMPILE_DEBUG;
 #endif // _DEBUG
 
-	TCHAR   cFullPath[MAX_PATH] = {};
+    TCHAR   FullPath[MAX_PATH] = {};
 
-	const PathInfo* pInfo = CPathManager::GetInst()->FindPath(strPathName);
+    const PathInfo* Info = CPathManager::GetInst()->FindPath(PathName);
 
-	if (pInfo)
-		lstrcpy(cFullPath, pInfo->cPath);
+    if (Info)
+        lstrcpy(FullPath, Info->Path);
 
-	lstrcat(cFullPath, cFileName);
+    lstrcat(FullPath, FileName);
 
-	ID3DBlob* pError = nullptr;
+    ID3DBlob* Error = nullptr;
 
-	if (FAILED(D3DCompileFromFile(cFullPath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, cEntryName, "ps_5_0", iFlag, 0, &m_pPSBlob, &pError)))
-	{
-		OutputDebugStringA((char*)pError->GetBufferPointer());
-		OutputDebugStringA("\n");
+    if (FAILED(D3DCompileFromFile(FullPath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
+        EntryName, "ps_5_0", Flag, 0, &m_PSBlob, &Error)))
+    {
+        OutputDebugStringA((char*)Error->GetBufferPointer());
+        OutputDebugStringA("\n");
 
-		return false;
-	}
+        return false;
+    }
 
-	// 컴파일된 코드를 이용해서 Shader를 만든다.
-	if (FAILED(CDevice::GetInst()->GetDevice()->CreatePixelShader(m_pPSBlob->GetBufferPointer(), m_pPSBlob->GetBufferSize(), nullptr, &m_pPS)))
-		return false;
+    // 컴파일된 코드를 이용해서 Shader를 만든다.
+    if (FAILED(CDevice::GetInst()->GetDevice()->CreatePixelShader(m_PSBlob->GetBufferPointer(),
+        m_PSBlob->GetBufferSize(), nullptr, &m_PS)))
+        return false;
 
-	return true;
+
+    return true;
 }
 
-bool CGraphicShader::LoadHullShader(const char* cEntryName, const TCHAR* cFileName, const std::string& strPathName)
+bool CGraphicShader::LoadHullShader(const char* EntryName, const TCHAR* FileName, const std::string& PathName)
 {
-	SAFE_RELEASE(m_pHS);
-	SAFE_RELEASE(m_pHSBlob);
+    SAFE_RELEASE(m_HS);
+    SAFE_RELEASE(m_HSBlob);
 
-	unsigned int iFlag = 0;
+    unsigned int Flag = 0;
 
 #ifdef _DEBUG
-	iFlag = D3DCOMPILE_DEBUG;
+    Flag = D3DCOMPILE_DEBUG;
 #endif // _DEBUG
 
-	TCHAR   cFullPath[MAX_PATH] = {};
+    TCHAR   FullPath[MAX_PATH] = {};
 
-	const PathInfo* pInfo = CPathManager::GetInst()->FindPath(strPathName);
+    const PathInfo* Info = CPathManager::GetInst()->FindPath(PathName);
 
-	if (pInfo)
-		lstrcpy(cFullPath, pInfo->cPath);
+    if (Info)
+        lstrcpy(FullPath, Info->Path);
 
-	lstrcat(cFullPath, cFileName);
+    lstrcat(FullPath, FileName);
 
-	ID3DBlob* pError = nullptr;
+    ID3DBlob* Error = nullptr;
 
-	if (FAILED(D3DCompileFromFile(cFullPath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, cEntryName, "hs_5_0", iFlag, 0, &m_pHSBlob, &pError)))
-	{
-		OutputDebugStringA((char*)pError->GetBufferPointer());
-		OutputDebugStringA("\n");
+    if (FAILED(D3DCompileFromFile(FullPath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
+        EntryName, "hs_5_0", Flag, 0, &m_HSBlob, &Error)))
+    {
+        OutputDebugStringA((char*)Error->GetBufferPointer());
+        OutputDebugStringA("\n");
 
-		return false;
-	}
+        return false;
+    }
 
-	// 컴파일된 코드를 이용해서 Shader를 만든다.
-	if (FAILED(CDevice::GetInst()->GetDevice()->CreateHullShader(m_pHSBlob->GetBufferPointer(), m_pHSBlob->GetBufferSize(), nullptr, &m_pHS)))
-		return false;
+    // 컴파일된 코드를 이용해서 Shader를 만든다.
+    if (FAILED(CDevice::GetInst()->GetDevice()->CreateHullShader(m_HSBlob->GetBufferPointer(),
+        m_HSBlob->GetBufferSize(), nullptr, &m_HS)))
+        return false;
 
-	return true;
+
+    return true;
 }
 
-bool CGraphicShader::LoadDomainShader(const char* cEntryName, const TCHAR* cFileName, const std::string& strPathName)
+bool CGraphicShader::LoadDomainShader(const char* EntryName, const TCHAR* FileName, const std::string& PathName)
 {
-	SAFE_RELEASE(m_pDS);
-	SAFE_RELEASE(m_pDSBlob);
+    SAFE_RELEASE(m_DS);
+    SAFE_RELEASE(m_DSBlob);
 
-	unsigned int iFlag = 0;
+    unsigned int Flag = 0;
 
 #ifdef _DEBUG
-	iFlag = D3DCOMPILE_DEBUG;
+    Flag = D3DCOMPILE_DEBUG;
 #endif // _DEBUG
 
-	TCHAR   cFullPath[MAX_PATH] = {};
+    TCHAR   FullPath[MAX_PATH] = {};
 
-	const PathInfo* pInfo = CPathManager::GetInst()->FindPath(strPathName);
+    const PathInfo* Info = CPathManager::GetInst()->FindPath(PathName);
 
-	if (pInfo)
-		lstrcpy(cFullPath, pInfo->cPath);
+    if (Info)
+        lstrcpy(FullPath, Info->Path);
 
-	lstrcat(cFullPath, cFileName);
+    lstrcat(FullPath, FileName);
 
-	ID3DBlob* pError = nullptr;
+    ID3DBlob* Error = nullptr;
 
-	if (FAILED(D3DCompileFromFile(cFullPath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, cEntryName, "ds_5_0", iFlag, 0, &m_pDSBlob, &pError)))
-	{
-		OutputDebugStringA((char*)pError->GetBufferPointer());
-		OutputDebugStringA("\n");
+    if (FAILED(D3DCompileFromFile(FullPath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
+        EntryName, "ds_5_0", Flag, 0, &m_DSBlob, &Error)))
+    {
+        OutputDebugStringA((char*)Error->GetBufferPointer());
+        OutputDebugStringA("\n");
 
-		return false;
-	}
+        return false;
+    }
 
-	// 컴파일된 코드를 이용해서 Shader를 만든다.
-	if (FAILED(CDevice::GetInst()->GetDevice()->CreateDomainShader(m_pDSBlob->GetBufferPointer(), m_pDSBlob->GetBufferSize(), nullptr, &m_pDS)))
-		return false;
+    // 컴파일된 코드를 이용해서 Shader를 만든다.
+    if (FAILED(CDevice::GetInst()->GetDevice()->CreateDomainShader(m_DSBlob->GetBufferPointer(),
+        m_DSBlob->GetBufferSize(), nullptr, &m_DS)))
+        return false;
 
-	return true;
+
+    return true;
 }
 
-bool CGraphicShader::LoadGeometryShader(const char* cEntryName, const TCHAR* cFileName, const std::string& strPathName)
+bool CGraphicShader::LoadGeometryShader(const char* EntryName, const TCHAR* FileName, const std::string& PathName)
 {
-	SAFE_RELEASE(m_pGS);
-	SAFE_RELEASE(m_pGSBlob);
+    SAFE_RELEASE(m_GS);
+    SAFE_RELEASE(m_GSBlob);
 
-	unsigned int iFlag = 0;
+    unsigned int Flag = 0;
 
 #ifdef _DEBUG
-	iFlag = D3DCOMPILE_DEBUG;
+    Flag = D3DCOMPILE_DEBUG;
 #endif // _DEBUG
 
-	TCHAR   cFullPath[MAX_PATH] = {};
+    TCHAR   FullPath[MAX_PATH] = {};
 
-	const PathInfo* pInfo = CPathManager::GetInst()->FindPath(strPathName);
+    const PathInfo* Info = CPathManager::GetInst()->FindPath(PathName);
 
-	if (pInfo)
-		lstrcpy(cFullPath, pInfo->cPath);
+    if (Info)
+        lstrcpy(FullPath, Info->Path);
 
-	lstrcat(cFullPath, cFileName);
+    lstrcat(FullPath, FileName);
 
-	ID3DBlob* pError = nullptr;
+    ID3DBlob* Error = nullptr;
 
-	if (FAILED(D3DCompileFromFile(cFullPath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, cEntryName, "gs_5_0", iFlag, 0, &m_pGSBlob, &pError)))
-	{
-		OutputDebugStringA((char*)pError->GetBufferPointer());
-		OutputDebugStringA("\n");
+    if (FAILED(D3DCompileFromFile(FullPath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
+        EntryName, "gs_5_0", Flag, 0, &m_GSBlob, &Error)))
+    {
+        OutputDebugStringA((char*)Error->GetBufferPointer());
+        OutputDebugStringA("\n");
 
-		return false;
-	}
+        return false;
+    }
 
-	// 컴파일된 코드를 이용해서 Shader를 만든다.
-	if (FAILED(CDevice::GetInst()->GetDevice()->CreateGeometryShader(m_pGSBlob->GetBufferPointer(), m_pGSBlob->GetBufferSize(), nullptr, &m_pGS)))
-		return false;
+    // 컴파일된 코드를 이용해서 Shader를 만든다.
+    if (FAILED(CDevice::GetInst()->GetDevice()->CreateGeometryShader(m_GSBlob->GetBufferPointer(),
+        m_GSBlob->GetBufferSize(), nullptr, &m_GS)))
+        return false;
 
-	return true;
+
+    return true;
 }

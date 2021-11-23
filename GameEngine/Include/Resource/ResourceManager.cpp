@@ -4,65 +4,76 @@
 DEFINITION_SINGLE(CResourceManager)
 
 CResourceManager::CResourceManager()	:
-	m_pMeshManager(nullptr),
-	m_pShaderManager(nullptr),
-	m_pMaterialManager(nullptr)
+	m_MeshManager(nullptr),
+	m_ShaderManager(nullptr),
+	m_MaterialManager(nullptr)
 {
 }
 
 CResourceManager::~CResourceManager()
 {
-	SAFE_DELETE(m_pMaterialManager);
-	SAFE_DELETE(m_pShaderManager);
-	SAFE_DELETE(m_pMeshManager);
-}
-
-void CResourceManager::ReleaseMesh(const std::string& strName)
-{
-	m_pMeshManager->ReleaseMesh(strName);
-}
-
-void CResourceManager::ReleaseShader(const std::string& strName)
-{
-	m_pShaderManager->ReleaseShader(strName);
-}
-
-void CResourceManager::ReleaseMaterial(const std::string& strName)
-{
-	m_pMaterialManager->ReleaseMaterial(strName);
-}
-
-CMesh* CResourceManager::FindMesh(const std::string& strName)
-{
-	return m_pMeshManager->FindMash(strName);
-}
-
-CShader* CResourceManager::FindShader(const std::string& strName)
-{
-	return m_pShaderManager->FindShader(strName);
-}
-
-CMaterial* CResourceManager::FindMaterial(const std::string& strName)
-{
-	return m_pMaterialManager->FindMaterial(strName);
+	SAFE_DELETE(m_MaterialManager);
+	SAFE_DELETE(m_ShaderManager);
+	SAFE_DELETE(m_MeshManager);
 }
 
 bool CResourceManager::Init()
 {
-	m_pMeshManager = new CMeshManager;
+	m_MeshManager = new CMeshManager;
 
-	if (!m_pMeshManager->Init())
+	if (!m_MeshManager->Init())
 		return false;
 
-	m_pShaderManager = new CShaderManager;
+	m_ShaderManager = new CShaderManager;
 
-	if (!m_pShaderManager->Init())
+	if (!m_ShaderManager->Init())
 		return false;
 
-	m_pMaterialManager = new CMaterialManager;
+	m_MaterialManager = new CMaterialManager;
 
-	if (!m_pMaterialManager->Init())
+	if (!m_MaterialManager->Init())
 		return false;
 
 	return true;
+}
+
+CMesh* CResourceManager::FindMesh(const std::string& Name)
+{
+	return m_MeshManager->FindMesh(Name);
+}
+
+void CResourceManager::ReleaseMesh(const std::string& Name)
+{
+	m_MeshManager->ReleaseMesh(Name);
+}
+
+CShader* CResourceManager::FindShader(const std::string& Name)
+{
+	return m_ShaderManager->FindShader(Name);
+}
+
+void CResourceManager::ReleaseShader(const std::string& Name)
+{
+	m_ShaderManager->ReleaseShader(Name);
+}
+
+bool CResourceManager::CreateConstantBuffer(const std::string& Name, int Size, int Register,
+	int ConstantBufferShaderType)
+{
+	return m_ShaderManager->CreateConstantBuffer(Name, Size, Register, ConstantBufferShaderType);
+}
+
+CConstantBuffer* CResourceManager::FindConstantBuffer(const std::string& Name)
+{
+	return m_ShaderManager->FindConstantBuffer(Name);
+}
+
+CMaterial* CResourceManager::FindMaterial(const std::string& Name)
+{
+	return m_MaterialManager->FindMaterial(Name);
+}
+
+void CResourceManager::ReleaseMaterial(const std::string& Name)
+{
+	m_MaterialManager->ReleaseMaterial(Name);
 }

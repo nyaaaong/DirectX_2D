@@ -70,7 +70,7 @@ struct Vector4
 
 	// operator --
 	Vector4 operator -- ();
-	Vector4 operator -- (int);
+	Vector4 operator -- (int);	
 
 	XMVECTOR Convert()	const;
 	void Convert(const XMVECTOR& v);
@@ -81,3 +81,4 @@ struct Vector4
 	static Vector4	Green;
 	static Vector4	Blue;
 };
+

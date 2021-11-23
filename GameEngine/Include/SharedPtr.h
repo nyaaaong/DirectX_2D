@@ -5,86 +5,86 @@ class CSharedPtr
 {
 public:
 	CSharedPtr()	:
-		m_pPtr(nullptr)
+		m_Ptr(nullptr)
 	{
 	}
 
-	CSharedPtr(T* pPtr)
+	CSharedPtr(T* Ptr)
 	{
-		m_pPtr = pPtr;
+		m_Ptr = Ptr;
 
-		if (m_pPtr)
-			m_pPtr->AddRef();
+		if (m_Ptr)
+			m_Ptr->AddRef();
 	}
 
-	CSharedPtr(const CSharedPtr<T>& pPtr)
+	CSharedPtr(const CSharedPtr<T>& Ptr)
 	{
-		m_pPtr = pPtr.m_pPtr;
+		m_Ptr = Ptr.m_Ptr;
 
-		if (m_pPtr)
-			m_pPtr->AddRef();
+		if (m_Ptr)
+			m_Ptr->AddRef();
 	}
 
 	~CSharedPtr()
 	{
-		if (m_pPtr)
-			m_pPtr->Release();
+		if (m_Ptr)
+			m_Ptr->Release();
 	}
 
 private:
-	T* m_pPtr;
+	T* m_Ptr;
 
 public:
-	void operator = (const T& pPtr)
+	void operator = (T* Ptr)
 	{
-		if (m_pPtr)
-			m_pPtr->Release();
+		if (m_Ptr)
+			m_Ptr->Release();
 
-		m_pPtr = pPtr;
+		m_Ptr = Ptr;
 
-		if (m_pPtr)
-			m_pPtr->AddRef();
+		if (m_Ptr)
+			m_Ptr->AddRef();
 	}
 
-	void operator = (const CSharedPtr<T>& pPtr)
+	void operator = (const CSharedPtr<T>& Ptr)
 	{
-		if (m_pPtr)
-			m_pPtr->Release();
+		if (m_Ptr)
+			m_Ptr->Release();
 
-		m_pPtr = pPtr.m_pPtr;
+		m_Ptr = Ptr.m_Ptr;
 
-		if (m_pPtr)
-			m_pPtr->AddRef();
+		if (m_Ptr)
+			m_Ptr->AddRef();
 	}
 
-	bool operator == (const T& pPtr)	const
+	bool operator == (T* Ptr)	const
 	{
-		return m_pPtr == pPtr;
+		return m_Ptr == Ptr;
 	}
 
-	bool operator == (const CSharedPtr<T>& pPtr)	const
+	bool operator == (const CSharedPtr<T>& Ptr)	const
 	{
-		return m_pPtr == pPtr.m_pPtr;
+		return m_Ptr == Ptr.m_Ptr;
 	}
 
-	bool operator != (const T& pPtr)	const
+	bool operator != (T* Ptr)	const
 	{
-		return m_pPtr != pPtr;
+		return m_Ptr != Ptr;
 	}
 
-	bool operator != (const CSharedPtr<T>& pPtr)	const
+	bool operator != (const CSharedPtr<T>& Ptr)	const
 	{
-		return m_pPtr != pPtr.m_pPtr;
+		return m_Ptr != Ptr.m_Ptr;
 	}
 
 	operator T* ()	const
 	{
-		return m_pPtr;
+		return m_Ptr;
 	}
 
 	T* operator -> ()	const
 	{
-		return m_pPtr;
+		return m_Ptr;
 	}
 };
 

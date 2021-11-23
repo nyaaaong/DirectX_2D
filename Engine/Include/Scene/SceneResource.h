@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../GameInfo.h"
 #include "../Resource/Mesh/Mesh.h"
 #include "../Resource/Shader/Shader.h"
 #include "../Resource/Material/Material.h"
@@ -14,39 +15,48 @@ private:
 	~CSceneResource();
 
 private:
-	std::unordered_map<std::string, CSharedPtr<CMesh>>	m_mapMesh;
+	class CScene* m_Scene;
+
+private:
+	std::unordered_map<std::string, CSharedPtr<CMesh>>		m_mapMesh;
 	std::unordered_map<std::string, CSharedPtr<CShader>>	m_mapShader;
 	std::unordered_map<std::string, CSharedPtr<CMaterial>>	m_mapMaterial;
-	class CScene* m_pScene;
 
-public:
-	CMesh* FindMesh(const std::string& strName);
-	CShader* FindShader(const std::string& strName);
-	CMaterial* FindMaterial(const std::string& strName);
+public:	// =================== Mesh =====================
 
-public:
+
+	CMesh* FindMesh(const std::string& Name);
+
+
+public:	// =================== Shader =====================
 	template <typename T>
-	bool CreateMaterial(const std::string& strName)
+	bool CreateShader(const std::string& Name)
 	{
-		if (FindMaterial(strName))
+		if (FindShader(Name))
 			return false;
 
-		CResourceManager::GetInst()->CreateMaterial<CMaterial>(strName);
+		CResourceManager::GetInst()->CreateShader<T>(Name);
 
-		m_mapMaterial.insert(std::make_pair(strName, CResourceManager::GetInst()->FindMaterial(strName)));
+		m_mapShader.insert(std::make_pair(Name, CResourceManager::GetInst()->FindShader(Name)));
 
 		return true;
 	}
+	CShader* FindShader(const std::string& Name);
 
+
+public:	// =================== Material =====================
+	CMaterial* FindMaterial(const std::string& Name);
+
+public:
 	template <typename T>
-	bool CreateShader(const std::string& strName)
+	bool CreateMaterial(const std::string& Name)
 	{
-		if (FindShader(strName))
+		if (FindMaterial(Name))
 			return false;
 
-		CResourceManager::GetInst()->CreateShader<CShader>(strName);
+		CResourceManager::GetInst()->CreateMaterial<T>(Name);
 
-		m_mapShader.insert(std::make_pair(strName, CResourceManager::GetInst()->FindShader(strName)));
+		m_mapMaterial.insert(std::make_pair(Name, CResourceManager::GetInst()->FindMaterial(Name)));
 
 		return true;
 	}

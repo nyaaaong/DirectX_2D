@@ -12,36 +12,36 @@ private:
 
 private:
 	std::unordered_map<std::string, CSharedPtr<class CShader>>	m_mapShader;
-
-public:
-	void ReleaseShader(const std::string& strName);
-
-public:
-	class CShader* FindShader(const std::string& strName);
+	std::unordered_map<std::string, CSharedPtr<class CConstantBuffer>>	m_mapConstantBuffer;
 
 public:
 	bool Init();
+	class CShader* FindShader(const std::string& Name);
+	void ReleaseShader(const std::string& Name);
+
+	bool CreateConstantBuffer(const std::string& Name, int Size, int Register,
+		int ConstantBufferShaderType = (int)ConstantBuffer_Shader_Type::All);
+	class CConstantBuffer* FindConstantBuffer(const std::string& Name);
 
 public:
 	template <typename T>
-	bool CreateShader(const std::string& strName)
+	bool CreateShader(const std::string& Name)
 	{
-		T* pShader = (T*)FindShader(strName);
+		T* Shader = (T*)FindShader(Name);
 
-		if (pShader)
+		if (Shader)
 			return false;
 
-		pShader = new T;
+		Shader = new T;
 
-		if (!pShader->Init())
+		if (!Shader->Init())
 		{
-			SAFE_RELEASE(pShader);
+			SAFE_RELEASE(Shader);
 			return false;
 		}
 
-		m_mapShader.insert(std::make_pair(strName, pShader));
+		m_mapShader.insert(std::make_pair(Name, Shader));
 
 		return true;
 	}
 };
-

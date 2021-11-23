@@ -9,87 +9,76 @@ public:
 	virtual ~CRef();
 
 protected:
-	std::string	m_strName;
-	int		m_iRefCount;
-	bool	m_bEnable;
-	bool	m_bActive;
-	size_t	m_iTypeID;
+	std::string	m_Name;
+	int			m_RefCount;
+	bool		m_Enable;
+	bool		m_Active;
+	size_t		m_TypeID;
 
 public:
-	void Enable()
+	void Enable(bool bEnable)
 	{
-		m_bEnable = true;
-	}
-
-	void Disable()
-	{
-		m_bEnable = false;
+		m_Enable = bEnable;
 	}
 
 	void Destroy()
 	{
-		m_bActive = true;
+		m_Active = false;
+	}
+
+	bool IsActive()	const
+	{
+		return m_Active;
+	}
+
+	bool IsEnable()	const
+	{
+		return m_Enable;
 	}
 
 	void AddRef()
 	{
-		++m_iRefCount;
+		++m_RefCount;
+	}
+
+	int GetRefCount()	const
+	{
+		return m_RefCount;
 	}
 
 	int Release()
 	{
-		--m_iRefCount;
+		--m_RefCount;
 
-		if (m_iRefCount <= 0)
+		if (m_RefCount <= 0)
 		{
 			delete	this;
 			return 0;
 		}
 
-		return m_iRefCount;
+		return m_RefCount;
 	}
 
-	void SetName(const std::string& strName)
+	void SetName(const std::string& Name)
 	{
-		m_strName = strName;
-	}
-
-public:
-	bool IsEnable()	const
-	{
-		return m_bEnable == true;
-	}
-
-	bool IsDisable()	const
-	{
-		return m_bEnable == false;
-	}
-
-	bool IsActive()	const
-	{
-		return m_bActive;
-	}
-
-	int GetRefCount()	const
-	{
-		return m_iRefCount;
+		m_Name = Name;
 	}
 
 	const std::string& GetName()	const
 	{
-		return m_strName;
+		return m_Name;
 	}
 
 	template <typename T>
 	void SetTypeID()
 	{
-		m_iTypeID = typeid(T).hash_code();
+		m_TypeID = typeid(T).hash_code();
 	}
 
 	template <typename T>
 	bool CheckType()
 	{
-		return m_iTypeID == typeid(T).hash_code();
+		return m_TypeID == typeid(T).hash_code();
 	}
 };
 

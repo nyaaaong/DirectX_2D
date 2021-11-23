@@ -2,8 +2,8 @@
 
 #include "../Ref.h"
 
-class CSceneMode :
-    public CRef
+class CSceneMode	:
+	public CRef
 {
 	friend class CScene;
 
@@ -12,11 +12,11 @@ protected:
 	virtual ~CSceneMode();
 
 private:
-	class CScene* m_pScene;
+	class CScene* m_Scene;
 
 public:
 	virtual bool Init();
-	virtual void Update(float fTime);
-	virtual void PostUpdate(float fTime);
+	virtual void Update(float DeltaTime);
+	virtual void PostUpdate(float DeltaTime);
 };
 

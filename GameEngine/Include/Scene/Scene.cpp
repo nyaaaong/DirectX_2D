@@ -1,24 +1,23 @@
 
 #include "Scene.h"
 
-CScene::CScene()	:
-	m_pResource(nullptr)
+CScene::CScene()
 {
-	m_pMode = new CSceneMode;
-	m_pResource = new CSceneResource;
+	m_Mode = new CSceneMode;
+	m_Resource = new CSceneResource;
 
-	m_pMode->m_pScene = this;
-	m_pResource->m_pScene = this;
+	m_Mode->m_Scene = this;
+	m_Resource->m_Scene = this;
 }
 
 CScene::~CScene()
 {
-	SAFE_DELETE(m_pResource);
+	SAFE_DELETE(m_Resource);
 }
 
-void CScene::Update(float fTime)
+void CScene::Update(float DeltaTime)
 {
-	m_pMode->Update(fTime);
+	m_Mode->Update(DeltaTime);
 
 	auto	iter = m_ObjList.begin();
 	auto	iterEnd = m_ObjList.end();
@@ -32,20 +31,20 @@ void CScene::Update(float fTime)
 			continue;
 		}
 
-		else if ((*iter)->IsDisable())
+		else if (!(*iter)->IsEnable())
 		{
 			++iter;
 			continue;
 		}
 
-		(*iter)->Update(fTime);
+		(*iter)->Update(DeltaTime);
 		++iter;
 	}
 }
 
-void CScene::PostUpdate(float fTime)
+void CScene::PostUpdate(float DeltaTime)
 {
-	m_pMode->PostUpdate(fTime);
+	m_Mode->PostUpdate(DeltaTime);
 
 	auto	iter = m_ObjList.begin();
 	auto	iterEnd = m_ObjList.end();
@@ -59,13 +58,13 @@ void CScene::PostUpdate(float fTime)
 			continue;
 		}
 
-		else if ((*iter)->IsDisable())
+		else if (!(*iter)->IsEnable())
 		{
 			++iter;
 			continue;
 		}
 
-		(*iter)->PostUpdate(fTime);
+		(*iter)->PostUpdate(DeltaTime);
 		++iter;
 	}
 }

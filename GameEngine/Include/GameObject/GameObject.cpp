@@ -2,7 +2,7 @@
 #include "GameObject.h"
 
 CGameObject::CGameObject()	:
-	m_pScene(nullptr)
+	m_Scene(nullptr)
 {
 	SetTypeID<CGameObject>();
 }
@@ -11,11 +11,16 @@ CGameObject::CGameObject(const CGameObject& obj)
 {
 	*this = obj;
 
-	m_iRefCount = 0;
+	m_RefCount = 0;
 }
 
 CGameObject::~CGameObject()
 {
+}
+
+void CGameObject::SetScene(CScene* Scene)
+{
+	m_Scene = Scene;
 }
 
 bool CGameObject::Init()
@@ -23,11 +28,11 @@ bool CGameObject::Init()
 	return true;
 }
 
-void CGameObject::Update(float fTime)
+void CGameObject::Update(float DeltaTime)
 {
 }
 
-void CGameObject::PostUpdate(float fTime)
+void CGameObject::PostUpdate(float DeltaTime)
 {
 }
 

@@ -15,25 +15,24 @@ private:
 	std::unordered_map<std::string, CSharedPtr<CMaterial>>	m_mapMaterial;
 
 public:
-	CMaterial* FindMaterial(const std::string& strName);
-	void ReleaseMaterial(const std::string& strName);
-
-public:
 	bool Init();
+	CMaterial* FindMaterial(const std::string& Name);
+	void ReleaseMaterial(const std::string& Name);
 
 public:
 	template <typename T>
-	bool CreateMaterial(const std::string& strName)
+	bool CreateMaterial(const std::string& Name)
 	{
-		T* pMaterial = (T*)FindMaterial(strName);
+		T* Material = (T*)FindMaterial(Name);
 
-		if (pMaterial)
+		if (Material)
 			return false;
 
-		pMaterial = new T;
-		pMaterial->SetName(strName);
+		Material = new T;
 
-		m_mapMaterial.insert(std::make_pair(strName, pMaterial));
+		Material->SetName(Name);
+
+		m_mapMaterial.insert(std::make_pair(Name, Material));
 
 		return true;
 	}

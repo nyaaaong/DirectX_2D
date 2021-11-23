@@ -7,30 +7,30 @@
 class CSpriteComponent :
     public CSceneComponent
 {
-	friend class CGameObject;
+    friend class CGameObject;
 
 protected:
-	CSpriteComponent();
-	CSpriteComponent(const CSpriteComponent& com);
-	virtual ~CSpriteComponent();
+    CSpriteComponent();
+    CSpriteComponent(const CSpriteComponent& com);
+    virtual ~CSpriteComponent();
 
 protected:
-	CSharedPtr<CSpriteMesh>	m_pMesh;
-	CSharedPtr<CMaterial>	m_pMaterial;
+    CSharedPtr<CSpriteMesh> m_Mesh;
+    CSharedPtr<CMaterial> m_Material;
 
 public:
-	void SetMaterial(CMaterial* pMaterial)
-	{
-		m_pMaterial = pMaterial;
-	}
+    void SetMaterial(CMaterial* Material)
+    {
+        m_Material = Material;
+    }
 
 public:
-	virtual bool Init();
-	virtual void Update(float fTime);
-	virtual void PostUpdate(float fTime);
-	virtual void PrevRender();
-	virtual void Render();
-	virtual void PostRender();
-	virtual CSpriteComponent* Clone();
+    virtual bool Init();
+    virtual void Update(float DeltaTime);
+    virtual void PostUpdate(float DeltaTime);
+    virtual void PrevRender();
+    virtual void Render();
+    virtual void PostRender();
+    virtual CSpriteComponent* Clone();
 };
 

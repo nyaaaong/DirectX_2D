@@ -11,13 +11,13 @@ CMaterial::~CMaterial()
 {
 }
 
-void CMaterial::SetShader(const std::string& strName)
+void CMaterial::SetShader(const std::string& Name)
 {
-	m_pShader = (CGraphicShader*)CResourceManager::GetInst()->FindShader(strName);
+	m_Shader = (CGraphicShader*)CResourceManager::GetInst()->FindShader(Name);
 }
 
 void CMaterial::Render()
 {
-	if (m_pShader)
-		m_pShader->SetShader();
+	if (m_Shader)
+		m_Shader->SetShader();
 }

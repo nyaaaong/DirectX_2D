@@ -3,122 +3,131 @@
 DEFINITION_SINGLE(CDevice)
 
 CDevice::CDevice()	:
-	m_pDevice(nullptr),
-	m_pContext(nullptr),
-	m_pSwapChain(nullptr),
-	m_pTargetView(nullptr),
-	m_pDepthView(nullptr),
-	m_hWnd(0),
-	m_tRS{}
+	m_Device(nullptr),
+	m_Context(nullptr),
+	m_SwapChain(nullptr),
+	m_TargetView(nullptr),
+	m_DepthView(nullptr),
+	m_hWnd(0)
 {
 }
 
 CDevice::~CDevice()
 {
-	SAFE_RELEASE(m_pDepthView);
-	SAFE_RELEASE(m_pTargetView);
+	SAFE_RELEASE(m_TargetView);
+	SAFE_RELEASE(m_DepthView);
 
-	SAFE_RELEASE(m_pSwapChain);
+	SAFE_RELEASE(m_SwapChain);
 
-	if (m_pContext)
-		m_pContext->ClearState();
+	if (m_Context)
+		m_Context->ClearState();
 
-	SAFE_RELEASE(m_pContext);
-	SAFE_RELEASE(m_pDevice);
+	SAFE_RELEASE(m_Context);
+	SAFE_RELEASE(m_Device);
 }
 
-bool CDevice::Init(HWND hWnd, unsigned int iWidth, unsigned int iHeight, bool bWindowMode)
+bool CDevice::Init(HWND hWnd, unsigned int Width,
+	unsigned int Height, bool WindowMode)
 {
 	m_hWnd = hWnd;
-	m_tRS.iWidth = iWidth;
-	m_tRS.iHeight = iHeight;
+	m_RS.Width = Width;
+	m_RS.Height = Height;
 
-	unsigned int iFlag = D3D11_CREATE_DEVICE_BGRA_SUPPORT; // 나중에 폰트 출력을 위해 BRGA로 맞춰준다.
+	unsigned int Flag = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
 #ifdef _DEBUG
-	iFlag |= D3D11_CREATE_DEVICE_DEBUG;
+
+	Flag |= D3D11_CREATE_DEVICE_DEBUG;
+
 #endif // _DEBUG
 
-	DXGI_SWAP_CHAIN_DESC	tSwapDesc = {};
+	DXGI_SWAP_CHAIN_DESC	SwapDesc = {};
 
-	tSwapDesc.BufferDesc.Width = iWidth;
-	tSwapDesc.BufferDesc.Height = iHeight;
-	tSwapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	tSwapDesc.BufferDesc.RefreshRate.Numerator = 1;
-	tSwapDesc.BufferDesc.RefreshRate.Denominator = 60; // RefreshRate는 주사율을 말한다
-	tSwapDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	tSwapDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	tSwapDesc.BufferCount = 1;
-	tSwapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	tSwapDesc.OutputWindow = hWnd;
-	tSwapDesc.SampleDesc.Count = 1;
-	tSwapDesc.SampleDesc.Quality = 0;
-	tSwapDesc.Windowed = bWindowMode;
-	tSwapDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	SwapDesc.BufferDesc.Width = Width;
+	SwapDesc.BufferDesc.Height = Height;
+	SwapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	SwapDesc.BufferDesc.RefreshRate.Numerator = 1;
+	SwapDesc.BufferDesc.RefreshRate.Denominator = 60;
+	SwapDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	SwapDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	SwapDesc.BufferCount = 1;
+	SwapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	SwapDesc.OutputWindow = hWnd;
+	SwapDesc.SampleDesc.Count = 1;
+	SwapDesc.SampleDesc.Quality = 0;
+	SwapDesc.Windowed = WindowMode;
+	SwapDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
-	D3D_FEATURE_LEVEL	eLevel = D3D_FEATURE_LEVEL_11_0;
-	D3D_FEATURE_LEVEL	eLevel1 = D3D_FEATURE_LEVEL_11_0;
+	D3D_FEATURE_LEVEL	FLevel = D3D_FEATURE_LEVEL_11_0;
+	D3D_FEATURE_LEVEL	FLevel1 = D3D_FEATURE_LEVEL_11_0;
 
-	if (FAILED(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0, iFlag, &eLevel, 1, D3D11_SDK_VERSION, &tSwapDesc, &m_pSwapChain, &m_pDevice, &eLevel1, &m_pContext)))
+	if (FAILED(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE,
+		0, Flag, &FLevel, 1, D3D11_SDK_VERSION,
+		&SwapDesc, &m_SwapChain, &m_Device, &FLevel1, &m_Context)))
 		return false;
 
-	// SwapChain이 갖고 있는 백버퍼를 얻어온다
-	ID3D11Texture2D* pBackBuffer = nullptr;
+	// SwapChain이 가지고 있는 백버퍼를 얻어온다.
+	ID3D11Texture2D* BackBuffer = nullptr;
 
-	m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&pBackBuffer);
+	m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
+		(void**)&BackBuffer);
 
-	// BackBuffer과 연결된 RenderTargetView를 생성한다
-	m_pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &m_pTargetView);
+	// BackBuffer와 연결된 RenderTargetView를 생성한다.
+	m_Device->CreateRenderTargetView(BackBuffer, nullptr, &m_TargetView);
 
-	SAFE_RELEASE(pBackBuffer);
+	SAFE_RELEASE(BackBuffer);
 
-	// 깊이 버퍼를 만든다
-	D3D11_TEXTURE2D_DESC	tDepthDesc = {};
+	// 깊이버퍼를 만든다.
+	D3D11_TEXTURE2D_DESC	DepthDesc = {};
 
-	tDepthDesc.Width = iWidth;
-	tDepthDesc.Height = iHeight;
-	tDepthDesc.ArraySize = 1;
-	tDepthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	tDepthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	tDepthDesc.Usage = D3D11_USAGE_DEFAULT;
-	tDepthDesc.SampleDesc.Count = 1;
-	tDepthDesc.SampleDesc.Quality = 0;
-	tDepthDesc.MipLevels = 1;
+	DepthDesc.Width = Width;
+	DepthDesc.Height = Height;
+	DepthDesc.ArraySize = 1;
 
-	ID3D11Texture2D* pDepthBuffer = nullptr;
+	DepthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	DepthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	DepthDesc.Usage = D3D11_USAGE_DEFAULT;
+	DepthDesc.SampleDesc.Count = 1;
+	DepthDesc.SampleDesc.Quality = 0;
+	DepthDesc.MipLevels = 1;
 
-	m_pDevice->CreateTexture2D(&tDepthDesc, nullptr, &pDepthBuffer);
-	m_pDevice->CreateDepthStencilView(pDepthBuffer, nullptr, &m_pDepthView);
+	ID3D11Texture2D* DepthBuffer = nullptr;
 
-	SAFE_RELEASE(pDepthBuffer);
+	m_Device->CreateTexture2D(&DepthDesc, nullptr, &DepthBuffer);
 
-	D3D11_VIEWPORT	tVP = {};
+	m_Device->CreateDepthStencilView(DepthBuffer, nullptr, &m_DepthView);
 
-	tVP.Width = (float)iWidth;
-	tVP.Height = (float)iHeight;
-	tVP.MaxDepth = 1.f;
+	SAFE_RELEASE(DepthBuffer);
 
-	m_pContext->RSSetViewports(1, &tVP);
+	D3D11_VIEWPORT	VP = {};
+
+	VP.Width = (float)Width;
+	VP.Height = (float)Height;
+	VP.MaxDepth = 1.f;
+
+	m_Context->RSSetViewports(1, &VP);
 
 	return true;
 }
 
-void CDevice::ClearRenderTarget(float fClearColor[4])
+void CDevice::ClearRenderTarget(float ClearColor[4])
 {
-	m_pContext->ClearRenderTargetView(m_pTargetView, fClearColor);
+	m_Context->ClearRenderTargetView(m_TargetView, ClearColor);
 }
 
-void CDevice::ClearDepthStencil(float fDepth, unsigned char fStencil)
+void CDevice::ClearDepthStencil(float Depth, unsigned char Stencil)
 {
-	m_pContext->ClearDepthStencilView(m_pDepthView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, fDepth, fStencil);
+	m_Context->ClearDepthStencilView(m_DepthView,
+		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
+		Depth, Stencil);
 }
 
 void CDevice::RenderStart()
 {
-	m_pContext->OMSetRenderTargets(1, &m_pTargetView, m_pDepthView);
+	m_Context->OMSetRenderTargets(1, &m_TargetView, m_DepthView);
 }
 
 void CDevice::Flip()
 {
-	m_pSwapChain->Present(0, 0);
+	m_SwapChain->Present(0, 0);
 }

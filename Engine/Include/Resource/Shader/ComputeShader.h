@@ -3,16 +3,14 @@
 class CComputeShader :
     public CShader
 {
-	friend class CShaderManager;
+    friend class CShaderManager;
 
 protected:
-	CComputeShader();
-	virtual ~CComputeShader() = 0;
+    CComputeShader();
+    virtual ~CComputeShader() = 0;
 
 public:
-	virtual void SetShader();
-
-public:
-	virtual bool Init() = 0;
+    virtual bool Init() = 0;
+    virtual void SetShader();
 };
 

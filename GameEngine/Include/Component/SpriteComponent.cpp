@@ -11,7 +11,7 @@ CSpriteComponent::CSpriteComponent()
 CSpriteComponent::CSpriteComponent(const CSpriteComponent& com)	:
 	CSceneComponent(com)
 {
-	*this = com;
+	m_Mesh = com.m_Mesh;
 }
 
 CSpriteComponent::~CSpriteComponent()
@@ -20,23 +20,20 @@ CSpriteComponent::~CSpriteComponent()
 
 bool CSpriteComponent::Init()
 {
-	if (!CSceneComponent::Init())
-		return false;
-
-	m_pMesh = dynamic_cast<CSpriteMesh*>(m_pScene->GetResource()->FindMesh("SpriteMesh"));
-	m_pMaterial = m_pScene->GetResource()->FindMaterial("Color");
+	m_Mesh = (CSpriteMesh*)m_Scene->GetResource()->FindMesh("SpriteMesh");
+	m_Material = m_Scene->GetResource()->FindMaterial("Color");
 
 	return true;
 }
 
-void CSpriteComponent::Update(float fTime)
+void CSpriteComponent::Update(float DeltaTime)
 {
-	CSceneComponent::Update(fTime);
+	CSceneComponent::Update(DeltaTime);
 }
 
-void CSpriteComponent::PostUpdate(float fTime)
+void CSpriteComponent::PostUpdate(float DeltaTime)
 {
-	CSceneComponent::PostUpdate(fTime);
+	CSceneComponent::PostUpdate(DeltaTime);
 }
 
 void CSpriteComponent::PrevRender()

@@ -1,9 +1,10 @@
 #include "Ref.h"
 
 CRef::CRef()	:
-	m_iRefCount(0),
-	m_bEnable(true),
-	m_bActive(true)
+	m_RefCount(0),
+	m_Enable(true),
+	m_Active(true),
+	m_TypeID(0)
 {
 }
 

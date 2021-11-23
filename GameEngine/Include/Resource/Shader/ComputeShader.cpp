@@ -1,8 +1,9 @@
+
 #include "ComputeShader.h"
 
 CComputeShader::CComputeShader()
 {
-	m_eType = Shader_Type::Compute;
+	m_Type = Shader_Type::Compute;
 }
 
 CComputeShader::~CComputeShader()

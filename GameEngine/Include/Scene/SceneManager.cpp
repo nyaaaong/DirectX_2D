@@ -4,34 +4,34 @@
 DEFINITION_SINGLE(CSceneManager)
 
 CSceneManager::CSceneManager()	:
-	m_pScene(nullptr),
-	m_pNextScene(nullptr)
+	m_Scene(nullptr),
+	m_NextScene(nullptr)
 {
 }
 
 CSceneManager::~CSceneManager()
 {
-	SAFE_DELETE(m_pNextScene);
-	SAFE_DELETE(m_pScene);
+	SAFE_DELETE(m_Scene);
+	SAFE_DELETE(m_NextScene);
 }
 
 bool CSceneManager::Init()
 {
-	m_pScene = new CScene;
+	m_Scene = new CScene;
 
 	return true;
 }
 
-bool CSceneManager::Update(float fTime)
+bool CSceneManager::Update(float DeltaTime)
 {
-	m_pScene->Update(fTime);
+	m_Scene->Update(DeltaTime);
 
 	return false;
 }
 
-bool CSceneManager::PostUpdate(float fTime)
+bool CSceneManager::PostUpdate(float DeltaTime)
 {
-	m_pScene->PostUpdate(fTime);
+	m_Scene->PostUpdate(DeltaTime);
 
 	return false;
 }

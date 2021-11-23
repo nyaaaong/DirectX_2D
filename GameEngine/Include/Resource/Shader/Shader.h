@@ -3,27 +3,25 @@
 #include "../../Ref.h"
 
 class CShader :
-	public CRef
+    public CRef
 {
-	friend class CShaderManager;
+    friend class CShaderManager;
 
 protected:
-	CShader();
-	virtual ~CShader() = 0;
+    CShader();
+    virtual ~CShader() = 0;
 
 protected:
-	Shader_Type	m_eType;
+    Shader_Type m_Type;
 
 public:
-	Shader_Type GetShaderType()	const
-	{
-		return m_eType;
-	}
+    Shader_Type GetShaderType() const
+    {
+        return m_Type;
+    }
 
 public:
-	virtual void SetShader() = 0;
-
-public:
-	virtual bool Init() = 0;
+    virtual bool Init() = 0;
+    virtual void SetShader() = 0;
 };
 

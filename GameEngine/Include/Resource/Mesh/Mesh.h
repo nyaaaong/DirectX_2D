@@ -3,7 +3,7 @@
 #include "../../Ref.h"
 
 class CMesh :
-    public CRef
+	public CRef
 {
 	friend class CMeshManager;
 
@@ -13,17 +13,16 @@ protected:
 
 protected:
 	std::vector<MeshContainer*>	m_vecContainer;
-	Vector3	m_tMin;
-	Vector3	m_tMax;
+
+	Vector3	m_Min;
+	Vector3	m_Max;
 
 public:
 	virtual bool Init();
-
-protected:
 	virtual void Render();
 
 protected:
-	bool CreateBuffer(Buffer_Type eType, void* pData, int iSize, int iCount, D3D11_USAGE eUsage, ID3D11Buffer** pBuffer);
-
+	bool CreateBuffer(Buffer_Type Type, void* Data, int Size, int Count,
+		D3D11_USAGE Usage, ID3D11Buffer** Buffer);
 };
 

@@ -11,12 +11,14 @@ using namespace DirectX;
 
 #define	PI	3.14159f
 
-static float DegreeToRadian(float fAngle)
+static float DegreeToRadian(float Angle)
 {
-	return fAngle / 180.f * PI;
+	return Angle / 180.f * PI;
 }
 
-static float RadianToDegree(float fAngle)
+static float RadianToDegree(float Angle)
 {
-	return fAngle * 180.f / PI;
+	return Angle * 180.f / PI;
 }
+
+

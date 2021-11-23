@@ -1,6 +1,6 @@
 #include "Vector2.h"
 
-Vector2::Vector2() :
+Vector2::Vector2()	:
 	x(0.f),
 	y(0.f)
 {
@@ -12,7 +12,7 @@ Vector2::Vector2(float _x, float _y) :
 {
 }
 
-Vector2::Vector2(const Vector2& v) :
+Vector2::Vector2(const Vector2& v)	:
 	x(v.x),
 	y(v.y)
 {
@@ -22,7 +22,6 @@ Vector2::Vector2(const XMVECTOR& v)	:
 	x(0.f),
 	y(0.f)
 {
-	// XMVECTOR를 Vector2의 x와 y에 알맞는 값을 넣어줌
 	XMStoreFloat2((XMFLOAT2*)this, v);
 }
 
@@ -45,7 +44,7 @@ Vector2& Vector2::operator=(float f)
 {
 	x = f;
 	y = f;
-
+	
 	return *this;
 }
 
@@ -57,7 +56,6 @@ bool Vector2::operator==(const Vector2& v) const
 bool Vector2::operator==(const XMVECTOR& v) const
 {
 	Vector2	v1;
-	// v를 Vector2의 x, y로 변환함
 	XMStoreFloat2((XMFLOAT2*)&v1, v);
 
 	return x == v1.x && y == v1.y;
@@ -312,14 +310,13 @@ float Vector2::Angle(const Vector2& v) const
 	return 0.0f;
 }
 
+
 XMVECTOR Vector2::Convert()	const
 {
-	// Vector2를 XMFLOAT2로 변환후 반환
 	return XMLoadFloat2((XMFLOAT2*)this);
 }
 
 void Vector2::Convert(const XMVECTOR& v)
 {
-	// v의 x y값을 현재 Vector2의 x y값으로 변환
 	XMStoreFloat2((XMFLOAT2*)this, v);
 }

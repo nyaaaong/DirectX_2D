@@ -5,52 +5,48 @@
 class CComponent :
     public CRef
 {
-	friend class CGameObject;
+    friend class CGameObject;
 
 protected:
-	CComponent();
-	CComponent(const CComponent& com);
-	virtual ~CComponent() = 0;
+    CComponent();
+    CComponent(const CComponent& com);
+    virtual ~CComponent() = 0;
 
 protected:
-	class CScene* m_pScene;
-	class CGameObject* m_pObject;
-	Component_Type	m_eComponentType;
+    class CScene* m_Scene;
+    class CGameObject* m_Object;
 
 public:
-	Component_Type GetComponentType()	const
-	{
-		return m_eComponentType;
-	}
-
-	class CGameObject* GetGameObject()	const
-	{
-		return m_pObject;
-	}
-
-	class CScene* GetScene()	const
-	{
-		return m_pScene;
-	}
+    virtual void SetScene(class CScene* Scene);
+    virtual void SetGameObject(class CGameObject* Object);
 
 public:
-	void SetScene(class CScene* pScene)
-	{
-		m_pScene = pScene;
-	}
+    class CScene* GetScene()    const
+    {
+        return m_Scene;
+    }
 
-	void SetGameObject(class CGameObject* pObject)
-	{
-		m_pObject = pObject;
-	}
+    class CGameObject* GetGameObject()    const
+    {
+        return m_Object;
+    }
+
+protected:
+    Component_Type  m_ComponentType;
 
 public:
-	virtual bool Init();
-	virtual void Update(float fTime) = 0;
-	virtual void PostUpdate(float fTime) = 0;
-	virtual void PrevRender() = 0;
-	virtual void Render() = 0;
-	virtual void PostRender() = 0;
-	virtual CComponent* Clone() = 0;
+    Component_Type GetComponentType()   const
+    {
+        return m_ComponentType;
+    }
+
+public:
+    virtual bool Init();
+    virtual void Update(float DeltaTime) = 0;
+    virtual void PostUpdate(float DeltaTime) = 0;
+    virtual void PrevRender() = 0;
+    virtual void Render() = 0;
+    virtual void PostRender() = 0;
+    virtual CComponent* Clone() = 0;
 };
 

@@ -10,20 +10,24 @@ CMeshManager::~CMeshManager()
 {
 }
 
-void CMeshManager::ReleaseMesh(const std::string& strName)
+bool CMeshManager::Init()
 {
-	auto	iter = m_mapMesh.find(strName);
+	CMesh* SpriteMesh = new CSpriteMesh;
 
-	if (iter != m_mapMesh.end())
+	if (!SpriteMesh->Init())
 	{
-		if (iter->second->GetRefCount() == 1)
-			m_mapMesh.erase(iter);
+		SpriteMesh->Release();
+		return false;
 	}
+
+	m_mapMesh.insert(std::make_pair("SpriteMesh", SpriteMesh));
+
+	return true;
 }
 
-CMesh* CMeshManager::FindMash(const std::string& strName)
+CMesh* CMeshManager::FindMesh(const std::string& Name)
 {
-	auto	iter = m_mapMesh.find(strName);
+	auto	iter = m_mapMesh.find(Name);
 
 	if (iter == m_mapMesh.end())
 		return nullptr;
@@ -31,17 +35,13 @@ CMesh* CMeshManager::FindMash(const std::string& strName)
 	return iter->second;
 }
 
-bool CMeshManager::Init()
+void CMeshManager::ReleaseMesh(const std::string& Name)
 {
-	CMesh* pSpriteMesh = new CSpriteMesh;
+	auto	iter = m_mapMesh.find(Name);
 
-	if (!pSpriteMesh->Init())
+	if (iter != m_mapMesh.end())
 	{
-		SAFE_RELEASE(pSpriteMesh)
-		return false;
+		if (iter->second->GetRefCount() == 1)
+			m_mapMesh.erase(iter);
 	}
-
-	m_mapMesh.insert(std::make_pair("SpriteMesh", pSpriteMesh));
-
-	return true;
 }

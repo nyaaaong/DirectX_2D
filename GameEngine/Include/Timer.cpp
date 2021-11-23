@@ -1,39 +1,41 @@
 #include "Timer.h"
 
-float CTimer::Update()
+CTimer::CTimer() :
+	m_FPS(0.f),
+	m_DeltaTime(0.f),
+	m_FPSTime(0.f),
+	m_Tick(0)
 {
-	LARGE_INTEGER	Time;
-	QueryPerformanceCounter(&Time);
-
-	m_fDeltaTime = (Time.QuadPart - m_Time.QuadPart) / static_cast<float>(m_Second.QuadPart);
-
-	m_Time = Time;
-
-	m_fFPSTime += m_fDeltaTime;
-	++m_iTick;
-
-	if (m_iTick == 60)
-	{
-		m_fFPS = 60 / m_fFPSTime;
-		m_fFPSTime = 0.f;
-		m_iTick = 0;
-	}
-
-	return m_fDeltaTime;
-}
-
-CTimer::CTimer()	:
-	m_Time(),
-	m_Second(),
-	m_fDeltaTime(0.f),
-	m_fFPS(0.f),
-	m_fFPSTime(0.f),
-	m_iTick(0)
-{
+	// 고해상도 타이머의 초당 틱을 얻어온다.
 	QueryPerformanceFrequency(&m_Second);
+
+	// 고해상도 타이머의 현재 틱을 얻어온다.
 	QueryPerformanceCounter(&m_Time);
 }
 
 CTimer::~CTimer()
 {
+}
+
+float CTimer::Update()
+{
+	LARGE_INTEGER	Time;
+	QueryPerformanceCounter(&Time);
+
+	m_DeltaTime = (Time.QuadPart - m_Time.QuadPart) / (float)m_Second.QuadPart;
+
+	m_Time = Time;
+
+
+	m_FPSTime += m_DeltaTime;
+	++m_Tick;
+
+	if (m_Tick == 60)
+	{
+		m_FPS = 60 / m_FPSTime;
+		m_FPSTime = 0.f;
+		m_Tick = 0;
+	}
+
+	return m_DeltaTime;
 }

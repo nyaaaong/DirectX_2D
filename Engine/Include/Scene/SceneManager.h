@@ -5,28 +5,28 @@
 class CSceneManager
 {
 private:
-	CScene* m_pScene;
-	CScene* m_pNextScene;
+	CScene* m_Scene;
+	CScene* m_NextScene;
 
 public:
 	CScene* GetScene()	const
 	{
-		return m_pScene;
+		return m_Scene;
 	}
 
 public:
 	bool Init();
-	bool Update(float fTime);
-	bool PostUpdate(float fTime);
+	bool Update(float DeltaTime);
+	bool PostUpdate(float DeltaTime);
 
 public:
 	template <typename T>
-	bool CreateSceneMode(bool bCurrent = true)
+	bool CreateSceneMode(bool Current = true)
 	{
-		if (bCurrent)
-			return m_pScene->CreateSceneMode<T>();
+		if (Current)
+			return m_Scene->CreateSceneMode<T>();
 
-		return m_pNextScene->CreateSceneMode<T>();
+		return m_NextScene->CreateSceneMode<T>();
 	}
 
 	DECLARE_SINGLE(CSceneManager)

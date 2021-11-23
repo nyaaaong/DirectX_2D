@@ -13,29 +13,31 @@ private:
 	~CScene();
 
 private:
-	CSharedPtr<CSceneMode>	m_pMode;
-	CSceneResource* m_pResource;
+	CSharedPtr<CSceneMode> m_Mode;
+	CSceneResource* m_Resource;
 	std::list<CSharedPtr<CGameObject>>	m_ObjList;
 
 public:
 	CSceneResource* GetResource()	const
 	{
-		return m_pResource;
+		return m_Resource;
 	}
 
 public:
-	void Update(float fTime);
-	void PostUpdate(float fTime);
+	void Update(float DeltaTime);
+	void PostUpdate(float DeltaTime);
 
 public:
 	template <typename T>
 	bool CreateSceneMode()
 	{
-		m_pMode = new T;
+		m_Mode = new T;
 
-		if (!m_pMode->Init())
+		m_Mode->m_Scene = this;
+
+		if (!m_Mode->Init())
 		{
-			m_pMode = nullptr;
+			m_Mode = nullptr;
 			return false;
 		}
 
@@ -43,21 +45,22 @@ public:
 	}
 
 	template <typename T>
-	T* CreateGameObject(const std::string& strName)
+	T* CreateGameObject(const std::string& Name)
 	{
-		T* pObj = new T;
+		T* Obj = new T;
 
-		pObj->SetName(strName);
+		Obj->SetName(Name);
+		Obj->SetScene(this);
 
-		if (!pObj->Init())
+		if (!Obj->Init())
 		{
-			SAFE_RELEASE(pObj);
+			SAFE_RELEASE(Obj);
 			return nullptr;
 		}
 
-		m_ObjList.push_back(pObj);
+		m_ObjList.push_back(Obj);
 
-		return pObj;
+		return Obj;
 	}
 };
 

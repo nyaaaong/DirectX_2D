@@ -8,6 +8,12 @@ CMesh::CMesh()
 
 CMesh::~CMesh()
 {
+	size_t	Size = m_vecContainer.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		SAFE_DELETE(m_vecContainer[i]);
+	}
 }
 
 bool CMesh::Init()
@@ -15,91 +21,100 @@ bool CMesh::Init()
 	return true;
 }
 
+bool CMesh::CreateBuffer(Buffer_Type Type, void* Data, int Size,
+	int Count, D3D11_USAGE Usage, ID3D11Buffer** Buffer)
+{
+	D3D11_BUFFER_DESC	Desc = {};
+	
+	Desc.ByteWidth = Size * Count;
+	Desc.Usage = Usage;
+
+	if (Type == Buffer_Type::Vertex)
+		Desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+
+	else
+		Desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+
+	if (Usage == D3D11_USAGE_DYNAMIC)
+		Desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+	else if (Usage == D3D11_USAGE_STAGING)
+		Desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
+
+	D3D11_SUBRESOURCE_DATA	BufferData = {};
+
+	BufferData.pSysMem = Data;
+
+	if (FAILED(CDevice::GetInst()->GetDevice()->CreateBuffer(&Desc,
+		&BufferData, Buffer)))
+		return false;
+
+
+	if (Type == Buffer_Type::Vertex)
+	{
+		char* VertexData = (char*)Data;
+
+		for (int i = 0; i < Count; ++i)
+		{
+			Vector3* Pos = (Vector3*)VertexData;
+			VertexData += Size;
+
+			if (m_Min.x > Pos->x)
+				m_Min.x = Pos->x;
+
+			if (m_Min.y > Pos->y)
+				m_Min.y = Pos->y;
+
+			if (m_Min.z > Pos->z)
+				m_Min.z = Pos->z;
+
+			if (m_Max.x < Pos->x)
+				m_Max.x = Pos->x;
+
+			if (m_Max.y < Pos->y)
+				m_Max.y = Pos->y;
+
+			if (m_Max.z < Pos->z)
+				m_Max.z = Pos->z;
+		}
+	}
+
+	return true;
+}
+
 void CMesh::Render()
 {
-	size_t	iSize = m_vecContainer.size();
+	size_t	Size = m_vecContainer.size();
 
-	for (size_t i = 0; i < iSize; ++i)
+	for (size_t i = 0; i < Size; ++i)
 	{
-		unsigned int	iStride = m_vecContainer[i]->tVB.iSize;
-		unsigned int	iOffset = 0;
+		unsigned int	Stride = m_vecContainer[i]->VB.Size;
+		unsigned int	Offset = 0;
 
-		CDevice::GetInst()->GetContext()->IASetPrimitiveTopology(m_vecContainer[i]->ePrimitive);
-		CDevice::GetInst()->GetContext()->IASetVertexBuffers(0, 1, &m_vecContainer[i]->tVB.pBuffer, &iStride, &iOffset);
+		CDevice::GetInst()->GetContext()->IASetPrimitiveTopology(m_vecContainer[i]->Primitive);
+		CDevice::GetInst()->GetContext()->IASetVertexBuffers(0, 1,
+			&m_vecContainer[i]->VB.Buffer, &Stride, &Offset);
 
-		size_t	iIndexCount = m_vecContainer[i]->vecIB.size();
+		size_t	IdxCount = m_vecContainer[i]->vecIB.size();
 
-		if (iIndexCount > 0)
+		if (IdxCount > 0)
 		{
-			for (size_t j = 0; j < iIndexCount; ++j)
+			for (size_t j = 0; j < IdxCount; ++j)
 			{
-				CDevice::GetInst()->GetContext()->IASetIndexBuffer(m_vecContainer[i]->vecIB[j].pBuffer, m_vecContainer[i]->vecIB[j].eFmt, 0);
-				CDevice::GetInst()->GetContext()->DrawIndexed(m_vecContainer[i]->vecIB[j].iCount, 0, 0);
+				CDevice::GetInst()->GetContext()->IASetIndexBuffer(
+					m_vecContainer[i]->vecIB[j].Buffer,
+					m_vecContainer[i]->vecIB[j].Fmt, 0);
+				CDevice::GetInst()->GetContext()->DrawIndexed(
+					m_vecContainer[i]->vecIB[j].Count, 0, 0);
 			}
 		}
 
 		else
 		{
-			CDevice::GetInst()->GetContext()->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
-			CDevice::GetInst()->GetContext()->Draw(m_vecContainer[i]->tVB.iCount, 0);
+			CDevice::GetInst()->GetContext()->IASetIndexBuffer(
+				nullptr, DXGI_FORMAT_UNKNOWN, 0);
+			CDevice::GetInst()->GetContext()->Draw(
+				m_vecContainer[i]->VB.Count, 0);
 		}
 	}
-}
-
-bool CMesh::CreateBuffer(Buffer_Type eType, void* pData, int iSize, int iCount, D3D11_USAGE eUsage, ID3D11Buffer** pBuffer)
-{
-	D3D11_BUFFER_DESC	eDesc = {};
-
-	eDesc.ByteWidth = iSize * iCount;
-	eDesc.Usage = eUsage;
-
-	if (eType == Buffer_Type::Vertex)
-		eDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-	else
-		eDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-
-	if (eUsage == D3D11_USAGE_DYNAMIC)
-		eDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-	else if (eUsage == D3D11_USAGE_STAGING)
-		eDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
-
-	D3D11_SUBRESOURCE_DATA	tBufferData = {};
-
-	tBufferData.pSysMem = pData;
-
-	if (FAILED(CDevice::GetInst()->GetDevice()->CreateBuffer(&eDesc, &tBufferData, pBuffer)))
-		return false;
-
-	if (eType == Buffer_Type::Vertex)
-	{
-		char* pVertexData = static_cast<char*>(pData);
-
-		for (int i = 0; i < iCount; ++i)
-		{
-			Vector3* tPos = (Vector3*)pVertexData;
-			pVertexData += iSize;
-
-			if (m_tMin.x > tPos->x)
-				m_tMin.x = tPos->x;
-
-			if (m_tMin.y > tPos->y)
-				m_tMin.y = tPos->y;
-
-			if (m_tMin.z > tPos->z)
-				m_tMin.z = tPos->z;
-
-			if (m_tMax.x < tPos->x)
-				m_tMax.x = tPos->x;
-
-			if (m_tMax.y < tPos->y)
-				m_tMax.y = tPos->y;
-
-			if (m_tMax.z < tPos->z)
-				m_tMax.z = tPos->z;
-		}
-	}
-
-	return true;
 }

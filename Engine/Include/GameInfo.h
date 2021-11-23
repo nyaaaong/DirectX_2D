@@ -1,5 +1,6 @@
-
 #pragma once
+
+#pragma warning(disable:6387)
 
 #include <Windows.h>
 #include <list>
@@ -13,109 +14,132 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
+#pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "dxguid.lib")
+#pragma comment(lib, "d3dcompiler.lib")
+
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix.h"
 #include "SharedPtr.h"
 
-#pragma comment(lib, "d3d11.lib")
-#pragma comment(lib, "dxguid.lib")
-#pragma comment(lib, "d3dcompiler.lib")
-
-#define ASSERT(msg)	assert(!TEXT(msg))
-
 #define	ROOT_PATH	"Root"
-#define SHADER_PATH	"Shader"
+#define	SHADER_PATH	"Shader"
 
-#define SAFE_DELETE(p)	if (p) { delete p; p = nullptr; }
-#define SAFE_RELEASE(p)	if (p) { p->Release(); p = nullptr; }
+#define	SAFE_DELETE(p)	if(p)	{ delete p; p = nullptr; }
+#define	SAFE_RELEASE(p)	if(p)	{ p->Release(); p = nullptr; }
 
-#define DECLARE_SINGLE(Type)\
+#define	DECLARE_SINGLE(Type)	\
 private:\
-	static Type* m_pInst;\
+	static Type*	m_Inst;\
 public:\
 	static Type* GetInst()\
 	{\
-		if (!m_pInst)\
-			m_pInst = new Type;\
-		return m_pInst;\
+		if(!m_Inst)\
+			m_Inst = new Type;\
+		return m_Inst;\
 	}\
 	static void DestroyInst()\
 	{\
-		SAFE_DELETE(m_pInst);\
+		SAFE_DELETE(m_Inst);\
 	}\
 private:\
 	Type();\
 	~Type();
 
-#define DEFINITION_SINGLE(Type)	Type*	Type::m_pInst = nullptr;
+#define	DEFINITION_SINGLE(Type)	Type* Type::m_Inst = nullptr;
 
 struct Resolution
 {
-	unsigned int	iWidth;
-	unsigned int	iHeight;
+	unsigned int	Width;
+	unsigned int	Height;
+
+	Resolution()	:
+		Width(0),
+		Height(0)
+	{}
 };
 
 struct VertexColor
 {
-	Vector3	tPos;
-	Vector4	tColor;
+	Vector3	Pos;
+	Vector4	Color;
 
 	VertexColor()
 	{
 	}
 
-	VertexColor(const Vector3& _tPos, const Vector4& _tColor)	:
-		tPos(_tPos),
-		tColor(_tColor)
+	VertexColor(const Vector3& _Pos, const Vector4& _Color)	:
+		Pos(_Pos),
+		Color(_Color)
 	{
 	}
 };
 
+
 struct VertexBuffer
 {
-	ID3D11Buffer* pBuffer;
-	int		iSize;
-	int		iCount;
+	ID3D11Buffer* Buffer;
+	int		Size;
+	int		Count;
 
 	VertexBuffer() :
-		pBuffer(nullptr),
-		iSize(0),
-		iCount(0)
+		Buffer(nullptr),
+		Size(0),
+		Count(0)
 	{
 	}
 
 	~VertexBuffer()
 	{
-		SAFE_RELEASE(pBuffer);
+		SAFE_RELEASE(Buffer);
 	}
 };
 
 struct IndexBuffer
 {
-	ID3D11Buffer* pBuffer;
-	int		iSize;
-	int		iCount;
-	DXGI_FORMAT	eFmt;
+	ID3D11Buffer* Buffer;
+	int		Size;
+	int		Count;
+	DXGI_FORMAT	Fmt;
 
 	IndexBuffer() :
-		pBuffer(nullptr),
-		iSize(0),
-		iCount(0),
-		eFmt(DXGI_FORMAT_UNKNOWN)
+		Buffer(nullptr),
+		Size(0),
+		Count(0),
+		Fmt(DXGI_FORMAT_UNKNOWN)
 	{
 	}
 
 	~IndexBuffer()
 	{
-		SAFE_RELEASE(pBuffer);
+		SAFE_RELEASE(Buffer);
 	}
 };
 
+
+
 struct MeshContainer
 {
-	VertexBuffer	tVB;
+	VertexBuffer	VB;
 	std::vector<IndexBuffer>	vecIB;
-	D3D11_PRIMITIVE_TOPOLOGY	ePrimitive;
+	D3D11_PRIMITIVE_TOPOLOGY	Primitive;
+
+	MeshContainer()	:
+		Primitive()
+	{}
+};
+
+struct TransformCBuffer
+{
+	Matrix	matWorld;
+	Matrix	matView;
+	Matrix	matProj;
+	Matrix	matWV;
+	Matrix	matWVP;
+	Matrix	matVP;
+	Vector3	Pivot;
+	Vector3	MeshSize;
+	Vector2	Empty;
 };

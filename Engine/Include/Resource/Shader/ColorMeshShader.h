@@ -3,13 +3,13 @@
 class CColorMeshShader :
     public CGraphicShader
 {
-	friend class CShaderManager;
+    friend class CShaderManager;
 
 protected:
-	CColorMeshShader();
-	virtual ~CColorMeshShader();
+    CColorMeshShader();
+    virtual ~CColorMeshShader();
 
 public:
-	virtual bool Init();
+    virtual bool Init();
 };
 

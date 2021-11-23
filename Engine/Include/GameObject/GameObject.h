@@ -6,64 +6,64 @@
 class CGameObject :
     public CRef
 {
-	friend class CScene;
+    friend class CScene;
 
 protected:
-	CGameObject();
-	CGameObject(const CGameObject& obj);
-	virtual ~CGameObject();
+    CGameObject();
+    CGameObject(const CGameObject& obj);
+    virtual ~CGameObject();
 
 protected:
-	class CScene* m_pScene;
-	CSharedPtr<CSceneComponent>	m_pRootComponent;
-	std::vector<CSharedPtr<CObjectComponent>>	m_vecObjectComponent;
+    class CScene* m_Scene;
 
 public:
-	void SetRootComponent(CSceneComponent* pSceneComponent)
-	{
-		m_pRootComponent = pSceneComponent;
-	}
-
-	void SetScene(class CScene* pScene)
-	{
-		m_pScene = pScene;
-	}
+    class CScene* GetScene()    const
+    {
+        return m_Scene;
+    }
 
 public:
-	class CScene* GetScene()	const
-	{
-		return m_pScene;
-	}
+    void SetScene(class CScene* Scene);
+
+protected:
+    CSharedPtr<CSceneComponent> m_RootComponent;
+    std::vector<CSharedPtr<CObjectComponent>>   m_vecObjectComponent;
 
 public:
-	virtual bool Init();
-	virtual void Update(float fTime);
-	virtual void PostUpdate(float fTime);
-	virtual void PrevRender();
-	virtual void Render();
-	virtual void PostRender();
-	virtual CGameObject* Clone();
+    void SetRootComponent(CSceneComponent* Component)
+    {
+        m_RootComponent = Component;
+    }
 
 public:
-	template <typename T>
-	T* CreateComponent(const std::string& strName)
-	{
-		T* pComponent = new T;
+    virtual bool Init();
+    virtual void Update(float DeltaTime);
+    virtual void PostUpdate(float DeltaTime);
+    virtual void PrevRender();
+    virtual void Render();
+    virtual void PostRender();
+    virtual CGameObject* Clone();
 
-		pComponent->SetName(strName);
-		pComponent->SetScene(m_pScene);
-		pComponent->SetGameObject(this);
+public:
+    template <typename T>
+    T* CreateComponent(const std::string& Name)
+    {
+        T* Component = new T;
 
-		if (!pComponent->Init())
-		{
-			SAFE_RELEASE(pComponent);
-			return nullptr;
-		}
+        Component->SetName(Name);
+        Component->SetScene(m_Scene);
+        Component->SetGameObject(this);
 
-		if (pComponent->GetComponentType() == Component_Type::ObjectComponent)
-			m_vecObjectComponent.push_back(pComponent);
+        if (!Component->Init())
+        {
+            SAFE_RELEASE(Component);
+            return nullptr;
+        }
 
-		return pComponent;
-	}
+        if (Component->GetComponentType() == Component_Type::ObjectComponent)
+            m_vecObjectComponent.push_back(Component);
+
+        return Component;
+    }
 };
 

@@ -9,9 +9,20 @@ CMaterialManager::~CMaterialManager()
 {
 }
 
-CMaterial* CMaterialManager::FindMaterial(const std::string& strName)
+bool CMaterialManager::Init()
 {
-	auto	iter = m_mapMaterial.find(strName);
+	CreateMaterial<CMaterial>("Color");
+
+	CSharedPtr<CMaterial>	Mtrl = FindMaterial("Color");
+
+	Mtrl->SetShader("ColorMeshShader");
+
+	return true;
+}
+
+CMaterial* CMaterialManager::FindMaterial(const std::string& Name)
+{
+	auto	iter = m_mapMaterial.find(Name);
 
 	if (iter == m_mapMaterial.end())
 		return nullptr;
@@ -19,23 +30,13 @@ CMaterial* CMaterialManager::FindMaterial(const std::string& strName)
 	return iter->second;
 }
 
-void CMaterialManager::ReleaseMaterial(const std::string& strName)
+void CMaterialManager::ReleaseMaterial(const std::string& Name)
 {
-	auto	iter = m_mapMaterial.find(strName);
+	auto	iter = m_mapMaterial.find(Name);
 
 	if (iter != m_mapMaterial.end())
 	{
 		if (iter->second->GetRefCount() == 1)
 			m_mapMaterial.erase(iter);
 	}
-}
-
-bool CMaterialManager::Init()
-{
-	CreateMaterial<CMaterial>("Color");
-
-	CSharedPtr<CMaterial>	pMtrl = FindMaterial("Color");
-	pMtrl->SetShader("ColorMeshShader");
-
-	return true;
 }

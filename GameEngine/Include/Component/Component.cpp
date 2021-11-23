@@ -2,22 +2,32 @@
 #include "Component.h"
 
 CComponent::CComponent()	:
-	m_pScene(nullptr),
-	m_pObject(nullptr),
-	m_eComponentType(Component_Type::ObjectComponent)
+	m_Scene(nullptr),
+	m_Object(nullptr),
+	m_ComponentType(Component_Type::SceneComponent)
 {
 }
 
 CComponent::CComponent(const CComponent& com)
 {
 	*this = com;
-	m_iRefCount = 0;
+	m_RefCount = 0;
 
-	m_pObject = nullptr;
+	m_Object = nullptr;
 }
 
 CComponent::~CComponent()
 {
+}
+
+void CComponent::SetScene(CScene* Scene)
+{
+	m_Scene = Scene;
+}
+
+void CComponent::SetGameObject(CGameObject* Object)
+{
+	m_Object = Object;
 }
 
 bool CComponent::Init()

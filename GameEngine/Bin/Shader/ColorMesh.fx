@@ -3,36 +3,40 @@
 
 struct VertexColor
 {
-	float3	tPos : POSITION; // 0번
-	float4	tColor : COLOR;
+	// 변수 뒤에 : 레지스터이름 + 번호 로 지정한다.
+	// 번호를 안붙이면 0으로 지정된다.
+	float3	Pos : POSITION;	// Vector3타입.
+	float4	Color : COLOR;
 };
 
 struct VertexColorOutput
 {
-	float4	tPos : SV_POSITION; // SV : System Value, 레지스터에 저장만 하는 기능. 직접 사용해선 안된다
-	float4	tColor : COLOR;
+	// SV가 붙으면 System Value이다. 이 값은 레지스터에 저장만 하고
+	// 가져다 사용하면 안된다.
+	float4	Pos : SV_POSITION;
+	float4	Color : COLOR;
 };
 
-VertexColorOutput ColorMeshVS(VertexColor tInput)
+VertexColorOutput ColorMeshVS(VertexColor input)
 {
-	VertexColorOutput	tOutput = (VertexColorOutput)0;
+	VertexColorOutput	output = (VertexColorOutput)0;
 
-	tOutput.tPos = float4(tInput.tPos, 1.f);
-	tOutput.tColor = tInput.tColor;
+	output.Pos = float4(input.Pos, 1.f);
+	output.Color = input.Color;
 
-	return tOutput;
+	return output;
 }
 
 struct VertexColorPSOutput
 {
-	float4	tColor : SV_TARGET;
+	float4	Color : SV_TARGET;
 };
 
-VertexColorPSOutput ColorMeshPS(VertexColorOutput tInput)
+VertexColorPSOutput ColorMeshPS(VertexColorOutput input)
 {
-	VertexColorPSOutput	tOutput = (VertexColorPSOutput)0;
+	VertexColorPSOutput	output = (VertexColorPSOutput)0;
 
-	tOutput.tColor = tInput.tColor;
+	output.Color = input.Color;
 
-	return tOutput;
+	return output;
 }

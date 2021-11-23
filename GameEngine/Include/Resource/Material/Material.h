@@ -1,21 +1,21 @@
 #pragma once
+
 #include "../Shader/GraphicShader.h"
+
 class CMaterial :
     public CRef
 {
-	friend class CMaterialManager;
+    friend class CMaterialManager;
 
 protected:
-	CMaterial();
-	virtual ~CMaterial();
+    CMaterial();
+    virtual ~CMaterial();
 
 protected:
-	CSharedPtr<CGraphicShader>	m_pShader;
+    CSharedPtr<CGraphicShader>  m_Shader;
 
 public:
-	void SetShader(const std::string& strName);
-
-public:
-	void Render();
+    void SetShader(const std::string& Name);
+    void Render();
 };
 

@@ -1,7 +1,5 @@
 #pragma once
-
 #include "Mesh.h"
-
 class CSpriteMesh :
     public CMesh
 {

@@ -7,25 +7,28 @@ class CEngine
 private:
 	HINSTANCE	m_hInst;
 	HWND		m_hWnd;
-	Resolution	m_tRS;
-	static bool m_bLoop;
-	float		m_fClearColor[4];
-	class CTimer* m_pTimer;
+	Resolution	m_RS;
+	static bool	m_Loop;
+	float		m_ClearColor[4];
+	class CTimer* m_Timer;
 
 public:
-	bool Init(HINSTANCE hInst, const TCHAR* cName, unsigned int iWidth, unsigned int iHeight, int iIconID, bool bWindowMode = true);
-	bool Init(HINSTANCE hInst, HWND hWnd, unsigned int iWidth, unsigned int iHeight, bool bWindowMode = true);
+	bool Init(HINSTANCE hInst, const TCHAR* Name, unsigned int Width,
+		unsigned int Height, int IconID,
+		bool WindowMode = true);
+	bool Init(HINSTANCE hInst, HWND hWnd, unsigned int Width,
+		unsigned int Height, bool WindowMode = true);
 	int Run();
 	void Logic();
 
 private:
-	bool Update(float fTime);
-	bool PostUpdate(float fTime);
-	bool Render(float fTime);
+	bool Update(float DeltaTime);
+	bool PostUpdate(float DeltaTime);
+	bool Render(float DeltaTime);
 
 private:
-	ATOM Register(const TCHAR* cName, int IconID);
-	BOOL Create(const TCHAR* cName);
+	ATOM Register(const TCHAR* Name, int IconID);
+	BOOL Create(const TCHAR* Name);
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 	DECLARE_SINGLE(CEngine)
