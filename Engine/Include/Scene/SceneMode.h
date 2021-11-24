@@ -11,10 +11,21 @@ protected:
 	CSceneMode();
 	virtual ~CSceneMode();
 
-private:
+protected:
 	class CScene* m_Scene;
+	CSharedPtr<class CGameObject>	m_PlayerObject;
 
 public:
+	class CGameObject* GetPlayerObject()	const
+	{
+		return m_PlayerObject;
+	}
+
+public:
+	void SetPlayerObject(class CGameObject* Obj);
+
+public:
+	virtual void Start();
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);

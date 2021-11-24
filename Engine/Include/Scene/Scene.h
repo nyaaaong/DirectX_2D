@@ -23,7 +23,13 @@ public:
 		return m_Resource;
 	}
 
+	CGameObject* GetPlayerObject()	const
+	{
+		return m_Mode->GetPlayerObject();
+	}
+
 public:
+	void Start();
 	void Update(float DeltaTime);
 	void PostUpdate(float DeltaTime);
 

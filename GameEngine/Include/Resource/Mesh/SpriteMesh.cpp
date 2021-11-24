@@ -20,10 +20,10 @@ bool CSpriteMesh::Init()
 
 	VertexColor	Vtx[4] =
 	{
-		VertexColor(Vector3(-0.5f, 0.5f, 0.f), Vector4::Red),
-		VertexColor(Vector3(0.5f, 0.5f, 0.f), Vector4::Green),
-		VertexColor(Vector3(-0.5f, -0.5f, 0.f), Vector4::Blue),
-		VertexColor(Vector3(0.5f, -0.5f, 0.f), Vector4(1.f, 0.f, 1.f, 1.f))
+		VertexColor(Vector3(0.f, 1.f, 0.f), Vector4::Red),
+		VertexColor(Vector3(1.f, 1.f, 0.f), Vector4::Green),
+		VertexColor(Vector3(0.f, 0.f, 0.f), Vector4::Blue),
+		VertexColor(Vector3(1.f, 0.f, 0.f), Vector4(1.f, 0.f, 1.f, 1.f))
 	};
 
 	if (!CreateBuffer(Buffer_Type::Vertex, Vtx, sizeof(VertexColor),

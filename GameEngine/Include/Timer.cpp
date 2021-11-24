@@ -2,8 +2,8 @@
 
 CTimer::CTimer() :
 	m_FPS(0.f),
-	m_DeltaTime(0.f),
 	m_FPSTime(0.f),
+	m_DeltaTime(0.f),
 	m_Tick(0)
 {
 	// 고해상도 타이머의 초당 틱을 얻어온다.

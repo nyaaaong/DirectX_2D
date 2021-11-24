@@ -1,6 +1,8 @@
 
 #include "Engine.h"
 #include "resource.h"
+#include "Scene/SceneManager.h"
+#include "Scene/MainScene.h"
 
 #ifdef _DEBUG
 
@@ -24,6 +26,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		CEngine::DestroyInst();
 		return 0;
 	}
+
+	CSceneManager::GetInst()->CreateSceneMode<CMainScene>();
 
 	int Ret = CEngine::GetInst()->Run();
 

@@ -21,7 +21,9 @@ VertexColorOutput ColorMeshVS(VertexColor input)
 {
 	VertexColorOutput	output = (VertexColorOutput)0;
 
-	output.Pos = float4(input.Pos, 1.f);
+	float3	Pos = input.Pos - g_Pivot * g_MeshSize;
+
+	output.Pos = mul(float4(Pos, 1.f), g_matWVP);
 	output.Color = input.Color;
 
 	return output;

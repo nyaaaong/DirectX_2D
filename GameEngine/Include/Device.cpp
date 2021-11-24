@@ -8,7 +8,8 @@ CDevice::CDevice()	:
 	m_SwapChain(nullptr),
 	m_TargetView(nullptr),
 	m_DepthView(nullptr),
-	m_hWnd(0)
+	m_hWnd(0),
+	m_RS{}
 {
 }
 

@@ -6,6 +6,7 @@
 CSpriteComponent::CSpriteComponent()
 {
 	SetTypeID<CSpriteComponent>();
+	m_Render = true;
 }
 
 CSpriteComponent::CSpriteComponent(const CSpriteComponent& com)	:
@@ -18,10 +19,17 @@ CSpriteComponent::~CSpriteComponent()
 {
 }
 
+void CSpriteComponent::Start()
+{
+	CSceneComponent::Start();
+}
+
 bool CSpriteComponent::Init()
 {
 	m_Mesh = (CSpriteMesh*)m_Scene->GetResource()->FindMesh("SpriteMesh");
 	m_Material = m_Scene->GetResource()->FindMaterial("Color");
+
+	SetMeshSize(1.f, 1.f, 0.f);
 
 	return true;
 }
@@ -44,6 +52,10 @@ void CSpriteComponent::PrevRender()
 void CSpriteComponent::Render()
 {
 	CSceneComponent::Render();
+
+	m_Material->Render();
+
+	m_Mesh->Render();
 }
 
 void CSpriteComponent::PostRender()

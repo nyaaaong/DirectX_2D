@@ -409,7 +409,8 @@ void CTransform::SetWorldRotationZ(float z)
 
 void CTransform::SetWorldPos(const Vector3& Pos)
 {
-	m_WorldRot = Pos;
+	m_WorldPos = Pos;
+	m_RelativePos = Pos;
 
 	InheritPos(true);
 }

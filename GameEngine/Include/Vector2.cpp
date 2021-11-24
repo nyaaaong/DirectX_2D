@@ -18,7 +18,7 @@ Vector2::Vector2(const Vector2& v)	:
 {
 }
 
-Vector2::Vector2(const XMVECTOR& v)	:
+Vector2::Vector2(const XMVECTOR& v) :
 	x(0.f),
 	y(0.f)
 {

@@ -56,7 +56,16 @@ CMesh* CSceneResource::FindMesh(const std::string& Name)
 	auto	iter = m_mapMesh.find(Name);
 
 	if (iter == m_mapMesh.end())
-		return nullptr;
+	{
+		CMesh* Mesh = CResourceManager::GetInst()->FindMesh(Name);
+
+		if (!Mesh)
+			return nullptr;
+
+		m_mapMesh.insert(std::make_pair(Name, Mesh));
+
+		return Mesh;
+	}
 
 	return iter->second;
 }
@@ -66,7 +75,16 @@ CShader* CSceneResource::FindShader(const std::string& Name)
 	auto	iter = m_mapShader.find(Name);
 
 	if (iter == m_mapShader.end())
-		return nullptr;
+	{
+		CShader* Shader = CResourceManager::GetInst()->FindShader(Name);
+
+		if (!Shader)
+			return nullptr;
+
+		m_mapShader.insert(std::make_pair(Name, Shader));
+
+		return Shader;
+	}
 
 	return iter->second;
 }
@@ -76,7 +94,16 @@ CMaterial* CSceneResource::FindMaterial(const std::string& Name)
 	auto	iter = m_mapMaterial.find(Name);
 
 	if (iter == m_mapMaterial.end())
-		return nullptr;
+	{
+		CMaterial* Material = CResourceManager::GetInst()->FindMaterial(Name);
+
+		if (!Material)
+			return nullptr;
+
+		m_mapMaterial.insert(std::make_pair(Name, Material));
+
+		return Material;
+	}
 
 	return iter->second;
 }

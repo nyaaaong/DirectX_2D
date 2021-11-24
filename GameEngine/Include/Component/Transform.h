@@ -98,6 +98,11 @@ public:
 		return m_RelativePos;
 	}
 
+	Vector3 GetRelativeAxis(AXIS Axis)
+	{
+		return m_RelativeAxis[Axis];
+	}
+
 public:
 	void SetRelativeScale(const Vector3& Scale);
 	void SetRelativeScale(float x, float y, float z);
@@ -155,6 +160,11 @@ public:
 	Vector3 GetMeshSize()	const
 	{
 		return m_MeshSize;
+	}
+
+	Vector3 GetWorldAxis(AXIS Axis)
+	{
+		return m_WorldAxis[Axis];
 	}
 
 	const Matrix& GetWorldMatrix()	const

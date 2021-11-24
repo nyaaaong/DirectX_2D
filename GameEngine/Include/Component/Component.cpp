@@ -4,7 +4,7 @@
 CComponent::CComponent()	:
 	m_Scene(nullptr),
 	m_Object(nullptr),
-	m_ComponentType(Component_Type::SceneComponent)
+	m_ComponentType((Component_Type)0)
 {
 }
 
@@ -28,6 +28,10 @@ void CComponent::SetScene(CScene* Scene)
 void CComponent::SetGameObject(CGameObject* Object)
 {
 	m_Object = Object;
+}
+
+void CComponent::Start()
+{
 }
 
 bool CComponent::Init()

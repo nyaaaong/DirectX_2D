@@ -30,7 +30,7 @@ Vector4::Vector4(const Vector4& v) :
 {
 }
 
-Vector4::Vector4(const XMVECTOR& v)	:
+Vector4::Vector4(const XMVECTOR& v) :
 	x(0.f),
 	y(0.f),
 	z(0.f),

@@ -15,6 +15,19 @@ CScene::~CScene()
 	SAFE_DELETE(m_Resource);
 }
 
+void CScene::Start()
+{
+	m_Mode->Start();
+
+	auto	iter = m_ObjList.begin();
+	auto	iterEnd = m_ObjList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		(*iter)->Start();
+	}
+}
+
 void CScene::Update(float DeltaTime)
 {
 	m_Mode->Update(DeltaTime);

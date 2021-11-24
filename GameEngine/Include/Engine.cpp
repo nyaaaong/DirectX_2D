@@ -4,6 +4,7 @@
 #include "PathManager.h"
 #include "Timer.h"
 #include "Scene/SceneManager.h"
+#include "Render/RenderManager.h"
 
 DEFINITION_SINGLE(CEngine)
 
@@ -13,19 +14,21 @@ CEngine::CEngine()	:
 	m_ClearColor{},
 	m_Timer(nullptr),
 	m_hInst(0),
-	m_hWnd(0)
+	m_hWnd(0),
+	m_RS{}
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(100);
-
-	m_ClearColor[0] = 0.06274f;
+	m_ClearColor[0] = 0.09019f;
 	m_ClearColor[1] = 0.37254f;
-	m_ClearColor[2] = 0.17254f;
+	m_ClearColor[2] = 0.18823f;
 }
 
 CEngine::~CEngine()
 {
 	CSceneManager::DestroyInst();
+
+	CRenderManager::DestroyInst();
 
 	CPathManager::DestroyInst();
 
@@ -70,6 +73,11 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 
 	// 리소스 관리자 초기화
 	if (!CResourceManager::GetInst()->Init())
+		return false;
+
+
+	// 렌더링 관리자 초기화
+	if (!CRenderManager::GetInst()->Init())
 		return false;
 
 
@@ -158,7 +166,7 @@ bool CEngine::Render(float DeltaTime)
 	Shader->SetShader();
 
 	Mesh->Render();*/
-
+	CRenderManager::GetInst()->Render();
 
 
 
@@ -205,7 +213,7 @@ ATOM CEngine::Register(const TCHAR* Name, int IconID)
 BOOL CEngine::Create(const TCHAR* Name)
 {
 	m_hWnd = CreateWindowW(Name, Name, WS_OVERLAPPEDWINDOW,
-		600, 250, m_RS.Width, m_RS.Height, nullptr, nullptr, m_hInst, nullptr);
+		0, 0, m_RS.Width, m_RS.Height, nullptr, nullptr, m_hInst, nullptr);
 
 	if (!m_hWnd)
 	{
@@ -223,7 +231,7 @@ BOOL CEngine::Create(const TCHAR* Name)
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
 	// 위에서 얻어온 Rect를 이용해서 윈도우 크기를 지정한다.
-	SetWindowPos(m_hWnd, HWND_TOPMOST, 600, 250, rc.right - rc.left,
+	SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, rc.right - rc.left,
 		rc.bottom - rc.top,
 		SWP_NOZORDER);
 

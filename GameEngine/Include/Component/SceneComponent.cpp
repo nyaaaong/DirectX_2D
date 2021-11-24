@@ -1,5 +1,6 @@
 
 #include "SceneComponent.h"
+#include "../Render/RenderManager.h"
 
 CSceneComponent::CSceneComponent()
 {
@@ -157,6 +158,18 @@ CSceneComponent* CSceneComponent::FindComponent(const std::string& Name)
 	return nullptr;
 }
 
+void CSceneComponent::Start()
+{
+	CComponent::Start();
+
+	size_t	Size = m_vecChild.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		m_vecChild[i]->Start();
+	}
+}
+
 bool CSceneComponent::Init()
 {
 	return true;
@@ -164,18 +177,44 @@ bool CSceneComponent::Init()
 
 void CSceneComponent::Update(float DeltaTime)
 {
+	m_Transform->Update(DeltaTime);
+
+	size_t	Size = m_vecChild.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		m_vecChild[i]->Update(DeltaTime);
+	}
 }
 
 void CSceneComponent::PostUpdate(float DeltaTime)
 {
+	m_Transform->PostUpdate(DeltaTime);
+
+	size_t	Size = m_vecChild.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		m_vecChild[i]->PostUpdate(DeltaTime);
+	}
 }
 
 void CSceneComponent::PrevRender()
 {
+	if (m_Render)
+		CRenderManager::GetInst()->AddRenderList(this);
+
+	size_t	Size = m_vecChild.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		m_vecChild[i]->PrevRender();
+	}
 }
 
 void CSceneComponent::Render()
 {
+	m_Transform->SetTransform();
 }
 
 void CSceneComponent::PostRender()

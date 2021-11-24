@@ -1,5 +1,6 @@
 
 #include "SceneMode.h"
+#include "../GameObject/GameObject.h"
 
 CSceneMode::CSceneMode()	:
 	m_Scene(nullptr)
@@ -8,6 +9,15 @@ CSceneMode::CSceneMode()	:
 }
 
 CSceneMode::~CSceneMode()
+{
+}
+
+void CSceneMode::SetPlayerObject(CGameObject* Obj)
+{
+	m_PlayerObject = Obj;
+}
+
+void CSceneMode::Start()
 {
 }
 
