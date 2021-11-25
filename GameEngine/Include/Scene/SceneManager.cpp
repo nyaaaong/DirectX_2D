@@ -27,6 +27,9 @@ bool CSceneManager::Init()
 
 bool CSceneManager::Update(float DeltaTime)
 {
+	if (!m_Scene->IsStart())
+		m_Scene->Start();
+
 	m_Scene->Update(DeltaTime);
 
 	return false;

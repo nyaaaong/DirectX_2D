@@ -25,6 +25,9 @@
     <Filter Include="01. Object\01. Bullet">
       <UniqueIdentifier>{a8df3148-6792-434c-a18b-b9e714c5fc22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Object\00. Player\00. Costume">
+      <UniqueIdentifier>{b0981d5d-f254-4c37-b38c-a4888a1950b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,6 +42,12 @@
     <ClCompile Include="Object\Player2D.cpp">
       <Filter>01. Object\00. Player</Filter>
     </ClCompile>
+    <ClCompile Include="Object\BulletTornaido.cpp">
+      <Filter>01. Object\01. Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Costume\Costume.cpp">
+      <Filter>01. Object\00. Player\00. Costume</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -52,6 +61,12 @@
     </ClInclude>
     <ClInclude Include="Object\Player2D.h">
       <Filter>01. Object\00. Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\BulletTornaido.h">
+      <Filter>01. Object\01. Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Costume\Costume.h">
+      <Filter>01. Object\00. Player\00. Costume</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

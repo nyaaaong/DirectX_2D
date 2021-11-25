@@ -16,8 +16,14 @@ private:
 	CSharedPtr<CSceneMode> m_Mode;
 	CSceneResource* m_Resource;
 	std::list<CSharedPtr<CGameObject>>	m_ObjList;
+	bool		m_Start;
 
 public:
+	bool IsStart()	const
+	{
+		return m_Start;
+	}
+
 	CSceneResource* GetResource()	const
 	{
 		return m_Resource;
@@ -65,6 +71,9 @@ public:
 		}
 
 		m_ObjList.push_back(Obj);
+
+		if (m_Start)
+			Obj->Start();
 
 		return Obj;
 	}

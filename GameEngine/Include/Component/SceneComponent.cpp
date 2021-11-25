@@ -1,6 +1,7 @@
 
 #include "SceneComponent.h"
 #include "../Render/RenderManager.h"
+#include "../GameObject/GameObject.h"
 
 CSceneComponent::CSceneComponent()
 {
@@ -16,7 +17,7 @@ CSceneComponent::CSceneComponent()
 	m_Parent = nullptr;
 }
 
-CSceneComponent::CSceneComponent(const CSceneComponent& com)	:
+CSceneComponent::CSceneComponent(const CSceneComponent& com) :
 	CComponent(com)
 {
 	m_Transform = com.m_Transform->Clone();
@@ -49,6 +50,18 @@ CSceneComponent::CSceneComponent(const CSceneComponent& com)	:
 CSceneComponent::~CSceneComponent()
 {
 	SAFE_DELETE(m_Transform);
+}
+
+void CSceneComponent::SetSceneComponent(CGameObject* Object)
+{
+	Object->AddSceneComponent(this);
+
+	size_t	Size = m_vecChild.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		m_vecChild[i]->SetSceneComponent(Object);
+	}
 }
 
 void CSceneComponent::SetScene(CScene* Scene)

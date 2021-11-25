@@ -167,11 +167,15 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object\Bullet.cpp" />
+    <ClCompile Include="Object\BulletTornaido.cpp" />
+    <ClCompile Include="Object\Costume\Costume.cpp" />
     <ClCompile Include="Object\Player2D.cpp" />
     <ClCompile Include="Scene\MainScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object\Bullet.h" />
+    <ClInclude Include="Object\BulletTornaido.h" />
+    <ClInclude Include="Object\Costume\Costume.h" />
     <ClInclude Include="Object\Player2D.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene\MainScene.h" />

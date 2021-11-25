@@ -1,6 +1,6 @@
 #pragma once
 
-#pragma warning(disable:6387)
+#pragma warning(disable:26812)
 
 #include <Windows.h>
 #include <list>
@@ -54,11 +54,6 @@ struct Resolution
 {
 	unsigned int	Width;
 	unsigned int	Height;
-
-	Resolution()	:
-		Width(0),
-		Height(0)
-	{}
 };
 
 struct VertexColor
@@ -125,10 +120,6 @@ struct MeshContainer
 	VertexBuffer	VB;
 	std::vector<IndexBuffer>	vecIB;
 	D3D11_PRIMITIVE_TOPOLOGY	Primitive;
-
-	MeshContainer()	:
-		Primitive()
-	{}
 };
 
 struct TransformCBuffer

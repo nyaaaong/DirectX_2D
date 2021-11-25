@@ -9,6 +9,7 @@ CBullet::CBullet()
 CBullet::CBullet(const CBullet& obj) :
 	CGameObject(obj)
 {
+	m_Sprite = (CSpriteComponent*)FindComponent("BulletSprite");
 }
 
 CBullet::~CBullet()

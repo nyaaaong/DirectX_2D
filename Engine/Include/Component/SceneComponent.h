@@ -26,6 +26,9 @@ public:
 	}
 
 public:
+	void SetSceneComponent(class CGameObject* Object);
+
+public:
 	virtual void SetScene(class CScene* Scene);
 	virtual void SetGameObject(class CGameObject* Object);
 
@@ -34,6 +37,16 @@ public:
 	bool DeleteChild(CSceneComponent* Child);
 	bool DeleteChild(const std::string& Name);
 	CSceneComponent* FindComponent(const std::string& Name);
+
+public:
+	virtual void Start();
+	virtual bool Init();
+	virtual void Update(float DeltaTime);
+	virtual void PostUpdate(float DeltaTime);
+	virtual void PrevRender();
+	virtual void Render();
+	virtual void PostRender();
+	virtual CSceneComponent* Clone();
 
 public:
 	void SetInheritScale(bool Inherit)
@@ -56,19 +69,19 @@ public:
 		m_Transform->SetInheritRotZ(Inherit);
 	}
 
-	void SetInheritPosX(bool Inherit)
+	void SetInheritParentRotationPosX(bool Inherit)
 	{
-		m_Transform->SetInheritPosX(Inherit);
+		m_Transform->SetInheritParentRotationPosX(Inherit);
 	}
 
-	void SetInheritPosY(bool Inherit)
+	void SetInheritParentRotationPosY(bool Inherit)
 	{
-		m_Transform->SetInheritPosY(Inherit);
+		m_Transform->SetInheritParentRotationPosY(Inherit);
 	}
 
-	void SetInheritPosZ(bool Inherit)
+	void SetInheritParentRotationPosZ(bool Inherit)
 	{
-		m_Transform->SetInheritPosZ(Inherit);
+		m_Transform->SetInheritParentRotationPosZ(Inherit);
 	}
 
 	void InheritScale(bool Current)
@@ -81,9 +94,9 @@ public:
 		m_Transform->InheritRotation(Current);
 	}
 
-	void InheritPos(bool Current)
+	void InheritParentRotationPos(bool Current)
 	{
-		m_Transform->InheritPos(Current);
+		m_Transform->InheritParentRotationPos(Current);
 	}
 
 	void InheritWorldScale(bool Current)
@@ -355,15 +368,5 @@ public:
 	{
 		m_Transform->AddWorldPos(x, y, z);
 	}
-
-public:
-	virtual void Start();
-	virtual bool Init();
-	virtual void Update(float DeltaTime);
-	virtual void PostUpdate(float DeltaTime);
-	virtual void PrevRender();
-	virtual void Render();
-	virtual void PostRender();
-	virtual CSceneComponent* Clone();
 };
 

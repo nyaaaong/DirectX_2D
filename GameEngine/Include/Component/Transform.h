@@ -26,9 +26,9 @@ private:
 	bool	m_InheritRotX;
 	bool	m_InheritRotY;
 	bool	m_InheritRotZ;
-	bool	m_InheritPosX;
-	bool	m_InheritPosY;
-	bool	m_InheritPosZ;
+	bool	m_InheritParentRotationPosX;
+	bool	m_InheritParentRotationPosY;
+	bool	m_InheritParentRotationPosZ;
 	bool	m_UpdateScale;
 	bool	m_UpdateRot;
 	bool	m_UpdatePos;
@@ -54,27 +54,28 @@ public:
 		m_InheritRotZ = Inherit;
 	}
 
-	void SetInheritPosX(bool Inherit)
+	void SetInheritParentRotationPosX(bool Inherit)
 	{
-		m_InheritPosX = Inherit;
+		m_InheritParentRotationPosX = Inherit;
 	}
 
-	void SetInheritPosY(bool Inherit)
+	void SetInheritParentRotationPosY(bool Inherit)
 	{
-		m_InheritPosY = Inherit;
+		m_InheritParentRotationPosY = Inherit;
 	}
 
-	void SetInheritPosZ(bool Inherit)
+	void SetInheritParentRotationPosZ(bool Inherit)
 	{
-		m_InheritPosZ = Inherit;
+		m_InheritParentRotationPosZ = Inherit;
 	}
 
 	void InheritScale(bool Current);
 	void InheritRotation(bool Current);
-	void InheritPos(bool Current);
+	void InheritParentRotationPos(bool Current);
 
 	void InheritWorldScale(bool Current);
 	void InheritWorldRotation(bool Current);
+	void InheritParentRotationWorldPos(bool Current);
 
 private:	// Relative
 	Vector3	m_RelativeScale;
@@ -83,22 +84,22 @@ private:	// Relative
 	Vector3	m_RelativeAxis[AXIS_MAX];
 
 public:
-	Vector3 GetRelativeScale()	const
+	const Vector3& GetRelativeScale()	const
 	{
 		return m_RelativeScale;
 	}
 
-	Vector3 GetRelativeRot()	const
+	const Vector3& GetRelativeRot()	const
 	{
 		return m_RelativeRot;
 	}
 
-	Vector3 GetRelativePos()	const
+	const Vector3& GetRelativePos()	const
 	{
 		return m_RelativePos;
 	}
 
-	Vector3 GetRelativeAxis(AXIS Axis)
+	const Vector3& GetRelativeAxis(AXIS Axis)
 	{
 		return m_RelativeAxis[Axis];
 	}
@@ -137,32 +138,32 @@ private:
 	Matrix	m_matWorld;
 
 public:
-	Vector3 GetWorldScale()	const
+	const Vector3& GetWorldScale()	const
 	{
 		return m_WorldScale;
 	}
 
-	Vector3 GetWorldRot()	const
+	const Vector3& GetWorldRot()	const
 	{
 		return m_WorldRot;
 	}
 
-	Vector3 GetWorldPos()	const
+	const Vector3& GetWorldPos()	const
 	{
 		return m_WorldPos;
 	}
 
-	Vector3 GetPivot()	const
+	const Vector3& GetPivot()	const
 	{
 		return m_Pivot;
 	}
 
-	Vector3 GetMeshSize()	const
+	const Vector3& GetMeshSize()	const
 	{
 		return m_MeshSize;
 	}
 
-	Vector3 GetWorldAxis(AXIS Axis)
+	const Vector3& GetWorldAxis(AXIS Axis)
 	{
 		return m_WorldAxis[Axis];
 	}

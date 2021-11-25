@@ -1,7 +1,8 @@
 
 #include "Scene.h"
 
-CScene::CScene()
+CScene::CScene()	:
+	m_Start(false)
 {
 	m_Mode = new CSceneMode;
 	m_Resource = new CSceneResource;
@@ -17,6 +18,8 @@ CScene::~CScene()
 
 void CScene::Start()
 {
+	m_Start = true;
+
 	m_Mode->Start();
 
 	auto	iter = m_ObjList.begin();

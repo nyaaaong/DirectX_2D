@@ -26,9 +26,9 @@ private:
 	bool	m_InheritRotX;
 	bool	m_InheritRotY;
 	bool	m_InheritRotZ;
-	bool	m_InheritPosX;
-	bool	m_InheritPosY;
-	bool	m_InheritPosZ;
+	bool	m_InheritParentRotationPosX;
+	bool	m_InheritParentRotationPosY;
+	bool	m_InheritParentRotationPosZ;
 	bool	m_UpdateScale;
 	bool	m_UpdateRot;
 	bool	m_UpdatePos;
@@ -54,27 +54,28 @@ public:
 		m_InheritRotZ = Inherit;
 	}
 
-	void SetInheritPosX(bool Inherit)
+	void SetInheritParentRotationPosX(bool Inherit)
 	{
-		m_InheritPosX = Inherit;
+		m_InheritParentRotationPosX = Inherit;
 	}
 
-	void SetInheritPosY(bool Inherit)
+	void SetInheritParentRotationPosY(bool Inherit)
 	{
-		m_InheritPosY = Inherit;
+		m_InheritParentRotationPosY = Inherit;
 	}
 
-	void SetInheritPosZ(bool Inherit)
+	void SetInheritParentRotationPosZ(bool Inherit)
 	{
-		m_InheritPosZ = Inherit;
+		m_InheritParentRotationPosZ = Inherit;
 	}
 
 	void InheritScale(bool Current);
 	void InheritRotation(bool Current);
-	void InheritPos(bool Current);
+	void InheritParentRotationPos(bool Current);
 
 	void InheritWorldScale(bool Current);
 	void InheritWorldRotation(bool Current);
+	void InheritParentRotationWorldPos(bool Current);
 
 private:	// Relative
 	Vector3	m_RelativeScale;

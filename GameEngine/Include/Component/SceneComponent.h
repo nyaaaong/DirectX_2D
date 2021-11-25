@@ -4,52 +4,51 @@
 #include "Transform.h"
 
 class CSceneComponent :
-    public CComponent
+	public CComponent
 {
-    friend class CGameObject;
+	friend class CGameObject;
 
 protected:
-    CSceneComponent();
-    CSceneComponent(const CSceneComponent& com);
-    virtual ~CSceneComponent();
+	CSceneComponent();
+	CSceneComponent(const CSceneComponent& com);
+	virtual ~CSceneComponent();
 
 protected:
-    CTransform* m_Transform;
-    CSceneComponent* m_Parent;
-    std::vector<CSharedPtr<CSceneComponent>>    m_vecChild;
-    bool    m_Render;
+	CTransform* m_Transform;
+	CSceneComponent* m_Parent;
+	std::vector<CSharedPtr<CSceneComponent>>    m_vecChild;
+	bool    m_Render;
 
 public:
-    bool IsRender() const
-    {
-        return m_Render;
-    }
+	bool IsRender() const
+	{
+		return m_Render;
+	}
 
 public:
-    virtual void SetScene(class CScene* Scene);
-    virtual void SetGameObject(class CGameObject* Object);
+	void SetSceneComponent(class CGameObject* Object);
 
 public:
-    void AddChild(CSceneComponent* Child);
-    bool DeleteChild(CSceneComponent* Child);
-    bool DeleteChild(const std::string& Name);
-    CSceneComponent* FindComponent(const std::string& Name);
+	virtual void SetScene(class CScene* Scene);
+	virtual void SetGameObject(class CGameObject* Object);
 
 public:
-    virtual void Start();
-    virtual bool Init();
-    virtual void Update(float DeltaTime);
-    virtual void PostUpdate(float DeltaTime);
-    virtual void PrevRender();
-    virtual void Render();
-    virtual void PostRender();
-    virtual CSceneComponent* Clone();
+	void AddChild(CSceneComponent* Child);
+	bool DeleteChild(CSceneComponent* Child);
+	bool DeleteChild(const std::string& Name);
+	CSceneComponent* FindComponent(const std::string& Name);
 
+public:
+	virtual void Start();
+	virtual bool Init();
+	virtual void Update(float DeltaTime);
+	virtual void PostUpdate(float DeltaTime);
+	virtual void PrevRender();
+	virtual void Render();
+	virtual void PostRender();
+	virtual CSceneComponent* Clone();
 
-
-
-
-public:	// =============== 历林罐篮 Transform 康开 ===============
+public:
 	void SetInheritScale(bool Inherit)
 	{
 		m_Transform->SetInheritScale(Inherit);
@@ -70,19 +69,19 @@ public:	// =============== 历林罐篮 Transform 康开 ===============
 		m_Transform->SetInheritRotZ(Inherit);
 	}
 
-	void SetInheritPosX(bool Inherit)
+	void SetInheritParentRotationPosX(bool Inherit)
 	{
-		m_Transform->SetInheritPosX(Inherit);
+		m_Transform->SetInheritParentRotationPosX(Inherit);
 	}
 
-	void SetInheritPosY(bool Inherit)
+	void SetInheritParentRotationPosY(bool Inherit)
 	{
-		m_Transform->SetInheritPosY(Inherit);
+		m_Transform->SetInheritParentRotationPosY(Inherit);
 	}
 
-	void SetInheritPosZ(bool Inherit)
+	void SetInheritParentRotationPosZ(bool Inherit)
 	{
-		m_Transform->SetInheritPosZ(Inherit);
+		m_Transform->SetInheritParentRotationPosZ(Inherit);
 	}
 
 	void InheritScale(bool Current)
@@ -95,9 +94,9 @@ public:	// =============== 历林罐篮 Transform 康开 ===============
 		m_Transform->InheritRotation(Current);
 	}
 
-	void InheritPos(bool Current)
+	void InheritParentRotationPos(bool Current)
 	{
-		m_Transform->InheritPos(Current);
+		m_Transform->InheritParentRotationPos(Current);
 	}
 
 	void InheritWorldScale(bool Current)

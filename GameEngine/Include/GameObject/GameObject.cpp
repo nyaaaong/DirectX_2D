@@ -2,7 +2,8 @@
 #include "GameObject.h"
 
 CGameObject::CGameObject()	:
-	m_Scene(nullptr)
+	m_Scene(nullptr),
+	m_Parent(nullptr)
 {
 	SetTypeID<CGameObject>();
 }
@@ -14,7 +15,24 @@ CGameObject::CGameObject(const CGameObject& obj)
 	m_RefCount = 0;
 
 	if (obj.m_RootComponent)
+	{
 		m_RootComponent = obj.m_RootComponent->Clone();
+
+		m_RootComponent->SetGameObject(this);
+
+		m_RootComponent->SetSceneComponent(this);
+	}
+
+	m_vecObjectComponent.clear();
+
+	size_t	Size = obj.m_vecObjectComponent.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		m_vecObjectComponent.push_back(obj.m_vecObjectComponent[i]->Clone());
+
+		m_vecObjectComponent[i]->SetGameObject(this);
+	}
 }
 
 CGameObject::~CGameObject()
@@ -24,6 +42,33 @@ CGameObject::~CGameObject()
 void CGameObject::SetScene(CScene* Scene)
 {
 	m_Scene = Scene;
+}
+
+CComponent* CGameObject::FindComponent(const std::string& Name)
+{
+	{
+		auto	iter = m_SceneComponentList.begin();
+		auto	iterEnd = m_SceneComponentList.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if ((*iter)->GetName() == Name)
+				return *iter;
+		}
+	}
+
+	{
+		auto	iter = m_vecObjectComponent.begin();
+		auto	iterEnd = m_vecObjectComponent.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if ((*iter)->GetName() == Name)
+				return *iter;
+		}
+	}
+
+	return nullptr;
 }
 
 void CGameObject::Start()

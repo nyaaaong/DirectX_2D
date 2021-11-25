@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma warning(disable:26812)
+
 #include <Windows.h>
 #include <list>
 #include <vector>
