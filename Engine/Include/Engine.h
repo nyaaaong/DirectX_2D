@@ -11,6 +11,7 @@ private:
 	static bool	m_Loop;
 	float		m_ClearColor[4];
 	class CTimer* m_Timer;
+	bool		m_Start;
 
 public:
 	bool Init(HINSTANCE hInst, const TCHAR* Name, unsigned int Width,

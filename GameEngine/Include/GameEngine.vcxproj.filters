@@ -88,6 +88,9 @@
     <Filter Include="06. Render">
       <UniqueIdentifier>{8cdf9cea-1a0f-4e74-bb34-2da5e4900bb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Engine\07. Input">
+      <UniqueIdentifier>{617c03c2-3ba2-4a43-9a00-9f926e9a28b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -204,6 +207,9 @@
     <ClInclude Include="Render\RenderManager.h">
       <Filter>06. Render</Filter>
     </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>01. Engine\07. Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -307,6 +313,9 @@
     </ClCompile>
     <ClCompile Include="Render\RenderManager.cpp">
       <Filter>06. Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>01. Engine\07. Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

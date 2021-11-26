@@ -1,8 +1,9 @@
 #include "Engine.h"
 #include "Device.h"
-#include "Resource/ResourceManager.h"
 #include "PathManager.h"
 #include "Timer.h"
+#include "Input.h"
+#include "Resource/ResourceManager.h"
 #include "Scene/SceneManager.h"
 #include "Render/RenderManager.h"
 
@@ -15,7 +16,8 @@ CEngine::CEngine()	:
 	m_Timer(nullptr),
 	m_hInst(0),
 	m_hWnd(0),
-	m_RS{}
+	m_RS{},
+	m_Start(false)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(100);
@@ -27,6 +29,8 @@ CEngine::CEngine()	:
 CEngine::~CEngine()
 {
 	CSceneManager::DestroyInst();
+
+	CInput::DestroyInst();
 
 	CRenderManager::DestroyInst();
 
@@ -75,6 +79,9 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 	if (!CResourceManager::GetInst()->Init())
 		return false;
 
+	// 입력 관리자 초기화
+	if (!CInput::GetInst()->Init(m_hInst, m_hWnd))
+		return false;
 
 	// 렌더링 관리자 초기화
 	if (!CRenderManager::GetInst()->Init())
@@ -125,9 +132,17 @@ int CEngine::Run()
 
 void CEngine::Logic()
 {
+	if (!m_Start)
+	{
+		m_Start = true;
+		CSceneManager::GetInst()->Start();
+	}
+
 	m_Timer->Update();
 
 	float	DeltaTime = m_Timer->GetDeltaTime();
+
+	CInput::GetInst()->Update(DeltaTime);
 
 	if (Update(DeltaTime))
 		return;

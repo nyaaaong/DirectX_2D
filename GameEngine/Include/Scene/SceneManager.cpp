@@ -16,6 +16,11 @@ CSceneManager::~CSceneManager()
 	SAFE_DELETE(m_NextScene);
 }
 
+void CSceneManager::Start()
+{
+	m_Scene->Start();
+}
+
 bool CSceneManager::Init()
 {
 	m_Scene = new CScene;
@@ -27,9 +32,6 @@ bool CSceneManager::Init()
 
 bool CSceneManager::Update(float DeltaTime)
 {
-	if (!m_Scene->IsStart())
-		m_Scene->Start();
-
 	m_Scene->Update(DeltaTime);
 
 	return false;

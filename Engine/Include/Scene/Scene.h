@@ -19,11 +19,6 @@ private:
 	bool		m_Start;
 
 public:
-	bool IsStart()	const
-	{
-		return m_Start;
-	}
-
 	CSceneResource* GetResource()	const
 	{
 		return m_Resource;

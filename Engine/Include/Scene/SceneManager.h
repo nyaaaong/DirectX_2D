@@ -15,6 +15,7 @@ public:
 	}
 
 public:
+	void Start();
 	bool Init();
 	bool Update(float DeltaTime);
 	bool PostUpdate(float DeltaTime);

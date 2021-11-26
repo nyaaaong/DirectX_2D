@@ -1,6 +1,9 @@
 #pragma once
 
+#pragma warning(disable:6387)
 #pragma warning(disable:26812)
+
+#define	DIRECTINPUT_VERSION	0x0800
 
 #include <Windows.h>
 #include <list>
@@ -13,10 +16,12 @@
 #include <algorithm>
 #include <d3d11.h>
 #include <d3dcompiler.h>
+#include <dinput.h>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "d3dcompiler.lib")
+#pragma comment(lib, "dinput8.lib")
 
 #include "Vector2.h"
 #include "Vector3.h"
@@ -120,6 +125,10 @@ struct MeshContainer
 	VertexBuffer	VB;
 	std::vector<IndexBuffer>	vecIB;
 	D3D11_PRIMITIVE_TOPOLOGY	Primitive;
+
+	MeshContainer()	:
+		Primitive()
+	{}
 };
 
 struct TransformCBuffer
@@ -131,7 +140,7 @@ struct TransformCBuffer
 	Matrix	matWVP;
 	Matrix	matVP;
 	Vector3	Pivot;
-	float	Empty1;
+	float	Empty1 = 0.f;
 	Vector3	MeshSize;
-	float	Empty;
+	float	Empty = 0.f;
 };
