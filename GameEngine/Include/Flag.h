@@ -52,3 +52,10 @@ enum Key_State
 	KeyState_Up,
 	KeyState_Max
 };
+
+enum class Image_Type
+{
+	Atlas,
+	Frame,
+	Array
+};

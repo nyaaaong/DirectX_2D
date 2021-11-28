@@ -3,6 +3,7 @@
 #include "Bullet.h"
 #include "BulletTornaido.h"
 #include "Scene/Scene.h"
+#include "Input.h"
 
 CPlayer2D::CPlayer2D()
 {
@@ -113,129 +114,19 @@ bool CPlayer2D::Init()
 	m_Child4Sprite->SetPivot(0.5f, 0.5f, 0.f);
 	m_Child4Sprite->SetInheritRotZ(true);
 
+	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveUp", KeyState_Push, this, &CPlayer2D::MoveUp);
+	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveDown", KeyState_Push, this, &CPlayer2D::MoveDown);
+	CInput::GetInst()->SetKeyCallback<CPlayer2D>("RotationZInv", KeyState_Push, this, &CPlayer2D::RotationZInv);
+	CInput::GetInst()->SetKeyCallback<CPlayer2D>("RotationZ", KeyState_Push, this, &CPlayer2D::RotationZ);
+	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Attack", KeyState_Down, this, &CPlayer2D::Attack);
+	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Attack1", KeyState_Push, this, &CPlayer2D::Attack1);
+
 	return true;
 }
 
 void CPlayer2D::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
-
-	if (GetAsyncKeyState('D') & 0x8000)
-	{
-		m_Sprite->AddRelativeRotationZ(-180.f * DeltaTime);
-	}
-
-	if (GetAsyncKeyState('A') & 0x8000)
-	{
-		m_Sprite->AddRelativeRotationZ(180.f * DeltaTime);
-	}
-
-
-	if (GetAsyncKeyState('W') & 0x8000)
-	{
-		m_Sprite->AddRelativePos(m_Sprite->GetWorldAxis(AXIS_Y) * 300.f * DeltaTime);
-	}
-
-	if (GetAsyncKeyState('S') & 0x8000)
-	{
-		m_Sprite->AddRelativePos(m_Sprite->GetWorldAxis(AXIS_Y) * 300.f * -DeltaTime);
-	}
-
-	static bool SolW = false;
-
-	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
-	{
-		SolW = true;
-		//m_ChildSprite->AddWorldPos(30.f * DeltaTime, 0.f, 0.f);
-		//m_ChildSprite->AddRelativePos(30.f * DeltaTime, 0.f, 0.f);
-	}
-
-	else if (SolW)
-	{
-		SolW = false;
-		m_SolW = true;
-	}
-
-	if (m_SolW)
-	{
-		float	Dist = 50.f * DeltaTime;
-		m_WDistance += Dist;
-
-
-		if (m_WDistance >= 100.f)
-		{
-			m_SolW = false;
-
-			Dist -= (m_WDistance - 100.f);
-
-			m_WDistance = 100.f;
-		}
-
-		m_Child1Sprite->AddRelativePos(Dist, 0.f, 0.f);
-		m_Child2Sprite->AddRelativePos(-Dist, 0.f, 0.f);
-		m_Child3Sprite->AddRelativePos(0.f, Dist, 0.f);
-		m_Child4Sprite->AddRelativePos(0.f, -Dist, 0.f);
-	}
-
-	static bool Fire = false;
-
-	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
-	{
-		Fire = true;
-	}
-
-	else if (Fire)
-	{
-		Fire = false;
-
-		CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
-
-		//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
-		Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
-		Bullet->SetWorldRotation(GetWorldRot());
-
-		Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
-
-		//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
-		Bullet->SetWorldPos(m_ChildLeftMuzzle->GetWorldPos());
-		Bullet->SetWorldRotation(GetWorldRot());
-
-		Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
-
-		//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
-		Bullet->SetWorldPos(m_ChildRightMuzzle->GetWorldPos());
-		Bullet->SetWorldRotation(GetWorldRot());
-	}
-
-	static bool Fire1 = false;
-
-	if (GetAsyncKeyState('1') & 0x8000)
-	{
-		Fire1 = true;
-	}
-
-	else if (Fire1)
-	{
-		Fire1 = false;
-
-		CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
-
-		//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
-		Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
-		Bullet->SetWorldRotation(GetWorldRot());
-
-		Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
-
-		//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
-		Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
-		Bullet->SetWorldRotation(GetWorldRot() + Vector3(0.f, 0.f, 45.f));
-
-		Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
-
-		//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
-		Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
-		Bullet->SetWorldRotation(GetWorldRot() + Vector3(0.f, 0.f, -45.f));
-	}
 
 	static bool Fire2 = false;
 
@@ -266,4 +157,66 @@ void CPlayer2D::PostUpdate(float DeltaTime)
 CPlayer2D* CPlayer2D::Clone()
 {
 	return new CPlayer2D(*this);
+}
+
+void CPlayer2D::MoveUp(float DeltaTime)
+{
+	m_Sprite->AddRelativePos(m_Sprite->GetWorldAxis(AXIS_Y) * 300.f * DeltaTime);
+}
+
+void CPlayer2D::MoveDown(float DeltaTime)
+{
+	m_Sprite->AddRelativePos(m_Sprite->GetWorldAxis(AXIS_Y) * -300.f * DeltaTime);
+}
+
+void CPlayer2D::RotationZInv(float DeltaTime)
+{
+	m_Sprite->AddRelativeRotationZ(180.f * DeltaTime);
+}
+
+void CPlayer2D::RotationZ(float DeltaTime)
+{
+	m_Sprite->AddRelativeRotationZ(-180.f * DeltaTime);
+}
+
+void CPlayer2D::Attack(float DeltaTime)
+{
+	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
+
+	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
+	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
+	Bullet->SetWorldRotation(GetWorldRot());
+
+	Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
+
+	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
+	Bullet->SetWorldPos(m_ChildLeftMuzzle->GetWorldPos());
+	Bullet->SetWorldRotation(GetWorldRot());
+
+	Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
+
+	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
+	Bullet->SetWorldPos(m_ChildRightMuzzle->GetWorldPos());
+	Bullet->SetWorldRotation(GetWorldRot());
+}
+
+void CPlayer2D::Attack1(float DeltaTime)
+{
+	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
+
+	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
+	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
+	Bullet->SetWorldRotation(GetWorldRot());
+
+	Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
+
+	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
+	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
+	Bullet->SetWorldRotation(GetWorldRot() + Vector3(0.f, 0.f, 45.f));
+
+	Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
+
+	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
+	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
+	Bullet->SetWorldRotation(GetWorldRot() + Vector3(0.f, 0.f, -45.f));
 }

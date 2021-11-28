@@ -42,6 +42,9 @@ public:
 	}
 
 public:
+	Vector2 GetViewportAspectRatio();
+
+public:
 	bool Init(HWND hWnd, unsigned int Width, unsigned int Height,
 		bool WindowMode);
 	void ClearRenderTarget(float ClearColor[4]);

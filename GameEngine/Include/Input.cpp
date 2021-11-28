@@ -1,4 +1,5 @@
 #include "Input.h"
+#include "Device.h"
 
 DEFINITION_SINGLE(CInput)
 
@@ -215,6 +216,18 @@ void CInput::ReadDirectInputMouse()
 
 void CInput::UpdateMouse(float DeltaTime)
 {
+	POINT	MouseWindowPos;
+
+	GetCursorPos(&MouseWindowPos);
+	ScreenToClient(m_hWnd, &MouseWindowPos);
+
+	Vector2	Ratio = CDevice::GetInst()->GetViewportAspectRatio();
+
+	Vector2	MousePos = Vector2(MouseWindowPos.x * Ratio.x, MouseWindowPos.y * Ratio.y);
+
+	m_MouseMove = MousePos - m_MousePos;
+
+	m_MousePos = MousePos;
 }
 
 void CInput::UpdateKeyState()
@@ -276,16 +289,18 @@ void CInput::UpdateKeyState()
 			switch (Key)
 			{
 			case DIK_MOUSELBUTTON:
+				if (m_MouseState.rgbButtons[0] & 0x80)
+					KeyPush = true;
 				break;
 			case DIK_MOUSERBUTTON:
+				if (m_MouseState.rgbButtons[1] & 0x80)
+					KeyPush = true;
 				break;
 			case DIK_MOUSEWHEEL:
 				break;
 			default:	// 키보드 키를 알아볼 경우
 				if (m_KeyArray[Key] & 0x80)
-				{
 					KeyPush = true;
-				}
 				break;
 			}
 			break;
@@ -642,4 +657,18 @@ unsigned char CInput::ConvertKey(unsigned char Key)
 	}
 
 	return Key;
+}
+
+void CInput::ClearCallback()
+{
+	auto	iter = m_mapKeyInfo.begin();
+	auto	iterEnd = m_mapKeyInfo.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		for (int i = 0; i < KeyState_Max; ++i)
+		{
+			iter->second->Callback[i] = nullptr;
+		}
+	}
 }

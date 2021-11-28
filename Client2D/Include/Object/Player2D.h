@@ -35,5 +35,13 @@ public:
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
 	virtual CPlayer2D* Clone();
+
+private:
+	void MoveUp(float DeltaTime);
+	void MoveDown(float DeltaTime);
+	void RotationZInv(float DeltaTime);
+	void RotationZ(float DeltaTime);
+	void Attack(float DeltaTime);
+	void Attack1(float DeltaTime);
 };
 

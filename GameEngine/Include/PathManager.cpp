@@ -59,6 +59,7 @@ bool CPathManager::Init()
 	m_mapPath.insert(std::make_pair(ROOT_PATH, Info));
 
 	AddPath(SHADER_PATH, TEXT("Shader\\"));
+	AddPath(TEXTURE_PATH, TEXT("Texture\\"));
 
 	return true;
 }

@@ -27,6 +27,18 @@ CDevice::~CDevice()
 	SAFE_RELEASE(m_Device);
 }
 
+Vector2 CDevice::GetViewportAspectRatio()
+{
+	RECT	ClientRC = {};
+
+	GetClientRect(m_hWnd, &ClientRC);
+
+	float	Width = (float)(ClientRC.right - ClientRC.left);
+	float	Height = (float)(ClientRC.bottom - ClientRC.top);
+
+	return Vector2(m_RS.Width / Width, m_RS.Height / Height);
+}
+
 bool CDevice::Init(HWND hWnd, unsigned int Width,
 	unsigned int Height, bool WindowMode)
 {
@@ -37,7 +49,7 @@ bool CDevice::Init(HWND hWnd, unsigned int Width,
 	unsigned int Flag = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
 #ifdef _DEBUG
-
+	
 	Flag |= D3D11_CREATE_DEVICE_DEBUG;
 
 #endif // _DEBUG

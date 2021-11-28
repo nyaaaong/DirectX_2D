@@ -52,6 +52,19 @@ private:
 	bool	m_Ctrl;
 	bool	m_Alt;
 	bool	m_Shift;
+	Vector2		m_MousePos;
+	Vector2		m_MouseMove;
+
+public:
+	const Vector2& GetMousePos()	const
+	{
+		return m_MousePos;
+	}
+
+	const Vector2& GetMosueMove()	const
+	{
+		return m_MouseMove;
+	}
 
 public:
 	bool CreateKey(const std::string& Name, unsigned char Key);
@@ -81,6 +94,7 @@ private:
 	unsigned char ConvertKey(unsigned char Key);
 
 public:
+	void ClearCallback();
 	template <typename T>
 	void SetKeyCallback(const std::string& Name, Key_State State, T* Obj, void(T::*Func)(float))
 	{

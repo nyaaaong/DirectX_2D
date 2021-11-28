@@ -91,6 +91,9 @@
     <Filter Include="01. Engine\07. Input">
       <UniqueIdentifier>{617c03c2-3ba2-4a43-9a00-9f926e9a28b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Resource\04. Texture">
+      <UniqueIdentifier>{94899a5e-8912-426b-88e7-50a6ac623c13}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -210,6 +213,15 @@
     <ClInclude Include="Input.h">
       <Filter>01. Engine\07. Input</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Texture\DirectXTex.h">
+      <Filter>02. Resource\04. Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Texture\TextureManager.h">
+      <Filter>02. Resource\04. Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Texture\Texture.h">
+      <Filter>02. Resource\04. Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -317,6 +329,12 @@
     <ClCompile Include="Input.cpp">
       <Filter>01. Engine\07. Input</Filter>
     </ClCompile>
+    <ClCompile Include="Resource\Texture\TextureManager.cpp">
+      <Filter>02. Resource\04. Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Texture\Texture.cpp">
+      <Filter>02. Resource\04. Texture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Shader\ShaderInfo.fx">
@@ -325,5 +343,10 @@
     <FxCompile Include="..\Bin\Shader\ColorMesh.fx">
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resource\Texture\DirectXTex.inl">
+      <Filter>02. Resource\04. Texture</Filter>
+    </None>
   </ItemGroup>
 </Project>
