@@ -4,6 +4,7 @@
 #include "BulletTornaido.h"
 #include "Scene/Scene.h"
 #include "Input.h"
+#include "Resource/Material/Material.h"
 
 CPlayer2D::CPlayer2D()
 {
@@ -120,6 +121,7 @@ bool CPlayer2D::Init()
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("RotationZ", KeyState_Push, this, &CPlayer2D::RotationZ);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Attack", KeyState_Down, this, &CPlayer2D::Attack);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Attack1", KeyState_Push, this, &CPlayer2D::Attack1);
+	CInput::GetInst()->SetKeyCallback<CPlayer2D>("test", KeyState_Push, this, &CPlayer2D::test);
 
 	return true;
 }
@@ -219,4 +221,9 @@ void CPlayer2D::Attack1(float DeltaTime)
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
 	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot() + Vector3(0.f, 0.f, -45.f));
+}
+
+void CPlayer2D::test(float DeltatTime)
+{
+	int a = 0;
 }

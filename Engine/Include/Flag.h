@@ -59,3 +59,10 @@ enum class Image_Type
 	Frame,
 	Array
 };
+
+enum class Sampler_Type
+{
+	Point,
+	Linear,
+	Anisotropic
+};

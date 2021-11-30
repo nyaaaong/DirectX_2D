@@ -6,6 +6,7 @@
 #include "Resource/ResourceManager.h"
 #include "Scene/SceneManager.h"
 #include "Render/RenderManager.h"
+#include "Excel/ExcelManager.h"
 
 DEFINITION_SINGLE(CEngine)
 
@@ -28,6 +29,8 @@ CEngine::CEngine()	:
 
 CEngine::~CEngine()
 {
+	CExcelManager::DestroyInst();
+
 	CSceneManager::DestroyInst();
 
 	CInput::DestroyInst();
@@ -87,9 +90,12 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 	if (!CRenderManager::GetInst()->Init())
 		return false;
 
-
 	// 장면 관리자 초기화
 	if (!CSceneManager::GetInst()->Init())
+		return false;
+
+	// 엑셀 관리자 초기화
+	if (!CExcelManager::GetInst()->Init())
 		return false;
 
 	return true;

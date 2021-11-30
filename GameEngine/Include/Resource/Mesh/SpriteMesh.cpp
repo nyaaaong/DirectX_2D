@@ -14,19 +14,19 @@ bool CSpriteMesh::Init()
 {
 	MeshContainer*	Container = new MeshContainer;
 
-	Container->VB.Size = sizeof(VertexColor);
+	Container->VB.Size = sizeof(VertexUV);
 	Container->VB.Count = 4;
 	Container->Primitive = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
-	VertexColor	Vtx[4] =
+	VertexUV	Vtx[4] =
 	{
-		VertexColor(Vector3(0.f, 1.f, 0.f), Vector4::Red),
-		VertexColor(Vector3(1.f, 1.f, 0.f), Vector4::Green),
-		VertexColor(Vector3(0.f, 0.f, 0.f), Vector4::Blue),
-		VertexColor(Vector3(1.f, 0.f, 0.f), Vector4(1.f, 0.f, 1.f, 1.f))
+		VertexUV(Vector3(0.f, 1.f, 0.f), Vector2(0.f, 0.f)),
+		VertexUV(Vector3(1.f, 1.f, 0.f), Vector2(1.f, 0.f)),
+		VertexUV(Vector3(0.f, 0.f, 0.f), Vector2(0.f, 1.f)),
+		VertexUV(Vector3(1.f, 0.f, 0.f), Vector2(1.f, 1.f))
 	};
 
-	if (!CreateBuffer(Buffer_Type::Vertex, Vtx, sizeof(VertexColor),
+	if (!CreateBuffer(Buffer_Type::Vertex, Vtx, sizeof(VertexUV),
 		4, D3D11_USAGE_IMMUTABLE, &Container->VB.Buffer))
 		return false;
 

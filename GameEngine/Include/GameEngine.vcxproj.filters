@@ -94,6 +94,18 @@
     <Filter Include="02. Resource\04. Texture">
       <UniqueIdentifier>{94899a5e-8912-426b-88e7-50a6ac623c13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07. Excel">
+      <UniqueIdentifier>{02ac4bb2-ee6d-4295-8ccb-5c3778901d71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07. Excel\00. Library">
+      <UniqueIdentifier>{7c0236af-2e9a-4395-bf31-030a91d692df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07. Excel\00. Library\00. Include">
+      <UniqueIdentifier>{391ae07e-bfef-482f-a0e6-254963e5e927}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\02. Shader\02. ShaderClass\02. Mesh2D">
+      <UniqueIdentifier>{58bf3e92-b007-4207-9fc5-d70cbe8ae0a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -222,6 +234,45 @@
     <ClInclude Include="Resource\Texture\Texture.h">
       <Filter>02. Resource\04. Texture</Filter>
     </ClInclude>
+    <ClInclude Include="Excel\ExcelManager.h">
+      <Filter>07. Excel</Filter>
+    </ClInclude>
+    <ClInclude Include="Excel\include_cpp\IBookT.h">
+      <Filter>07. Excel\00. Library\00. Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Excel\include_cpp\IFilterColumnT.h">
+      <Filter>07. Excel\00. Library\00. Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Excel\include_cpp\IFontT.h">
+      <Filter>07. Excel\00. Library\00. Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Excel\include_cpp\IFormatT.h">
+      <Filter>07. Excel\00. Library\00. Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Excel\include_cpp\IFormControlT.h">
+      <Filter>07. Excel\00. Library\00. Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Excel\include_cpp\IRichStringT.h">
+      <Filter>07. Excel\00. Library\00. Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Excel\include_cpp\ISheetT.h">
+      <Filter>07. Excel\00. Library\00. Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Excel\include_cpp\libxl.h">
+      <Filter>07. Excel\00. Library\00. Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Excel\include_cpp\setup.h">
+      <Filter>07. Excel\00. Library\00. Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Excel\include_cpp\enum.h">
+      <Filter>07. Excel\00. Library\00. Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Excel\include_cpp\IAutoFilterT.h">
+      <Filter>07. Excel\00. Library\00. Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\Mesh2DShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\02. Mesh2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -335,6 +386,12 @@
     <ClCompile Include="Resource\Texture\Texture.cpp">
       <Filter>02. Resource\04. Texture</Filter>
     </ClCompile>
+    <ClCompile Include="Excel\ExcelManager.cpp">
+      <Filter>07. Excel</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\Mesh2DShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\02. Mesh2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Shader\ShaderInfo.fx">
@@ -343,10 +400,21 @@
     <FxCompile Include="..\Bin\Shader\ColorMesh.fx">
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
+    <FxCompile Include="..\Bin\Shader\Mesh2D.fx">
+      <Filter>02. Resource\02. Shader\01. HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resource\Texture\DirectXTex.inl">
       <Filter>02. Resource\04. Texture</Filter>
     </None>
+    <None Include="Excel\libxl.dll">
+      <Filter>07. Excel\00. Library</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Excel\libxl.lib">
+      <Filter>07. Excel\00. Library</Filter>
+    </Library>
   </ItemGroup>
 </Project>

@@ -43,5 +43,6 @@ private:
 	void RotationZ(float DeltaTime);
 	void Attack(float DeltaTime);
 	void Attack1(float DeltaTime);
+	void test(float DeltatTime);
 };
 

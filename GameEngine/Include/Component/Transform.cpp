@@ -369,21 +369,21 @@ void CTransform::AddRelativeRotation(float x, float y, float z)
 
 void CTransform::AddRelativeRotationX(float x)
 {
-	Vector3	Rot(x, m_RelativeRot.y, m_RelativeRot.z);
+	Vector3	Rot(x, 0.f, 0.f);
 
 	AddRelativeRotation(Rot);
 }
 
 void CTransform::AddRelativeRotationY(float y)
 {
-	Vector3	Rot(m_RelativeRot.x, y, m_RelativeRot.z);
+	Vector3	Rot(0.f, y, 0.f);
 
 	AddRelativeRotation(Rot);
 }
 
 void CTransform::AddRelativeRotationZ(float z)
 {
-	Vector3	Rot(m_RelativeRot.x, m_RelativeRot.y, z);
+	Vector3	Rot(0.f, 0.f, z);
 
 	AddRelativeRotation(Rot);
 }
@@ -506,21 +506,21 @@ void CTransform::AddWorldRotation(float x, float y, float z)
 
 void CTransform::AddWorldRotationX(float x)
 {
-	Vector3	Rot(x, m_WorldRot.y, m_WorldRot.z);
+	Vector3	Rot(x, 0.f, 0.f);
 
 	AddWorldRotation(Rot);
 }
 
 void CTransform::AddWorldRotationY(float y)
 {
-	Vector3	Rot(m_WorldRot.x, y, m_WorldRot.z);
+	Vector3	Rot(0.f, y, 0.f);
 
 	AddWorldRotation(Rot);
 }
 
 void CTransform::AddWorldRotationZ(float z)
 {
-	Vector3	Rot(m_WorldRot.x, m_WorldRot.y, z);
+	Vector3	Rot(0.f, 0.f, z);
 
 	AddWorldRotation(Rot);
 }

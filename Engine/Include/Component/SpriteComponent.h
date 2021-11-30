@@ -19,13 +19,16 @@ protected:
     CSharedPtr<CMaterial> m_Material;
 
 public:
-    void SetMaterial(CMaterial* Material)
-    {
-        m_Material = Material;
-    }
+	CMaterial* GetMaterial()    const
+	{
+		return m_Material;
+	}
 
 public:
-	virtual void Start();
+	void SetMaterial(CMaterial* Material);
+
+public:
+    virtual void Start();
     virtual bool Init();
     virtual void Update(float DeltaTime);
     virtual void PostUpdate(float DeltaTime);

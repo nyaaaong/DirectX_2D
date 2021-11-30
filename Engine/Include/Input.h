@@ -61,7 +61,7 @@ public:
 		return m_MousePos;
 	}
 
-	const Vector2& GetMosueMove()	const
+	const Vector2& GetMouseMove()	const
 	{
 		return m_MouseMove;
 	}

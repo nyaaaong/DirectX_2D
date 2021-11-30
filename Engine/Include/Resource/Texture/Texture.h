@@ -79,6 +79,13 @@ public:
 		return m_vecTextureInfo.size();
 	}
 
+private:
+	bool CreateResource(int Index);
+
+public:
+	void SetShader(int Register, int ShaderType, int Index);
+	void ResetShader(int Register, int ShaderType, int Index);
+
 public:
 	bool LoadTexture(const std::string& Name, const TCHAR* FileName,
 		const std::string& PathName = TEXTURE_PATH);

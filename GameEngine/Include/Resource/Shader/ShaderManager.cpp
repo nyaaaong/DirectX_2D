@@ -2,6 +2,7 @@
 #include "ShaderManager.h"
 #include "ColorMeshShader.h"
 #include "ConstantBuffer.h"
+#include "Mesh2DShader.h"
 
 CShaderManager::CShaderManager()
 {
@@ -16,6 +17,8 @@ bool CShaderManager::Init()
 	if (!CreateShader<CColorMeshShader>("ColorMeshShader"))
 		return false;
 
+	if (!CreateShader<CMesh2DShader>("Mesh2DShader"))
+		return false;
 
 
 

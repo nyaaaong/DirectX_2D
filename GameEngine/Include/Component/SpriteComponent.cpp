@@ -24,10 +24,15 @@ void CSpriteComponent::Start()
 	CSceneComponent::Start();
 }
 
+void CSpriteComponent::SetMaterial(CMaterial* Material)
+{
+	m_Material = Material->Clone();
+}
+
 bool CSpriteComponent::Init()
 {
 	m_Mesh = (CSpriteMesh*)m_Scene->GetResource()->FindMesh("SpriteMesh");
-	m_Material = m_Scene->GetResource()->FindMaterial("Color");
+	SetMaterial(m_Scene->GetResource()->FindMaterial("BaseTexture"));
 
 	SetMeshSize(1.f, 1.f, 0.f);
 

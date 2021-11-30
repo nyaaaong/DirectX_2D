@@ -12,6 +12,8 @@ CTextureManager::~CTextureManager()
 
 bool CTextureManager::Init()
 {
+	LoadTexture("EngineTexture", TEXT("teemo.png"));
+
 	return true;
 }
 
