@@ -74,6 +74,7 @@ bool CTexture::LoadTexture(const std::string& Name, const TCHAR* FileName,
 	{
 		if (FAILED(LoadFromDDSFile(FullPath, DDS_FLAGS_NONE, nullptr, *Image)))
 		{
+			SAFE_DELETE(Info);
 			SAFE_DELETE(Image);
 			return false;
 		}
@@ -83,6 +84,7 @@ bool CTexture::LoadTexture(const std::string& Name, const TCHAR* FileName,
 	{
 		if (FAILED(LoadFromTGAFile(FullPath, nullptr, *Image)))
 		{
+			SAFE_DELETE(Info);
 			SAFE_DELETE(Image);
 			return false;
 		}
@@ -92,6 +94,7 @@ bool CTexture::LoadTexture(const std::string& Name, const TCHAR* FileName,
 	{
 		if (FAILED(LoadFromWICFile(FullPath, WIC_FLAGS_NONE, nullptr, *Image)))
 		{
+			SAFE_DELETE(Info);
 			SAFE_DELETE(Image);
 			return false;
 		}

@@ -4,6 +4,7 @@
 #include "Shader/ShaderManager.h"
 #include "Material/MaterialManager.h"
 #include "Texture/TextureManager.h"
+#include "Animation/AnimationManager.h"
 
 class CResourceManager
 {
@@ -12,6 +13,7 @@ private:
 	CShaderManager* m_ShaderManager;
 	CMaterialManager* m_MaterialManager;
 	CTextureManager* m_TextureManager;
+	CAnimationManager* m_AnimationManager;
 
 public:
 	bool Init();
@@ -50,6 +52,15 @@ public:	// =================== Texture =====================
 		const std::string& PathName = TEXTURE_PATH);
 	class CTexture* FindTexture(const std::string& Name);
 	void ReleaseTexture(const std::string& Name);
+
+public:	// =================== Sequence2D =====================
+	bool CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName,
+		const TCHAR* FileName, const std::string& PathName = TEXTURE_PATH);
+	void AddAnimationSequence2DFrame(const std::string& Name, const Vector2& Start, const Vector2& Size);
+	void AddAnimationSequence2DFrame(const std::string& Name, float StartX, float StartY, float Width, float Height);
+	CAnimationSequence2D* FindAnimationSequence2D(const std::string& Name);
+	void ReleaseAnimationSequence2D(const std::string& Name);
+	class CAnimation2DConstantBuffer* GetAnimation2DCBuffer()	const;
 
 public:
 	template <typename T>

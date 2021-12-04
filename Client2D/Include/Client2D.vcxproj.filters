@@ -25,9 +25,6 @@
     <Filter Include="01. Object\01. Bullet">
       <UniqueIdentifier>{a8df3148-6792-434c-a18b-b9e714c5fc22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Object\00. Player\00. Costume">
-      <UniqueIdentifier>{b0981d5d-f254-4c37-b38c-a4888a1950b7}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -45,11 +42,11 @@
     <ClCompile Include="Object\BulletTornaido.cpp">
       <Filter>01. Object\01. Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Costume\Costume.cpp">
-      <Filter>01. Object\00. Player\00. Costume</Filter>
-    </ClCompile>
     <ClCompile Include="ClientManager.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\PlayerAnimation2D.cpp">
+      <Filter>01. Object\00. Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -68,11 +65,11 @@
     <ClInclude Include="Object\BulletTornaido.h">
       <Filter>01. Object\01. Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Costume\Costume.h">
-      <Filter>01. Object\00. Player\00. Costume</Filter>
-    </ClInclude>
     <ClInclude Include="ClientManager.h">
       <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\PlayerAnimation2D.h">
+      <Filter>01. Object\00. Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

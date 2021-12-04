@@ -34,6 +34,31 @@ protected:
 	CSharedPtr<CGraphicShader>  m_Shader;
 	std::vector<MaterialTextureInfo>    m_TextureInfo;
 	Vector4     m_BaseColor;
+	float       m_Opacity;
+	class CMaterialConstantBuffer* m_CBuffer;
+	CSharedPtr<class CRenderState>  m_RenderStateArray[(int)RenderState_Type::Max];
+
+private:
+	class CScene* m_Scene;
+
+public:
+	void SetScene(class CScene* Scene)
+	{
+		m_Scene = Scene;
+	}
+
+private:
+	void SetConstantBuffer(class CMaterialConstantBuffer* Buffer)
+	{
+		m_CBuffer = Buffer;
+	}
+
+public:
+	void SetRenderState(class CRenderState* State);
+	void SetRenderState(const std::string& Name);
+	void SetTransparency(bool Enable);
+	void SetOpacity(float Opacity);
+	void AddOpacity(float Opacity);
 
 public:
 	void SetBaseColor(const Vector4& Color);

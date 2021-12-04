@@ -5,6 +5,10 @@
 
 #define	DIRECTINPUT_VERSION	0x0800
 
+#ifdef	_DEBUG
+#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#endif
+
 #include <Windows.h>
 #include <list>
 #include <vector>
@@ -17,6 +21,8 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <dinput.h>
+
+#include "Excel/include_cpp/libxl.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxguid.lib")
@@ -33,6 +39,7 @@
 #define	ROOT_PATH	"Root"
 #define	SHADER_PATH	"Shader"
 #define	TEXTURE_PATH	"Texture"
+#define	EXCEL_PATH	"Excel"
 
 #define	SAFE_DELETE(p)	if(p)	{ delete p; p = nullptr; }
 #define	SAFE_DELETE_ARRAY(p)	if(p)	{ delete[] p; p = nullptr; }
@@ -162,4 +169,43 @@ struct VertexUV
 		UV(_UV)
 	{
 	}
+};
+
+struct MaterialCBuffer
+{
+	Vector4	BaseColor;
+	float	Opacity;
+	Vector3	Empty;
+
+	MaterialCBuffer()	:
+		Opacity(1.f)
+	{}
+};
+
+struct AnimationFrameData
+{
+	Vector2	Start;
+	Vector2	Size;
+};
+
+struct Animation2DCBuffer
+{
+	Vector2	Animation2DStartUV;
+	Vector2	Animation2DEndUV;
+	int		Animation2DType;
+	Vector3	Animation2DEmpty;
+
+	Animation2DCBuffer()	:
+		Animation2DType(-1)
+	{}
+};
+
+struct Standard2DCBuffer
+{
+	int		AnimationEnable;
+	Vector3	Empty;
+
+	Standard2DCBuffer()	:
+		AnimationEnable(-1)
+	{}
 };

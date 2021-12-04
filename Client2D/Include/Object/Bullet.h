@@ -14,6 +14,7 @@ protected:
 
 private:
     CSharedPtr<class CSpriteComponent>    m_Sprite;
+	float   m_Distance;
 
 public:
     virtual bool Init();

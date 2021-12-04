@@ -2,7 +2,8 @@
 #include "Bullet.h"
 #include "Component/SpriteComponent.h"
 
-CBullet::CBullet()
+CBullet::CBullet() :
+	m_Distance(600.f)
 {
 }
 
@@ -10,6 +11,7 @@ CBullet::CBullet(const CBullet& obj) :
 	CGameObject(obj)
 {
 	m_Sprite = (CSpriteComponent*)FindComponent("BulletSprite");
+	m_Distance = obj.m_Distance;
 }
 
 CBullet::~CBullet()
@@ -32,7 +34,16 @@ void CBullet::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
 
-	AddRelativePos(GetWorldAxis(AXIS_Y) * 500.f * DeltaTime);
+	float	Dist = 500.f * DeltaTime;
+
+	m_Distance -= Dist;
+
+	if (m_Distance <= 0.f)
+	{
+		Destroy();
+	}
+
+	AddRelativePos(GetWorldAxis(AXIS_Y) * Dist);
 }
 
 void CBullet::PostUpdate(float DeltaTime)

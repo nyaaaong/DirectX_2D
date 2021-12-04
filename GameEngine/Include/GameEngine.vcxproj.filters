@@ -106,6 +106,30 @@
     <Filter Include="02. Resource\02. Shader\02. ShaderClass\02. Mesh2D">
       <UniqueIdentifier>{58bf3e92-b007-4207-9fc5-d70cbe8ae0a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07. Excel\01. Character">
+      <UniqueIdentifier>{48e76c40-8d0d-45df-842c-c11696681803}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07. Excel\01. Character\00. Player">
+      <UniqueIdentifier>{0ab86bdc-44b7-4ea7-8e9e-0d7f804bddc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\02. Shader\03. ConstantBuffer\02. Material">
+      <UniqueIdentifier>{3355a160-79cb-43e9-84d0-0de207401a5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Render\00. RenderState">
+      <UniqueIdentifier>{cf6ceeb4-c89f-4121-ad8f-5d0e744bea31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. Animation">
+      <UniqueIdentifier>{14cedd96-a861-4be3-b000-0c5f783f756b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\05. Animation">
+      <UniqueIdentifier>{94270292-9dbc-49c8-8a5a-851403500f7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\02. Shader\03. ConstantBuffer\03. Animation2D">
+      <UniqueIdentifier>{f4d2b0e2-bb32-4f9a-804e-2614ab9d17b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\02. Shader\03. ConstantBuffer\04. Standard2D">
+      <UniqueIdentifier>{d7b330d1-e9c2-41bc-8841-c7d85ebcde3c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -195,9 +219,6 @@
     <ClInclude Include="Component\ObjectComponent.h">
       <Filter>05. Component\02. ObjectComponent</Filter>
     </ClInclude>
-    <ClInclude Include="Component\SpriteComponent.h">
-      <Filter>05. Component\01. SceneComponent\01. MeshComponent</Filter>
-    </ClInclude>
     <ClInclude Include="Resource\Material\Material.h">
       <Filter>02. Resource\03. Material</Filter>
     </ClInclude>
@@ -272,6 +293,45 @@
     </ClInclude>
     <ClInclude Include="Resource\Shader\Mesh2DShader.h">
       <Filter>02. Resource\02. Shader\02. ShaderClass\02. Mesh2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Excel\Excel.h">
+      <Filter>07. Excel</Filter>
+    </ClInclude>
+    <ClInclude Include="Excel\Character\Excel_Player.h">
+      <Filter>07. Excel\01. Character\00. Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\MaterialConstantBuffer.h">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\02. Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\RenderStateManager.h">
+      <Filter>06. Render\00. RenderState</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\BlendState.h">
+      <Filter>06. Render\00. RenderState</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\RenderState.h">
+      <Filter>06. Render\00. RenderState</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\SpriteComponent.h">
+      <Filter>05. Component\01. SceneComponent\01. MeshComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AnimationSequence2DData.h">
+      <Filter>08. Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AnimationSequence2DInstance.h">
+      <Filter>08. Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Animation\AnimationManager.h">
+      <Filter>02. Resource\05. Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Animation\AnimationSequence2D.h">
+      <Filter>02. Resource\05. Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\Standard2DConstantBuffer.h">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\04. Standard2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\Animation2DConstantBuffer.h">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\03. Animation2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -350,9 +410,6 @@
     <ClCompile Include="Component\ObjectComponent.cpp">
       <Filter>05. Component\02. ObjectComponent</Filter>
     </ClCompile>
-    <ClCompile Include="Component\SpriteComponent.cpp">
-      <Filter>05. Component\01. SceneComponent\01. MeshComponent</Filter>
-    </ClCompile>
     <ClCompile Include="Resource\Material\Material.cpp">
       <Filter>02. Resource\03. Material</Filter>
     </ClCompile>
@@ -391,6 +448,45 @@
     </ClCompile>
     <ClCompile Include="Resource\Shader\Mesh2DShader.cpp">
       <Filter>02. Resource\02. Shader\02. ShaderClass\02. Mesh2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Excel\Excel.cpp">
+      <Filter>07. Excel</Filter>
+    </ClCompile>
+    <ClCompile Include="Excel\Character\Excel_Player.cpp">
+      <Filter>07. Excel\01. Character\00. Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\MaterialConstantBuffer.cpp">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\02. Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\RenderStateManager.cpp">
+      <Filter>06. Render\00. RenderState</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\RenderState.cpp">
+      <Filter>06. Render\00. RenderState</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\BlendState.cpp">
+      <Filter>06. Render\00. RenderState</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\SpriteComponent.cpp">
+      <Filter>05. Component\01. SceneComponent\01. MeshComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\AnimationSequence2DData.cpp">
+      <Filter>08. Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\AnimationSequence2DInstance.cpp">
+      <Filter>08. Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Animation\AnimationManager.cpp">
+      <Filter>02. Resource\05. Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Animation\AnimationSequence2D.cpp">
+      <Filter>02. Resource\05. Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\Standard2DConstantBuffer.cpp">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\04. Standard2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\Animation2DConstantBuffer.cpp">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\03. Animation2D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

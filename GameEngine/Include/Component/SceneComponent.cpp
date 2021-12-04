@@ -2,6 +2,7 @@
 #include "SceneComponent.h"
 #include "../Render/RenderManager.h"
 #include "../GameObject/GameObject.h"
+#include "../Resource/Shader/Standard2DConstantBuffer.h"
 
 CSceneComponent::CSceneComponent()
 {
@@ -228,6 +229,9 @@ void CSceneComponent::PrevRender()
 void CSceneComponent::Render()
 {
 	m_Transform->SetTransform();
+
+	CRenderManager::GetInst()->GetStandard2DCBuffer()->SetAnimation2DEnable(false);
+	CRenderManager::GetInst()->GetStandard2DCBuffer()->UpdateCBuffer();
 }
 
 void CSceneComponent::PostRender()

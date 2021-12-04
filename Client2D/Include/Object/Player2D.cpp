@@ -5,11 +5,13 @@
 #include "Scene/Scene.h"
 #include "Input.h"
 #include "Resource/Material/Material.h"
+#include "PlayerAnimation2D.h"
 
 CPlayer2D::CPlayer2D()
 {
 	m_SolW = false;
 	m_WDistance = 0.f;
+	m_Opacity = 1.f;
 }
 
 CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
@@ -27,6 +29,8 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_Child2Sprite = (CSpriteComponent*)FindComponent("PlayerChild2Sprite");
 	m_Child3Sprite = (CSpriteComponent*)FindComponent("PlayerChild3Sprite");
 	m_Child4Sprite = (CSpriteComponent*)FindComponent("PlayerChild4Sprite");
+
+	m_Opacity = obj.m_Opacity;
 }
 
 CPlayer2D::~CPlayer2D()
@@ -56,10 +60,19 @@ bool CPlayer2D::Init()
 	m_Sprite->AddChild(m_Muzzle);
 	m_Sprite->AddChild(m_ChildRoot);
 
+	m_Sprite->SetTransparency(true);
+
+	m_Sprite->CreateAnimationInstance<CPlayerAnimation2D>();
 
 	m_ChildLeftSprite->AddChild(m_ChildLeftMuzzle);
 	m_ChildRightSprite->AddChild(m_ChildRightMuzzle);
 
+
+	m_ChildLeftSprite->SetTexture(0, 0, (int)ConstantBuffer_Shader_Type::Pixel, "Teemo", TEXT("Teemo.jpg"));
+	m_ChildRightSprite->SetTexture(0, 0, (int)ConstantBuffer_Shader_Type::Pixel, "Teemo", TEXT("Teemo.jpg"));
+
+	m_ChildLeftSprite->SetBaseColor(1.f, 0.f, 0.f, 1.f);
+	m_ChildRightSprite->SetBaseColor(1.f, 0.f, 0.f, 1.f);
 
 	m_ChildRoot->AddChild(m_Child1Sprite);
 	m_ChildRoot->AddChild(m_Child2Sprite);
@@ -132,6 +145,8 @@ void CPlayer2D::Update(float DeltaTime)
 
 	static bool Fire2 = false;
 
+	static bool	Hide = false;
+
 	if (GetAsyncKeyState('2') & 0x8000)
 	{
 		Fire2 = true;
@@ -146,9 +161,21 @@ void CPlayer2D::Update(float DeltaTime)
 		//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
 		Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
 		Bullet->SetWorldRotation(GetWorldRot());
+
+		Hide = true;
 	}
 
 	m_ChildRoot->AddRelativeRotation(0.f, 0.f, 180.f * DeltaTime);
+
+	if (Hide)
+	{
+		m_Opacity -= DeltaTime / 5.f;
+
+		if (m_Opacity < 0.f)
+			m_Opacity = 0.f;
+
+		m_Sprite->SetOpacity(m_Opacity);
+	}
 }
 
 void CPlayer2D::PostUpdate(float DeltaTime)

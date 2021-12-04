@@ -379,6 +379,12 @@ unsigned char CInput::ConvertKey(unsigned char Key)
 	{
 		switch (Key)
 		{
+		case VK_LBUTTON:
+			return DIK_MOUSELBUTTON;
+		case VK_RBUTTON:
+			return DIK_MOUSERBUTTON;
+		case VK_MBUTTON:
+			return DIK_MOUSEWHEEL;
 		case VK_BACK:
 			return DIK_BACK;
 		case VK_TAB:
@@ -555,8 +561,8 @@ unsigned char CInput::ConvertKey(unsigned char Key)
 			return DIK_DECIMAL;
 		case VK_DIVIDE:
 			return DIK_DIVIDE;
-			//case VK_RETURN:		
-			return DIK_NUMPADENTER;
+		//case VK_RETURN:
+		//	return DIK_NUMPADENTER;
 		case VK_F1:
 			return DIK_F1;
 		case VK_F2:

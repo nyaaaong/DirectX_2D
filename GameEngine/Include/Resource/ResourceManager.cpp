@@ -7,12 +7,14 @@ CResourceManager::CResourceManager()	:
 	m_MeshManager(nullptr),
 	m_ShaderManager(nullptr),
 	m_MaterialManager(nullptr),
-	m_TextureManager(nullptr)
+	m_TextureManager(nullptr),
+	m_AnimationManager(nullptr)
 {
 }
 
 CResourceManager::~CResourceManager()
 {
+	SAFE_DELETE(m_AnimationManager);
 	SAFE_DELETE(m_MaterialManager);
 	SAFE_DELETE(m_ShaderManager);
 	SAFE_DELETE(m_MeshManager);
@@ -39,6 +41,11 @@ bool CResourceManager::Init()
 	m_MaterialManager = new CMaterialManager;
 
 	if (!m_MaterialManager->Init())
+		return false;
+
+	m_AnimationManager = new CAnimationManager;
+
+	if (!m_AnimationManager->Init())
 		return false;
 
 	return true;
@@ -98,4 +105,37 @@ CTexture* CResourceManager::FindTexture(const std::string& Name)
 void CResourceManager::ReleaseTexture(const std::string& Name)
 {
 	m_TextureManager->ReleaseTexture(Name);
+}
+
+bool CResourceManager::CreateAnimationSequence2D(const std::string& Name,
+	const std::string& TextureName, const TCHAR* FileName, const std::string& PathName)
+{
+	return m_AnimationManager->CreateAnimationSequence2D(Name, TextureName, FileName, PathName);
+}
+
+void CResourceManager::AddAnimationSequence2DFrame(const std::string& Name, const Vector2& Start,
+	const Vector2& Size)
+{
+	m_AnimationManager->AddFrame(Name, Start, Size);
+}
+
+void CResourceManager::AddAnimationSequence2DFrame(const std::string& Name, float StartX,
+	float StartY, float Width, float Height)
+{
+	m_AnimationManager->AddFrame(Name, StartX, StartY, Width, Height);
+}
+
+CAnimationSequence2D* CResourceManager::FindAnimationSequence2D(const std::string& Name)
+{
+	return m_AnimationManager->FindSequence(Name);
+}
+
+void CResourceManager::ReleaseAnimationSequence2D(const std::string& Name)
+{
+	m_AnimationManager->ReleaseSequence(Name);
+}
+
+CAnimation2DConstantBuffer* CResourceManager::GetAnimation2DCBuffer() const
+{
+	return m_AnimationManager->GetAnimation2DCBuffer();
 }

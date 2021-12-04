@@ -37,6 +37,20 @@ CSceneResource::~CSceneResource()
 	}
 
 	{
+		auto	iter = m_mapTexture.begin();
+		auto	iterEnd = m_mapTexture.end();
+
+		for (; iter != iterEnd;)
+		{
+			std::string	Name = iter->first;
+
+			iter = m_mapTexture.erase(iter);
+
+			CResourceManager::GetInst()->ReleaseTexture(Name);
+		}
+	}
+
+	{
 		auto	iter = m_mapMaterial.begin();
 		auto	iterEnd = m_mapMaterial.end();
 
@@ -47,6 +61,20 @@ CSceneResource::~CSceneResource()
 			iter = m_mapMaterial.erase(iter);
 
 			CResourceManager::GetInst()->ReleaseMaterial(Name);
+		}
+	}
+
+	{
+		auto	iter = m_mapSequence2D.begin();
+		auto	iterEnd = m_mapSequence2D.end();
+
+		for (; iter != iterEnd;)
+		{
+			std::string	Name = iter->first;
+
+			iter = m_mapSequence2D.erase(iter);
+
+			CResourceManager::GetInst()->ReleaseAnimationSequence2D(Name);
 		}
 	}
 }
@@ -106,4 +134,96 @@ CMaterial* CSceneResource::FindMaterial(const std::string& Name)
 	}
 
 	return iter->second;
+}
+
+bool CSceneResource::LoadTexture(const std::string& Name, const TCHAR* FileName, const std::string& PathName)
+{
+	if (FindTexture(Name))
+		return true;
+
+	if (!CResourceManager::GetInst()->LoadTexture(Name, FileName, PathName))
+		return false;
+
+	m_mapTexture.insert(std::make_pair(Name, CResourceManager::GetInst()->FindTexture(Name)));
+
+	return true;
+}
+
+CTexture* CSceneResource::FindTexture(const std::string& Name)
+{
+	auto	iter = m_mapTexture.find(Name);
+
+	if (iter == m_mapTexture.end())
+	{
+		CTexture* Texture = CResourceManager::GetInst()->FindTexture(Name);
+
+		if (!Texture)
+			return nullptr;
+
+		m_mapTexture.insert(std::make_pair(Name, Texture));
+
+		return Texture;
+	}
+
+	return iter->second;
+}
+
+bool CSceneResource::CreateAnimationSequence2D(const std::string& Name,
+	const std::string& TextureName, const TCHAR* FileName, const std::string& PathName)
+{
+	if (FindAnimationSequence2D(Name))
+		return true;
+
+	if (!CResourceManager::GetInst()->CreateAnimationSequence2D(Name, TextureName, FileName, PathName))
+		return false;
+
+	m_mapSequence2D.insert(std::make_pair(Name, CResourceManager::GetInst()->FindAnimationSequence2D(Name)));
+
+	return true;
+}
+
+void CSceneResource::AddAnimationSequence2DFrame(const std::string& Name, const Vector2& Start,
+	const Vector2& Size)
+{
+	CAnimationSequence2D* Anim = FindAnimationSequence2D(Name);
+
+	if (!Anim)
+		return;
+
+	Anim->AddFrame(Start, Size);
+}
+
+void CSceneResource::AddAnimationSequence2DFrame(const std::string& Name, float StartX,
+	float StartY, float Width, float Height)
+{
+	CAnimationSequence2D* Anim = FindAnimationSequence2D(Name);
+
+	if (!Anim)
+		return;
+
+	Anim->AddFrame(StartX, StartY, Width, Height);
+}
+
+CAnimationSequence2D* CSceneResource::FindAnimationSequence2D(const std::string& Name)
+{
+	auto	iter = m_mapSequence2D.find(Name);
+
+	if (iter == m_mapSequence2D.end())
+	{
+		CAnimationSequence2D* Anim = CResourceManager::GetInst()->FindAnimationSequence2D(Name);
+
+		if (!Anim)
+			return nullptr;
+
+		m_mapSequence2D.insert(std::make_pair(Name, Anim));
+
+		return Anim;
+	}
+
+	return iter->second;
+}
+
+CAnimation2DConstantBuffer* CSceneResource::GetAnimation2DCBuffer() const
+{
+	return CResourceManager::GetInst()->GetAnimation2DCBuffer();
 }

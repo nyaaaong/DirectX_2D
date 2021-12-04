@@ -1,17 +1,24 @@
 
 #include "MaterialManager.h"
 #include "../ResourceManager.h"
+#include "../Shader/MaterialConstantBuffer.h"
 
-CMaterialManager::CMaterialManager()
+CMaterialManager::CMaterialManager() :
+	m_CBuffer(nullptr)
 {
 }
 
 CMaterialManager::~CMaterialManager()
 {
+	SAFE_DELETE(m_CBuffer);
 }
 
 bool CMaterialManager::Init()
 {
+	m_CBuffer = new CMaterialConstantBuffer;
+
+	m_CBuffer->Init();
+
 	CreateMaterial<CMaterial>("Color");
 
 	CSharedPtr<CMaterial>	Mtrl = FindMaterial("Color");

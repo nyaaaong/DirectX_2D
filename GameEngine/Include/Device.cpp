@@ -49,6 +49,21 @@ bool CDevice::Init(HWND hWnd, unsigned int Width,
 	unsigned int Flag = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
 #ifdef _DEBUG
+
+	D3D_FEATURE_LEVEL	FLevel = D3D_FEATURE_LEVEL_11_0;
+	D3D_FEATURE_LEVEL	FLevel1 = D3D_FEATURE_LEVEL_11_0;
+
+	if (FAILED(D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0, Flag,
+		&FLevel, 1, D3D11_SDK_VERSION, &m_Device, &FLevel1, &m_Context)))
+		return false;
+
+	int		SampleCount = 4;
+
+	UINT	Check = 0;
+	m_Device->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &Check);
+
+	if (Check < 1)
+		SampleCount = 1;
 	
 	Flag |= D3D11_CREATE_DEVICE_DEBUG;
 
@@ -66,18 +81,31 @@ bool CDevice::Init(HWND hWnd, unsigned int Width,
 	SwapDesc.BufferCount = 1;
 	SwapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	SwapDesc.OutputWindow = hWnd;
-	SwapDesc.SampleDesc.Count = 1;
+	SwapDesc.SampleDesc.Count = SampleCount;
 	SwapDesc.SampleDesc.Quality = 0;
 	SwapDesc.Windowed = WindowMode;
 	SwapDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
-	D3D_FEATURE_LEVEL	FLevel = D3D_FEATURE_LEVEL_11_0;
-	D3D_FEATURE_LEVEL	FLevel1 = D3D_FEATURE_LEVEL_11_0;
+	IDXGIDevice* DXGIDevice = nullptr;
+	m_Device->QueryInterface(__uuidof(IDXGIDevice), (void**)&DXGIDevice);
 
-	if (FAILED(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE,
-		0, Flag, &FLevel, 1, D3D11_SDK_VERSION,
-		&SwapDesc, &m_SwapChain, &m_Device, &FLevel1, &m_Context)))
+	IDXGIAdapter* Adapter = nullptr;
+	DXGIDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&Adapter);
+
+	IDXGIFactory* Factory = nullptr;
+	Adapter->GetParent(__uuidof(IDXGIFactory), (void**)&Factory);
+
+	if (FAILED(Factory->CreateSwapChain(m_Device, &SwapDesc, &m_SwapChain)))
+	{
+		SAFE_RELEASE(DXGIDevice);
+		SAFE_RELEASE(Adapter);
+		SAFE_RELEASE(Factory);
 		return false;
+	}
+
+	SAFE_RELEASE(DXGIDevice);
+	SAFE_RELEASE(Adapter);
+	SAFE_RELEASE(Factory);
 
 	// SwapChain이 가지고 있는 백버퍼를 얻어온다.
 	ID3D11Texture2D* BackBuffer = nullptr;
@@ -100,7 +128,7 @@ bool CDevice::Init(HWND hWnd, unsigned int Width,
 	DepthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	DepthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	DepthDesc.Usage = D3D11_USAGE_DEFAULT;
-	DepthDesc.SampleDesc.Count = 1;
+	DepthDesc.SampleDesc.Count = SampleCount;
 	DepthDesc.SampleDesc.Quality = 0;
 	DepthDesc.MipLevels = 1;
 

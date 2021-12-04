@@ -4,7 +4,9 @@
 #include "../Resource/Mesh/Mesh.h"
 #include "../Resource/Shader/Shader.h"
 #include "../Resource/Material/Material.h"
+#include "../Resource/Texture/Texture.h"
 #include "../Resource/ResourceManager.h"
+#include "../Resource/Animation/AnimationSequence2D.h"
 
 class CSceneResource
 {
@@ -21,6 +23,8 @@ private:
 	std::unordered_map<std::string, CSharedPtr<CMesh>>		m_mapMesh;
 	std::unordered_map<std::string, CSharedPtr<CShader>>	m_mapShader;
 	std::unordered_map<std::string, CSharedPtr<CMaterial>>	m_mapMaterial;
+	std::unordered_map<std::string, CSharedPtr<CTexture>>	m_mapTexture;
+	std::unordered_map<std::string, CSharedPtr<CAnimationSequence2D>>	m_mapSequence2D;
 
 public:	// =================== Mesh =====================
 
@@ -33,9 +37,10 @@ public:	// =================== Shader =====================
 	bool CreateShader(const std::string& Name)
 	{
 		if (FindShader(Name))
-			return false;
+			return true;
 
-		CResourceManager::GetInst()->CreateShader<T>(Name);
+		if (!CResourceManager::GetInst()->CreateShader<T>(Name))
+			return false;
 
 		m_mapShader.insert(std::make_pair(Name, CResourceManager::GetInst()->FindShader(Name)));
 
@@ -47,14 +52,28 @@ public:	// =================== Shader =====================
 public:	// =================== Material =====================
 	CMaterial* FindMaterial(const std::string& Name);
 
+public:	// =================== Sequence2D =====================
+	bool CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName,
+		const TCHAR* FileName, const std::string& PathName = TEXTURE_PATH);
+	void AddAnimationSequence2DFrame(const std::string& Name, const Vector2& Start, const Vector2& Size);
+	void AddAnimationSequence2DFrame(const std::string& Name, float StartX, float StartY, float Width, float Height);
+	CAnimationSequence2D* FindAnimationSequence2D(const std::string& Name);
+	class CAnimation2DConstantBuffer* GetAnimation2DCBuffer()	const;
+
+public:	// =================== Texture =====================
+	bool LoadTexture(const std::string& Name, const TCHAR* FileName,
+		const std::string& PathName = TEXTURE_PATH);
+	class CTexture* FindTexture(const std::string& Name);
+
 public:
 	template <typename T>
 	bool CreateMaterial(const std::string& Name)
 	{
 		if (FindMaterial(Name))
-			return false;
+			return true;
 
-		CResourceManager::GetInst()->CreateMaterial<T>(Name);
+		if (!CResourceManager::GetInst()->CreateMaterial<T>(Name))
+			return false;
 
 		m_mapMaterial.insert(std::make_pair(Name, CResourceManager::GetInst()->FindMaterial(Name)));
 

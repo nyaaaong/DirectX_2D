@@ -13,6 +13,7 @@ private:
 
 private:
 	std::unordered_map<std::string, CSharedPtr<CMaterial>>	m_mapMaterial;
+	class CMaterialConstantBuffer* m_CBuffer;
 
 public:
 	bool Init();
@@ -30,6 +31,7 @@ public:
 
 		Material = new T;
 
+		Material->SetConstantBuffer(m_CBuffer);
 		Material->SetName(Name);
 
 		m_mapMaterial.insert(std::make_pair(Name, Material));

@@ -66,3 +66,11 @@ enum class Sampler_Type
 	Linear,
 	Anisotropic
 };
+
+enum class RenderState_Type
+{
+	Blend,
+	Rasterizer,
+	DepthStencil,
+	Max
+};

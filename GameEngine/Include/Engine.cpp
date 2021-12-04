@@ -29,8 +29,6 @@ CEngine::CEngine()	:
 
 CEngine::~CEngine()
 {
-	CExcelManager::DestroyInst();
-
 	CSceneManager::DestroyInst();
 
 	CInput::DestroyInst();
@@ -38,6 +36,8 @@ CEngine::~CEngine()
 	CRenderManager::DestroyInst();
 
 	CPathManager::DestroyInst();
+
+	CExcelManager::DestroyInst();
 
 	CResourceManager::DestroyInst();
 
@@ -78,8 +78,12 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 	if (!CPathManager::GetInst()->Init())
 		return false;
 
-	// 리소스 관리자 초기화
+	// 리소스 관리자 초기화 
 	if (!CResourceManager::GetInst()->Init())
+		return false;
+
+	// 엑셀 관리자 초기화
+	if (!CExcelManager::GetInst()->Init())
 		return false;
 
 	// 입력 관리자 초기화
@@ -92,10 +96,6 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 
 	// 장면 관리자 초기화
 	if (!CSceneManager::GetInst()->Init())
-		return false;
-
-	// 엑셀 관리자 초기화
-	if (!CExcelManager::GetInst()->Init())
 		return false;
 
 	return true;

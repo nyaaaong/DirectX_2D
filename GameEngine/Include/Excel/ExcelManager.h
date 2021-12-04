@@ -4,6 +4,9 @@
 
 class CExcelManager
 {
+private:
+	class CExcel* m_PlayerInfo;
+
 public:
 	bool Init();
 

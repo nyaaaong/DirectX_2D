@@ -34,6 +34,7 @@ bool CConstantBuffer::Init(int Size, int Register, int ConstantBufferShaderType)
 	return true;
 }
 
+
 void CConstantBuffer::UpdateBuffer(void* Data)
 {
 	D3D11_MAPPED_SUBRESOURCE	Map = {};

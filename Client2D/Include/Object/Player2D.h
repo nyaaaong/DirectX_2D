@@ -29,6 +29,7 @@ private:
 
 	bool        m_SolW;
 	float       m_WDistance;
+	float       m_Opacity;
 
 public:
 	virtual bool Init();

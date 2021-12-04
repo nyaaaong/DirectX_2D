@@ -32,6 +32,7 @@ public:
 		const std::string& BaseName = ROOT_PATH);
 	const PathInfo* FindPath(const std::string& Name);
 
+
 private:
 	static CPathManager* m_Inst;
 
