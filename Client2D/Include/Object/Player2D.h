@@ -31,6 +31,15 @@ private:
 	float       m_WDistance;
 	float       m_Opacity;
 
+	bool	m_EnableInput;
+	bool	m_Dodge;
+
+public:
+	void SetEnableInput(bool Enable)
+	{
+		m_EnableInput = Enable;
+	}
+
 public:
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
@@ -40,10 +49,17 @@ public:
 private:
 	void MoveUp(float DeltaTime);
 	void MoveDown(float DeltaTime);
+	void MoveLeft(float DeltaTime);
+	void MoveRight(float DeltaTime);
 	void RotationZInv(float DeltaTime);
 	void RotationZ(float DeltaTime);
+	void Dodge(float DeltaTime);
+	void DodgeEnd(float DeltaTime);
 	void Attack(float DeltaTime);
 	void Attack1(float DeltaTime);
 	void test(float DeltatTime);
+
+private:
+	void Action(float DeltaTime);
 };
 

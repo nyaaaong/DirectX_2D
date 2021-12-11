@@ -13,5 +13,8 @@ public:
 public:
 	virtual bool Init();
 	virtual CPlayerAnimation2D* Clone();
+
+private:
+	void DefaultAnimation();
 };
 

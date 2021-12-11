@@ -31,10 +31,7 @@ void CMainScene::CreateMaterial()
 
 void CMainScene::CreateAnimationSequence()
 {
-	m_Scene->GetResource()->CreateAnimationSequence2D("PlayerIdle", "Player", TEXT("Player.png"));
+	m_Scene->GetResource()->CreateAnimationSequence2D("PlayerIdleD", "Player", TEXT("Player.png"), Vector2(66.f, 117.f), Vector2(42.f, 66.f), 4, 6);
 
-	for (int i = 0; i < 7; ++i)
-	{
-		m_Scene->GetResource()->AddAnimationSequence2DFrame("PlayerIdle", Vector2(i * 50.f, 148.f), Vector2(50.f, 37.f));
-	}
+	m_Scene->GetResource()->CreateAnimationSequence2D("PlayerDodgeD", "Player", TEXT("Player.png"), Vector2(66.f, 876.f), Vector2(48.f, 87.f), 9, 6);
 }

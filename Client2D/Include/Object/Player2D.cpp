@@ -7,7 +7,9 @@
 #include "Resource/Material/Material.h"
 #include "PlayerAnimation2D.h"
 
-CPlayer2D::CPlayer2D()
+CPlayer2D::CPlayer2D()	:
+	m_EnableInput(true),
+	m_Dodge(false)
 {
 	m_SolW = false;
 	m_WDistance = 0.f;
@@ -31,6 +33,7 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_Child4Sprite = (CSpriteComponent*)FindComponent("PlayerChild4Sprite");
 
 	m_Opacity = obj.m_Opacity;
+	m_Dodge = false;
 }
 
 CPlayer2D::~CPlayer2D()
@@ -88,9 +91,9 @@ bool CPlayer2D::Init()
 	m_ChildRightMuzzle->SetRelativePos(0.f, 100.f, 0.f);
 	m_ChildRightMuzzle->SetInheritRotZ(true);
 
-	m_Sprite->SetRelativeScale(100.f, 100.f, 1.f);
+	m_Sprite->SetRelativeScale(42.f, 66.f, 1.f);
 	m_Sprite->SetRelativePos(100.f, 50.f, 0.f);
-	m_Sprite->SetPivot(0.5f, 0.5f, 0.f);
+	m_Sprite->SetPivot(0.5f, 1.f, 0.f);
 
 	m_ChildRightSprite->SetRelativeScale(50.f, 50.f, 1.f);
 	m_ChildRightSprite->SetInheritScale(false);
@@ -130,9 +133,12 @@ bool CPlayer2D::Init()
 
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveUp", KeyState_Push, this, &CPlayer2D::MoveUp);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveDown", KeyState_Push, this, &CPlayer2D::MoveDown);
+	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveLeft", KeyState_Push, this, &CPlayer2D::MoveLeft);
+	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveRight", KeyState_Push, this, &CPlayer2D::MoveRight);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("RotationZInv", KeyState_Push, this, &CPlayer2D::RotationZInv);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("RotationZ", KeyState_Push, this, &CPlayer2D::RotationZ);
-	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Attack", KeyState_Down, this, &CPlayer2D::Attack);
+	//CInput::GetInst()->SetKeyCallback<CPlayer2D>("Attack", KeyState_Down, this, &CPlayer2D::Attack);
+	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Dodge", KeyState_Down, this, &CPlayer2D::Dodge);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Attack1", KeyState_Push, this, &CPlayer2D::Attack1);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("test", KeyState_Push, this, &CPlayer2D::test);
 
@@ -176,6 +182,8 @@ void CPlayer2D::Update(float DeltaTime)
 
 		m_Sprite->SetOpacity(m_Opacity);
 	}
+
+	Action(DeltaTime);
 }
 
 void CPlayer2D::PostUpdate(float DeltaTime)
@@ -190,26 +198,75 @@ CPlayer2D* CPlayer2D::Clone()
 
 void CPlayer2D::MoveUp(float DeltaTime)
 {
+	if (!m_EnableInput)
+		return;
+
 	m_Sprite->AddRelativePos(m_Sprite->GetWorldAxis(AXIS_Y) * 300.f * DeltaTime);
 }
 
 void CPlayer2D::MoveDown(float DeltaTime)
 {
+	if (!m_EnableInput)
+		return;
+
 	m_Sprite->AddRelativePos(m_Sprite->GetWorldAxis(AXIS_Y) * -300.f * DeltaTime);
+}
+
+void CPlayer2D::MoveLeft(float DeltaTime)
+{
+	if (!m_EnableInput)
+		return;
+
+	m_Sprite->AddRelativePos(m_Sprite->GetWorldAxis(AXIS_X) * -300.f * DeltaTime);
+}
+
+void CPlayer2D::MoveRight(float DeltaTime)
+{
+	if (!m_EnableInput)
+		return;
+
+	m_Sprite->AddRelativePos(m_Sprite->GetWorldAxis(AXIS_X) * 300.f * DeltaTime);
 }
 
 void CPlayer2D::RotationZInv(float DeltaTime)
 {
+	if (!m_EnableInput)
+		return;
+
 	m_Sprite->AddRelativeRotationZ(180.f * DeltaTime);
 }
 
 void CPlayer2D::RotationZ(float DeltaTime)
 {
+	if (!m_EnableInput)
+		return;
+
 	m_Sprite->AddRelativeRotationZ(-180.f * DeltaTime);
+}
+
+void CPlayer2D::Dodge(float DeltaTime)
+{
+	if (!m_EnableInput)
+		return;
+
+	m_EnableInput = false;
+	m_Dodge = true;
+
+	m_Sprite->GetAnimation()->ChangeAnimation("PlayerDodgeD");
+}
+
+void CPlayer2D::DodgeEnd(float DeltaTime)
+{
+	m_EnableInput = true;
+
+	m_Sprite->GetAnimation()->ChangeAnimation("PlayerIdleD");
 }
 
 void CPlayer2D::Attack(float DeltaTime)
 {
+	if (!m_EnableInput)
+		return;
+
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
@@ -231,6 +288,9 @@ void CPlayer2D::Attack(float DeltaTime)
 
 void CPlayer2D::Attack1(float DeltaTime)
 {
+	if (!m_EnableInput)
+		return;
+
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
@@ -253,4 +313,19 @@ void CPlayer2D::Attack1(float DeltaTime)
 void CPlayer2D::test(float DeltatTime)
 {
 	int a = 0;
+}
+
+void CPlayer2D::Action(float DeltaTime)
+{
+	if (m_Dodge)
+	{
+		if (!m_Sprite->GetAnimation()->CheckCurrentAnimation("PlayerDodgeD"))
+		{
+			m_Dodge = false;
+			m_EnableInput = true;
+		}
+
+		else
+			m_Sprite->AddRelativePos(m_Sprite->GetWorldAxis(AXIS_Y) * -600.f * DeltaTime);
+	}
 }
