@@ -401,7 +401,7 @@ namespace DirectX
         size_t __cdecl GetBufferSize() const noexcept { return m_size; }
 
         HRESULT __cdecl Resize(size_t size) noexcept;
-            // Reallocate for a new size
+            // Reallocate for a DBG_NEW size
 
         HRESULT __cdecl Trim(size_t size) noexcept;
             // Shorten size without reallocation
@@ -607,7 +607,7 @@ namespace DirectX
     HRESULT __cdecl Convert(
         _In_reads_(nimages) const Image* srcImages, _In_ size_t nimages, _In_ const TexMetadata& metadata,
         _In_ DXGI_FORMAT format, _In_ TEX_FILTER_FLAGS filter, _In_ float threshold, _Out_ ScratchImage& result) noexcept;
-        // Convert the image to a new format
+        // Convert the image to a DBG_NEW format
 
     HRESULT __cdecl ConvertToSinglePlane(_In_ const Image& srcImage, _Out_ ScratchImage& image) noexcept;
     HRESULT __cdecl ConvertToSinglePlane(

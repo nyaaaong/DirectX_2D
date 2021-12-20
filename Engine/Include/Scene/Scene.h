@@ -29,6 +29,20 @@ public:
 		return m_Mode->GetPlayerObject();
 	}
 
+	CGameObject* FindObject(const std::string& Name)
+	{
+		auto	iter = m_ObjList.begin();
+		auto	iterEnd = m_ObjList.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if ((*iter)->GetName() == Name)
+				return *iter;
+		}
+
+		return nullptr;
+	}
+
 public:
 	void Start();
 	void Update(float DeltaTime);
@@ -38,7 +52,7 @@ public:
 	template <typename T>
 	bool CreateSceneMode()
 	{
-		m_Mode = new T;
+		m_Mode = DBG_NEW T;
 
 		m_Mode->m_Scene = this;
 
@@ -54,7 +68,7 @@ public:
 	template <typename T>
 	T* CreateGameObject(const std::string& Name)
 	{
-		T* Obj = new T;
+		T* Obj = DBG_NEW T;
 
 		Obj->SetName(Name);
 		Obj->SetScene(this);

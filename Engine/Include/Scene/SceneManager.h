@@ -21,6 +21,9 @@ public:
 	bool PostUpdate(float DeltaTime);
 
 public:
+	DECLARE_SINGLE(CSceneManager)
+
+public:
 	template <typename T>
 	bool CreateSceneMode(bool Current = true)
 	{
@@ -29,7 +32,5 @@ public:
 
 		return m_NextScene->CreateSceneMode<T>();
 	}
-
-	DECLARE_SINGLE(CSceneManager)
 };
 

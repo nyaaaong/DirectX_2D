@@ -14,6 +14,17 @@ private:
 	bool		m_Start;
 
 public:
+	HWND GetWindowHandle()	const
+	{
+		return m_hWnd;
+	}
+
+	HINSTANCE GetWindowInstance()	const
+	{
+		return m_hInst;
+	}
+
+public:
 	bool Init(HINSTANCE hInst, const TCHAR* Name, unsigned int Width,
 		unsigned int Height, int IconID,
 		bool WindowMode = true);
@@ -34,4 +45,3 @@ private:
 
 	DECLARE_SINGLE(CEngine)
 };
-

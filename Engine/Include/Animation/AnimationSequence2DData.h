@@ -38,6 +38,26 @@ private:
 	std::vector<Animation2DNotify*>	m_vecNotify;
 
 public:
+	int GetCurrentFrame()	const
+	{
+		return m_Frame;
+	}
+
+	float GetAnimationTime()	const
+	{
+		return m_Time;
+	}
+
+	class CAnimationSequence2D* GetAnimationSequence()	const
+	{
+		return m_Sequence;
+	}
+
+public:
+	bool Save(FILE* File, const char* FullPath);
+	bool Load(FILE* File, class CAnimationSequence2D* Sequence, const char* FullPath);
+
+public:
 	template <typename T>
 	void SetEndFunction(T* Obj, void (T::* Func)())
 	{
@@ -47,7 +67,7 @@ public:
 	template <typename T>
 	void AddNotify(const std::string& Name, int Frame, T* Obj, void (T::* Func)())
 	{
-		Animation2DNotify* Notify = new Animation2DNotify;
+		Animation2DNotify* Notify = DBG_NEW Animation2DNotify;
 
 		Notify->Name = Name;
 		Notify->Frame = Frame;

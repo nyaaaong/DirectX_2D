@@ -32,7 +32,7 @@ public:
 		if (Shader)
 			return false;
 
-		Shader = new T;
+		Shader = DBG_NEW T;
 
 		if (!Shader->Init())
 		{

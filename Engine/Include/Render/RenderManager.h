@@ -2,16 +2,31 @@
 
 #include "../GameInfo.h"
 
+struct RenderLayer
+{
+	std::string		Name;
+	int				LayerPriority;
+	std::vector<class CSceneComponent*>	RenderList;
+	int				RenderCount;
+
+	RenderLayer()
+	{
+		LayerPriority = 0;
+		RenderCount = 0;
+		RenderList.resize(500);
+	}
+};
+
 class CRenderManager
 {
 private:
 	class CRenderStateManager* m_RenderStateManager;
-
-private:
-	const std::list<CSharedPtr<class CGameObject>>* m_ObjectList;
-	std::vector<class CSceneComponent*>	m_RenderList;
-	int		m_RenderCount;
 	class CStandard2DConstantBuffer* m_Standard2DCBuffer;
+	class CRenderState* m_DepthDisable;
+	std::vector<RenderLayer*>	m_RenderLayerList;
+	std::vector<class CSceneComponent*>	m_RenderList;
+	const std::list<CSharedPtr<class CGameObject>>* m_ObjectList;
+	int		m_RenderCount;
 
 public:
 	class CStandard2DConstantBuffer* GetStandard2DCBuffer()	const
@@ -27,13 +42,12 @@ public:
 	}
 
 	void AddRenderList(class CSceneComponent* Component);
+	void CreateLayer(const std::string& Name, int Priority);
+	void SetLayerPriority(const std::string& Name, int Priority);
 
 public:
 	bool Init();
 	void Render();
-
-
-
 
 
 	// Render State
@@ -48,6 +62,9 @@ public:
 
 public:
 	class CRenderState* FindRenderState(const std::string& Name);
+
+private:
+	static bool Sortlayer(RenderLayer* Src, RenderLayer* Dest);
 
 	DECLARE_SINGLE(CRenderManager)
 };

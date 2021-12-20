@@ -59,6 +59,11 @@ protected:
 	Image_Type	m_ImageType;
 
 public:
+	ID3D11ShaderResourceView* GetResource(int Index = 0)	const
+	{
+		return m_vecTextureInfo[Index]->SRV;
+	}
+
 	Image_Type GetImageType()	const
 	{
 		return m_ImageType;
@@ -89,5 +94,7 @@ public:
 public:
 	bool LoadTexture(const std::string& Name, const TCHAR* FileName,
 		const std::string& PathName = TEXTURE_PATH);
+	bool LoadTextureFullPath(const std::string& Name, const TCHAR* FullPath);
+	void Save(FILE* pFile);
 };
 

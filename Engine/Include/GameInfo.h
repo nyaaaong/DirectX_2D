@@ -4,9 +4,12 @@
 #pragma warning(disable:26812)
 
 #define	DIRECTINPUT_VERSION	0x0800
+#define _CRTDBG_MAP_ALLOC
 
 #ifdef	_DEBUG
-#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#define DBG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#else
+#define DBG_NEW new
 #endif
 
 #include <Windows.h>
@@ -14,6 +17,7 @@
 #include <vector>
 #include <unordered_map>
 #include <crtdbg.h>
+#include <stdlib.h>
 #include <functional>
 #include <string>
 #include <math.h>
@@ -21,6 +25,7 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <dinput.h>
+#include <assert.h>
 
 #include "Excel/include_cpp/libxl.h"
 
@@ -35,11 +40,18 @@
 #include "Vector4.h"
 #include "Matrix.h"
 #include "SharedPtr.h"
+#include "imgui.h"
+#include "imgui_impl_dx11.h"
+#include "imgui_impl_win32.h"
+
+#define	ASSERT(text)	assert(!text);
 
 #define	ROOT_PATH	"Root"
 #define	SHADER_PATH	"Shader"
 #define	TEXTURE_PATH	"Texture"
 #define	EXCEL_PATH	"Excel"
+#define	FONT_PATH		"Font"
+#define	ANIMATION_PATH	"Animation"
 
 #define	SAFE_DELETE(p)	if(p)	{ delete p; p = nullptr; }
 #define	SAFE_DELETE_ARRAY(p)	if(p)	{ delete[] p; p = nullptr; }
@@ -52,7 +64,7 @@ public:\
 	static Type* GetInst()\
 	{\
 		if(!m_Inst)\
-			m_Inst = new Type;\
+			m_Inst = DBG_NEW Type;\
 		return m_Inst;\
 	}\
 	static void DestroyInst()\
@@ -208,4 +220,10 @@ struct Standard2DCBuffer
 	Standard2DCBuffer()	:
 		AnimationEnable(-1)
 	{}
+};
+
+struct FindComponentName
+{
+	std::string	Name;
+	std::string	ParentName;
 };

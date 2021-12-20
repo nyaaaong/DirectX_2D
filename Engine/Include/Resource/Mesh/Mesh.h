@@ -18,6 +18,9 @@ protected:
 	Vector3	m_Max;
 
 public:
+	virtual bool CreateMesh(void* VtxData, int Size, int Count, D3D11_USAGE Usage,
+		D3D11_PRIMITIVE_TOPOLOGY Primitive, void* IdxData = nullptr, int IdxSize = 0, int IdxCount = 0,
+		D3D11_USAGE IdxUsage = D3D11_USAGE_DEFAULT, DXGI_FORMAT Fmt = DXGI_FORMAT_UNKNOWN);
 	virtual bool Init();
 	virtual void Render();
 

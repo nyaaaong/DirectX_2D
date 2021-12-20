@@ -48,6 +48,9 @@ public:
 
 	int Release()
 	{
+		if (m_RefCount < -1000)
+			ASSERT("if (m_RefCount < -1000)");
+
 		--m_RefCount;
 
 		if (m_RefCount <= 0)
