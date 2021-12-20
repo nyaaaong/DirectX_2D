@@ -23,7 +23,7 @@ void CSceneManager::Start()
 
 bool CSceneManager::Init()
 {
-	m_Scene = new CScene;
+	m_Scene = DBG_NEW CScene;
 
 	CRenderManager::GetInst()->SetObjectList(&m_Scene->m_ObjList);
 

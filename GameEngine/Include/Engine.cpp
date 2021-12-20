@@ -7,6 +7,7 @@
 #include "Scene/SceneManager.h"
 #include "Render/RenderManager.h"
 #include "Excel/ExcelManager.h"
+#include "IMGUIManager.h"
 
 DEFINITION_SINGLE(CEngine)
 
@@ -21,7 +22,7 @@ CEngine::CEngine()	:
 	m_Start(false)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(100);
+	//_CrtSetBreakAlloc(172854);
 	m_ClearColor[0] = 0.09019f;
 	m_ClearColor[1] = 0.37254f;
 	m_ClearColor[2] = 0.18823f;
@@ -40,6 +41,8 @@ CEngine::~CEngine()
 	CExcelManager::DestroyInst();
 
 	CResourceManager::DestroyInst();
+
+	CIMGUIManager::DestroyInst();
 
 	CDevice::DestroyInst();
 
@@ -69,12 +72,13 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 	m_RS.Width = Width;
 	m_RS.Height = Height;
 
-	m_Timer = new CTimer;
+	m_Timer = DBG_NEW CTimer;
 
 	// Device 초기화
 	if (!CDevice::GetInst()->Init(m_hWnd, Width, Height, WindowMode))
 		return false;
 
+	// 경로 관리자 초기화
 	if (!CPathManager::GetInst()->Init())
 		return false;
 
@@ -88,6 +92,10 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 
 	// 입력 관리자 초기화
 	if (!CInput::GetInst()->Init(m_hInst, m_hWnd))
+		return false;
+
+	// IMGUI 관리자 초기화
+	if (!CIMGUIManager::GetInst()->Init(m_hWnd))
 		return false;
 
 	// 렌더링 관리자 초기화
@@ -141,12 +149,16 @@ void CEngine::Logic()
 	if (!m_Start)
 	{
 		m_Start = true;
+
 		CSceneManager::GetInst()->Start();
+		CIMGUIManager::GetInst()->Start();
 	}
 
 	m_Timer->Update();
 
 	float	DeltaTime = m_Timer->GetDeltaTime();
+
+	CIMGUIManager::GetInst()->Update(DeltaTime);
 
 	CInput::GetInst()->Update(DeltaTime);
 
@@ -189,8 +201,7 @@ bool CEngine::Render(float DeltaTime)
 	Mesh->Render();*/
 	CRenderManager::GetInst()->Render();
 
-
-
+	CIMGUIManager::GetInst()->Render();
 
 	CDevice::GetInst()->Flip();
 
@@ -233,8 +244,7 @@ ATOM CEngine::Register(const TCHAR* Name, int IconID)
 
 BOOL CEngine::Create(const TCHAR* Name)
 {
-	m_hWnd = CreateWindowW(Name, Name, WS_OVERLAPPEDWINDOW,
-		0, 0, m_RS.Width, m_RS.Height, nullptr, nullptr, m_hInst, nullptr);
+	m_hWnd = CreateWindowW(Name, Name, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU, 0, 0, m_RS.Width, m_RS.Height, nullptr, nullptr, m_hInst, nullptr);
 
 	if (!m_hWnd)
 	{
@@ -266,8 +276,13 @@ BOOL CEngine::Create(const TCHAR* Name)
 	return TRUE;
 }
 
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 LRESULT CEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+		return 1;
+
 	switch (message)
 	{
 	case WM_PAINT:

@@ -29,7 +29,7 @@ public:
 		if (Material)
 			return false;
 
-		Material = new T;
+		Material = DBG_NEW T;
 
 		Material->SetConstantBuffer(m_CBuffer);
 		Material->SetName(Name);

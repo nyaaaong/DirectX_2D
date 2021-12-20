@@ -18,15 +18,28 @@ protected:
 	CSceneComponent* m_Parent;
 	std::vector<CSharedPtr<CSceneComponent>>    m_vecChild;
 	bool    m_Render;
+	std::string		m_LayerName;
 
 public:
+	std::string GetLayerName()	const
+	{
+		return m_LayerName;
+	}
+
 	bool IsRender() const
 	{
 		return m_Render;
 	}
 
 public:
+	void SetLayerName(const std::string& Name)
+	{
+		m_LayerName = Name;
+	}
+
+public:
 	void SetSceneComponent(class CGameObject* Object);
+	void GetAllSceneComponentsName(std::vector<FindComponentName>& vecNames);
 
 public:
 	virtual void SetScene(class CScene* Scene);

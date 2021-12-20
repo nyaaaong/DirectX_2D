@@ -23,27 +23,27 @@ CResourceManager::~CResourceManager()
 
 bool CResourceManager::Init()
 {
-	m_MeshManager = new CMeshManager;
+	m_MeshManager = DBG_NEW CMeshManager;
 
 	if (!m_MeshManager->Init())
 		return false;
 
-	m_ShaderManager = new CShaderManager;
+	m_ShaderManager = DBG_NEW CShaderManager;
 
 	if (!m_ShaderManager->Init())
 		return false;
 
-	m_TextureManager = new CTextureManager;
+	m_TextureManager = DBG_NEW CTextureManager;
 
 	if (!m_TextureManager->Init())
 		return false;
 
-	m_MaterialManager = new CMaterialManager;
+	m_MaterialManager = DBG_NEW CMaterialManager;
 
 	if (!m_MaterialManager->Init())
 		return false;
 
-	m_AnimationManager = new CAnimationManager;
+	m_AnimationManager = DBG_NEW CAnimationManager;
 
 	if (!m_AnimationManager->Init())
 		return false;
@@ -97,6 +97,12 @@ bool CResourceManager::LoadTexture(const std::string& Name, const TCHAR* FileNam
 	return m_TextureManager->LoadTexture(Name, FileName, PathName);
 }
 
+bool CResourceManager::LoadTextureFullPath(const std::string& Name, const TCHAR* FullPath)
+{
+	return m_TextureManager->LoadTextureFullPath(Name, FullPath);
+}
+
+
 CTexture* CResourceManager::FindTexture(const std::string& Name)
 {
 	return m_TextureManager->FindTexture(Name);
@@ -111,6 +117,18 @@ bool CResourceManager::CreateAnimationSequence2D(const std::string& Name,
 	const std::string& TextureName, const TCHAR* FileName, const std::string& PathName)
 {
 	return m_AnimationManager->CreateAnimationSequence2D(Name, TextureName, FileName, PathName);
+}
+
+bool CResourceManager::CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, const Vector2& Start, const Vector2& Size,
+	int CountX, int InterX, int CountY, int InterY, const std::string& PathName)
+{
+	return m_AnimationManager->CreateAnimationSequence2D(Name, TextureName, FileName, Start, Size, CountX, InterX, CountY, InterY, PathName);
+}
+
+bool CResourceManager::CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, float StartX, float StartY, float Width, float Height,
+	int CountX, int InterX, int CountY, int InterY, const std::string& PathName)
+{
+	return m_AnimationManager->CreateAnimationSequence2D(Name, TextureName, FileName, StartX, StartY, Width, Height, CountX, InterX, CountY, InterY, PathName);
 }
 
 void CResourceManager::AddAnimationSequence2DFrame(const std::string& Name, const Vector2& Start,
@@ -138,4 +156,25 @@ void CResourceManager::ReleaseAnimationSequence2D(const std::string& Name)
 CAnimation2DConstantBuffer* CResourceManager::GetAnimation2DCBuffer() const
 {
 	return m_AnimationManager->GetAnimation2DCBuffer();
+}
+
+bool CResourceManager::CreateAnimationSequence2D(const std::string& Name, CTexture* Texture)
+{
+	return m_AnimationManager->CreateAnimationSequence2D(Name, Texture);
+}
+
+bool CResourceManager::SaveSequence2D(FILE* File, const std::string& Name, const char* FullPath)
+{
+	return m_AnimationManager->SaveSequence(File, Name, FullPath);
+}
+
+bool CResourceManager::LoadSequence2D(FILE* File, CIMGUIListBox* AnimFrameList, std::string& resultName, const char* FullPath, class CScene* Scene)
+{
+	return m_AnimationManager->LoadSequence(File, AnimFrameList, resultName, FullPath, Scene);
+}
+
+bool CResourceManager::LoadSequence2D(FILE* File, CIMGUIListBox* AnimFrameList, const char* FullPath, CScene* Scene)
+{
+	std::string	Name;
+	return m_AnimationManager->LoadSequence(File, AnimFrameList, Name, FullPath, Scene);
 }

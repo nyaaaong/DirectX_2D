@@ -20,6 +20,9 @@ CSpriteComponent::CSpriteComponent(const CSpriteComponent& com)	:
 
 	if (com.m_Animation)
 		m_Animation = com.m_Animation->Clone();
+
+	if (com.m_Material)
+		m_Material = com.m_Material->Clone();
 }
 
 CSpriteComponent::~CSpriteComponent()
@@ -128,6 +131,7 @@ bool CSpriteComponent::Init()
 	SetMaterial(m_Scene->GetResource()->FindMaterial("BaseTexture"));
 
 	SetMeshSize(1.f, 1.f, 0.f);
+	SetWorldScale((float)m_Material->GetTextureWidth(), (float)m_Material->GetTextureHeight(), 1.f);
 
 	return true;
 }
@@ -156,7 +160,7 @@ void CSpriteComponent::Render()
 
 	if (m_Animation)
 	{
-		CRenderManager::GetInst()->GetStandard2DCBuffer()->SetAnimation2DEnable(true);
+		CRenderManager::GetInst()->GetStandard2DCBuffer()->SetAnimation2DEnable(m_Animation->GetAnimationCount() > 0);
 		CRenderManager::GetInst()->GetStandard2DCBuffer()->UpdateCBuffer();
 
 		m_Animation->SetShader();
@@ -176,5 +180,5 @@ void CSpriteComponent::PostRender()
 
 CSpriteComponent* CSpriteComponent::Clone()
 {
-	return new CSpriteComponent(*this);
+	return DBG_NEW CSpriteComponent(*this);
 }

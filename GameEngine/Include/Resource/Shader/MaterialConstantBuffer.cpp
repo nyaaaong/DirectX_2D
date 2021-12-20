@@ -31,5 +31,5 @@ void CMaterialConstantBuffer::UpdateCBuffer()
 
 CMaterialConstantBuffer* CMaterialConstantBuffer::Clone()
 {
-	return new CMaterialConstantBuffer(*this);
+	return DBG_NEW CMaterialConstantBuffer(*this);
 }

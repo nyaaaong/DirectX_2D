@@ -31,5 +31,5 @@ void CStandard2DConstantBuffer::UpdateCBuffer()
 
 CStandard2DConstantBuffer* CStandard2DConstantBuffer::Clone()
 {
-	return new CStandard2DConstantBuffer(*this);
+	return DBG_NEW CStandard2DConstantBuffer(*this);
 }

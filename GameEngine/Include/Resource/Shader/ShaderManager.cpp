@@ -3,6 +3,7 @@
 #include "ColorMeshShader.h"
 #include "ConstantBuffer.h"
 #include "Mesh2DShader.h"
+#include "PosMeshShader.h"
 
 CShaderManager::CShaderManager()
 {
@@ -15,6 +16,9 @@ CShaderManager::~CShaderManager()
 bool CShaderManager::Init()
 {
 	if (!CreateShader<CColorMeshShader>("ColorMeshShader"))
+		return false;
+
+	if (!CreateShader<CPosMeshShader>("PosMeshShader"))
 		return false;
 
 	if (!CreateShader<CMesh2DShader>("Mesh2DShader"))
@@ -68,7 +72,7 @@ bool CShaderManager::CreateConstantBuffer(const std::string& Name, int Size, int
 	if (Buffer)
 		return true;
 
-	Buffer = new CConstantBuffer;
+	Buffer = DBG_NEW CConstantBuffer;
 
 	Buffer->SetName(Name);
 

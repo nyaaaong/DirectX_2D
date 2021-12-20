@@ -71,6 +71,14 @@ CComponent* CGameObject::FindComponent(const std::string& Name)
 	return nullptr;
 }
 
+void CGameObject::GetAllSceneComponentsName(std::vector<FindComponentName>& vecNames)
+{
+	if (!m_RootComponent)
+		return;
+
+	m_RootComponent->GetAllSceneComponentsName(vecNames);
+}
+
 void CGameObject::Start()
 {
 	if (m_RootComponent)
@@ -156,5 +164,5 @@ void CGameObject::PostRender()
 
 CGameObject* CGameObject::Clone()
 {
-	return new CGameObject(*this);
+	return DBG_NEW CGameObject(*this);
 }

@@ -549,7 +549,7 @@ void CTransform::Start()
 
 void CTransform::Init()
 {
-	m_CBuffer = new CTransformConstantBuffer;
+	m_CBuffer = DBG_NEW CTransformConstantBuffer;
 
 	m_CBuffer->Init();
 }
@@ -596,5 +596,5 @@ void CTransform::ComputeWorld()
 
 CTransform* CTransform::Clone()
 {
-	return new CTransform(*this);
+	return DBG_NEW CTransform(*this);
 }

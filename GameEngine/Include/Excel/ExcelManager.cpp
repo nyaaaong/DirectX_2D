@@ -18,7 +18,7 @@ CExcelManager::~CExcelManager()
 
 bool CExcelManager::Init()
 {
-	m_PlayerInfo = new CExcel_Player;
+	m_PlayerInfo = DBG_NEW CExcel_Player;
 
 	if (!m_PlayerInfo->Init())
 		return false;

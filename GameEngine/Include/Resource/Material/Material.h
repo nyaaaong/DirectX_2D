@@ -47,6 +47,22 @@ protected:
     class CMaterialConstantBuffer* m_CBuffer;
     CSharedPtr<class CRenderState>  m_RenderStateArray[(int)RenderState_Type::Max];
 
+public:
+	CTexture* GetTexture(int TextureIndex = 0)  const
+	{
+		return m_TextureInfo[TextureIndex].Texture;
+	}
+
+	unsigned int GetTextureWidth(int TextureIndex = 0)  const
+	{
+		return m_TextureInfo[TextureIndex].Texture->GetWidth();
+	}
+
+	unsigned int GetTextureHeight(int TextureIndex = 0)  const
+	{
+		return m_TextureInfo[TextureIndex].Texture->GetHeight();
+	}
+
 private:
     void SetConstantBuffer(class CMaterialConstantBuffer* Buffer)
     {

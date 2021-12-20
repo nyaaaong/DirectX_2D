@@ -1,6 +1,6 @@
 #include "PathManager.h"
 
-CPathManager* CPathManager::m_Inst = nullptr;
+DEFINITION_SINGLE(CPathManager)
 
 CPathManager::CPathManager()
 {
@@ -42,7 +42,7 @@ bool CPathManager::Init()
 		}
 	}
 
-	PathInfo* Info = new PathInfo;
+	PathInfo* Info = DBG_NEW PathInfo;
 
 	lstrcpy(Info->Path, Path);
 
@@ -61,6 +61,8 @@ bool CPathManager::Init()
 	AddPath(SHADER_PATH, TEXT("Shader\\"));
 	AddPath(TEXTURE_PATH, TEXT("Texture\\"));
 	AddPath(EXCEL_PATH, TEXT("Excel\\"));
+	AddPath(FONT_PATH, TEXT("Font\\"));
+	AddPath(ANIMATION_PATH, TEXT("Animation\\"));
 
 	return true;
 }
@@ -76,7 +78,7 @@ bool CPathManager::AddPath(const std::string& Name, const TCHAR* Path,
 	if (!BaseInfo)
 		return false;
 
-	PathInfo* Info = new PathInfo;
+	PathInfo* Info = DBG_NEW PathInfo;
 
 	lstrcpy(Info->Path, BaseInfo->Path);
 	lstrcat(Info->Path, Path);

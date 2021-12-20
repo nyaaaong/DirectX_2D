@@ -186,13 +186,13 @@ void CMaterial::SetTexture(int Index, int Register, int ShaderType, const std::s
 
 void CMaterial::SetTextureFullPath(int Index, int Register, int ShaderType, const std::string& Name, const TCHAR* FullPath)
 {
-	/*if (!CResourceManager::GetInst()->LoadTexture(Name, FileName, PathName))
+	if (!CResourceManager::GetInst()->LoadTextureFullPath(Name, FullPath))
 		return;
 
 	m_TextureInfo[Index].Register = Register;
 	m_TextureInfo[Index].Name = Name;
 	m_TextureInfo[Index].Texture = CResourceManager::GetInst()->FindTexture(Name);
-	m_TextureInfo[Index].ShaderType = ShaderType;*/
+	m_TextureInfo[Index].ShaderType = ShaderType;
 }
 
 void CMaterial::SetTexture(int Index, int Register, int ShaderType, const std::string& Name, const std::vector<TCHAR*>& vecFileName, const std::string& PathName)
@@ -256,5 +256,5 @@ void CMaterial::Reset()
 
 CMaterial* CMaterial::Clone()
 {
-	return new CMaterial(*this);
+	return DBG_NEW CMaterial(*this);
 }

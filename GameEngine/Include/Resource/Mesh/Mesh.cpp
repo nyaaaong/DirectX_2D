@@ -16,6 +16,37 @@ CMesh::~CMesh()
 	}
 }
 
+bool CMesh::CreateMesh(void* VtxData, int Size, int Count, D3D11_USAGE Usage, D3D11_PRIMITIVE_TOPOLOGY Primitive,
+	void* IdxData, int IdxSize, int IdxCount, D3D11_USAGE IdxUsage, DXGI_FORMAT Fmt)
+{
+	MeshContainer* Container = DBG_NEW MeshContainer;
+
+	Container->VB.Size = Size;
+	Container->VB.Count = Count;
+	Container->Primitive = Primitive;
+
+	if (!CreateBuffer(Buffer_Type::Vertex, VtxData, Size,
+		Count, Usage, &Container->VB.Buffer))
+		return false;
+
+	if (IdxData != nullptr)
+	{
+		Container->vecIB.resize(1);
+
+		Container->vecIB[0].Size = IdxSize;
+		Container->vecIB[0].Count = IdxCount;
+		Container->vecIB[0].Fmt = Fmt;
+
+		if (!CreateBuffer(Buffer_Type::Index, IdxData, IdxSize,
+			IdxCount, IdxUsage, &Container->vecIB[0].Buffer))
+			return false;
+	}
+
+	m_vecContainer.push_back(Container);
+
+	return true;
+}
+
 bool CMesh::Init()
 {
 	return true;

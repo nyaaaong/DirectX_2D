@@ -4,9 +4,7 @@
 
 class CAnimationSequence2DInstance
 {
-	friend class CSpriteComponent;
-
-protected:
+public:
 	CAnimationSequence2DInstance();
 	CAnimationSequence2DInstance(const CAnimationSequence2DInstance& Anim);
 	virtual ~CAnimationSequence2DInstance();
@@ -17,6 +15,7 @@ protected:
 	std::unordered_map<std::string, CAnimationSequence2DData*>	m_mapAnimation;
 	CAnimationSequence2DData* m_CurrentAnimation;
 	class CAnimation2DConstantBuffer* m_CBuffer;
+	bool		m_PlayAnimation;
 
 public:
 	void SetScene(class CScene* Scene)
@@ -29,9 +28,39 @@ public:
 		m_Owner = Owner;
 	}
 
+	int GetAnimationCount()	const
+	{
+		return (int)m_mapAnimation.size();
+	}
+
+	void Play()
+	{
+		m_PlayAnimation = true;
+	}
+
+	void Stop()
+	{
+		m_PlayAnimation = false;
+	}
+
+	bool IsPlay()	const
+	{
+		return m_PlayAnimation;
+	}
+
+	CAnimationSequence2DData* GetCurrentAnimation()	const
+	{
+		return m_CurrentAnimation;
+	}
+
+public:
+	void Save(FILE* File, const char* FullPath);
+	void Load(FILE* File, const std::string& SequenceName, class CIMGUIListBox* AnimFrameList, const char* FullPath);
+
 public:
 	void AddAnimation(const std::string& SequenceName, const std::string& Name, bool Loop = true, float PlayTime = 1.f,
 		float PlayScale = 1.f, bool Reverse = false);
+	void DeleteAnimation(const std::string& Name);
 	void SetPlayTime(const std::string& Name, float PlayTime);
 	void SetPlayScale(const std::string& Name, float PlayScale);
 	void SetReverse(const std::string& Name, bool Reverse);

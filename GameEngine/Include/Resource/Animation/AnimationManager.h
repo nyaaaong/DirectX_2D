@@ -24,8 +24,15 @@ public:
 	bool Init();
 	bool CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName,
 		const TCHAR* FileName, const std::string& PathName = TEXTURE_PATH);
+	bool CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, const Vector2& Start, const Vector2& Size,
+		int CountX, int InterX = 0, int CountY = 0, int InterY = 0, const std::string& PathName = TEXTURE_PATH);
+	bool CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, float StartX, float StartY, float Width, float Height,
+		int CountX, int InterX = 0, int CountY = 0, int InterY = 0, const std::string& PathName = TEXTURE_PATH);
 	void AddFrame(const std::string& Name, const Vector2& Start, const Vector2& Size);
 	void AddFrame(const std::string& Name, float StartX, float StartY, float Width, float Height);
+	bool CreateAnimationSequence2D(const std::string& Name, class CTexture* Texture);
+	bool SaveSequence(FILE* File, const std::string& Name, const char* FullPath);
+	bool LoadSequence(FILE* File, class CIMGUIListBox* AnimFrameList, std::string& resultName, const char* FullPath, class CScene* Scene = nullptr);
 
 
 	CAnimationSequence2D* FindSequence(const std::string& Name);

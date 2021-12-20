@@ -23,3 +23,61 @@ CAnimationSequence2DData::~CAnimationSequence2DData()
 		SAFE_DELETE((*iter));
 	}
 }
+
+bool CAnimationSequence2DData::Save(FILE* File, const char* FullPath)
+{
+	int Length = (int)m_Name.length();
+	fwrite(&Length, sizeof(int), 1, File);
+
+	if (m_Name == "")
+		ASSERT("if (m_Name == "")");
+
+	fwrite(m_Name.c_str(), sizeof(char), Length, File);
+
+	fwrite(&m_Frame, sizeof(int), 1, File);
+
+	fwrite(&m_Time, sizeof(float), 1, File);
+	fwrite(&m_FrameTime, sizeof(float), 1, File);
+	fwrite(&m_PlayTime, sizeof(float), 1, File);
+	fwrite(&m_PlayScale, sizeof(float), 1, File);
+	fwrite(&m_Loop, sizeof(bool), 1, File);
+	fwrite(&m_Reverse, sizeof(bool), 1, File);
+
+	/*
+	std::function<void()>	m_EndFunction;
+	std::vector<Animation2DNotify*>	m_vecNotify;
+	*/
+
+	return true;
+}
+
+bool CAnimationSequence2DData::Load(FILE* File, CAnimationSequence2D* Sequence, const char* FullPath)
+{
+	m_Sequence = Sequence;
+
+	int	Length = 0;
+	fread(&Length, sizeof(int), 1, File);
+
+	char	Name[256] = {};
+	fread(Name, sizeof(char), Length, File);
+	m_Name = Name;
+
+	if (m_Name == "")
+		ASSERT("if (m_Name == "")");
+
+	fread(&m_Frame, sizeof(int), 1, File);
+
+	fread(&m_Time, sizeof(float), 1, File);
+	fread(&m_FrameTime, sizeof(float), 1, File);
+	fread(&m_PlayTime, sizeof(float), 1, File);
+	fread(&m_PlayScale, sizeof(float), 1, File);
+	fread(&m_Loop, sizeof(bool), 1, File);
+	fread(&m_Reverse, sizeof(bool), 1, File);
+
+	/*
+	std::function<void()>	m_EndFunction;
+	std::vector<Animation2DNotify*>	m_vecNotify;
+	*/
+
+	return true;
+}

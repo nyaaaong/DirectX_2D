@@ -4,6 +4,7 @@
 #include "../Component/SceneComponent.h"
 #include "RenderStateManager.h"
 #include "../Resource/Shader/Standard2DConstantBuffer.h"
+#include "RenderState.h"
 
 DEFINITION_SINGLE(CRenderManager)
 
@@ -11,23 +12,79 @@ CRenderManager::CRenderManager()	:
 	m_ObjectList(nullptr),
 	m_RenderCount(0),
 	m_RenderStateManager(nullptr),
-	m_Standard2DCBuffer(nullptr)
+	m_Standard2DCBuffer(nullptr),
+	m_DepthDisable(nullptr)
 {
 }
 
 CRenderManager::~CRenderManager()
 {
+	auto	iter = m_RenderLayerList.begin();
+	auto	iterEnd = m_RenderLayerList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		SAFE_DELETE((*iter));
+	}
+
+	m_RenderLayerList.clear();
+
 	SAFE_DELETE(m_Standard2DCBuffer);
 	SAFE_DELETE(m_RenderStateManager);
 }
 
 void CRenderManager::AddRenderList(CSceneComponent* Component)
 {
-	if (m_RenderCount == (int)m_RenderList.size())
-		m_RenderList.resize(m_RenderCount * 2);
+	RenderLayer* Layer = nullptr;
 
-	m_RenderList[m_RenderCount] = Component;
-	++m_RenderCount;
+	auto	iter = m_RenderLayerList.begin();
+	auto	iterEnd = m_RenderLayerList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if ((*iter)->Name == Component->GetLayerName())
+		{
+			Layer = *iter;
+			break;
+		}
+	}
+
+	if (!Layer)
+		return;
+
+	if (Layer->RenderCount == (int)Layer->RenderList.size())
+		Layer->RenderList.resize(Layer->RenderCount * 2);
+
+	Layer->RenderList[Layer->RenderCount] = Component;
+	++Layer->RenderCount;
+}
+
+void CRenderManager::CreateLayer(const std::string& Name, int Priority)
+{
+	RenderLayer* Layer = DBG_NEW RenderLayer;
+	Layer->Name = Name;
+	Layer->LayerPriority = Priority;
+
+	m_RenderLayerList.push_back(Layer);
+
+	sort(m_RenderLayerList.begin(), m_RenderLayerList.end(), CRenderManager::Sortlayer);
+}
+
+void CRenderManager::SetLayerPriority(const std::string& Name, int Priority)
+{
+	auto	iter = m_RenderLayerList.begin();
+	auto	iterEnd = m_RenderLayerList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if ((*iter)->Name == Name)
+		{
+			(*iter)->LayerPriority = Priority;
+			break;
+		}
+	}
+
+	sort(m_RenderLayerList.begin(), m_RenderLayerList.end(), CRenderManager::Sortlayer);
 }
 
 bool CRenderManager::Init()
@@ -35,20 +92,39 @@ bool CRenderManager::Init()
 	m_RenderList.resize(500);
 	m_RenderCount = 0;
 
-	m_RenderStateManager = new CRenderStateManager;
+	m_RenderStateManager = DBG_NEW CRenderStateManager;
 
 	m_RenderStateManager->Init();
 
-	m_Standard2DCBuffer = new CStandard2DConstantBuffer;
+	m_Standard2DCBuffer = DBG_NEW CStandard2DConstantBuffer;
 
 	m_Standard2DCBuffer->Init();
+
+	// 기본 레이어 생성
+	RenderLayer* Layer = DBG_NEW RenderLayer;
+	Layer->Name = "Default";
+	Layer->LayerPriority = 0;
+
+	m_RenderLayerList.push_back(Layer);
+
+	m_DepthDisable = m_RenderStateManager->FindRenderState("DepthDisable");
 
 	return true;
 }
 
 void CRenderManager::Render()
 {
-	m_RenderCount = 0;
+	m_DepthDisable->SetState();
+
+	{
+		auto	iter = m_RenderLayerList.begin();
+		auto	iterEnd = m_RenderLayerList.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			(*iter)->RenderCount = 0;
+		}
+	}
 
 	{
 		auto	iter = m_ObjectList->begin();
@@ -61,18 +137,32 @@ void CRenderManager::Render()
 	}
 
 	{
-		for (int i = 0; i < m_RenderCount; ++i)
+		auto	iter = m_RenderLayerList.begin();
+		auto	iterEnd = m_RenderLayerList.end();
+
+		for (; iter != iterEnd; ++iter)
 		{
-			m_RenderList[i]->Render();
+			for (int i = 0; i < (*iter)->RenderCount; ++i)
+			{
+				(*iter)->RenderList[i]->Render();
+			}
 		}
 	}
 
 	{
-		for (int i = 0; i < m_RenderCount; ++i)
+		auto	iter = m_RenderLayerList.begin();
+		auto	iterEnd = m_RenderLayerList.end();
+
+		for (; iter != iterEnd; ++iter)
 		{
-			m_RenderList[i]->PostRender();
+			for (int i = 0; i < (*iter)->RenderCount; ++i)
+			{
+				(*iter)->RenderList[i]->PostRender();
+			}
 		}
 	}
+
+	m_DepthDisable->ResetState();
 }
 
 void CRenderManager::SetBlendFactor(const std::string& Name, float r, float g,
@@ -99,4 +189,9 @@ bool CRenderManager::CreateBlendState(const std::string& Name,
 CRenderState* CRenderManager::FindRenderState(const std::string& Name)
 {
 	return m_RenderStateManager->FindRenderState(Name);
+}
+
+bool CRenderManager::Sortlayer(RenderLayer* Src, RenderLayer* Dest)
+{
+	return Src->LayerPriority < Dest->LayerPriority;
 }

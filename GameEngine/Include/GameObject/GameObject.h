@@ -51,6 +51,7 @@ public:
 
 public:
 	class CComponent* FindComponent(const std::string& Name);
+	void GetAllSceneComponentsName(std::vector<FindComponentName>& vecNames);
 
 public:
 	virtual void Start();
@@ -61,31 +62,6 @@ public:
 	virtual void Render();
 	virtual void PostRender();
 	virtual CGameObject* Clone();
-
-public:
-	template <typename T>
-	T* CreateComponent(const std::string& Name)
-	{
-		T* Component = new T;
-
-		Component->SetName(Name);
-		Component->SetScene(m_Scene);
-		Component->SetGameObject(this);
-
-		if (!Component->Init())
-		{
-			SAFE_RELEASE(Component);
-			return nullptr;
-		}
-
-		if (Component->GetComponentType() == Component_Type::ObjectComponent)
-			m_vecObjectComponent.push_back((class CObjectComponent*)Component);
-
-		else
-			m_SceneComponentList.push_back((class CSceneComponent*)Component);
-
-		return Component;
-	}
 
 public:
 	void SetInheritScale(bool Inherit)
@@ -185,7 +161,7 @@ public:
 	}
 
 public:
-	const Vector3& GetRelativeScale()	const
+	Vector3 GetRelativeScale()	const
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -193,7 +169,7 @@ public:
 		return m_RootComponent->GetRelativeScale();
 	}
 
-	const Vector3& GetRelativeRot()	const
+	Vector3 GetRelativeRot()	const
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -201,7 +177,7 @@ public:
 		return m_RootComponent->GetRelativeRot();
 	}
 
-	const Vector3& GetRelativePos()	const
+	Vector3 GetRelativePos()	const
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -209,7 +185,7 @@ public:
 		return m_RootComponent->GetRelativePos();
 	}
 
-	const Vector3& GetRelativeAxis(AXIS Axis)
+	Vector3 GetRelativeAxis(AXIS Axis)
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -363,7 +339,7 @@ public:
 	}
 
 public:
-	const Vector3& GetWorldScale()	const
+	Vector3 GetWorldScale()	const
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -371,7 +347,7 @@ public:
 		return m_RootComponent->GetWorldScale();
 	}
 
-	const Vector3& GetWorldRot()	const
+	Vector3 GetWorldRot()	const
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -379,7 +355,7 @@ public:
 		return m_RootComponent->GetWorldRot();
 	}
 
-	const Vector3& GetWorldPos()	const
+	Vector3 GetWorldPos()	const
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -387,7 +363,7 @@ public:
 		return m_RootComponent->GetWorldPos();
 	}
 
-	const Vector3& GetPivot()	const
+	Vector3 GetPivot()	const
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -395,7 +371,7 @@ public:
 		return m_RootComponent->GetPivot();
 	}
 
-	const Vector3& GetMeshSize()	const
+	Vector3 GetMeshSize()	const
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -411,7 +387,7 @@ public:
 		return m_RootComponent->GetWorldMatrix();
 	}
 
-	const Vector3& GetWorldAxis(AXIS Axis)
+	Vector3 GetWorldAxis(AXIS Axis)
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -595,6 +571,36 @@ public:
 			return;
 
 		m_RootComponent->AddWorldPos(x, y, z);
+	}
+
+public:
+	template <typename T>
+	T* CreateComponent(const std::string& Name)
+	{
+		T* Component = DBG_NEW T;
+
+		Component->SetName(Name);
+		Component->SetScene(m_Scene);
+		Component->SetGameObject(this);
+
+		if (!Component->Init())
+		{
+			SAFE_RELEASE(Component);
+			return nullptr;
+		}
+
+		if (Component->GetComponentType() == Component_Type::ObjectComponent)
+			m_vecObjectComponent.push_back((class CObjectComponent*)Component);
+
+		else
+		{
+			m_SceneComponentList.push_back((class CSceneComponent*)Component);
+
+			if (!m_RootComponent)
+				m_RootComponent = Component;
+		}
+
+		return Component;
 	}
 };
 

@@ -39,6 +39,19 @@ CInput::~CInput()
 	SAFE_RELEASE(m_Input);
 }
 
+bool CInput::GetKeyState(const std::string& Name, Key_State state)
+{
+	if (state == KeyState_Max)
+		ASSERT("if (state == KeyState_Max)");
+
+	const KeyInfo* Key = FindKeyInfo(Name);
+
+	if (!Key)
+		ASSERT("if (!Key)");
+
+	return Key->State.State[state];
+}
+
 bool CInput::CreateKey(const std::string& Name, unsigned char Key)
 {
 	KeyInfo* Info = FindKeyInfo(Name);
@@ -46,7 +59,7 @@ bool CInput::CreateKey(const std::string& Name, unsigned char Key)
 	if (Info)
 		return false;
 
-	Info = new KeyInfo;
+	Info = DBG_NEW KeyInfo;
 
 	Info->Name = Name;
 
@@ -223,6 +236,8 @@ void CInput::UpdateMouse(float DeltaTime)
 
 	Vector2	MousePos = Vector2(MouseWindowPos.x * Ratio.x, MouseWindowPos.y * Ratio.y);
 
+	MousePos.y = CDevice::GetInst()->GetResolution().Height - MousePos.y;
+
 	m_MouseMove = MousePos - m_MousePos;
 
 	m_MousePos = MousePos;
@@ -342,13 +357,18 @@ void CInput::UpdateKeyInfo(float DeltaTime)
 	{
 		unsigned char Key = iter->second->State.Key;
 
+		bool b = ImGui::GetIO().WantCaptureMouse;
+
 		if (m_vecKeyState[Key].State[KeyState_Down] &&
 			iter->second->Ctrl == m_Ctrl &&
 			iter->second->Alt == m_Alt &&
 			iter->second->Shift == m_Shift)
 		{
 			if (iter->second->Callback[KeyState_Down])
-				iter->second->Callback[KeyState_Down](DeltaTime);
+			{
+				if (!ImGui::GetIO().WantCaptureMouse)
+					iter->second->Callback[KeyState_Down](DeltaTime);
+			}
 		}
 
 
@@ -358,7 +378,10 @@ void CInput::UpdateKeyInfo(float DeltaTime)
 			iter->second->Shift == m_Shift)
 		{
 			if (iter->second->Callback[KeyState_Push])
-				iter->second->Callback[KeyState_Push](DeltaTime);
+			{
+				if (!ImGui::GetIO().WantCaptureMouse)
+					iter->second->Callback[KeyState_Push](DeltaTime);
+			}
 		}
 
 
@@ -368,7 +391,10 @@ void CInput::UpdateKeyInfo(float DeltaTime)
 			iter->second->Shift == m_Shift)
 		{
 			if (iter->second->Callback[KeyState_Up])
-				iter->second->Callback[KeyState_Up](DeltaTime);
+			{
+				if (!ImGui::GetIO().WantCaptureMouse)
+					iter->second->Callback[KeyState_Up](DeltaTime);
+			}
 		}
 	}
 }

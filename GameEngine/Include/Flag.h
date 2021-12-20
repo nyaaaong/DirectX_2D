@@ -74,3 +74,23 @@ enum class RenderState_Type
 	DepthStencil,
 	Max
 };
+
+enum Radio_Type
+{
+	RT_NONE,
+	RT_TEST,
+	RT_MAX
+};
+
+enum Edit_Mode
+{
+	EM_CAPTURE,
+	EM_DRAG
+};
+
+enum class SceneComponent_Type
+{
+	Sprite,
+	StaticMesh,
+	Max
+};

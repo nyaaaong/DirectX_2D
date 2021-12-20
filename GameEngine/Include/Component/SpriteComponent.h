@@ -20,6 +20,11 @@ protected:
 	class CAnimationSequence2DInstance* m_Animation;
 
 public:
+	class CAnimationSequence2DInstance* GetAnimationInstance()  const
+	{
+		return m_Animation;
+	}
+
     CMaterial* GetMaterial()    const
     {
         return m_Material;
@@ -63,7 +68,7 @@ public:
 	template <typename T>
 	void CreateAnimationInstance()
 	{
-		T* Anim = new T;
+		T* Anim = DBG_NEW T;
 
 		Anim->SetScene(m_Scene);
 		Anim->SetOwner(this);

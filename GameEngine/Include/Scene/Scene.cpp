@@ -4,8 +4,8 @@
 CScene::CScene()	:
 	m_Start(false)
 {
-	m_Mode = new CSceneMode;
-	m_Resource = new CSceneResource;
+	m_Mode = DBG_NEW CSceneMode;
+	m_Resource = DBG_NEW CSceneResource;
 
 	m_Mode->m_Scene = this;
 	m_Resource->m_Scene = this;

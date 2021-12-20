@@ -31,5 +31,5 @@ void CAnimation2DConstantBuffer::UpdateCBuffer()
 
 CAnimation2DConstantBuffer* CAnimation2DConstantBuffer::Clone()
 {
-	return new CAnimation2DConstantBuffer(*this);
+	return DBG_NEW CAnimation2DConstantBuffer(*this);
 }

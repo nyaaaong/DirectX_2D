@@ -62,9 +62,29 @@ bool CTextureManager::LoadTexture(const std::string& Name, const TCHAR* FileName
 	if (Texture)
 		return true;
 
-	Texture = new CTexture;
+	Texture = DBG_NEW CTexture;
 
 	if (!Texture->LoadTexture(Name, FileName, PathName))
+	{
+		SAFE_RELEASE(Texture);
+		return false;
+	}
+
+	m_mapTexture.insert(std::make_pair(Name, Texture));
+
+	return true;
+}
+
+bool CTextureManager::LoadTextureFullPath(const std::string& Name, const TCHAR* FullPath)
+{
+	CTexture* Texture = FindTexture(Name);
+
+	if (Texture)
+		return true;
+
+	Texture = DBG_NEW CTexture;
+
+	if (!Texture->LoadTextureFullPath(Name, FullPath))
 	{
 		SAFE_RELEASE(Texture);
 		return false;

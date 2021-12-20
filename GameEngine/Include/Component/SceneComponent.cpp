@@ -10,12 +10,14 @@ CSceneComponent::CSceneComponent()
 	m_ComponentType = Component_Type::SceneComponent;
 	m_Render = false;
 
-	m_Transform = new CTransform;
+	m_Transform = DBG_NEW CTransform;
 
 	m_Transform->m_Owner = this;
 	m_Transform->Init();
 
 	m_Parent = nullptr;
+
+	m_LayerName = "Default";
 }
 
 CSceneComponent::CSceneComponent(const CSceneComponent& com) :
@@ -62,6 +64,25 @@ void CSceneComponent::SetSceneComponent(CGameObject* Object)
 	for (size_t i = 0; i < Size; ++i)
 	{
 		m_vecChild[i]->SetSceneComponent(Object);
+	}
+}
+
+void CSceneComponent::GetAllSceneComponentsName(std::vector<FindComponentName>& vecNames)
+{
+	FindComponentName	Name;
+
+	Name.Name = m_Name;
+
+	if (m_Parent)
+		Name.ParentName = m_Parent->GetName();
+
+	vecNames.push_back(Name);
+
+	size_t	Size = m_vecChild.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		m_vecChild[i]->GetAllSceneComponentsName(vecNames);
 	}
 }
 
@@ -240,5 +261,5 @@ void CSceneComponent::PostRender()
 
 CSceneComponent* CSceneComponent::Clone()
 {
-	return new CSceneComponent(*this);
+	return DBG_NEW CSceneComponent(*this);
 }

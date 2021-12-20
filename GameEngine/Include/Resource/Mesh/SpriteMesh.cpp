@@ -12,7 +12,7 @@ CSpriteMesh::~CSpriteMesh()
 
 bool CSpriteMesh::Init()
 {
-	MeshContainer*	Container = new MeshContainer;
+	MeshContainer*	Container = DBG_NEW MeshContainer;
 
 	Container->VB.Size = sizeof(VertexUV);
 	Container->VB.Count = 4;

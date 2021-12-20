@@ -17,6 +17,15 @@ private:
     std::vector<AnimationFrameData> m_vecFrameData;
 
 public:
+	void SetFrameData(int FrameIndex, const Vector2& StartPos, const Vector2& Size)
+	{
+		if (m_vecFrameData.size() <= FrameIndex)
+			ASSERT("if (m_vecFrameData.size() <= FrameIndex)");
+
+		m_vecFrameData[FrameIndex].Start = StartPos;
+		m_vecFrameData[FrameIndex].Size = Size;
+	}
+
     void SetScene(class CScene* Scene)
     {
         m_Scene = Scene;
@@ -44,5 +53,9 @@ public:
         const std::string& PathName = TEXTURE_PATH);
     void AddFrame(const Vector2& StartPos, const Vector2& Size);
     void AddFrame(float StartX, float StartY, float Width, float Height);
+	void DeleteFrame(int Index);
+	void ClearFrame();
+	bool Save(FILE* File, const char* FullPath);
+	bool Load(FILE* File, class CIMGUIListBox* AnimFrameList, const char* FullPath);
 };
 

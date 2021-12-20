@@ -5,7 +5,7 @@
 
 CTexture::CTexture()	:
 	m_Scene(nullptr),
-	m_ImageType((Image_Type)0)
+	m_ImageType(Image_Type::Atlas)
 {
 }
 
@@ -22,13 +22,13 @@ CTexture::~CTexture()
 bool CTexture::LoadTexture(const std::string& Name, const TCHAR* FileName, 
 	const std::string& PathName)
 {
-	TextureResourceInfo* Info = new TextureResourceInfo;
+	TextureResourceInfo* Info = DBG_NEW TextureResourceInfo;
 
 	SetName(Name);
 
 	const PathInfo* Path = CPathManager::GetInst()->FindPath(PathName);
 
-	TCHAR* FullPath = new TCHAR[MAX_PATH];
+	TCHAR* FullPath = DBG_NEW TCHAR[MAX_PATH];
 	memset(FullPath, 0, sizeof(TCHAR) * MAX_PATH);
 
 	if (Path)
@@ -38,12 +38,12 @@ bool CTexture::LoadTexture(const std::string& Name, const TCHAR* FileName,
 
 	Info->FullPath = FullPath;
 
-	Info->FileName = new TCHAR[MAX_PATH];
+	Info->FileName = DBG_NEW TCHAR[MAX_PATH];
 	memset(Info->FileName, 0, sizeof(TCHAR) * MAX_PATH);
 
 	lstrcpy(Info->FileName, FileName);
 
-	Info->PathName = new char[MAX_PATH];
+	Info->PathName = DBG_NEW char[MAX_PATH];
 	memset(Info->PathName, 0, sizeof(char) * MAX_PATH);
 
 	strcpy_s(Info->PathName, PathName.length() + 1, PathName.c_str());
@@ -68,7 +68,7 @@ bool CTexture::LoadTexture(const std::string& Name, const TCHAR* FileName,
 	// 대문자로 바꿔준다
 	_strupr_s(Ext);
 
-	ScratchImage* Image = new ScratchImage;
+	ScratchImage* Image = DBG_NEW ScratchImage;
 
 	if (strcmp(Ext, ".DDS") == 0)
 	{
@@ -107,6 +107,102 @@ bool CTexture::LoadTexture(const std::string& Name, const TCHAR* FileName,
 	return CreateResource(0);
 }
 
+
+bool CTexture::LoadTextureFullPath(const std::string& Name, const TCHAR* FullPath)
+{
+	TextureResourceInfo* Info = DBG_NEW TextureResourceInfo;
+
+	SetName(Name);
+
+	TCHAR* FullPath1 = DBG_NEW TCHAR[MAX_PATH];
+	memset(FullPath1, 0, sizeof(TCHAR) * MAX_PATH);
+
+	lstrcpy(FullPath1, FullPath);
+
+	Info->FullPath = FullPath1;
+
+	Info->FileName = DBG_NEW TCHAR[MAX_PATH];
+	memset(Info->FileName, 0, sizeof(TCHAR) * MAX_PATH);
+
+	int PathLength = lstrlen(Info->FullPath);
+
+	for (int i = PathLength - 1; i > 0; --i)
+	{
+		if (Info->FullPath[i] == '\\' && i >= 4)
+		{
+			if ((Info->FullPath[i - 1] == 'n' || Info->FullPath[i - 1] == 'N') &&
+				(Info->FullPath[i - 2] == 'i' || Info->FullPath[i - 2] == 'I') &&
+				(Info->FullPath[i - 3] == 'b' || Info->FullPath[i - 3] == 'B') &&
+				Info->FullPath[i - 4] == '\\')
+			{
+				lstrcpy(Info->FileName, &Info->FullPath[i + 1]);
+				break;
+			}
+		}
+	}
+
+	TCHAR	_FileExt[_MAX_EXT] = {};
+
+	_wsplitpath_s(FullPath, nullptr, 0, nullptr, 0, nullptr, 0, _FileExt, _MAX_EXT);
+
+	Info->PathName = DBG_NEW char[MAX_PATH];
+	memset(Info->PathName, 0, sizeof(char) * MAX_PATH);
+
+	strcpy_s(Info->PathName, strlen(ROOT_PATH) + 1, ROOT_PATH);
+
+	char	Ext[_MAX_EXT] = {};
+
+#ifdef UNICODE
+
+	int	ConvertLength = WideCharToMultiByte(CP_ACP, 0, _FileExt, -1, nullptr, 0, nullptr, nullptr);
+	WideCharToMultiByte(CP_ACP, 0, _FileExt, -1, Ext, ConvertLength, nullptr, nullptr);
+
+#else
+
+	strcpy_s(Ext, _FileExt);
+
+#endif // UNICODE
+
+	_strupr_s(Ext);
+
+	ScratchImage* Image = DBG_NEW ScratchImage;
+
+	if (strcmp(Ext, ".DDS") == 0)
+	{
+		if (FAILED(LoadFromDDSFile(FullPath, DDS_FLAGS_NONE, nullptr, *Image)))
+		{
+			SAFE_DELETE(Info);
+			SAFE_DELETE(Image);
+			return false;
+		}
+	}
+
+	else if (strcmp(Ext, ".TGA") == 0)
+	{
+		if (FAILED(LoadFromTGAFile(FullPath, nullptr, *Image)))
+		{
+			SAFE_DELETE(Info);
+			SAFE_DELETE(Image);
+			return false;
+		}
+	}
+
+	else
+	{
+		if (FAILED(LoadFromWICFile(FullPath, WIC_FLAGS_NONE, nullptr, *Image)))
+		{
+			SAFE_DELETE(Info);
+			SAFE_DELETE(Image);
+			return false;
+		}
+	}
+
+	Info->Image = Image;
+
+	m_vecTextureInfo.push_back(Info);
+
+	return CreateResource(0);
+}
 
 bool CTexture::CreateResource(int Index)
 {
@@ -178,5 +274,36 @@ void CTexture::ResetShader(int Register, int ShaderType, int Index)
 
 	else
 	{
+	}
+}
+
+void CTexture::Save(FILE* pFile)
+{
+	int	Length = (int)m_Name.length();
+	fwrite(&Length, sizeof(int), 1, pFile);
+	fwrite(m_Name.c_str(), sizeof(char), Length, pFile);
+
+	fwrite(&m_ImageType, sizeof(Image_Type), 1, pFile);
+
+	int	InfoCount = (int)m_vecTextureInfo.size();
+
+	fwrite(&InfoCount, sizeof(int), 1, pFile);
+
+	for (int i = 0; i < InfoCount; ++i)
+	{
+		int	PathSize = (int)lstrlen(m_vecTextureInfo[i]->FullPath);
+
+		fwrite(&PathSize, sizeof(int), 1, pFile);
+		fwrite(m_vecTextureInfo[i]->FullPath, sizeof(TCHAR), PathSize, pFile);
+
+		PathSize = (int)lstrlen(m_vecTextureInfo[i]->FileName);
+
+		fwrite(&PathSize, sizeof(int), 1, pFile);
+		fwrite(m_vecTextureInfo[i]->FileName, sizeof(TCHAR), PathSize, pFile);
+
+		PathSize = (int)strlen(m_vecTextureInfo[i]->PathName);
+
+		fwrite(&PathSize, sizeof(int), 1, pFile);
+		fwrite(m_vecTextureInfo[i]->PathName, sizeof(char), PathSize, pFile);
 	}
 }

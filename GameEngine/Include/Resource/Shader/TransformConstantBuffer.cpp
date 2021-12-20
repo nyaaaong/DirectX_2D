@@ -42,5 +42,5 @@ void CTransformConstantBuffer::UpdateCBuffer()
 
 CTransformConstantBuffer* CTransformConstantBuffer::Clone()
 {
-	return new CTransformConstantBuffer(*this);
+	return DBG_NEW CTransformConstantBuffer(*this);
 }

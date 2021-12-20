@@ -56,21 +56,24 @@ private:
 	Vector2		m_MouseMove;
 
 public:
-	const Vector2& GetMousePos()	const
+	Vector2 GetMousePos()	const
 	{
 		return m_MousePos;
 	}
 
-	const Vector2& GetMouseMove()	const
+	Vector2 GetMouseMove()	const
 	{
 		return m_MouseMove;
 	}
 
 public:
+	bool GetKeyState(const std::string& Name, Key_State state);
+
+public:
 	bool CreateKey(const std::string& Name, unsigned char Key);
-	bool SetCtrlKey(const std::string& Name, bool State);
-	bool SetAltKey(const std::string& Name, bool State);
-	bool SetShiftKey(const std::string& Name, bool State);
+	bool SetCtrlKey(const std::string& Name, bool State = true);
+	bool SetAltKey(const std::string& Name, bool State = true);
+	bool SetShiftKey(const std::string& Name, bool State = true);
 
 private:
 	KeyInfo* FindKeyInfo(const std::string& Name);
@@ -95,8 +98,12 @@ private:
 
 public:
 	void ClearCallback();
+
+	DECLARE_SINGLE(CInput)
+
+public:
 	template <typename T>
-	void SetKeyCallback(const std::string& Name, Key_State State, T* Obj, void(T::*Func)(float))
+	void SetKeyCallback(const std::string& Name, Key_State State, T* Obj, void(T::* Func)(float))
 	{
 		KeyInfo* Info = FindKeyInfo(Name);
 
@@ -105,7 +112,5 @@ public:
 
 		Info->Callback[State] = std::bind(Func, Obj, std::placeholders::_1);
 	}
-
-	DECLARE_SINGLE(CInput)
 };
 

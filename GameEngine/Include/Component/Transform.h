@@ -84,22 +84,22 @@ private:	// Relative
 	Vector3	m_RelativeAxis[AXIS_MAX];
 
 public:
-	const Vector3& GetRelativeScale()	const
+	Vector3 GetRelativeScale()	const
 	{
 		return m_RelativeScale;
 	}
 
-	const Vector3& GetRelativeRot()	const
+	Vector3 GetRelativeRot()	const
 	{
 		return m_RelativeRot;
 	}
 
-	const Vector3& GetRelativePos()	const
+	Vector3 GetRelativePos()	const
 	{
 		return m_RelativePos;
 	}
 
-	const Vector3& GetRelativeAxis(AXIS Axis)
+	Vector3 GetRelativeAxis(AXIS Axis)
 	{
 		return m_RelativeAxis[Axis];
 	}
@@ -138,32 +138,32 @@ private:
 	Matrix	m_matWorld;
 
 public:
-	const Vector3& GetWorldScale()	const
+	Vector3 GetWorldScale()	const
 	{
 		return m_WorldScale;
 	}
 
-	const Vector3& GetWorldRot()	const
+	Vector3 GetWorldRot()	const
 	{
 		return m_WorldRot;
 	}
 
-	const Vector3& GetWorldPos()	const
+	Vector3 GetWorldPos()	const
 	{
 		return m_WorldPos;
 	}
 
-	const Vector3& GetPivot()	const
+	Vector3 GetPivot()	const
 	{
 		return m_Pivot;
 	}
 
-	const Vector3& GetMeshSize()	const
+	Vector3 GetMeshSize()	const
 	{
 		return m_MeshSize;
 	}
 
-	const Vector3& GetWorldAxis(AXIS Axis)
+	Vector3 GetWorldAxis(AXIS Axis)
 	{
 		return m_WorldAxis[Axis];
 	}

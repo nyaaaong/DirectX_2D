@@ -15,7 +15,7 @@ CMaterialManager::~CMaterialManager()
 
 bool CMaterialManager::Init()
 {
-	m_CBuffer = new CMaterialConstantBuffer;
+	m_CBuffer = DBG_NEW CMaterialConstantBuffer;
 
 	m_CBuffer->Init();
 

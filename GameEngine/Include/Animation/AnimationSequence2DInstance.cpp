@@ -6,12 +6,14 @@
 #include "../Resource/Animation/AnimationSequence2D.h"
 #include "../Resource/Shader/Animation2DConstantBuffer.h"
 #include "../Resource/Texture/Texture.h"
+#include "../IMGUIListBox.h"
 
 CAnimationSequence2DInstance::CAnimationSequence2DInstance()	:
 	m_Scene(nullptr),
 	m_Owner(nullptr),
 	m_CurrentAnimation(nullptr),
-	m_CBuffer(nullptr)
+	m_CBuffer(nullptr),
+	m_PlayAnimation(true)
 {
 }
 
@@ -21,12 +23,14 @@ CAnimationSequence2DInstance::CAnimationSequence2DInstance(const CAnimationSeque
 	m_CurrentAnimation(nullptr),
 	m_CBuffer(nullptr)
 {
+	m_PlayAnimation = Anim.m_PlayAnimation;
+
 	auto	iter = Anim.m_mapAnimation.begin();
 	auto	iterEnd = Anim.m_mapAnimation.end();
 
 	for (; iter != iterEnd; ++iter)
 	{
-		CAnimationSequence2DData* Data = new CAnimationSequence2DData;
+		CAnimationSequence2DData* Data = DBG_NEW CAnimationSequence2DData;
 
 		Data->m_Sequence = iter->second->m_Sequence;
 		Data->m_Name = iter->second->m_Name;
@@ -53,7 +57,60 @@ CAnimationSequence2DInstance::~CAnimationSequence2DInstance()
 	}
 }
 
-void CAnimationSequence2DInstance::AddAnimation(const std::string& SequenceName, 
+void CAnimationSequence2DInstance::Save(FILE* File, const char* FullPath)
+{
+	CAnimationSequence2DData* CurAnim = GetCurrentAnimation();
+	// 현재 선택된 시퀸스를 저장
+	if (!CurAnim->GetAnimationSequence()->Save(File, FullPath))
+		ASSERT("if (!GetCurrentAnimation()->GetAnimationSequence()->Save(FullPath))");
+
+	int FrameSize = CurAnim->GetAnimationSequence()->GetFrameCount();
+
+	for (int i = 0; i < FrameSize; ++i)
+	{
+		if (!CurAnim->Save(File, FullPath))
+			ASSERT("if (!CurAnim->Save(File, FullPath))");
+	}
+}
+
+void CAnimationSequence2DInstance::Load(FILE* File, const std::string& SequenceName, CIMGUIListBox* AnimFrameList, const char* FullPath)
+{
+	auto	iter = m_mapAnimation.find(SequenceName);
+
+	if (iter != m_mapAnimation.end())
+	{
+		SAFE_DELETE(iter->second);
+		m_mapAnimation.erase(iter);
+	}
+
+	CAnimationSequence2D* Sequence = nullptr;
+
+	if (m_Scene)
+		Sequence = m_Scene->GetResource()->FindAnimationSequence2D(SequenceName);
+
+	else
+		Sequence = CResourceManager::GetInst()->FindAnimationSequence2D(SequenceName);
+
+	CAnimationSequence2DData* Anim = DBG_NEW CAnimationSequence2DData;
+
+	if (!Anim->Load(File, Sequence, FullPath))
+	{
+		SAFE_DELETE(Anim);
+		return;
+	}
+
+	if (m_mapAnimation.empty())
+	{
+		m_CurrentAnimation = Anim;
+
+		if (m_Owner)
+			m_Owner->SetTexture(0, 0, (int)ConstantBuffer_Shader_Type::Pixel, Anim->m_Sequence->GetTexture()->GetName(), Anim->m_Sequence->GetTexture());
+	}
+
+	m_mapAnimation.insert(std::make_pair(SequenceName, Anim));
+}
+
+void CAnimationSequence2DInstance::AddAnimation(const std::string& SequenceName,
 	const std::string& Name, bool Loop,
 	float PlayTime, float PlayScale, bool Reverse)
 {
@@ -73,7 +130,7 @@ void CAnimationSequence2DInstance::AddAnimation(const std::string& SequenceName,
 	if (!Sequence)
 		return;
 
-	Anim = new CAnimationSequence2DData;
+	Anim = DBG_NEW CAnimationSequence2DData;
 
 	Anim->m_Sequence = Sequence;
 	Anim->m_Name = Name;
@@ -95,6 +152,17 @@ void CAnimationSequence2DInstance::AddAnimation(const std::string& SequenceName,
 	}
 
 	m_mapAnimation.insert(std::make_pair(Name, Anim));
+}
+
+void CAnimationSequence2DInstance::DeleteAnimation(const std::string& Name)
+{
+	auto	iter = m_mapAnimation.find(Name);
+
+	if (iter != m_mapAnimation.end())
+	{
+		SAFE_DELETE(iter->second);
+		m_mapAnimation.erase(iter);
+	}
 }
 
 void CAnimationSequence2DInstance::SetPlayTime(const std::string& Name, float PlayTime)
@@ -142,7 +210,7 @@ void CAnimationSequence2DInstance::SetCurrentAnimation(const std::string& Name)
 	m_CurrentAnimation = FindAnimation(Name);
 
 	if (!m_CurrentAnimation)
-		return;
+		ASSERT("if (!m_CurrentAnimation)");
 
 	m_CurrentAnimation->m_Frame = 0;
 	m_CurrentAnimation->m_Time = 0.f;
@@ -177,6 +245,10 @@ void CAnimationSequence2DInstance::ChangeAnimation(const std::string& Name)
 	}
 
 	m_CurrentAnimation = FindAnimation(Name);
+
+	if (!m_CurrentAnimation)
+		return;
+
 	m_CurrentAnimation->m_Frame = 0;
 	m_CurrentAnimation->m_Time = 0.f;
 
@@ -194,7 +266,7 @@ bool CAnimationSequence2DInstance::CheckCurrentAnimation(const std::string& Name
 
 void CAnimationSequence2DInstance::Start()
 {
-	if (m_Owner)
+	if (m_Owner && m_CurrentAnimation)
 	{
 		m_Owner->SetTexture(0, 0, (int)ConstantBuffer_Shader_Type::Pixel, m_CurrentAnimation->m_Sequence->GetTexture()->GetName(),
 			m_CurrentAnimation->m_Sequence->GetTexture());
@@ -203,16 +275,22 @@ void CAnimationSequence2DInstance::Start()
 
 bool CAnimationSequence2DInstance::Init()
 {
-	m_CBuffer = m_Scene->GetResource()->GetAnimation2DCBuffer();
+	if (m_Scene)
+		m_CBuffer = m_Scene->GetResource()->GetAnimation2DCBuffer();
 
 	return true;
 }
 
 void CAnimationSequence2DInstance::Update(float DeltaTime)
 {
+	if (!m_CurrentAnimation || !m_PlayAnimation || m_CurrentAnimation->m_Sequence->GetFrameCount() == 0)
+		return;
+
 	m_CurrentAnimation->m_Time += DeltaTime * m_CurrentAnimation->m_PlayScale;
 
 	bool	AnimEnd = false;
+
+	m_CurrentAnimation->m_FrameTime = m_CurrentAnimation->m_PlayTime / m_CurrentAnimation->m_Sequence->GetFrameCount();
 
 	if (m_CurrentAnimation->m_Time >= m_CurrentAnimation->m_FrameTime)
 	{
@@ -285,6 +363,12 @@ void CAnimationSequence2DInstance::Update(float DeltaTime)
 
 void CAnimationSequence2DInstance::SetShader()
 {
+	if (!m_CurrentAnimation)
+		return;
+
+	else if (m_CurrentAnimation->m_Sequence->GetFrameCount() == 0)
+		return;
+
 	Vector2	StartUV, EndUV;
 
 	Vector2	Start = m_CurrentAnimation->m_Sequence->GetFrameData(m_CurrentAnimation->m_Frame).Start;
@@ -296,11 +380,14 @@ void CAnimationSequence2DInstance::SetShader()
 	EndUV = (Start + FrameSize) /
 		Vector2((float)m_CurrentAnimation->m_Sequence->GetTexture()->GetWidth(), (float)m_CurrentAnimation->m_Sequence->GetTexture()->GetHeight());
 
-	m_CBuffer->SetAnimation2DType(m_CurrentAnimation->m_Sequence->GetTexture()->GetImageType());
-	m_CBuffer->SetStartUV(StartUV);
-	m_CBuffer->SetEndUV(EndUV);
 
-	m_CBuffer->UpdateCBuffer();
+	if (m_CBuffer)
+	{
+		m_CBuffer->SetAnimation2DType(m_CurrentAnimation->m_Sequence->GetTexture()->GetImageType());
+		m_CBuffer->SetStartUV(StartUV);
+		m_CBuffer->SetEndUV(EndUV);
+		m_CBuffer->UpdateCBuffer();
+	}
 }
 
 void CAnimationSequence2DInstance::ResetShader()
@@ -309,7 +396,7 @@ void CAnimationSequence2DInstance::ResetShader()
 
 CAnimationSequence2DInstance* CAnimationSequence2DInstance::Clone()
 {
-	return new CAnimationSequence2DInstance(*this);
+	return DBG_NEW CAnimationSequence2DInstance(*this);
 }
 
 CAnimationSequence2DData* CAnimationSequence2DInstance::FindAnimation(const std::string& Name)
