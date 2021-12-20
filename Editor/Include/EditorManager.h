@@ -17,6 +17,8 @@ private:
 	class CDetailWindow* m_DetailWindow;
 	class CEditorMenu* m_EditorMenu;
 	class CObjectHierarchy* m_ObjectHierarchy;
+	Vector3		m_PrevMousePos;
+	Vector3		m_CurMousePos;
 
 public:
 	class CDragObject* GetDragObj()	const
@@ -46,6 +48,11 @@ public:
 	void KeyboardDown(float DeltaTime);
 	void KeyboardLeft(float DeltaTime);
 	void KeyboardRight(float DeltaTime);
+
+	void MoveTabUp(float DeltaTime);
+	void MoveTabDown(float DeltaTime);
+	void MoveTabLeft(float DeltaTime);
+	void MoveTabRight(float DeltaTime);
 
 	DECLARE_SINGLE(CEditorManager)
 };

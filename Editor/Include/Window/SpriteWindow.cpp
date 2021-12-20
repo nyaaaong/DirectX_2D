@@ -84,13 +84,13 @@ bool CSpriteWindow::Init()
 	Label->SetAlign(0.5f, 0.f);
 
 	m_Capture = AddWidget<CIMGUIRadio>("Capture", 40.f, 20.f);
-	m_Capture->RadioButton(&m_Mode, EM_CAPTURE);
+	m_Capture->RadioButton(&m_Mode, CM_CAPTURE);
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 	Line->SetSpacing(73.f);
 
 	m_Drag = AddWidget<CIMGUIRadio>("Drag", 40.f, 20.f);
-	m_Drag->RadioButton(&m_Mode, EM_DRAG);
+	m_Drag->RadioButton(&m_Mode, CM_DRAG);
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 
@@ -398,9 +398,9 @@ void CSpriteWindow::AddAnimationFrameButton()
 	m_SpriteFrame->SetImageEnd(EndPos.x, EndPos.y);
 }
 
-void CSpriteWindow::EditMode()
+void CSpriteWindow::CaptureMode()
 {
-	if (m_Mode == EM_CAPTURE)
+	if (m_Mode == CM_CAPTURE)
 	{
 		m_AnimSizeX->ReadOnly();
 		m_AnimSizeY->ReadOnly();

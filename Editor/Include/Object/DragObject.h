@@ -16,8 +16,20 @@ private:
     CSharedPtr<class CStaticMeshComponent>    m_Mesh;
     Vector2     m_StartPos;
     Vector2     m_EndPos;
+	Vector3		m_FirstWorldPos;
 
 public:
+	void SetFirstWorldPos(const Vector3& FirstWorldPos)
+	{
+		m_FirstWorldPos = FirstWorldPos;
+	}
+
+public:
+	Vector3 GetFirstWorldPos()	const
+	{
+		return m_FirstWorldPos;
+	}
+
 	Vector2 GetStartPos()	const
 	{
 		return m_StartPos;

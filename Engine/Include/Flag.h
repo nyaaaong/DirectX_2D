@@ -82,10 +82,10 @@ enum Radio_Type
 	RT_MAX
 };
 
-enum Edit_Mode
+enum Capture_Mode
 {
-	EM_CAPTURE,
-	EM_DRAG
+	CM_CAPTURE,
+	CM_DRAG
 };
 
 enum class SceneComponent_Type

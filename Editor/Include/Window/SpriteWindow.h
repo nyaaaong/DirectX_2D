@@ -32,6 +32,11 @@ private:
 	bool				m_PlayAnim;
 
 public:
+	int GetCaptureMode()	const
+	{
+		return m_Mode;
+	}
+
 	CSharedPtr<class CSpriteEditObject> GetSpriteObject()	const
 	{
 		return m_SpriteObject;
@@ -58,7 +63,7 @@ public:
 	void LoadSequence();
 	
 private:
-	void EditMode();
+	void CaptureMode();
 	void Modify();
 	void DeleteAnimation(const std::string& SequenceName);
 };
