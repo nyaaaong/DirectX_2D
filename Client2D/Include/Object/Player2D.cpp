@@ -193,7 +193,7 @@ void CPlayer2D::PostUpdate(float DeltaTime)
 
 CPlayer2D* CPlayer2D::Clone()
 {
-	return new CPlayer2D(*this);
+	return DBG_NEW CPlayer2D(*this);
 }
 
 void CPlayer2D::MoveUp(float DeltaTime)
@@ -252,14 +252,14 @@ void CPlayer2D::Dodge(float DeltaTime)
 	m_EnableInput = false;
 	m_Dodge = true;
 
-	m_Sprite->GetAnimation()->ChangeAnimation("PlayerDodgeD");
+	m_Sprite->GetAnimationInstance()->ChangeAnimation("PlayerDodgeD");
 }
 
 void CPlayer2D::DodgeEnd(float DeltaTime)
 {
 	m_EnableInput = true;
 
-	m_Sprite->GetAnimation()->ChangeAnimation("PlayerIdleD");
+	m_Sprite->GetAnimationInstance()->ChangeAnimation("PlayerIdleD");
 }
 
 void CPlayer2D::Attack(float DeltaTime)
@@ -319,7 +319,7 @@ void CPlayer2D::Action(float DeltaTime)
 {
 	if (m_Dodge)
 	{
-		if (!m_Sprite->GetAnimation()->CheckCurrentAnimation("PlayerDodgeD"))
+		if (!m_Sprite->GetAnimationInstance()->CheckCurrentAnimation("PlayerDodgeD"))
 		{
 			m_Dodge = false;
 			m_EnableInput = true;

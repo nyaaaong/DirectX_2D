@@ -53,5 +53,5 @@ void CBulletTornaido::PostUpdate(float DeltaTime)
 
 CBulletTornaido* CBulletTornaido::Clone()
 {
-	return new CBulletTornaido(*this);
+	return DBG_NEW CBulletTornaido(*this);
 }

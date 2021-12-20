@@ -4,7 +4,7 @@
 //
 #define IDI_ICON1                       101
 
-// Next default values for new objects
+// Next default values for DBG_NEW objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS

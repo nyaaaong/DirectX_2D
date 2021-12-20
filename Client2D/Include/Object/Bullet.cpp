@@ -53,5 +53,5 @@ void CBullet::PostUpdate(float DeltaTime)
 
 CBullet* CBullet::Clone()
 {
-	return new CBullet(*this);
+	return DBG_NEW CBullet(*this);
 }

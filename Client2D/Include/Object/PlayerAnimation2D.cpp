@@ -36,7 +36,7 @@ bool CPlayerAnimation2D::Init()
 
 CPlayerAnimation2D* CPlayerAnimation2D::Clone()
 {
-	return new CPlayerAnimation2D(*this);
+	return DBG_NEW CPlayerAnimation2D(*this);
 }
 
 void CPlayerAnimation2D::DefaultAnimation()
