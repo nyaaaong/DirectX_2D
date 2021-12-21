@@ -15,6 +15,7 @@ CAnimationSequence2DInstance::CAnimationSequence2DInstance()	:
 	m_CBuffer(nullptr),
 	m_PlayAnimation(true)
 {
+	SetTypeID<CAnimationSequence2DInstance>();
 }
 
 CAnimationSequence2DInstance::CAnimationSequence2DInstance(const CAnimationSequence2DInstance& Anim)	:
@@ -407,4 +408,33 @@ CAnimationSequence2DData* CAnimationSequence2DInstance::FindAnimation(const std:
 		return nullptr;
 
 	return iter->second;
+}
+
+void CAnimationSequence2DInstance::Save(FILE* File)
+{
+	int	AnimCount = (int)m_mapAnimation.size();
+	fwrite(&AnimCount, sizeof(int), 1, File);
+
+	auto	iter = m_mapAnimation.begin();
+	auto	iterEnd = m_mapAnimation.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		int	Length = (int)iter->first.length();
+		fwrite(&Length, sizeof(int), 1, File);
+		fwrite(iter->first.c_str(), sizeof(char), Length, File);
+
+		iter->second->Save(File);
+	}
+
+	const std::string& CurrentName = m_CurrentAnimation->GetName();
+	int	Length = (int)CurrentName.length();
+	fwrite(&Length, sizeof(int), 1, File);
+	fwrite(CurrentName.c_str(), sizeof(char), Length, File);
+
+	fwrite(&m_PlayAnimation, sizeof(bool), 1, File);
+}
+
+void CAnimationSequence2DInstance::Load(FILE* File)
+{
 }

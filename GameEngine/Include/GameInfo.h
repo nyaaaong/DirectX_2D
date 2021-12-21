@@ -52,6 +52,7 @@
 #define	EXCEL_PATH	"Excel"
 #define	FONT_PATH		"Font"
 #define	ANIMATION_PATH	"Animation"
+#define	SCENE_PATH		"Scene"
 
 #define	SAFE_DELETE(p)	if(p)	{ delete p; p = nullptr; }
 #define	SAFE_DELETE_ARRAY(p)	if(p)	{ delete[] p; p = nullptr; }

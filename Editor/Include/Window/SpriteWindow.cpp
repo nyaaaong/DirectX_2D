@@ -103,7 +103,6 @@ bool CSpriteWindow::Init()
 	m_AnimStartFrameX = AddWidget<CIMGUITextInput>("StartXInput", 40.f, 20.f);
 	m_AnimStartFrameX->SetHideName();
 	m_AnimStartFrameX->AddFlag(ImGuiInputTextFlags_CharsDecimal); // 숫자와 - 등 기호까지만 입력
-	//m_AnimStartFrameX->ReadOnly()
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 	Line->SetSpacing(20.f);
@@ -118,7 +117,6 @@ bool CSpriteWindow::Init()
 	m_AnimStartFrameY = AddWidget<CIMGUITextInput>("StartYInput", 40.f, 20.f);
 	m_AnimStartFrameY->SetHideName();
 	m_AnimStartFrameY->AddFlag(ImGuiInputTextFlags_CharsDecimal); // 숫자와 - 등 기호까지만 입력
-	//m_AnimFrameX->ReadOnly()
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 
@@ -720,7 +718,7 @@ void CSpriteWindow::SaveSequence()
 			}
 		}
 
-		if (!Find) // anm 확장자가 붙지 않았을 경우 붙여준다.
+		if (!Find) // sqc 확장자가 붙지 않았을 경우 붙여준다.
 			lstrcat(FilePath, TEXT(".sqc"));
 
 		char    FullPath[MAX_PATH] = {};
@@ -759,12 +757,12 @@ void CSpriteWindow::LoadSequence()
 		// .sqc이 붙었는지 확인
 		int	iPathLength = static_cast<int>(lstrlen(FilePath));
 
-		TCHAR	anm[5] = TEXT("cqs.");
+		TCHAR	sqc[5] = TEXT("cqs.");
 		bool	Find = true;
 
 		for (int i = 1; i < 5; ++i)
 		{
-			if (FilePath[iPathLength - i] != anm[i - 1])
+			if (FilePath[iPathLength - i] != sqc[i - 1])
 			{
 				Find = false;
 				break;

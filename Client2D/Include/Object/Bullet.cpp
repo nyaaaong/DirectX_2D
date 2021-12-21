@@ -5,6 +5,7 @@
 CBullet::CBullet() :
 	m_Distance(600.f)
 {
+	SetTypeID<CBullet>();
 }
 
 CBullet::CBullet(const CBullet& obj) :

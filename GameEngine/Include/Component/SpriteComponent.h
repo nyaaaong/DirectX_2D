@@ -63,6 +63,8 @@ public:
     virtual void Render();
     virtual void PostRender();
     virtual CSpriteComponent* Clone();
+	virtual void Save(FILE* File);
+	virtual void Load(FILE* File);
 
 public:
 	template <typename T>

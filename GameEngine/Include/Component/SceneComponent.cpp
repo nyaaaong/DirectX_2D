@@ -3,6 +3,7 @@
 #include "../Render/RenderManager.h"
 #include "../GameObject/GameObject.h"
 #include "../Resource/Shader/Standard2DConstantBuffer.h"
+#include "../Scene/SceneManager.h"
 
 CSceneComponent::CSceneComponent()
 {
@@ -262,4 +263,61 @@ void CSceneComponent::PostRender()
 CSceneComponent* CSceneComponent::Clone()
 {
 	return DBG_NEW CSceneComponent(*this);
+}
+
+void CSceneComponent::Save(FILE* File)
+{
+	CComponent::Save(File);
+
+	fwrite(&m_Render, sizeof(bool), 1, File);
+
+	int	Length = (int)m_LayerName.length();
+	fwrite(&Length, sizeof(int), 1, File);
+	fwrite(m_LayerName.c_str(), sizeof(char), Length, File);
+
+	m_Transform->Save(File);
+
+	int	ChildCount = (int)m_vecChild.size();
+
+	fwrite(&ChildCount, sizeof(int), 1, File);
+
+	for (int i = 0; i < ChildCount; ++i)
+	{
+		size_t	TypeID = m_vecChild[i]->GetTypeID();
+		fwrite(&TypeID, sizeof(size_t), 1, File);
+
+		m_vecChild[i]->Save(File);
+	}
+}
+
+void CSceneComponent::Load(FILE* File)
+{
+	CComponent::Load(File);
+
+	fread(&m_Render, sizeof(bool), 1, File);
+
+	int	Length = 0;
+	char	LayerName[256] = {};
+	fread(&Length, sizeof(int), 1, File);
+	fread(LayerName, sizeof(char), Length, File);
+
+	m_LayerName = LayerName;
+
+	m_Transform->Load(File);
+
+	int	ChildCount = 0;
+
+	fread(&ChildCount, sizeof(int), 1, File);
+
+	for (int i = 0; i < ChildCount; ++i)
+	{
+		size_t	TypeID = 0;
+		fread(&TypeID, sizeof(size_t), 1, File);
+
+		CComponent* Component = CSceneManager::GetInst()->CallCreateComponent(m_Object, TypeID);
+
+		Component->Load(File);
+
+		m_vecChild.push_back((CSceneComponent*)Component);
+	}
 }

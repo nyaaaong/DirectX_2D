@@ -34,6 +34,8 @@ public:
 
 		Shader = DBG_NEW T;
 
+		Shader->SetName(Name);
+
 		if (!Shader->Init())
 		{
 			SAFE_RELEASE(Shader);

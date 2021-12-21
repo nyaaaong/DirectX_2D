@@ -21,6 +21,7 @@ bool CMeshManager::Init()
 		return false;
 	}
 
+	SpriteMesh->SetName("SpriteMesh");
 	m_mapMesh.insert(std::make_pair("SpriteMesh", SpriteMesh));
 
 	CMesh* FrameRectMesh = DBG_NEW CStaticMesh;
@@ -34,6 +35,7 @@ bool CMeshManager::Init()
 		Vector3(0.f, 1.f, 0.f)
 	};
 
+	FrameRectMesh->SetName("FrameRect");
 	FrameRectMesh->CreateMesh(FrameRectPos, sizeof(Vector3), 5, D3D11_USAGE_IMMUTABLE, D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 
 	m_mapMesh.insert(std::make_pair("FrameRect", FrameRectMesh));

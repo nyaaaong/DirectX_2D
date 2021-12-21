@@ -48,9 +48,6 @@ public:
 
 	int Release()
 	{
-		if (m_RefCount < -1000)
-			ASSERT("if (m_RefCount < -1000)");
-
 		--m_RefCount;
 
 		if (m_RefCount <= 0)
@@ -72,12 +69,23 @@ public:
 		return m_Name;
 	}
 
+	size_t GetTypeID()	const
+	{
+		return m_TypeID;
+	}
+
+public:
+	virtual void Save(FILE* File);
+	virtual void Load(FILE* File);
+
+public:
 	template <typename T>
 	void SetTypeID()
 	{
 		m_TypeID = typeid(T).hash_code();
 	}
 
+public:
 	template <typename T>
 	bool CheckType()
 	{

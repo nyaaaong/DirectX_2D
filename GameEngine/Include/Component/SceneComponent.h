@@ -60,6 +60,8 @@ public:
 	virtual void Render();
 	virtual void PostRender();
 	virtual CSceneComponent* Clone();
+	virtual void Save(FILE* File);
+	virtual void Load(FILE* File);
 
 public:
 	void SetInheritScale(bool Inherit)

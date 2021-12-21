@@ -38,6 +38,11 @@ private:
 	std::vector<Animation2DNotify*>	m_vecNotify;
 
 public:
+	const std::string& GetName()	const
+	{
+		return m_Name;
+	}
+
 	int GetCurrentFrame()	const
 	{
 		return m_Frame;
@@ -54,6 +59,8 @@ public:
 	}
 
 public:
+	void Save(FILE* File);
+	void Load(FILE* File);
 	bool Save(FILE* File, const char* FullPath);
 	bool Load(FILE* File, class CAnimationSequence2D* Sequence, const char* FullPath);
 

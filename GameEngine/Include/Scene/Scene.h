@@ -47,6 +47,10 @@ public:
 	void Start();
 	void Update(float DeltaTime);
 	void PostUpdate(float DeltaTime);
+	void Save(const char* FileName, const std::string& PathName = SCENE_PATH);
+	void SaveFullPath(const char* FullPath);
+	void Load(const char* FileName, const std::string& PathName = SCENE_PATH);
+	void LoadFullPath(const char* FullPath);
 
 public:
 	template <typename T>
@@ -66,6 +70,16 @@ public:
 	}
 
 	template <typename T>
+	bool LoadSceneMode()
+	{
+		m_Mode = new T;
+
+		m_Mode->m_Scene = this;
+
+		return true;
+	}
+
+	template <typename T>
 	T* CreateGameObject(const std::string& Name)
 	{
 		T* Obj = DBG_NEW T;
@@ -78,6 +92,21 @@ public:
 			SAFE_RELEASE(Obj);
 			return nullptr;
 		}
+
+		m_ObjList.push_back(Obj);
+
+		if (m_Start)
+			Obj->Start();
+
+		return Obj;
+	}
+
+	template <typename T>
+	T* LoadGameObject()
+	{
+		T* Obj = new T;
+
+		Obj->SetScene(this);
 
 		m_ObjList.push_back(Obj);
 

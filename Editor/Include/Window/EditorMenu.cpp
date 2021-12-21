@@ -79,6 +79,14 @@ bool CEditorMenu::Init()
 
 	m_ComponentCreateButton->SetClickCallback(this, &CEditorMenu::ComponentCreateButton);
 
+	CIMGUIButton* SaveSceneButton = AddWidget<CIMGUIButton>("SaveSceneButton", 100.f, 30.f);
+
+	SaveSceneButton->SetClickCallback(this, &CEditorMenu::SaveScene);
+
+	CIMGUIButton* LoadSceneButton = AddWidget<CIMGUIButton>("LoadSceneButton", 100.f, 30.f);
+
+	LoadSceneButton->SetClickCallback(this, &CEditorMenu::LoadScene);
+
 	return true;
 }
 
@@ -150,5 +158,89 @@ void CEditorMenu::ComponentCreateButton()
 		CIMGUIListBox* ComponentList = Hierarchy->GetComponentList();
 
 		ComponentList->AddItem(m_ComponentNameInput->GetTextMultibyte());
+	}
+}
+
+void CEditorMenu::SaveScene()
+{
+	TCHAR   FilePath[MAX_PATH] = {};
+
+	OPENFILENAME    OpenFile = {};
+
+	OpenFile.lStructSize = sizeof(OPENFILENAME);
+	OpenFile.hwndOwner = CEngine::GetInst()->GetWindowHandle();
+	OpenFile.lpstrFilter = TEXT("Scene (*.scn)\0*.scn");
+	OpenFile.lpstrFile = FilePath;
+	OpenFile.nMaxFile = MAX_PATH;
+	OpenFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(SCENE_PATH)->Path;
+
+	if (GetSaveFileName(&OpenFile) != 0)
+	{
+		// .scn이 붙었는지 확인
+		int	iPathLength = static_cast<int>(lstrlen(FilePath));
+
+		TCHAR	scn[5] = TEXT("ncs.");
+		bool	Find = true;
+
+		for (int i = 1; i < 5; ++i)
+		{
+			if (FilePath[iPathLength - i] != scn[i - 1])
+			{
+				Find = false;
+				break;
+			}
+		}
+
+		if (!Find) // scn 확장자가 붙지 않았을 경우 붙여준다.
+			lstrcat(FilePath, TEXT(".scn"));
+
+		char    ConvertFullPath[MAX_PATH] = {};
+
+		int Length = WideCharToMultiByte(CP_ACP, 0, FilePath, -1, 0, 0, 0, 0);
+		WideCharToMultiByte(CP_ACP, 0, FilePath, -1, ConvertFullPath, Length, 0, 0);
+
+		CSceneManager::GetInst()->GetScene()->SaveFullPath(ConvertFullPath);
+	}
+}
+
+void CEditorMenu::LoadScene()
+{
+	TCHAR   FilePath[MAX_PATH] = {};
+
+	OPENFILENAME    OpenFile = {};
+
+	OpenFile.lStructSize = sizeof(OPENFILENAME);
+	OpenFile.hwndOwner = CEngine::GetInst()->GetWindowHandle();
+	OpenFile.lpstrFilter = TEXT("Scene (*.scn)\0*.scn");
+	OpenFile.lpstrFile = FilePath;
+	OpenFile.nMaxFile = MAX_PATH;
+	OpenFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(SCENE_PATH)->Path;
+
+	if (GetOpenFileName(&OpenFile) != 0)
+	{
+		// .scn이 붙었는지 확인
+		int	iPathLength = static_cast<int>(lstrlen(FilePath));
+
+		TCHAR	scn[5] = TEXT("ncs.");
+		bool	Find = true;
+
+		for (int i = 1; i < 5; ++i)
+		{
+			if (FilePath[iPathLength - i] != scn[i - 1])
+			{
+				Find = false;
+				break;
+			}
+		}
+
+		if (!Find) // scn 확장자가 붙지 않았을 경우 붙여준다.
+			lstrcat(FilePath, TEXT(".scn"));
+
+		char    ConvertFullPath[MAX_PATH] = {};
+
+		int Length = WideCharToMultiByte(CP_ACP, 0, FilePath, -1, 0, 0, 0, 0);
+		WideCharToMultiByte(CP_ACP, 0, FilePath, -1, ConvertFullPath, Length, 0, 0);
+
+		CSceneManager::GetInst()->GetScene()->LoadFullPath(ConvertFullPath);
 	}
 }

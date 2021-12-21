@@ -1,5 +1,6 @@
 
 #include "GameObject.h"
+#include "../Scene/SceneManager.h"
 
 CGameObject::CGameObject()	:
 	m_Scene(nullptr),
@@ -165,4 +166,72 @@ void CGameObject::PostRender()
 CGameObject* CGameObject::Clone()
 {
 	return DBG_NEW CGameObject(*this);
+}
+
+void CGameObject::Save(FILE* File)
+{
+	CRef::Save(File);
+
+	if (m_RootComponent)
+	{
+		bool	Root = true;
+		fwrite(&Root, sizeof(bool), 1, File);
+
+		size_t	TypeID = m_RootComponent->GetTypeID();
+		fwrite(&TypeID, sizeof(size_t), 1, File);
+
+		m_RootComponent->Save(File);
+	}
+
+	else
+	{
+		bool	Root = false;
+		fwrite(&Root, sizeof(bool), 1, File);
+	}
+
+	int	ObjComponentCount = (int)m_vecObjectComponent.size();
+
+	fwrite(&ObjComponentCount, sizeof(int), 1, File);
+
+	for (int i = 0; i < ObjComponentCount; ++i)
+	{
+		size_t	TypeID = m_vecObjectComponent[i]->GetTypeID();
+		fwrite(&TypeID, sizeof(size_t), 1, File);
+
+		m_vecObjectComponent[i]->Save(File);
+	}
+}
+
+void CGameObject::Load(FILE* File)
+{
+	CRef::Load(File);
+
+	bool	Root = false;
+	fread(&Root, sizeof(bool), 1, File);
+
+	if (Root)
+	{
+		size_t	TypeID = 0;
+		fread(&TypeID, sizeof(size_t), 1, File);
+
+		CSceneManager::GetInst()->CallCreateComponent(this, TypeID);
+
+		m_RootComponent->Load(File);
+	}
+
+	int	ObjComponentCount = 0;
+
+	fread(&ObjComponentCount, sizeof(int), 1, File);
+
+	for (int i = 0; i < ObjComponentCount; ++i)
+	{
+		size_t	TypeID = 0;
+		fread(&TypeID, sizeof(size_t), 1, File);
+
+		CComponent* Component = CSceneManager::GetInst()->CallCreateComponent(this, TypeID);
+
+		Component->Load(File);
+
+		m_vecObjectComponent.push_back((CObjectComponent*)Component);
+	}
 }

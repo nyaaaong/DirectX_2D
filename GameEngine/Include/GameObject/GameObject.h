@@ -62,6 +62,8 @@ public:
 	virtual void Render();
 	virtual void PostRender();
 	virtual CGameObject* Clone();
+	virtual void Save(FILE* File);
+	virtual void Load(FILE* File);
 
 public:
 	void SetInheritScale(bool Inherit)
@@ -588,6 +590,28 @@ public:
 			SAFE_RELEASE(Component);
 			return nullptr;
 		}
+
+		if (Component->GetComponentType() == Component_Type::ObjectComponent)
+			m_vecObjectComponent.push_back((class CObjectComponent*)Component);
+
+		else
+		{
+			m_SceneComponentList.push_back((class CSceneComponent*)Component);
+
+			if (!m_RootComponent)
+				m_RootComponent = Component;
+		}
+
+		return Component;
+	}
+
+	template <typename T>
+	T* LoadComponent()
+	{
+		T* Component = new T;
+
+		Component->SetScene(m_Scene);
+		Component->SetGameObject(this);
 
 		if (Component->GetComponentType() == Component_Type::ObjectComponent)
 			m_vecObjectComponent.push_back((class CObjectComponent*)Component);

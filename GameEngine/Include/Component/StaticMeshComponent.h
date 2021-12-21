@@ -59,5 +59,7 @@ public:
     virtual void Render();
     virtual void PostRender();
     virtual CStaticMeshComponent* Clone();
+	virtual void Save(FILE* File);
+	virtual void Load(FILE* File);
 };
 

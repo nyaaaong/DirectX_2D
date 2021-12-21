@@ -4,6 +4,7 @@
 
 CBulletTornaido::CBulletTornaido()
 {
+	SetTypeID<CBulletTornaido>();
 }
 
 CBulletTornaido::CBulletTornaido(const CBulletTornaido& obj) :

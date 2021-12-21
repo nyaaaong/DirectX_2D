@@ -81,6 +81,13 @@ public:
 		return true;
 	}
 
+public:
+	template <typename T>
+	T* CreateMaterialEmpty()
+	{
+		return CResourceManager::GetInst()->CreateMaterialEmpty<T>();
+	}
+
 public:	// =================== Shader =====================
 	template <typename T>
 	bool CreateShader(const std::string& Name)

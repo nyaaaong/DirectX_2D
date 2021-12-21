@@ -76,6 +76,14 @@ public:
 		return m_MaterialManager->CreateMaterial<T>(Name);
 	}
 
+public:
+	template <typename T>
+	T* CreateMaterialEmpty()
+	{
+		return m_MaterialManager->CreateMaterialEmpty<T>();
+	}
+
+public:
 	template <typename T>
 	bool CreateShader(const std::string& Name)
 	{

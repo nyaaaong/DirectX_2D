@@ -63,6 +63,7 @@ bool CPathManager::Init()
 	AddPath(EXCEL_PATH, TEXT("Excel\\"));
 	AddPath(FONT_PATH, TEXT("Font\\"));
 	AddPath(ANIMATION_PATH, TEXT("Animation\\"));
+	AddPath(SCENE_PATH, TEXT("Scene\\"));
 
 	return true;
 }

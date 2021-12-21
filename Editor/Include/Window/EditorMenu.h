@@ -24,5 +24,7 @@ public:
 public:
 	void ObjectCreateButton();
 	void ComponentCreateButton();
+	void SaveScene();
+	void LoadScene();
 };
 

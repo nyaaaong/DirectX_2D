@@ -81,3 +81,30 @@ bool CAnimationSequence2DData::Load(FILE* File, CAnimationSequence2D* Sequence, 
 
 	return true;
 }
+
+void CAnimationSequence2DData::Save(FILE* File)
+{
+	int	Length = (int)m_Name.length();
+	fwrite(&Length, sizeof(int), 1, File);
+	fwrite(m_Name.c_str(), sizeof(char), Length, File);
+
+
+	fwrite(&m_Frame, sizeof(int), 1, File);
+	fwrite(&m_Time, sizeof(float), 1, File);
+	fwrite(&m_FrameTime, sizeof(float), 1, File);
+	fwrite(&m_PlayTime, sizeof(float), 1, File);
+	fwrite(&m_PlayScale, sizeof(float), 1, File);
+
+	fwrite(&m_Loop, sizeof(bool), 1, File);
+	fwrite(&m_Reverse, sizeof(bool), 1, File);
+
+	std::string	SequenceName = m_Sequence->GetName();
+
+	Length = (int)SequenceName.length();
+	fwrite(&Length, sizeof(int), 1, File);
+	fwrite(SequenceName.c_str(), sizeof(char), Length, File);
+}
+
+void CAnimationSequence2DData::Load(FILE* File)
+{
+}

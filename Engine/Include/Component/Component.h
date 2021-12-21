@@ -41,7 +41,7 @@ public:
     }
 
 public:
-	virtual void Start();
+    virtual void Start();
     virtual bool Init();
     virtual void Update(float DeltaTime) = 0;
     virtual void PostUpdate(float DeltaTime) = 0;
@@ -49,5 +49,7 @@ public:
     virtual void Render() = 0;
     virtual void PostRender() = 0;
     virtual CComponent* Clone() = 0;
+	virtual void Save(FILE* File);
+	virtual void Load(FILE* File);
 };
 

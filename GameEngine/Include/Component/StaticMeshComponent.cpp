@@ -172,3 +172,22 @@ CStaticMeshComponent* CStaticMeshComponent::Clone()
 {
 	return DBG_NEW CStaticMeshComponent(*this);
 }
+
+void CStaticMeshComponent::Save(FILE* File)
+{
+	std::string	MeshName = m_Mesh->GetName();
+
+	int	Length = (int)MeshName.length();
+
+	fwrite(&Length, sizeof(int), 1, File);
+	fwrite(MeshName.c_str(), sizeof(char), Length, File);
+
+	m_Material->Save(File);
+
+	CSceneComponent::Save(File);
+}
+
+void CStaticMeshComponent::Load(FILE* File)
+{
+	CSceneComponent::Load(File);
+}

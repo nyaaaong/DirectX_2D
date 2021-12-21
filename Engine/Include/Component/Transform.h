@@ -222,5 +222,7 @@ public:
 	void SetTransform();
 	void ComputeWorld();
 	CTransform* Clone();
+	void Save(FILE* File);
+	void Load(FILE* File);
 };
 

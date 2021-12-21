@@ -5,6 +5,7 @@
 #include "../Animation/AnimationSequence2DInstance.h"
 #include "../Render/RenderManager.h"
 #include "../Resource/Shader/Standard2DConstantBuffer.h"
+#include "../Scene/SceneManager.h"
 
 CSpriteComponent::CSpriteComponent() :
 	m_Animation(nullptr)
@@ -181,4 +182,65 @@ void CSpriteComponent::PostRender()
 CSpriteComponent* CSpriteComponent::Clone()
 {
 	return DBG_NEW CSpriteComponent(*this);
+}
+
+void CSpriteComponent::Save(FILE* File)
+{
+	std::string	MeshName = m_Mesh->GetName();
+
+	int	Length = (int)MeshName.length();
+
+	fwrite(&Length, sizeof(int), 1, File);
+	fwrite(MeshName.c_str(), sizeof(char), Length, File);
+
+	m_Material->Save(File);
+
+	bool	AnimEnable = false;
+
+	if (m_Animation)
+		AnimEnable = true;
+
+	fwrite(&AnimEnable, sizeof(bool), 1, File);
+
+	if (m_Animation)
+	{
+		size_t	TypeID = m_Animation->GetTypeID();
+		fwrite(&TypeID, sizeof(size_t), 1, File);
+
+		m_Animation->Save(File);
+	}
+
+	CSceneComponent::Save(File);
+}
+
+void CSpriteComponent::Load(FILE* File)
+{
+	char	MeshName[256] = {};
+
+	int	Length = 0;
+
+	fread(&Length, sizeof(int), 1, File);
+	fread(MeshName, sizeof(char), Length, File);
+
+	m_Mesh = (CSpriteMesh*)m_Scene->GetResource()->FindMesh(MeshName);
+
+	m_Material = m_Scene->GetResource()->CreateMaterialEmpty<CMaterial>();
+
+	m_Material->Load(File);
+
+	bool	AnimEnable = false;
+
+	fread(&AnimEnable, sizeof(bool), 1, File);
+
+	if (AnimEnable)
+	{
+		size_t	TypeID = m_Animation->GetTypeID();
+		fread(&TypeID, sizeof(size_t), 1, File);
+
+		CSceneManager::GetInst()->CallCreateAnimInstance(this, TypeID);
+
+		m_Animation->Load(File);
+	}
+
+	CSceneComponent::Load(File);
 }

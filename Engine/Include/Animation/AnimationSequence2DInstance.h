@@ -10,6 +10,7 @@ public:
 	virtual ~CAnimationSequence2DInstance();
 
 protected:
+	size_t		m_TypeID;
 	class CSpriteComponent* m_Owner;
 	class CScene* m_Scene;
 	std::unordered_map<std::string, CAnimationSequence2DData*>	m_mapAnimation;
@@ -18,6 +19,11 @@ protected:
 	bool		m_PlayAnimation;
 
 public:
+	size_t GetTypeID()	const
+	{
+		return m_TypeID;
+	}
+
 	void SetScene(class CScene* Scene)
 	{
 		m_Scene = Scene;
@@ -54,6 +60,8 @@ public:
 	}
 
 public:
+	virtual void Save(FILE* File);
+	virtual void Load(FILE* File);
 	void Save(FILE* File, const char* FullPath);
 	void Load(FILE* File, const std::string& SequenceName, class CIMGUIListBox* AnimFrameList, const char* FullPath);
 
@@ -92,6 +100,7 @@ public:
 		Data->SetEndFunction<T>(Obj, Func);
 	}
 
+public:
 	template <typename T>
 	void AddNotify(const std::string& Name, const std::string& NotifyName, int Frame,
 		T* Obj, void (T::* Func)())
@@ -102,6 +111,13 @@ public:
 			return;
 
 		Data->AddNotify<T>(NotifyName, Frame, Obj, Func);
+	}
+
+public:
+	template <typename T>
+	void SetTypeID()
+	{
+		m_TypeID = typeid(T).hash_code();
 	}
 };
 

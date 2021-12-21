@@ -3,6 +3,7 @@
 
 CPlayerAnimation2D::CPlayerAnimation2D()
 {
+	SetTypeID<CPlayerAnimation2D>();
 }
 
 CPlayerAnimation2D::CPlayerAnimation2D(const CPlayerAnimation2D& Anim)	:

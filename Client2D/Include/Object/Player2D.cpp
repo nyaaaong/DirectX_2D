@@ -11,6 +11,7 @@ CPlayer2D::CPlayer2D()	:
 	m_EnableInput(true),
 	m_Dodge(false)
 {
+	SetTypeID<CPlayer2D>();
 	m_SolW = false;
 	m_WDistance = 0.f;
 	m_Opacity = 1.f;
