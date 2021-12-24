@@ -42,7 +42,7 @@ public:
 	template <typename T>
 	T* CreateMaterialEmpty()
 	{
-		T* Material = new T;
+		T* Material = DBG_NEW T;
 
 		Material->SetConstantBuffer(m_CBuffer);
 

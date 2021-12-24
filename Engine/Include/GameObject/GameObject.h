@@ -608,7 +608,7 @@ public:
 	template <typename T>
 	T* LoadComponent()
 	{
-		T* Component = new T;
+		T* Component = DBG_NEW T;
 
 		Component->SetScene(m_Scene);
 		Component->SetGameObject(this);

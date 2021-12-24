@@ -163,18 +163,34 @@ bool CResourceManager::CreateAnimationSequence2D(const std::string& Name, CTextu
 	return m_AnimationManager->CreateAnimationSequence2D(Name, Texture);
 }
 
-bool CResourceManager::SaveSequence2D(FILE* File, const std::string& Name, const char* FullPath)
+bool CResourceManager::SaveSequence2DFullPath(const std::string& Name, const char* FullPath)
 {
-	return m_AnimationManager->SaveSequence(File, Name, FullPath);
+	return m_AnimationManager->SaveSequenceFullPath(Name, FullPath);
 }
 
-bool CResourceManager::LoadSequence2D(FILE* File, CIMGUIListBox* AnimFrameList, std::string& resultName, const char* FullPath, class CScene* Scene)
+bool CResourceManager::LoadSequence2DFullPath(std::string& resultName, const char* FullPath, class CScene* Scene)
 {
-	return m_AnimationManager->LoadSequence(File, AnimFrameList, resultName, FullPath, Scene);
+	return m_AnimationManager->LoadSequenceFullPath(resultName, FullPath, Scene);
 }
 
-bool CResourceManager::LoadSequence2D(FILE* File, CIMGUIListBox* AnimFrameList, const char* FullPath, CScene* Scene)
+bool CResourceManager::LoadSequence2DFullPath(const char* FullPath, CScene* Scene)
 {
 	std::string	Name;
-	return m_AnimationManager->LoadSequence(File, AnimFrameList, Name, FullPath, Scene);
+	return m_AnimationManager->LoadSequenceFullPath(Name, FullPath, Scene);
+}
+
+bool CResourceManager::SaveSequence2D(const std::string& Name, const char* FileName, const std::string& PathName)
+{
+	return m_AnimationManager->SaveSequence(Name, FileName, PathName);
+}
+
+bool CResourceManager::LoadSequence2D(const char* FileName, const std::string& PathName, CScene* Scene)
+{
+	std::string	Name;
+	return m_AnimationManager->LoadSequence(Name, FileName, PathName, Scene);
+}
+
+bool CResourceManager::LoadSequence2D(std::string& resultName, const char* FileName, const std::string& PathName, CScene* Scene)
+{
+	return m_AnimationManager->LoadSequence(resultName, FileName, PathName, Scene);
 }

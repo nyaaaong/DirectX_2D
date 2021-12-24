@@ -9,5 +9,8 @@ public:
 
 public:
     virtual bool Init();
+
+private:
+	bool LoadAnimationSequence2D();
 };
 

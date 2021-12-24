@@ -24,6 +24,8 @@ CAnimationSequence2DInstance::CAnimationSequence2DInstance(const CAnimationSeque
 	m_CurrentAnimation(nullptr),
 	m_CBuffer(nullptr)
 {
+	SetTypeID<CAnimationSequence2DInstance>();
+
 	m_PlayAnimation = Anim.m_PlayAnimation;
 
 	auto	iter = Anim.m_mapAnimation.begin();
@@ -58,59 +60,6 @@ CAnimationSequence2DInstance::~CAnimationSequence2DInstance()
 	}
 }
 
-void CAnimationSequence2DInstance::Save(FILE* File, const char* FullPath)
-{
-	CAnimationSequence2DData* CurAnim = GetCurrentAnimation();
-	// 현재 선택된 시퀸스를 저장
-	if (!CurAnim->GetAnimationSequence()->Save(File, FullPath))
-		ASSERT("if (!GetCurrentAnimation()->GetAnimationSequence()->Save(FullPath))");
-
-	int FrameSize = CurAnim->GetAnimationSequence()->GetFrameCount();
-
-	for (int i = 0; i < FrameSize; ++i)
-	{
-		if (!CurAnim->Save(File, FullPath))
-			ASSERT("if (!CurAnim->Save(File, FullPath))");
-	}
-}
-
-void CAnimationSequence2DInstance::Load(FILE* File, const std::string& SequenceName, CIMGUIListBox* AnimFrameList, const char* FullPath)
-{
-	auto	iter = m_mapAnimation.find(SequenceName);
-
-	if (iter != m_mapAnimation.end())
-	{
-		SAFE_DELETE(iter->second);
-		m_mapAnimation.erase(iter);
-	}
-
-	CAnimationSequence2D* Sequence = nullptr;
-
-	if (m_Scene)
-		Sequence = m_Scene->GetResource()->FindAnimationSequence2D(SequenceName);
-
-	else
-		Sequence = CResourceManager::GetInst()->FindAnimationSequence2D(SequenceName);
-
-	CAnimationSequence2DData* Anim = DBG_NEW CAnimationSequence2DData;
-
-	if (!Anim->Load(File, Sequence, FullPath))
-	{
-		SAFE_DELETE(Anim);
-		return;
-	}
-
-	if (m_mapAnimation.empty())
-	{
-		m_CurrentAnimation = Anim;
-
-		if (m_Owner)
-			m_Owner->SetTexture(0, 0, (int)ConstantBuffer_Shader_Type::Pixel, Anim->m_Sequence->GetTexture()->GetName(), Anim->m_Sequence->GetTexture());
-	}
-
-	m_mapAnimation.insert(std::make_pair(SequenceName, Anim));
-}
-
 void CAnimationSequence2DInstance::AddAnimation(const std::string& SequenceName,
 	const std::string& Name, bool Loop,
 	float PlayTime, float PlayScale, bool Reverse)
@@ -127,6 +76,65 @@ void CAnimationSequence2DInstance::AddAnimation(const std::string& SequenceName,
 
 	else
 		Sequence = CResourceManager::GetInst()->FindAnimationSequence2D(SequenceName);
+
+	if (!Sequence)
+		return;
+
+	Anim = DBG_NEW CAnimationSequence2DData;
+
+	Anim->m_Sequence = Sequence;
+	Anim->m_Name = Name;
+	Anim->m_Loop = Loop;
+	Anim->m_PlayTime = PlayTime;
+	Anim->m_PlayScale = PlayScale;
+	Anim->m_Reverse = Reverse;
+	Anim->m_FrameTime = PlayTime / Sequence->GetFrameCount();
+
+	if (m_mapAnimation.empty())
+	{
+		m_CurrentAnimation = Anim;
+
+		if (m_Owner)
+		{
+			m_Owner->SetTexture(0, 0, (int)ConstantBuffer_Shader_Type::Pixel, Anim->m_Sequence->GetTexture()->GetName(),
+				Anim->m_Sequence->GetTexture());
+		}
+	}
+
+	m_mapAnimation.insert(std::make_pair(Name, Anim));
+}
+
+void CAnimationSequence2DInstance::AddAnimation(const TCHAR* FileName,
+	const std::string& PathName, const std::string& Name,
+	bool Loop, float PlayTime, float PlayScale, bool Reverse)
+{
+	CAnimationSequence2DData* Anim = FindAnimation(Name);
+
+	if (Anim)
+		return;
+
+	char	FileNameMultibyte[256] = {};
+
+	int	Length = WideCharToMultiByte(CP_ACP, 0, FileName, -1, 0, 0, 0, 0);
+	WideCharToMultiByte(CP_ACP, 0, FileName, -1, FileNameMultibyte, Length, 0, 0);
+
+	CAnimationSequence2D* Sequence = nullptr;
+
+	if (m_Scene)
+	{
+		std::string	SequenceName;
+
+		m_Scene->GetResource()->LoadSequence2D(SequenceName, FileNameMultibyte);
+		Sequence = m_Scene->GetResource()->FindAnimationSequence2D(SequenceName);
+	}
+
+	else
+	{
+		std::string	SequenceName;
+
+		CResourceManager::GetInst()->LoadSequence2D(SequenceName, FileNameMultibyte);
+		Sequence = CResourceManager::GetInst()->FindAnimationSequence2D(SequenceName);
+	}
 
 	if (!Sequence)
 		return;
@@ -437,4 +445,45 @@ void CAnimationSequence2DInstance::Save(FILE* File)
 
 void CAnimationSequence2DInstance::Load(FILE* File)
 {
+	int	AnimCount = 0;
+	fread(&AnimCount, sizeof(int), 1, File);
+
+	for (int i = 0; i < AnimCount; ++i)
+	{
+		int	Length = 0;
+		char	AnimName[256] = {};
+
+		fread(&Length, sizeof(int), 1, File);
+		fread(AnimName, sizeof(char), Length, File);
+
+		CAnimationSequence2DData* Data = DBG_NEW CAnimationSequence2DData;
+
+		Data->Load(File);
+
+		if (m_Scene)
+		{
+			Data->m_Sequence = m_Scene->GetResource()->FindAnimationSequence2D(Data->m_SequenceName);
+		}
+
+		else
+		{
+			Data->m_Sequence = CResourceManager::GetInst()->FindAnimationSequence2D(Data->m_SequenceName);
+		}
+
+		m_mapAnimation.insert(std::make_pair(AnimName, Data));
+	}
+
+	int	Length = 0;
+	char	CurrentName[256] = {};
+
+	fread(&Length, sizeof(int), 1, File);
+	fread(CurrentName, sizeof(char), Length, File);
+
+	m_CurrentAnimation = FindAnimation(CurrentName);
+
+	fread(&m_PlayAnimation, sizeof(bool), 1, File);
+
+
+	if (m_Scene)
+		m_CBuffer = m_Scene->GetResource()->GetAnimation2DCBuffer();
 }

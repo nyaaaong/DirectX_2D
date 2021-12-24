@@ -50,6 +50,9 @@
     <ClCompile Include="Window\ObjectHierarchy.cpp">
       <Filter>01. Editor</Filter>
     </ClCompile>
+    <ClCompile Include="Object\Player2D.cpp">
+      <Filter>02. Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene\DefaultScene.h">
@@ -81,6 +84,9 @@
     </ClInclude>
     <ClInclude Include="EditorInfo.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Player2D.h">
+      <Filter>02. Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

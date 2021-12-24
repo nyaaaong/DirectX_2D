@@ -84,13 +84,13 @@ bool CSpriteWindow::Init()
 	Label->SetAlign(0.5f, 0.f);
 
 	m_Capture = AddWidget<CIMGUIRadio>("Capture", 40.f, 20.f);
-	m_Capture->RadioButton(&m_Mode, CM_CAPTURE);
+	m_Capture->RadioButton(&m_Mode, EM_CAPTURE);
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 	Line->SetSpacing(73.f);
 
 	m_Drag = AddWidget<CIMGUIRadio>("Drag", 40.f, 20.f);
-	m_Drag->RadioButton(&m_Mode, CM_DRAG);
+	m_Drag->RadioButton(&m_Mode, EM_DRAG);
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 
@@ -266,8 +266,7 @@ void CSpriteWindow::Update(float DeltaTime)
 		}
 	}
 
-	EditMode();
-
+	CaptureMode();
 }
 
 void CSpriteWindow::LoadTextureButton()
@@ -303,6 +302,8 @@ void CSpriteWindow::LoadTextureButton()
 
 		m_SpriteObject->GetSpriteComponent()->SetWorldScale((float)m_SpriteObject->GetSpriteComponent()->GetMaterial()->GetTextureWidth(), 
 			(float)m_SpriteObject->GetSpriteComponent()->GetMaterial()->GetTextureHeight(), 1.f);
+
+		RefreshInput();
 	}
 }
 
@@ -394,20 +395,22 @@ void CSpriteWindow::AddAnimationFrameButton()
 
 	m_SpriteFrame->SetImageStart(StartPos.x, StartPos.y);
 	m_SpriteFrame->SetImageEnd(EndPos.x, EndPos.y);
+
+	RefreshInput();
 }
 
 void CSpriteWindow::CaptureMode()
 {
-	if (m_Mode == CM_CAPTURE)
+	if (m_Mode == EM_CAPTURE)
 	{
-		m_AnimSizeX->ReadOnly();
-		m_AnimSizeY->ReadOnly();
+		m_AnimSizeX->ReadOnly(false);
+		m_AnimSizeY->ReadOnly(false);
 	}
 
 	else
 	{
-		m_AnimSizeX->ReadOnly(false);
-		m_AnimSizeY->ReadOnly(false);
+		m_AnimSizeX->ReadOnly(true);
+		m_AnimSizeY->ReadOnly(true);
 	}
 }
 
@@ -623,19 +626,7 @@ void CSpriteWindow::SelectAnimationFrame(int Index, const char* Item)
 	DragObject->SetStartPos(StartPos);
 	DragObject->SetEndPos(EndPos);
 
-	// StartPos를 이미지에서의 위치로 변경한다.
-
-	Vector2 Size = DragObject->GetEndPos() - DragObject->GetStartPos();
-	Size.x = abs(Size.x);
-	Size.y = abs(Size.y);
-
-	Vector2 ConvertImagePos;
-	ConvertImagePos.x = DragObject->GetStartPos().x - m_SpriteObject->GetWorldPos().x;
-	ConvertImagePos.y = m_SpriteObject->GetSpriteComponent()->GetMaterial()->GetTexture()->GetHeight() - (DragObject->GetStartPos().y - m_SpriteObject->GetWorldPos().y);
-
-	InputSize(Size);
-	InputStartFrameData(ConvertImagePos);
-	InputEndFrameData(ConvertImagePos + Size);
+	RefreshInput();
 }
 
 void CSpriteWindow::PlayAnimation()
@@ -728,14 +719,8 @@ void CSpriteWindow::SaveSequence()
 
 		FILE* File = nullptr;
 
-		fopen_s(&File, FullPath, "wb");
-
-		if (!File)
-			ASSERT("if (!File)");
-
-		m_AnimInstance->Save(File, FullPath);
-
-		fclose(File);
+		//m_AnimInstance->Save(File, FullPath);
+		m_AnimInstance->GetCurrentAnimation()->GetAnimationSequence()->SaveFullPath(FullPath);
 	}
 }
 
@@ -781,32 +766,34 @@ void CSpriteWindow::LoadSequence()
 
 		std::string	SequenceName;
 
-		FILE* File = nullptr;
-
-		fopen_s(&File, FullPath, "rb");
-
-		if (!File)
-			ASSERT("if (!File)");
-
-		if (!Resource->LoadSequence2D(File, m_AnimationFrameList, SequenceName, FullPath))
-			fclose(File);
-
-		else
-		{
-			// 시퀸스 리스트박스 등록
-			m_AnimationList->AddItem(SequenceName);
-
-			// 프레임 리스트박스 등록
-			m_AnimInstance->Load(File, SequenceName, m_AnimationFrameList, FullPath);
-
-			fclose(File);
-
-			int Index = m_AnimationFrameList->GetItemIndex(SequenceName);
-
-			if (Index == -1)
-				Index = 0;
-
-			SelectAnimation(Index, SequenceName.c_str());
-		}
+		Resource->LoadSequence2DFullPath(SequenceName, FullPath);
+		RefreshInput();
 	}
+}
+
+void CSpriteWindow::RefreshInput()
+{
+	CDragObject* DragObj = CEditorManager::GetInst()->GetDragObj();
+
+	//Vector2 ConvertStartPos, ConvertEndPos;
+	Vector2 StartPos = DragObj->GetStartPos();
+	Vector2 EndPos = DragObj->GetEndPos();
+	Vector2 Size = EndPos - StartPos;
+
+	/*Vector3	WorldPos = m_SpriteObject->GetWorldPos();
+
+	unsigned int Height = m_SpriteObject->GetSpriteComponent()->GetMaterial()->GetTexture()->GetHeight();
+
+	ConvertStartPos.x = StartPos.x - WorldPos.x;
+
+	ConvertEndPos.x = EndPos.x - WorldPos.x;
+	ConvertStartPos.y = Height - (StartPos.y - WorldPos.y);;
+	ConvertEndPos.y = Height - (EndPos.y - WorldPos.y);*/
+
+	Size.x = abs(Size.x);
+	Size.y = abs(Size.y);
+
+	InputSize(Size);
+	InputStartFrameData(StartPos);
+	InputEndFrameData(EndPos);
 }

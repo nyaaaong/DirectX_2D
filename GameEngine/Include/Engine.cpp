@@ -3,11 +3,12 @@
 #include "PathManager.h"
 #include "Timer.h"
 #include "Input.h"
+#include "IMGUIManager.h"
 #include "Resource/ResourceManager.h"
 #include "Scene/SceneManager.h"
 #include "Render/RenderManager.h"
 #include "Excel/ExcelManager.h"
-#include "IMGUIManager.h"
+#include "Collision/CollisionManager.h"
 
 DEFINITION_SINGLE(CEngine)
 
@@ -19,7 +20,9 @@ CEngine::CEngine()	:
 	m_hInst(0),
 	m_hWnd(0),
 	m_RS{},
-	m_Start(false)
+	m_Start(false),
+	m_Play(true),
+	m_Space(Engine_Space::Space2D)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(172854);
@@ -35,6 +38,8 @@ CEngine::~CEngine()
 	CInput::DestroyInst();
 
 	CRenderManager::DestroyInst();
+
+	CCollisionManager::DestroyInst();
 
 	CPathManager::DestroyInst();
 
@@ -84,6 +89,10 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 
 	// 리소스 관리자 초기화 
 	if (!CResourceManager::GetInst()->Init())
+		return false;
+
+	// 충돌 관리자 초기화
+	if (!CCollisionManager::GetInst()->Init())
 		return false;
 
 	// 엑셀 관리자 초기화
@@ -157,6 +166,9 @@ void CEngine::Logic()
 	m_Timer->Update();
 
 	float	DeltaTime = m_Timer->GetDeltaTime();
+
+	if (!m_Play)
+		DeltaTime = 0.f;
 
 	CIMGUIManager::GetInst()->Update(DeltaTime);
 

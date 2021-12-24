@@ -63,9 +63,12 @@ public:	// =================== Sequence2D =====================
 	void ReleaseAnimationSequence2D(const std::string& Name);
 	class CAnimation2DConstantBuffer* GetAnimation2DCBuffer()	const;
 	bool CreateAnimationSequence2D(const std::string& Name, class CTexture* Texture);
-	bool SaveSequence2D(FILE* File, const std::string& Name, const char* FullPath);
-	bool LoadSequence2D(FILE* File, class CIMGUIListBox* AnimFrameList, std::string& resultName, const char* FullPath, class CScene* Scene = nullptr);
-	bool LoadSequence2D(FILE* File, class CIMGUIListBox* AnimFrameList, const char* FullPath, class CScene* Scene = nullptr);
+	bool SaveSequence2DFullPath(const std::string& Name, const char* FullPath);
+	bool LoadSequence2DFullPath(std::string& resultName, const char* FullPath, class CScene* Scene = nullptr);
+	bool LoadSequence2DFullPath(const char* FullPath, class CScene* Scene = nullptr);
+	bool SaveSequence2D(const std::string& Name, const char* FileName, const std::string& PathName = ANIMATION_PATH);
+	bool LoadSequence2D(const char* FileName, const std::string& PathName = ANIMATION_PATH, class CScene* Scene = nullptr);
+	bool LoadSequence2D(std::string& resultName, const char* FileName, const std::string& PathName = ANIMATION_PATH, class CScene* Scene = nullptr);
 
 public:
 	DECLARE_SINGLE(CResourceManager)

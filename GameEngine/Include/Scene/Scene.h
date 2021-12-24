@@ -2,6 +2,7 @@
 
 #include "SceneMode.h"
 #include "SceneResource.h"
+#include "SceneCollision.h"
 #include "../GameObject/GameObject.h"
 
 class CScene
@@ -15,6 +16,7 @@ private:
 private:
 	CSharedPtr<CSceneMode> m_Mode;
 	CSceneResource* m_Resource;
+	CSceneCollision* m_Collision;
 	std::list<CSharedPtr<CGameObject>>	m_ObjList;
 	bool		m_Start;
 
@@ -72,7 +74,7 @@ public:
 	template <typename T>
 	bool LoadSceneMode()
 	{
-		m_Mode = new T;
+		m_Mode = DBG_NEW T;
 
 		m_Mode->m_Scene = this;
 
@@ -104,7 +106,7 @@ public:
 	template <typename T>
 	T* LoadGameObject()
 	{
-		T* Obj = new T;
+		T* Obj = DBG_NEW T;
 
 		Obj->SetScene(this);
 

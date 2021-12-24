@@ -12,8 +12,30 @@ private:
 	float		m_ClearColor[4];
 	class CTimer* m_Timer;
 	bool		m_Start;
+	bool		m_Play;
+	Engine_Space	m_Space;
 
 public:
+	Engine_Space GetEngineSpace()	const
+	{
+		return m_Space;
+	}
+
+	void SetEngineSpace(Engine_Space Space)
+	{
+		m_Space = Space;
+	}
+
+	bool IsPlay()	const
+	{
+		return m_Play;
+	}
+
+	void SetPlay(bool Play)
+	{
+		m_Play = Play;
+	}
+
 	HWND GetWindowHandle()	const
 	{
 		return m_hWnd;

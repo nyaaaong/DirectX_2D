@@ -146,6 +146,15 @@
     <Filter Include="01. Engine\08. IMGUI\02. Widget\01. Window">
       <UniqueIdentifier>{353266f5-d05c-4474-a11d-f316d09b857a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="09. Collision">
+      <UniqueIdentifier>{fd5dbdfa-318d-4071-bc35-5ed94a42d009}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Component\01. SceneComponent\02. Collider">
+      <UniqueIdentifier>{0dd1d978-ba31-4ece-96af-15cb5786eacc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Scene\03. Collision">
+      <UniqueIdentifier>{0ad5fad0-1e34-4a99-a7bc-b86850ed0eaf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -430,6 +439,21 @@
     <ClInclude Include="Render\DepthStencilState.h">
       <Filter>06. Render\00. RenderState</Filter>
     </ClInclude>
+    <ClInclude Include="Collision\CollisionManager.h">
+      <Filter>09. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ColliderComponent.h">
+      <Filter>05. Component\01. SceneComponent\02. Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ColliderBox2D.h">
+      <Filter>05. Component\01. SceneComponent\02. Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\CollisionSection.h">
+      <Filter>03. Scene\03. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneCollision.h">
+      <Filter>03. Scene\03. Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -662,6 +686,21 @@
     </ClCompile>
     <ClCompile Include="Render\DepthStencilState.cpp">
       <Filter>06. Render\00. RenderState</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\CollisionManager.cpp">
+      <Filter>09. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ColliderComponent.cpp">
+      <Filter>05. Component\01. SceneComponent\02. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ColliderBox2D.cpp">
+      <Filter>05. Component\01. SceneComponent\02. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneCollision.cpp">
+      <Filter>03. Scene\03. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\CollisionSection.cpp">
+      <Filter>03. Scene\03. Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

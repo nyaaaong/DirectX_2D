@@ -234,7 +234,7 @@ void CSpriteComponent::Load(FILE* File)
 
 	if (AnimEnable)
 	{
-		size_t	TypeID = m_Animation->GetTypeID();
+		size_t	TypeID = 0;
 		fread(&TypeID, sizeof(size_t), 1, File);
 
 		CSceneManager::GetInst()->CallCreateAnimInstance(this, TypeID);

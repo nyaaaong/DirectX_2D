@@ -1,6 +1,12 @@
 
 #pragma once
 
+enum class Engine_Space
+{
+	Space2D,
+	Space3D
+};
+
 enum AXIS
 {
 	AXIS_X,
@@ -82,10 +88,10 @@ enum Radio_Type
 	RT_MAX
 };
 
-enum Capture_Mode
+enum Edit_Mode
 {
-	CM_CAPTURE,
-	CM_DRAG
+	EM_CAPTURE,
+	EM_DRAG
 };
 
 enum class SceneComponent_Type
@@ -93,4 +99,41 @@ enum class SceneComponent_Type
 	Sprite,
 	StaticMesh,
 	Max
+}; 
+
+enum class Collision_Channel
+{
+	Object,
+	Player,
+	Monster,
+	PlayerAttack,
+	MonsterAttack,
+	Custom1,
+	Custom2,
+	Custom3,
+	Custom4,
+	Custom5,
+	Custom6,
+	Custom7,
+	Custom8,
+	Custom9,
+	Custom10,
+	Custom11,
+	Custom12,
+	Custom13,
+	Custom14,
+	Custom15,
+	Custom16,
+	Max
+};
+
+enum class Collision_State
+{
+	Ignore,
+	Collision
+};
+
+enum class Collider_Type
+{
+	Box2D
 };

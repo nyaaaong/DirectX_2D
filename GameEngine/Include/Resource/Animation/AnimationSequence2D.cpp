@@ -4,6 +4,7 @@
 #include "../../IMGUIListBox.h"
 #include "../../Scene/Scene.h"
 #include "../../Scene/SceneResource.h"
+#include "../../PathManager.h"
 
 CAnimationSequence2D::CAnimationSequence2D()	:
 	m_Scene(nullptr)
@@ -75,65 +76,73 @@ void CAnimationSequence2D::ClearFrame()
 	m_vecFrameData.clear();
 }
 
-
-bool CAnimationSequence2D::Save(FILE* File, const char* FullPath)
+bool CAnimationSequence2D::SaveFullPath(const char* FullPath)
 {
+	FILE* pFile = nullptr;
+
+	fopen_s(&pFile, FullPath, "wb");
+
+	if (!pFile)
+		return false;
+
 	int	Length = (int)m_Name.length();
-	fwrite(&Length, sizeof(int), 1, File);
-	fwrite(m_Name.c_str(), sizeof(char), Length, File);
-
-	if (m_Name == "")
-		ASSERT("if (m_Name == "")");
-
+	fwrite(&Length, sizeof(int), 1, pFile);
+	fwrite(m_Name.c_str(), sizeof(char), Length, pFile);
 
 	bool	TexEnable = false;
 
 	if (m_Texture)
 		TexEnable = true;
 
-	fwrite(&TexEnable, sizeof(bool), 1, File);
+	fwrite(&TexEnable, sizeof(bool), 1, pFile);
 
 	if (m_Texture)
-		m_Texture->Save(File);
+		m_Texture->Save(pFile);
 
 	int	FrameCount = (int)m_vecFrameData.size();
 
-	fwrite(&FrameCount, sizeof(int), 1, File);
+	fwrite(&FrameCount, sizeof(int), 1, pFile);
 
-	fwrite(&m_vecFrameData[0], sizeof(AnimationFrameData), FrameCount, File);
+	fwrite(&m_vecFrameData[0], sizeof(AnimationFrameData), FrameCount, pFile);
+
+	fclose(pFile);
 
 	return true;
 }
 
-bool CAnimationSequence2D::Load(FILE* File, CIMGUIListBox* AnimFrameList, const char* FullPath)
+bool CAnimationSequence2D::LoadFullPath(const char* FullPath)
 {
+	FILE* pFile = nullptr;
+
+	fopen_s(&pFile, FullPath, "rb");
+
+	if (!pFile)
+		return false;
+
 	int	Length = 0;
-	fread(&Length, sizeof(int), 1, File);
+	fread(&Length, sizeof(int), 1, pFile);
 
 	char	Name[256] = {};
-	fread(Name, sizeof(char), Length, File);
+	fread(Name, sizeof(char), Length, pFile);
 	m_Name = Name;
-
-	if (m_Name == "")
-		ASSERT("if (m_Name == "")");
 
 	bool	TexEnable = false;
 
-	fread(&TexEnable, sizeof(bool), 1, File);
+	fread(&TexEnable, sizeof(bool), 1, pFile);
 
 	if (TexEnable)
 	{
 		int	TexNameLength = 0;
-		fread(&TexNameLength, sizeof(int), 1, File);
+		fread(&TexNameLength, sizeof(int), 1, pFile);
 		char	TexName[256] = {};
-		fread(TexName, sizeof(char), TexNameLength, File);
+		fread(TexName, sizeof(char), TexNameLength, pFile);
 
 		Image_Type	ImageType;
-		fread(&ImageType, sizeof(Image_Type), 1, File);
+		fread(&ImageType, sizeof(Image_Type), 1, pFile);
 
 		int	InfoCount = 0;
 
-		fread(&InfoCount, sizeof(int), 1, File);
+		fread(&InfoCount, sizeof(int), 1, pFile);
 
 		std::vector<std::wstring>	vecFullPath;
 		std::vector<std::wstring>	vecFileName;
@@ -143,22 +152,22 @@ bool CAnimationSequence2D::Load(FILE* File, CIMGUIListBox* AnimFrameList, const 
 		{
 			int	PathSize = 0;
 
-			fread(&PathSize, sizeof(int), 1, File);
+			fread(&PathSize, sizeof(int), 1, pFile);
 
 			TCHAR	FullPath[MAX_PATH] = {};
-			fread(FullPath, sizeof(TCHAR), PathSize, File);
+			fread(FullPath, sizeof(TCHAR), PathSize, pFile);
 			vecFullPath.push_back(FullPath);
 
-			fread(&PathSize, sizeof(int), 1, File);
+			fread(&PathSize, sizeof(int), 1, pFile);
 
 			TCHAR	TexFileName[MAX_PATH] = {};
-			fread(TexFileName, sizeof(TCHAR), PathSize, File);
+			fread(TexFileName, sizeof(TCHAR), PathSize, pFile);
 			vecFileName.push_back(TexFileName);
 
-			fread(&PathSize, sizeof(int), 1, File);
+			fread(&PathSize, sizeof(int), 1, pFile);
 
 			char	TexPathName[MAX_PATH] = {};
-			fread(TexPathName, sizeof(char), PathSize, File);
+			fread(TexPathName, sizeof(char), PathSize, pFile);
 
 			PathName = TexPathName;
 		}
@@ -203,8 +212,6 @@ bool CAnimationSequence2D::Load(FILE* File, CIMGUIListBox* AnimFrameList, const 
 			break;
 		}
 
-		m_Texture = nullptr;
-
 		if (m_Scene)
 			m_Texture = m_Scene->GetResource()->FindTexture(TexName);
 
@@ -214,28 +221,41 @@ bool CAnimationSequence2D::Load(FILE* File, CIMGUIListBox* AnimFrameList, const 
 
 	int	FrameCount = 0;
 
-	fread(&FrameCount, sizeof(int), 1, File);
-
-	/*if (!m_vecFrameData.empty())
-		m_vecFrameData.clear();*/
+	fread(&FrameCount, sizeof(int), 1, pFile);
 
 	m_vecFrameData.resize((const size_t)FrameCount);
 
-	fread(&m_vecFrameData[0], sizeof(AnimationFrameData), FrameCount, File);
+	fread(&m_vecFrameData[0], sizeof(AnimationFrameData), FrameCount, pFile);
 
-	char    FrameName[32] = {};
-
-	for (int i = 0; i < FrameCount; ++i)
-	{
-		memset(FrameName, 0, sizeof(char) * 32);
-
-		sprintf_s(FrameName, "%d", i);
-
-		if (AnimFrameList->CheckItem(FrameName))
-			return false;
-
-		AnimFrameList->AddItem(FrameName);
-	}
+	fclose(pFile);
 
 	return true;
+}
+
+bool CAnimationSequence2D::Save(const char* FileName, const std::string& PathName)
+{
+	const PathInfo* Path = CPathManager::GetInst()->FindPath(PathName);
+
+	char	FullPath[MAX_PATH] = {};
+
+	if (Path)
+		strcpy_s(FullPath, Path->PathMultibyte);
+
+	strcat_s(FullPath, FileName);
+
+	return SaveFullPath(FullPath);
+}
+
+bool CAnimationSequence2D::Load(const char* FileName, const std::string& PathName)
+{
+	const PathInfo* Path = CPathManager::GetInst()->FindPath(PathName);
+
+	char	FullPath[MAX_PATH] = {};
+
+	if (Path)
+		strcpy_s(FullPath, Path->PathMultibyte);
+
+	strcat_s(FullPath, FileName);
+
+	return LoadFullPath(FullPath);
 }

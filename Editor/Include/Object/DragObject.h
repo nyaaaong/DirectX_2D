@@ -19,6 +19,16 @@ private:
 	Vector3		m_FirstWorldPos;
 
 public:
+	void AddStartPos(const Vector2& StartPos)
+	{
+		m_StartPos += StartPos;
+	}
+
+	void AddEndPos(const Vector2& EndPos)
+	{
+		m_EndPos += EndPos;
+	}
+
 	void SetFirstWorldPos(const Vector3& FirstWorldPos)
 	{
 		m_FirstWorldPos = FirstWorldPos;

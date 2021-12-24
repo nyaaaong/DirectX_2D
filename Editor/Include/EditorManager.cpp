@@ -15,6 +15,7 @@
 #include "Object/SpriteEditObject.h"
 #include "Object/DragObject.h"
 #include "Object/SpriteEditObject.h"
+#include "Object/Player2D.h"
 #include "Component/SpriteComponent.h"
 #include "Component/StaticMeshComponent.h"
 #include "Animation/AnimationSequence2DInstance.h"
@@ -27,8 +28,7 @@ CEditorManager::CEditorManager()	:
 	m_SpriteWindow(nullptr),
 	m_DetailWindow(nullptr),
 	m_EditorMenu(nullptr),
-	m_ObjectHierarchy(nullptr),
-	m_Drag(false)
+	m_ObjectHierarchy(nullptr)
 {
 }
 
@@ -53,6 +53,8 @@ void CEditorManager::SetEditMode(EditMode Mode)
 
 bool CEditorManager::Init(HINSTANCE hInst)
 {
+	CEngine::GetInst()->SetPlay(false);
+
 	if (!CEngine::GetInst()->Init(hInst, TEXT("GameEngine"), 1280, 720, IDI_ICON1))
 	{
 		CEngine::DestroyInst();
@@ -89,10 +91,15 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	CInput::GetInst()->SetKeyCallback("Left", KeyState_Down, this, &CEditorManager::KeyboardLeft);
 	CInput::GetInst()->SetKeyCallback("Right", KeyState_Down, this, &CEditorManager::KeyboardRight);
 
-	CInput::GetInst()->CreateKey("TabUp", 'W');
-	CInput::GetInst()->CreateKey("TabDown", 'S');
-	CInput::GetInst()->CreateKey("TabLeft", 'A');
-	CInput::GetInst()->CreateKey("TabRight", 'D');
+	CInput::GetInst()->CreateKey("MoveUp", 'W');
+	CInput::GetInst()->CreateKey("MoveDown", 'S');
+	CInput::GetInst()->CreateKey("RotationZInv", 'A');
+	CInput::GetInst()->CreateKey("RotationZ", 'D');
+
+	CInput::GetInst()->CreateKey("TabUp", VK_NUMPAD8);
+	CInput::GetInst()->CreateKey("TabDown", VK_NUMPAD2);
+	CInput::GetInst()->CreateKey("TabLeft", VK_NUMPAD4);
+	CInput::GetInst()->CreateKey("TabRight", VK_NUMPAD6);
 
 	CInput::GetInst()->SetKeyCallback("TabUp", KeyState_Down, this, &CEditorManager::MoveTabUp);
 	CInput::GetInst()->SetKeyCallback("TabDown", KeyState_Down, this, &CEditorManager::MoveTabDown);
@@ -129,23 +136,15 @@ void CEditorManager::MouseLButtonDown(float DeltaTime)
 
 	switch (m_SpriteWindow->GetCaptureMode())
 	{
-		case CM_CAPTURE:
+		case EM_CAPTURE:
 		{
 			m_DragObj->SetStartPos(MousePos);
 			break;
 		}
-		case CM_DRAG:
+		case EM_DRAG:
 		{
-			Vector3	DragLT = m_DragObj->GetWorldPos();
-			Vector3	DragRB = DragLT + m_DragObj->GetWorldScale();
-
 			m_CurMousePos = Vector3(MousePos.x, MousePos.y, 0.f);
 			m_PrevMousePos = m_CurMousePos;
-
-			if (DragLT.x < m_CurMousePos.x && DragLT.y > m_CurMousePos.y &&
-				DragRB.x > m_CurMousePos.x && DragRB.y < m_CurMousePos.y)
-				m_Drag = true;
-
 			break;
 		}
 	}
@@ -162,57 +161,68 @@ void CEditorManager::MouseLButtonPush(float DeltaTime)
 
 	Resolution	RS = CDevice::GetInst()->GetResolution();
 	Vector2		MousePos = CInput::GetInst()->GetMousePos();
-
-	if (MousePos.x < 0.f)
-		MousePos.x = 0.f;
-
-	else if (MousePos.x > (float)RS.Width)
-		MousePos.x = (float)RS.Width;
-
-	if (MousePos.y < 0.f)
-		MousePos.y = 0.f;
-
-	else if (MousePos.y > (float)RS.Height)
-		MousePos.y = (float)RS.Height;
-
+	Vector2		StartPos = m_DragObj->GetStartPos();
+	Vector2		EndPos = m_DragObj->GetEndPos();
+	
 	switch (m_SpriteWindow->GetCaptureMode())
 	{
-		case CM_CAPTURE:
+		case EM_CAPTURE:
 		{
-			m_DragObj->SetEndPos(MousePos);
+			if (MousePos.x < 0.f || MousePos.x >(float)RS.Width || MousePos.y < 0.f || MousePos.y >(float)RS.Height)
+				break;
 
-			Vector2	StartPos = m_DragObj->GetStartPos();
-			Vector2	EndPos = m_DragObj->GetEndPos();
+			if (MousePos.x < 0.f)
+				MousePos.x = 0.f;
+
+			else if (MousePos.x > (float)RS.Width)
+				MousePos.x = (float)RS.Width;
+
+			if (MousePos.y < 0.f)
+				MousePos.y = 0.f;
+
+			else if (MousePos.y > (float)RS.Height)
+				MousePos.y = (float)RS.Height;
+
+			m_DragObj->SetEndPos(MousePos);
 
 			if (StartPos == EndPos)
 				return;
 
-			// StartPos를 이미지에서의 위치로 변경한다.
-
-			Vector2 Size = m_DragObj->GetEndPos() - m_DragObj->GetStartPos();
-			Size.x = abs(Size.x);
-			Size.y = abs(Size.y);
-
-			Vector2 ConvertImagePos;
-			ConvertImagePos.x = m_DragObj->GetStartPos().x - m_SpriteWindow->GetSpriteObject()->GetWorldPos().x;
-			ConvertImagePos.y = m_SpriteWindow->GetSpriteObject()->GetSpriteComponent()->GetMaterial()->GetTexture()->GetHeight() - (m_DragObj->GetStartPos().y - m_SpriteWindow->GetSpriteObject()->GetWorldPos().y);
-
-			m_SpriteWindow->InputSize(Size);
-			m_SpriteWindow->InputStartFrameData(ConvertImagePos);
-			m_SpriteWindow->InputEndFrameData(ConvertImagePos + Size);
+			m_SpriteWindow->RefreshInput();
 			break;
 		}
-		case CM_DRAG:
-		{
-			if (m_Drag)
-			{
-				m_CurMousePos = Vector3(MousePos.x, MousePos.y, 0.f);
+		case EM_DRAG:
+		{			
+			m_CurMousePos = Vector3(MousePos.x, MousePos.y, 0.f);
 
-				m_DragObj->AddWorldPos(m_CurMousePos - m_PrevMousePos);
+			Resolution	RS = CDevice::GetInst()->GetResolution();
+			Vector3	Result3D = m_CurMousePos - m_PrevMousePos;
+			Vector3	DragWorldPos = m_DragObj->GetWorldPos();
+			Vector2	DragSize = m_DragObj->GetEndPos() - m_DragObj->GetStartPos();
+			DragSize = Vector2(abs(DragSize.x), abs(DragSize.y));
 
-				m_PrevMousePos = m_CurMousePos;
-			}
+			// Left, Top
+			if (Result3D.x + DragWorldPos.x <= 0.f)
+				Result3D.x = -DragWorldPos.x;
 
+			else if (Result3D.x + DragWorldPos.x + DragSize.x >= (float)RS.Width)
+				Result3D.x = (float)RS.Width - DragWorldPos.x - DragSize.x;
+
+			if (Result3D.y + DragWorldPos.y - DragSize.y <= 0.f)
+				Result3D.y = -DragWorldPos.y + DragSize.y;
+
+			else if (Result3D.y + DragWorldPos.y >= (float)RS.Height)
+				Result3D.y = (float)RS.Height - DragWorldPos.y;
+
+			m_DragObj->AddWorldPos(Result3D);
+
+			Vector2	Result2D = Vector2(Result3D.x, Result3D.y);
+			m_DragObj->AddStartPos(Result2D);
+			m_DragObj->AddEndPos(Result2D);
+
+			m_PrevMousePos = m_CurMousePos;
+
+			m_SpriteWindow->RefreshInput();
 			break;
 		}
 	}
@@ -220,41 +230,99 @@ void CEditorManager::MouseLButtonPush(float DeltaTime)
 
 void CEditorManager::MouseLButtonUp(float DeltaTime)
 {
-	if (m_Drag)
-		m_Drag = false;
 }
 
 void CEditorManager::KeyboardUp(float DeltaTime)
 {
 	if (m_DragObj)
+	{
+		if (m_DragObj->GetStartPos().y >= (float)CDevice::GetInst()->GetResolution().Height)
+			return;
+
 		m_DragObj->AddWorldPos(0.f, 1.f, 0.f);
+
+		Vector2	Result2D = Vector2(0.f, 1.f);
+		m_DragObj->AddStartPos(Result2D);
+		m_DragObj->AddEndPos(Result2D);
+
+		m_SpriteWindow->RefreshInput();
+	}
 }
 
 void CEditorManager::KeyboardDown(float DeltaTime)
 {
 	if (m_DragObj)
+	{
+		if (m_DragObj->GetEndPos().y <= 0.f)
+			return;
+
 		m_DragObj->AddWorldPos(0.f, -1.f, 0.f);
+
+		Vector2	Result2D = Vector2(0.f, -1.f);
+		m_DragObj->AddStartPos(Result2D);
+		m_DragObj->AddEndPos(Result2D);
+
+		m_SpriteWindow->RefreshInput();
+	}
 }
 
 void CEditorManager::KeyboardLeft(float DeltaTime)
 {
 	if (m_DragObj)
+	{
+		if (m_DragObj->GetStartPos().x <= 0.f)
+			return;
+
 		m_DragObj->AddWorldPos(-1.f, 0.f, 0.f);
+
+		Vector2	Result2D = Vector2(-1.f, 0.f);
+		m_DragObj->AddStartPos(Result2D);
+		m_DragObj->AddEndPos(Result2D);
+
+		m_SpriteWindow->RefreshInput();
+	}
 }
 
 void CEditorManager::KeyboardRight(float DeltaTime)
 {
 	if (m_DragObj)
+	{
+		if (m_DragObj->GetEndPos().x >= (float)CDevice::GetInst()->GetResolution().Width)
+			return;
+
 		m_DragObj->AddWorldPos(1.f, 0.f, 0.f);
+
+		Vector2	Result2D = Vector2(1.f, 0.f);
+		m_DragObj->AddStartPos(Result2D);
+		m_DragObj->AddEndPos(Result2D);
+
+		m_SpriteWindow->RefreshInput();
+	}
 }
 
 void CEditorManager::MoveTabUp(float DeltaTime)
 {
 	if (m_DragObj)
 	{
-		Vector2	Size = m_DragObj->GetStartPos() - m_DragObj->GetEndPos();
+		float	DragPosY = m_DragObj->GetStartPos().y;
+		float	ResH = (float)CDevice::GetInst()->GetResolution().Height;
 
-		m_DragObj->AddWorldPos(0.f, abs(Size.y), 0.f);
+		if (DragPosY >= ResH)
+			return;
+
+		Vector2	Size = m_DragObj->GetStartPos() - m_DragObj->GetEndPos();
+		float	ResultY = abs(Size.y);
+
+		if (ResultY + DragPosY >= ResH)
+			ResultY = ResH - DragPosY;
+
+		m_DragObj->AddWorldPos(0.f, ResultY, 0.f);
+
+		Vector2	Result2D = Vector2(0.f, ResultY);
+		m_DragObj->AddStartPos(Result2D);
+		m_DragObj->AddEndPos(Result2D);
+
+		m_SpriteWindow->RefreshInput();
 	}
 }
 
@@ -262,9 +330,24 @@ void CEditorManager::MoveTabDown(float DeltaTime)
 {
 	if (m_DragObj)
 	{
-		Vector2	Size = m_DragObj->GetStartPos() - m_DragObj->GetEndPos();
+		float	DragPosY = m_DragObj->GetEndPos().y;
 
-		m_DragObj->AddWorldPos(0.f, -abs(Size.y), 0.f);
+		if (DragPosY <= 0.f)
+			return;
+
+		Vector2	Size = m_DragObj->GetStartPos() - m_DragObj->GetEndPos();
+		float	ResultY = -abs(Size.y);
+
+		if (ResultY + DragPosY <= 0.f)
+			ResultY = -DragPosY;
+
+		m_DragObj->AddWorldPos(0.f, ResultY, 0.f);
+
+		Vector2	Result2D = Vector2(0.f, ResultY);
+		m_DragObj->AddStartPos(Result2D);
+		m_DragObj->AddEndPos(Result2D);
+
+		m_SpriteWindow->RefreshInput();
 	}
 }
 
@@ -272,9 +355,24 @@ void CEditorManager::MoveTabLeft(float DeltaTime)
 {
 	if (m_DragObj)
 	{
-		Vector2	Size = m_DragObj->GetStartPos() - m_DragObj->GetEndPos();
+		float	DragPosX = m_DragObj->GetStartPos().x;
 
-		m_DragObj->AddWorldPos(-abs(Size.x), 0.f, 0.f);
+		if (DragPosX <= 0.f)
+			return;
+
+		Vector2	Size = m_DragObj->GetStartPos() - m_DragObj->GetEndPos();
+		float	ResultX = -abs(Size.x);
+
+		if (ResultX + DragPosX <= 0.f)
+			ResultX = -DragPosX;
+
+		m_DragObj->AddWorldPos(ResultX, 0.f, 0.f);
+
+		Vector2	Result2D = Vector2(ResultX, 0.f);
+		m_DragObj->AddStartPos(Result2D);
+		m_DragObj->AddEndPos(Result2D);
+
+		m_SpriteWindow->RefreshInput();
 	}
 }
 
@@ -282,9 +380,25 @@ void CEditorManager::MoveTabRight(float DeltaTime)
 {
 	if (m_DragObj)
 	{
-		Vector2	Size = m_DragObj->GetStartPos() - m_DragObj->GetEndPos();
+		float	DragPosX = m_DragObj->GetEndPos().x;
+		float	ResW = (float)CDevice::GetInst()->GetResolution().Width;
 
-		m_DragObj->AddWorldPos(abs(Size.x), 0.f, 0.f);
+		if (DragPosX >= ResW)
+			return;
+
+		Vector2	Size = m_DragObj->GetStartPos() - m_DragObj->GetEndPos();
+		float	ResultX = abs(Size.x);
+
+		if (ResultX + DragPosX >= ResW)
+			ResultX = ResW - DragPosX;
+
+		m_DragObj->AddWorldPos(ResultX, 0.f, 0.f);
+
+		Vector2	Result2D = Vector2(ResultX, 0.f);
+		m_DragObj->AddStartPos(Result2D);
+		m_DragObj->AddEndPos(Result2D);
+
+		m_SpriteWindow->RefreshInput();
 	}
 }
 void CEditorManager::CreateSceneMode(CScene* Scene, size_t Type)
@@ -314,6 +428,13 @@ CGameObject* CEditorManager::CreateObject(CScene* Scene, size_t Type)
 	else if (Type == typeid(CSpriteEditObject).hash_code())
 	{
 		CSpriteEditObject* Obj = Scene->LoadGameObject<CSpriteEditObject>();
+
+		return Obj;
+	}
+
+	else if (Type == typeid(CPlayer2D).hash_code())
+	{
+		CPlayer2D* Obj = Scene->LoadGameObject<CPlayer2D>();
 
 		return Obj;
 	}

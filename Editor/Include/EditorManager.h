@@ -19,7 +19,6 @@ private:
 	class CObjectHierarchy* m_ObjectHierarchy;
 	Vector3		m_PrevMousePos;
 	Vector3		m_CurMousePos;
-	bool		m_Drag;
 
 public:
 	class CDragObject* GetDragObj()	const
@@ -61,6 +60,7 @@ public:
 	class CComponent* CreateComponent(class CGameObject* Obj, size_t Type);
 	void CreateAnimInstance(class CSpriteComponent* Sprite, size_t Type);
 
+public:
 	DECLARE_SINGLE(CEditorManager)
 };
 

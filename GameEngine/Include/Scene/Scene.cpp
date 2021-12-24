@@ -8,13 +8,18 @@ CScene::CScene()	:
 {
 	m_Mode = DBG_NEW CSceneMode;
 	m_Resource = DBG_NEW CSceneResource;
+	m_Collision = DBG_NEW CSceneCollision;
 
 	m_Mode->m_Scene = this;
 	m_Resource->m_Scene = this;
+	m_Collision->m_Scene = this;
+
+	m_Collision->Init();
 }
 
 CScene::~CScene()
 {
+	SAFE_DELETE(m_Collision);
 	SAFE_DELETE(m_Resource);
 }
 
@@ -31,6 +36,8 @@ void CScene::Start()
 	{
 		(*iter)->Start();
 	}
+
+	m_Collision->Start();
 }
 
 void CScene::Update(float DeltaTime)

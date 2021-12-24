@@ -1,5 +1,8 @@
 
 #include "EditorMenu.h"
+#include "Engine.h"
+#include "PathManager.h"
+#include "ObjectHierarchy.h"
 #include "IMGUIButton.h"
 #include "IMGUISameLine.h"
 #include "IMGUILabel.h"
@@ -8,22 +11,19 @@
 #include "IMGUIListBox.h"
 #include "IMGUIComboBox.h"
 #include "IMGUIImage.h"
-#include "Engine.h"
-#include "PathManager.h"
-#include "../EditorManager.h"
-#include "../Object/SpriteEditObject.h"
+#include "IMGUIManager.h"
 #include "Scene/SceneManager.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneResource.h"
 #include "Component/SpriteComponent.h"
 #include "Component/StaticMeshComponent.h"
 #include "Resource/Animation/AnimationSequence2D.h"
-#include "../Object/DragObject.h"
 #include "Animation/AnimationSequence2DInstance.h"
 #include "Animation/AnimationSequence2DData.h"
-#include "ObjectHierarchy.h"
 #include "../EditorManager.h"
-#include "IMGUIManager.h"
+#include "../Object/Player2D.h"
+#include "../Object/SpriteEditObject.h"
+#include "../Object/DragObject.h"
 
 CEditorMenu::CEditorMenu()	:
 	m_ObjectCreateButton(nullptr),
@@ -87,6 +87,10 @@ bool CEditorMenu::Init()
 
 	LoadSceneButton->SetClickCallback(this, &CEditorMenu::LoadScene);
 
+	CIMGUIButton* PlayButton = AddWidget<CIMGUIButton>("Play", 50.f, 50.f);
+
+	PlayButton->SetClickCallback(this, &CEditorMenu::GamePlay);
+
 	return true;
 }
 
@@ -108,6 +112,7 @@ void CEditorMenu::ObjectCreateButton()
 		CSceneManager::GetInst()->GetScene()->CreateGameObject<CGameObject>(m_ObjectNameInput->GetTextMultibyte());
 		break;
 	case CreateObject_Type::Player:
+		CSceneManager::GetInst()->GetScene()->CreateGameObject<CPlayer2D>(m_ObjectNameInput->GetTextMultibyte());
 		break;
 	}
 
@@ -243,4 +248,13 @@ void CEditorMenu::LoadScene()
 
 		CSceneManager::GetInst()->GetScene()->LoadFullPath(ConvertFullPath);
 	}
+}
+
+void CEditorMenu::GamePlay()
+{
+	if (!CEngine::GetInst()->IsPlay())
+		CEngine::GetInst()->SetPlay(true);
+
+	else
+		CEngine::GetInst()->SetPlay(false);
 }

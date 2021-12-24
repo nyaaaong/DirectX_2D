@@ -228,3 +228,12 @@ struct FindComponentName
 	std::string	Name;
 	std::string	ParentName;
 };
+
+struct CollisionProfile
+{
+	std::string			Name;
+	Collision_Channel	Channel;
+	bool				CollisionEnable;
+
+	std::vector<Collision_State>	vecState;
+};
