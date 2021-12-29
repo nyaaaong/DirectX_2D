@@ -124,6 +124,12 @@ void CGameObject::PostUpdate(float DeltaTime)
 		m_RootComponent->PostUpdate(DeltaTime);
 }
 
+void CGameObject::AddCollision()
+{
+	if (m_RootComponent)
+		m_RootComponent->CheckCollision();
+}
+
 void CGameObject::PrevRender()
 {
 	size_t	Size = m_vecObjectComponent.size();

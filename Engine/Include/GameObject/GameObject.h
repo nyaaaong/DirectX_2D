@@ -64,6 +64,7 @@ public:
 	virtual CGameObject* Clone();
 	virtual void Save(FILE* File);
 	virtual void Load(FILE* File);
+	void AddCollision();
 
 public:
 	void SetInheritScale(bool Inherit)

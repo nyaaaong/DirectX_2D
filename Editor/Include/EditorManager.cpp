@@ -14,7 +14,6 @@
 #include "Render/RenderManager.h"
 #include "Object/SpriteEditObject.h"
 #include "Object/DragObject.h"
-#include "Object/SpriteEditObject.h"
 #include "Object/Player2D.h"
 #include "Component/SpriteComponent.h"
 #include "Component/StaticMeshComponent.h"

@@ -39,6 +39,21 @@ bool CMeshManager::Init()
 	FrameRectMesh->CreateMesh(FrameRectPos, sizeof(Vector3), 5, D3D11_USAGE_IMMUTABLE, D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 
 	m_mapMesh.insert(std::make_pair("FrameRect", FrameRectMesh));
+	CMesh* Box2DMesh = DBG_NEW CStaticMesh;
+
+	Vector3	Box2DPos[5] =
+	{
+		Vector3(-0.5f, 0.5f, 0.f),
+		Vector3(0.5f, 0.5f, 0.f),
+		Vector3(0.5f, -0.5f, 0.f),
+		Vector3(-0.5f, -0.5f, 0.f),
+		Vector3(-0.5f, 0.5f, 0.f)
+	};
+
+	Box2DMesh->SetName("Box2D");
+	Box2DMesh->CreateMesh(Box2DPos, sizeof(Vector3), 5, D3D11_USAGE_IMMUTABLE, D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+
+	m_mapMesh.insert(std::make_pair("Box2D", Box2DMesh));
 
 	return true;
 }

@@ -79,15 +79,15 @@ bool CEditorMenu::Init()
 
 	m_ComponentCreateButton->SetClickCallback(this, &CEditorMenu::ComponentCreateButton);
 
-	CIMGUIButton* SaveSceneButton = AddWidget<CIMGUIButton>("SaveSceneButton", 100.f, 30.f);
+	CIMGUIButton* SaveSceneButton = AddWidget<CIMGUIButton>("SaveScene", 100.f, 20.f);
 
 	SaveSceneButton->SetClickCallback(this, &CEditorMenu::SaveScene);
 
-	CIMGUIButton* LoadSceneButton = AddWidget<CIMGUIButton>("LoadSceneButton", 100.f, 30.f);
+	CIMGUIButton* LoadSceneButton = AddWidget<CIMGUIButton>("LoadScene", 100.f, 20.f);
 
 	LoadSceneButton->SetClickCallback(this, &CEditorMenu::LoadScene);
 
-	CIMGUIButton* PlayButton = AddWidget<CIMGUIButton>("Play", 50.f, 50.f);
+	CIMGUIButton* PlayButton = AddWidget<CIMGUIButton>("Play", 50.f, 20.f);
 
 	PlayButton->SetClickCallback(this, &CEditorMenu::GamePlay);
 
@@ -205,6 +205,8 @@ void CEditorMenu::SaveScene()
 		WideCharToMultiByte(CP_ACP, 0, FilePath, -1, ConvertFullPath, Length, 0, 0);
 
 		CSceneManager::GetInst()->GetScene()->SaveFullPath(ConvertFullPath);
+
+		int a = 0;
 	}
 }
 

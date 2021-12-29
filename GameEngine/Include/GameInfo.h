@@ -235,5 +235,32 @@ struct CollisionProfile
 	Collision_Channel	Channel;
 	bool				CollisionEnable;
 
-	std::vector<Collision_State>	vecState;
+	std::vector<Collision_Interaction>	vecInteraction;
+};
+
+struct CollisionResult
+{
+	class CColliderComponent* Src;
+	class CColliderComponent* Dest;
+	Vector3	HitPoint;
+
+	CollisionResult() :
+		Src(nullptr),
+		Dest(nullptr)
+	{
+	}
+};
+
+struct Box2DInfo
+{
+	Vector2	Center;
+	Vector2	Axis[2];
+	Vector2	Length;
+	Vector2	Min;
+	Vector2	Max;
+};
+
+struct ColliderCBuffer
+{
+	Vector4	Color;
 };

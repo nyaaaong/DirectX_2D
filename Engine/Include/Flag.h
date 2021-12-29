@@ -127,10 +127,17 @@ enum class Collision_Channel
 	Max
 };
 
-enum class Collision_State
+enum class Collision_Interaction
 {
 	Ignore,
 	Collision
+};
+
+enum class Collision_State
+{
+	Begin,
+	End,
+	Max
 };
 
 enum class Collider_Type

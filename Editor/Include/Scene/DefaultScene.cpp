@@ -24,8 +24,7 @@ bool CDefaultScene::Init()
 
 bool CDefaultScene::LoadAnimationSequence2D()
 {
-	m_Scene->GetResource()->LoadSequence2D("PlayerIdle.sqc");
-	m_Scene->GetResource()->LoadSequence2D("PlayerRun.sqc");
+	m_Scene->GetResource()->LoadSequence2D("Player_Idle_Down.sqc");
 
 	return true;
 }

@@ -61,6 +61,11 @@ public:
 		return m_MousePos;
 	}
 
+	Vector2 GetMouseWorld2DPos()	const
+	{
+		return m_MousePos;
+	}
+
 	Vector2 GetMouseMove()	const
 	{
 		return m_MouseMove;

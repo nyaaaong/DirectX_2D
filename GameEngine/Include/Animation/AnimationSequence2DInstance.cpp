@@ -214,12 +214,12 @@ void CAnimationSequence2DInstance::SetLoop(const std::string& Name, bool Loop)
 	Anim->m_Loop = Loop;
 }
 
-void CAnimationSequence2DInstance::SetCurrentAnimation(const std::string& Name)
+bool CAnimationSequence2DInstance::SetCurrentAnimation(const std::string& Name)
 {
 	m_CurrentAnimation = FindAnimation(Name);
 
 	if (!m_CurrentAnimation)
-		ASSERT("if (!m_CurrentAnimation)");
+		return false;
 
 	m_CurrentAnimation->m_Frame = 0;
 	m_CurrentAnimation->m_Time = 0.f;
@@ -227,15 +227,12 @@ void CAnimationSequence2DInstance::SetCurrentAnimation(const std::string& Name)
 	size_t Size = m_CurrentAnimation->m_vecNotify.size();
 
 	for (size_t i = 0; i < Size; ++i)
-	{
 		m_CurrentAnimation->m_vecNotify[i]->Call = false;
-	}
 
 	if (m_Owner)
-	{
-		m_Owner->SetTexture(0, 0, (int)ConstantBuffer_Shader_Type::Pixel, m_CurrentAnimation->m_Sequence->GetTexture()->GetName(),
-			m_CurrentAnimation->m_Sequence->GetTexture());
-	}
+		m_Owner->SetTexture(0, 0, (int)ConstantBuffer_Shader_Type::Pixel, m_CurrentAnimation->m_Sequence->GetTexture()->GetName(), m_CurrentAnimation->m_Sequence->GetTexture());
+
+	return true;
 }
 
 void CAnimationSequence2DInstance::ChangeAnimation(const std::string& Name)
@@ -421,6 +418,10 @@ CAnimationSequence2DData* CAnimationSequence2DInstance::FindAnimation(const std:
 void CAnimationSequence2DInstance::Save(FILE* File)
 {
 	int	AnimCount = (int)m_mapAnimation.size();
+
+	if (AnimCount == 0)
+		ASSERT("if (AnimCount == 0)");
+
 	fwrite(&AnimCount, sizeof(int), 1, File);
 
 	auto	iter = m_mapAnimation.begin();
@@ -456,19 +457,24 @@ void CAnimationSequence2DInstance::Load(FILE* File)
 		fread(&Length, sizeof(int), 1, File);
 		fread(AnimName, sizeof(char), Length, File);
 
+		auto	iter = m_mapAnimation.find(AnimName);
+
+		if (iter != m_mapAnimation.end())
+		{
+			SAFE_DELETE(iter->second);
+
+			m_mapAnimation.erase(iter);
+		}
+
 		CAnimationSequence2DData* Data = DBG_NEW CAnimationSequence2DData;
 
 		Data->Load(File);
 
 		if (m_Scene)
-		{
 			Data->m_Sequence = m_Scene->GetResource()->FindAnimationSequence2D(Data->m_SequenceName);
-		}
 
 		else
-		{
 			Data->m_Sequence = CResourceManager::GetInst()->FindAnimationSequence2D(Data->m_SequenceName);
-		}
 
 		m_mapAnimation.insert(std::make_pair(AnimName, Data));
 	}

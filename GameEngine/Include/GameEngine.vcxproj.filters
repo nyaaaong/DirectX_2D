@@ -155,6 +155,9 @@
     <Filter Include="03. Scene\03. Collision">
       <UniqueIdentifier>{0ad5fad0-1e34-4a99-a7bc-b86850ed0eaf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Resource\02. Shader\03. ConstantBuffer\05. Collider">
+      <UniqueIdentifier>{1b16fee4-c1ad-4288-8936-097dbac80d72}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -454,6 +457,15 @@
     <ClInclude Include="Scene\SceneCollision.h">
       <Filter>03. Scene\03. Collision</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Shader\ColliderConstantBuffer.h">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\05. Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\ColliderShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\01. ColorMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\Collision.h">
+      <Filter>09. Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -701,6 +713,15 @@
     </ClCompile>
     <ClCompile Include="Scene\CollisionSection.cpp">
       <Filter>03. Scene\03. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ColliderConstantBuffer.cpp">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\05. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ColliderShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\01. ColorMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\Collision.cpp">
+      <Filter>09. Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

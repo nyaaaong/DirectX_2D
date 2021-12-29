@@ -26,6 +26,11 @@ public:
 		return m_Resource;
 	}
 
+	CSceneCollision* GetCollision()	const
+	{
+		return m_Collision;
+	}
+
 	CGameObject* GetPlayerObject()	const
 	{
 		return m_Mode->GetPlayerObject();

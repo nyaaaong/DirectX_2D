@@ -15,7 +15,6 @@ private:
 	class CIMGUIListBox* m_AnimationList;
 	class CIMGUIListBox* m_AnimationFrameList;
 	class CIMGUITextInput* m_AnimName;
-	class CIMGUITextInput* m_AnimFrameName;
 	class CIMGUITextInput* m_AnimSizeX;
 	class CIMGUITextInput* m_AnimSizeY;
 	class CIMGUITextInput* m_AnimStartFrameX;
@@ -47,7 +46,7 @@ public:
 	virtual bool Start();
 	virtual void Update(float DeltaTime);
 
-public:
+private:
 	void LoadTextureButton();
 	void AddAnimationButton();
 	void AddAnimationFrameButton();
@@ -69,5 +68,7 @@ private:
 	void CaptureMode();
 	void Modify();
 	void DeleteAnimation(const std::string& SequenceName);
+	void AddListBoxData(const std::string& SequenceName);
+	void AddFrameListBoxData(const std::string& SequenceName);
 };
 
