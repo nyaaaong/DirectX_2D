@@ -21,5 +21,10 @@ public:
 	{
 		m_BufferData.Color = Color;
 	}
+
+	void SetWVP(const Matrix& matWVP)
+	{
+		m_BufferData.matWVP = matWVP;
+	}
 };
 

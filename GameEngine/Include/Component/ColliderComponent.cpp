@@ -15,7 +15,6 @@ CColliderComponent::CColliderComponent()	:
 	m_CurrentSectionCheck = false;
 	m_Profile = nullptr;
 	m_MouseCollision = false;
-	m_Mesh = nullptr;
 	m_CBuffer = nullptr;
 }
 
@@ -28,6 +27,8 @@ CColliderComponent::CColliderComponent(const CColliderComponent& com) :
 	m_Render = com.m_Render;
 	m_Profile = com.m_Profile;
 	m_CBuffer = com.m_CBuffer->Clone();
+	m_Mesh = com.m_Mesh;
+	m_Shader = com.m_Shader;
 }
 
 CColliderComponent::~CColliderComponent()
@@ -191,6 +192,8 @@ void CColliderComponent::ClearFrame()
 void CColliderComponent::Start()
 {
 	CSceneComponent::Start();
+
+	m_Scene->GetCollision()->AddCollider(this);
 }
 
 bool CColliderComponent::Init()
@@ -205,6 +208,8 @@ bool CColliderComponent::Init()
 	m_CBuffer->Init();
 
 	m_CBuffer->SetColliderColor(Vector4(0.f, 1.f, 0.f, 1.f));
+
+	m_Shader = CResourceManager::GetInst()->FindShader("ColliderShader");
 
 	return true;
 }
@@ -221,8 +226,6 @@ void CColliderComponent::PostUpdate(float DeltaTime)
 
 void CColliderComponent::CheckCollision()
 {
-	m_Scene->GetCollision()->AddCollider(this);
-
 	CSceneComponent::CheckCollision();
 }
 

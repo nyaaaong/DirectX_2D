@@ -6,6 +6,7 @@ class CColliderComponent :
     public CSceneComponent
 {
     friend class CGameObject;
+	friend class CCollision;
 
 protected:
     CColliderComponent();
@@ -27,7 +28,8 @@ protected:
 	std::list<std::function<void(const CollisionResult&)>>  m_CollisionCallback[(int)Collision_State::Max];
 	std::list<std::function<void(const CollisionResult&)>>  m_CollisionMouseCallback[(int)Collision_State::Max];
 	bool                m_MouseCollision;
-	class CMesh* m_Mesh;
+	CSharedPtr<class CMesh> m_Mesh;
+	CSharedPtr<class CShader> m_Shader;
 	class CColliderConstantBuffer* m_CBuffer;
 
 public:

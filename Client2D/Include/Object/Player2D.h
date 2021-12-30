@@ -2,6 +2,7 @@
 
 #include "GameObject/GameObject.h"
 #include "Component/SpriteComponent.h"
+#include "Component/ColliderBox2D.h"
 
 class CPlayer2D :
 	public CGameObject
@@ -26,6 +27,8 @@ private:
 	CSharedPtr<CSpriteComponent>    m_Child2Sprite;
 	CSharedPtr<CSpriteComponent>    m_Child3Sprite;
 	CSharedPtr<CSpriteComponent>    m_Child4Sprite;
+
+	CSharedPtr<CColliderBox2D>       m_Body;
 
 	bool        m_SolW;
 	float       m_WDistance;

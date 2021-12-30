@@ -263,4 +263,5 @@ struct Box2DInfo
 struct ColliderCBuffer
 {
 	Vector4	Color;
+	Matrix	matWVP;
 };

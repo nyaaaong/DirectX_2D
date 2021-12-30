@@ -33,6 +33,8 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_Child3Sprite = (CSpriteComponent*)FindComponent("PlayerChild3Sprite");
 	m_Child4Sprite = (CSpriteComponent*)FindComponent("PlayerChild4Sprite");
 
+	m_Body = (CColliderBox2D*)FindComponent("Body");
+
 	m_Opacity = obj.m_Opacity;
 	m_Dodge = false;
 }
@@ -49,6 +51,8 @@ bool CPlayer2D::Init()
 	m_ChildRoot = CreateComponent<CSceneComponent>("PlayerChildRoot");
 	m_Muzzle = CreateComponent<CSceneComponent>("Muzzle");
 
+	m_Body = CreateComponent<CColliderBox2D>("Body");
+
 	m_ChildLeftMuzzle = CreateComponent<CSceneComponent>("LeftMuzzle");
 	m_ChildRightMuzzle = CreateComponent<CSceneComponent>("RightMuzzle");
 
@@ -59,6 +63,7 @@ bool CPlayer2D::Init()
 
 	SetRootComponent(m_Sprite);
 
+	m_Sprite->AddChild(m_Body);
 	m_Sprite->AddChild(m_ChildLeftSprite);
 	m_Sprite->AddChild(m_ChildRightSprite);
 	m_Sprite->AddChild(m_Muzzle);

@@ -77,27 +77,3 @@ PSOutput_Single PosMeshPS(VertexPosOutput input)
 
 	return output;
 }
-
-cbuffer Collider : register(b11)
-{
-	float4	g_ColliderColor;
-};
-
-VertexPosOutput ColliderMeshVS(VertexPos input)
-{
-	VertexPosOutput	output = (VertexPosOutput)0;
-
-	output.Pos = mul(float4(input.Pos, 1.f), g_matWVP);
-
-	return output;
-}
-
-PSOutput_Single ColliderMeshPS(VertexPosOutput input)
-{
-	PSOutput_Single	output = (PSOutput_Single)0;
-
-	output.Color.rgb = g_ColliderColor.rgb;
-	output.Color.a = g_ColliderColor.a;
-
-	return output;
-}

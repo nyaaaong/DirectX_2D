@@ -21,6 +21,9 @@
     <Filter Include="01. Object\01. Bullet">
       <UniqueIdentifier>{a8df3148-6792-434c-a18b-b9e714c5fc22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Object\02. Monster">
+      <UniqueIdentifier>{7526515e-b606-45aa-b3a3-821c8cc39806}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -44,6 +47,12 @@
     <ClCompile Include="Object\PlayerAnimation2D.cpp">
       <Filter>01. Object\00. Player</Filter>
     </ClCompile>
+    <ClCompile Include="Object\MonsterAnimation.cpp">
+      <Filter>01. Object\02. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Monster.cpp">
+      <Filter>01. Object\02. Monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene\MainScene.h">
@@ -66,6 +75,12 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>리소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Monster.h">
+      <Filter>01. Object\02. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\MonsterAnimation.h">
+      <Filter>01. Object\02. Monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
