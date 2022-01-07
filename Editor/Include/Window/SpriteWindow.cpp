@@ -733,233 +733,179 @@ void CSpriteWindow::SaveSequence()
 	if (SelectFrameIndex == 0)
 		return;
 
-	bool	CheckSaveSqc = false;
+	TCHAR   SQCPath[MAX_PATH] = {};
+	TCHAR	ANMPath[MAX_PATH] = {};
 
+	OPENFILENAME    OpenFile = {};
+
+	OpenFile.lStructSize = sizeof(OPENFILENAME);
+	OpenFile.hwndOwner = CEngine::GetInst()->GetWindowHandle();
+	OpenFile.lpstrFilter = TEXT("애니메이션 시퀸스 (*.sqc)\0*.sqc");
+	OpenFile.lpstrFile = SQCPath;
+	OpenFile.nMaxFile = MAX_PATH;
+	OpenFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(ANIMATION_PATH)->Path;
+
+	if (GetSaveFileName(&OpenFile) != 0)
 	{
-		TCHAR   FilePath[MAX_PATH] = {};
+		// .sqc이 붙었는지 확인
+		int	iPathLength = static_cast<int>(lstrlen(SQCPath));
 
-		OPENFILENAME    OpenFile = {};
+		TCHAR	sqc[5] = TEXT("cqs.");
+		bool	Find = true;
 
-		OpenFile.lStructSize = sizeof(OPENFILENAME);
-		OpenFile.hwndOwner = CEngine::GetInst()->GetWindowHandle();
-		OpenFile.lpstrFilter = TEXT("애니메이션 시퀸스 (*.sqc)\0*.sqc");
-		OpenFile.lpstrFile = FilePath;
-		OpenFile.nMaxFile = MAX_PATH;
-		OpenFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(ANIMATION_PATH)->Path;
-
-		if (GetSaveFileName(&OpenFile) != 0)
+		for (int i = 1; i < 5; ++i)
 		{
-			// .sqc이 붙었는지 확인
-			int	iPathLength = static_cast<int>(lstrlen(FilePath));
+			if (SQCPath[iPathLength - i] != sqc[i - 1])
+			{
+				Find = false;
+				break;
+			}
+		}
 
-			TCHAR	sqc[5] = TEXT("cqs.");
-			bool	Find = true;
+		if (!Find) // sqc 확장자가 붙지 않았을 경우 붙여준다.
+		{
+			lstrcpy(ANMPath, SQCPath);
+			lstrcat(SQCPath, TEXT(".sqc"));
+			lstrcat(ANMPath, TEXT(".anm"));
+		}
+
+		else
+		{
+			lstrcpy(ANMPath, SQCPath);
+
+			int Length = lstrlen(ANMPath);
 
 			for (int i = 1; i < 5; ++i)
 			{
-				if (FilePath[iPathLength - i] != sqc[i - 1])
-				{
-					Find = false;
-					break;
-				}
+				ANMPath[iPathLength - i] = 0;
 			}
 
-			if (!Find) // sqc 확장자가 붙지 않았을 경우 붙여준다.
-				lstrcat(FilePath, TEXT(".sqc"));
-
-			char    FullPath[MAX_PATH] = {};
-
-			int Length = WideCharToMultiByte(CP_ACP, 0, FilePath, -1, 0, 0, 0, 0);
-			WideCharToMultiByte(CP_ACP, 0, FilePath, -1, FullPath, Length, 0, 0);
-
-			m_AnimInstance->GetCurrentAnimation()->GetAnimationSequence()->SaveFullPath(FullPath);
-
-			CheckSaveSqc = true;
+			lstrcat(ANMPath, TEXT(".anm"));
 		}
-	}
 
-	{
-		if (!CheckSaveSqc)
+		char    SQCFullPath[MAX_PATH] = {};
+		char    ANMFullPath[MAX_PATH] = {};
+
+		int Length = WideCharToMultiByte(CP_ACP, 0, SQCPath, -1, 0, 0, 0, 0);
+		WideCharToMultiByte(CP_ACP, 0, SQCPath, -1, SQCFullPath, Length, 0, 0);
+
+		m_AnimInstance->GetCurrentAnimation()->GetAnimationSequence()->SaveFullPath(SQCFullPath);
+
+		Length = WideCharToMultiByte(CP_ACP, 0, ANMPath, -1, 0, 0, 0, 0);
+		WideCharToMultiByte(CP_ACP, 0, ANMPath, -1, ANMFullPath, Length, 0, 0);
+
+		FILE* File = nullptr;
+
+		fopen_s(&File, ANMFullPath, "wb");
+
+		if (!File)
 			return;
 
-		TCHAR   FilePath[MAX_PATH] = {};
+		m_AnimInstance->Save(File);
 
-		OPENFILENAME    OpenFile = {};
-
-		OpenFile.lStructSize = sizeof(OPENFILENAME);
-		OpenFile.hwndOwner = CEngine::GetInst()->GetWindowHandle();
-		OpenFile.lpstrFilter = TEXT("애니메이션 프레임 (*.anm)\0*.anm");
-		OpenFile.lpstrFile = FilePath;
-		OpenFile.nMaxFile = MAX_PATH;
-		OpenFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(ANIMATION_PATH)->Path;
-
-		if (GetSaveFileName(&OpenFile) != 0)
-		{
-			// .anm이 붙었는지 확인
-			int	iPathLength = static_cast<int>(lstrlen(FilePath));
-
-			TCHAR	anm[5] = TEXT("mna.");
-			bool	Find = true;
-
-			for (int i = 1; i < 5; ++i)
-			{
-				if (FilePath[iPathLength - i] != anm[i - 1])
-				{
-					Find = false;
-					break;
-				}
-			}
-
-			if (!Find) // anm 확장자가 붙지 않았을 경우 붙여준다.
-				lstrcat(FilePath, TEXT(".anm"));
-
-			char    FullPath[MAX_PATH] = {};
-
-			int Length = WideCharToMultiByte(CP_ACP, 0, FilePath, -1, 0, 0, 0, 0);
-			WideCharToMultiByte(CP_ACP, 0, FilePath, -1, FullPath, Length, 0, 0);
-
-			FILE* File = nullptr;
-
-			fopen_s(&File, FullPath, "wb");
-
-			if (!File)
-				return;
-
-			m_AnimInstance->Save(File);
-
-			fclose(File);
-		}
+		fclose(File);
 	}
 }
 
 void CSpriteWindow::LoadSequence()
 {
-	bool	CheckLoadSqc = false;
-
 	m_AnimationList->Clear();
 	m_AnimationFrameList->Clear();
 
+	TCHAR   SQCPath[MAX_PATH] = {};
+	TCHAR	ANMPath[MAX_PATH] = {};
+
+	OPENFILENAME    OpenFile = {};
+
+	OpenFile.lStructSize = sizeof(OPENFILENAME);
+	OpenFile.hwndOwner = CEngine::GetInst()->GetWindowHandle();
+	OpenFile.lpstrFilter = TEXT("애니메이션 시퀸스 (*.sqc)\0*.sqc");
+	OpenFile.lpstrFile = SQCPath;
+	OpenFile.nMaxFile = MAX_PATH;
+	OpenFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(ANIMATION_PATH)->Path;
+
+	if (GetOpenFileName(&OpenFile) != 0)
 	{
-		TCHAR   FilePath[MAX_PATH] = {};
+		// .sqc이 붙었는지 확인
+		int	iPathLength = static_cast<int>(lstrlen(SQCPath));
 
-		OPENFILENAME    OpenFile = {};
+		TCHAR	sqc[5] = TEXT("cqs.");
+		bool	Find = true;
 
-		OpenFile.lStructSize = sizeof(OPENFILENAME);
-		OpenFile.hwndOwner = CEngine::GetInst()->GetWindowHandle();
-		OpenFile.lpstrFilter = TEXT("애니메이션 시퀸스 (*.sqc)\0*.sqc");
-		OpenFile.lpstrFile = FilePath;
-		OpenFile.nMaxFile = MAX_PATH;
-		OpenFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(ANIMATION_PATH)->Path;
-
-		if (GetOpenFileName(&OpenFile) != 0)
+		for (int i = 1; i < 5; ++i)
 		{
-			// .sqc이 붙었는지 확인
-			int	iPathLength = static_cast<int>(lstrlen(FilePath));
+			if (SQCPath[iPathLength - i] != sqc[i - 1])
+			{
+				Find = false;
+				break;
+			}
+		}
 
-			TCHAR	sqc[5] = TEXT("cqs.");
-			bool	Find = true;
+		if (!Find) // sqc 확장자가 붙지 않았을 경우 붙여준다.
+		{
+			lstrcpy(ANMPath, SQCPath);
+			lstrcat(SQCPath, TEXT(".sqc"));
+			lstrcat(ANMPath, TEXT(".anm"));
+		}
+
+		else
+		{
+			lstrcpy(ANMPath, SQCPath);
+
+			int Length = lstrlen(ANMPath);
 
 			for (int i = 1; i < 5; ++i)
 			{
-				if (FilePath[iPathLength - i] != sqc[i - 1])
-				{
-					Find = false;
-					break;
-				}
+				ANMPath[iPathLength - i] = 0;
 			}
 
-			if (!Find) // sqc 확장자가 붙지 않았을 경우 붙여준다.
-				lstrcat(FilePath, TEXT(".sqc"));
-
-			char    FullPath[MAX_PATH] = {};
-
-			int Length = WideCharToMultiByte(CP_ACP, 0, FilePath, -1, 0, 0, 0, 0);
-			WideCharToMultiByte(CP_ACP, 0, FilePath, -1, FullPath, Length, 0, 0);
-
-			CSceneResource* Resource = CSceneManager::GetInst()->GetScene()->GetResource();
-
-			std::string	SequenceName;
-
-			Resource->LoadSequence2DFullPath(SequenceName, FullPath);
-
-			AddListBoxData(SequenceName);
-
-			CheckLoadSqc = true;
+			lstrcat(ANMPath, TEXT(".anm"));
 		}
-	}
 
-	{
-		if (!CheckLoadSqc)
+		char    SQCFullPath[MAX_PATH] = {};
+		char    ANMFullPath[MAX_PATH] = {};
+
+		int Length = WideCharToMultiByte(CP_ACP, 0, SQCPath, -1, 0, 0, 0, 0);
+		WideCharToMultiByte(CP_ACP, 0, SQCPath, -1, SQCFullPath, Length, 0, 0);
+
+		CSceneResource* Resource = CSceneManager::GetInst()->GetScene()->GetResource();
+
+		std::string	SequenceName;
+
+		Resource->LoadSequence2DFullPath(SequenceName, SQCFullPath);
+
+		AddListBoxData(SequenceName);
+
+		Length = WideCharToMultiByte(CP_ACP, 0, ANMPath, -1, 0, 0, 0, 0);
+		WideCharToMultiByte(CP_ACP, 0, ANMPath, -1, ANMFullPath, Length, 0, 0);
+
+		if (!m_AnimInstance)
+			ASSERT("if (!m_AnimInstance)");
+
+		FILE* File = nullptr;
+
+		fopen_s(&File, ANMFullPath, "rb");
+
+		if (!File)
 			return;
 
-		int SelectAnimIndex = m_AnimationList->GetSelectIndex();
+		m_AnimInstance->Load(File);
 
-		if (SelectAnimIndex == -1)
-			ASSERT("int SelectAnimIndex = m_AnimationList->GetSelectIndex();");
+		fclose(File);
 
-		TCHAR   FilePath[MAX_PATH] = {};
+		CAnimationSequence2DData* Anim = m_AnimInstance->GetCurrentAnimation();
 
-		OPENFILENAME    OpenFile = {};
+		if (!Anim)
+			return;
 
-		OpenFile.lStructSize = sizeof(OPENFILENAME);
-		OpenFile.hwndOwner = CEngine::GetInst()->GetWindowHandle();
-		OpenFile.lpstrFilter = TEXT("애니메이션 프레임 (*.anm)\0*.anm");
-		OpenFile.lpstrFile = FilePath;
-		OpenFile.nMaxFile = MAX_PATH;
-		OpenFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(ANIMATION_PATH)->Path;
+		AddFrameListBoxData(Anim->GetName());
 
-		if (GetOpenFileName(&OpenFile) != 0)
-		{
-			// .anm이 붙었는지 확인
-			int	iPathLength = static_cast<int>(lstrlen(FilePath));
+		m_SpriteFrame->SetTexture(m_SpriteObject->GetSpriteComponent()->GetMaterial()->GetTexture());
 
-			TCHAR	sqc[5] = TEXT("mna.");
-			bool	Find = true;
-
-			for (int i = 1; i < 5; ++i)
-			{
-				if (FilePath[iPathLength - i] != sqc[i - 1])
-				{
-					Find = false;
-					break;
-				}
-			}
-
-			if (!Find) // anm 확장자가 붙지 않았을 경우 붙여준다.
-				lstrcat(FilePath, TEXT(".anm"));
-
-			char    FullPath[MAX_PATH] = {};
-
-			int Length = WideCharToMultiByte(CP_ACP, 0, FilePath, -1, 0, 0, 0, 0);
-			WideCharToMultiByte(CP_ACP, 0, FilePath, -1, FullPath, Length, 0, 0);
-
-			if (!m_AnimInstance)
-				ASSERT("if (!m_AnimInstance)");
-
-			FILE* File = nullptr;
-
-			fopen_s(&File, FullPath, "rb");
-
-			if (!File)
-				return;
-
-			m_AnimInstance->Load(File);
-
-			fclose(File);
-
-			CAnimationSequence2DData* Anim = m_AnimInstance->GetCurrentAnimation();
-
-			if (!Anim)
-				return;
-
-			AddFrameListBoxData(Anim->GetName());
-
-			m_SpriteFrame->SetTexture(m_SpriteObject->GetSpriteComponent()->GetMaterial()->GetTexture());
-
-			RefreshInput();
-		}
+		RefreshInput();
 	}
 }
+
 void CSpriteWindow::RefreshInput()
 {
 	CDragObject* DragObj = CEditorManager::GetInst()->GetDragObj();
