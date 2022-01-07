@@ -142,5 +142,31 @@ enum class Collision_State
 
 enum class Collider_Type
 {
-	Box2D
+	Box2D,
+	Circle,
+	Pixel
+};
+
+enum class Camera_Type
+{
+	Camera2D,
+	Camera3D,
+	CameraUI
+};
+
+enum class PixelCollision_Type
+{
+	Color_Ignore,
+	Color_Confirm,
+	Alpha_Ignore,
+	Alpha_Confirm
+};
+
+enum class Button_State
+{
+	Normal,
+	MouseOn,
+	Click,
+	Disable,
+	Max
 };

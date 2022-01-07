@@ -42,6 +42,9 @@ public:
 	}
 
 public:
+	Vector3 GetSpriteSize()	const;
+
+public:
 	virtual bool Init();
 	virtual bool Start();
 	virtual void Update(float DeltaTime);

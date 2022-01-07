@@ -1,5 +1,8 @@
 
 #include "Transform.h"
+#include "CameraComponent.h"
+#include "../Scene/Scene.h"
+#include "../Scene/CameraManager.h"
 #include "../Resource/Shader/TransformConstantBuffer.h"
 
 CTransform::CTransform() :
@@ -174,13 +177,13 @@ void CTransform::InheritWorldRotation(bool Current)
 	if (m_Parent)
 	{
 		if (m_InheritRotX)
-			m_RelativeRot.x = m_WorldRot.x - m_Parent->GetWorldRot().x;
+			m_WorldRot.x = m_RelativeRot.x + m_Parent->GetWorldRot().x;
 
 		if (m_InheritRotY)
-			m_RelativeRot.y = m_WorldRot.y - m_Parent->GetWorldRot().y;
+			m_WorldRot.y = m_RelativeRot.y + m_Parent->GetWorldRot().y;
 
 		if (m_InheritRotZ)
-			m_RelativeRot.z = m_WorldRot.z - m_Parent->GetWorldRot().z;
+			m_WorldRot.z = m_RelativeRot.z + m_Parent->GetWorldRot().z;
 
 		if ((m_InheritRotX || m_InheritRotY || m_InheritRotZ) && !Current)
 			InheritParentRotationPos(false);
@@ -256,7 +259,7 @@ void CTransform::InheritParentRotationWorldPos(bool Current)
 		}
 
 		else
-			m_WorldPos = m_RelativePos + m_Parent->GetWorldPos();
+			m_RelativePos = m_WorldPos - m_Parent->GetWorldPos();
 	}
 
 	m_UpdatePos = true;
@@ -577,11 +580,10 @@ void CTransform::SetTransform()
 {
 	m_CBuffer->SetWorldMatrix(m_matWorld);
 
-	Matrix	matProj;
+	CCameraComponent* Camera = m_Scene->GetCameraManager()->GetCurrentCamera();
 
-	matProj = XMMatrixOrthographicOffCenterLH(0.f, 1280.f, 0.f, 720.f, 0.f, 1000.f);
-
-	m_CBuffer->SetProjMatrix(matProj);
+	m_CBuffer->SetViewMatrix(Camera->GetViewMatrix());
+	m_CBuffer->SetProjMatrix(Camera->GetProjMatrix());
 
 	m_CBuffer->SetPivot(m_Pivot);
 	m_CBuffer->SetMeshSize(m_MeshSize);

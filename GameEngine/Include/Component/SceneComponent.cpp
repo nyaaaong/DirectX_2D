@@ -331,3 +331,15 @@ void CSceneComponent::Load(FILE* File)
 		m_vecChild.push_back((CSceneComponent*)Component);
 	}
 }
+
+void CSceneComponent::Destroy()
+{
+	CComponent::Destroy();
+
+	size_t	Size = m_vecChild.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		m_vecChild[i]->Destroy();
+	}
+}

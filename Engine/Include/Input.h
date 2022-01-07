@@ -53,6 +53,7 @@ private:
 	bool	m_Alt;
 	bool	m_Shift;
 	Vector2		m_MousePos;
+	Vector2		m_MouseWorldPos;
 	Vector2		m_MouseMove;
 
 public:
@@ -63,7 +64,7 @@ public:
 
 	Vector2 GetMouseWorld2DPos()	const
 	{
-		return m_MousePos;
+		return m_MouseWorldPos;
 	}
 
 	Vector2 GetMouseMove()	const

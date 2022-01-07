@@ -54,6 +54,22 @@ bool CMeshManager::Init()
 	Box2DMesh->CreateMesh(Box2DPos, sizeof(Vector3), 5, D3D11_USAGE_IMMUTABLE, D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 
 	m_mapMesh.insert(std::make_pair("Box2D", Box2DMesh));
+	CMesh* CircleMesh = DBG_NEW CStaticMesh;
+
+	Vector3	CirclrPos[31];
+
+	CirclrPos[0] = Vector3(0.5f, 0.f, 0.f);
+
+	for (int i = 1; i < 31; ++i)
+	{
+		CirclrPos[i].x = cosf(DegreeToRadian(12.f * i)) * 0.5f;
+		CirclrPos[i].y = sinf(DegreeToRadian(12.f * i)) * 0.5f;
+	}
+
+	CircleMesh->SetName("Circle");
+	CircleMesh->CreateMesh(CirclrPos, sizeof(Vector3), 31, D3D11_USAGE_IMMUTABLE, D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+
+	m_mapMesh.insert(std::make_pair("Circle", CircleMesh));
 
 	return true;
 }

@@ -126,12 +126,20 @@ void CEditorManager::MouseLButtonDown(float DeltaTime)
 	else if (!m_SpriteWindow)
 		return;
 	
-	Resolution	RS = CDevice::GetInst()->GetResolution();
 	Vector2		MousePos = CInput::GetInst()->GetMousePos();
+	Vector3		ImgSize = m_SpriteWindow->GetSpriteSize();
 
-	if (MousePos.x < 0.f || MousePos.x > (float)RS.Width ||
-		MousePos.y < 0.f || MousePos.y > (float)RS.Height)
-		return;
+	if (MousePos.x < 0.f)
+		MousePos.x = 0.f;
+
+	else if (MousePos.x > ImgSize.x)
+		MousePos.x = ImgSize.x;
+
+	if (MousePos.y < 0.f)
+		MousePos.y = 0.f;
+
+	else if (MousePos.y > ImgSize.y)
+		MousePos.y = ImgSize.y;
 
 	switch (m_SpriteWindow->GetCaptureMode())
 	{
@@ -158,29 +166,26 @@ void CEditorManager::MouseLButtonPush(float DeltaTime)
 	else if (!m_SpriteWindow)
 		return;
 
-	Resolution	RS = CDevice::GetInst()->GetResolution();
 	Vector2		MousePos = CInput::GetInst()->GetMousePos();
 	Vector2		StartPos = m_DragObj->GetStartPos();
 	Vector2		EndPos = m_DragObj->GetEndPos();
+	Vector3		ImgSize = m_SpriteWindow->GetSpriteSize();
 	
 	switch (m_SpriteWindow->GetCaptureMode())
 	{
 		case EM_CAPTURE:
 		{
-			if (MousePos.x < 0.f || MousePos.x >(float)RS.Width || MousePos.y < 0.f || MousePos.y >(float)RS.Height)
-				break;
-
 			if (MousePos.x < 0.f)
 				MousePos.x = 0.f;
 
-			else if (MousePos.x > (float)RS.Width)
-				MousePos.x = (float)RS.Width;
+			else if (MousePos.x > ImgSize.x)
+				MousePos.x = ImgSize.x;
 
 			if (MousePos.y < 0.f)
 				MousePos.y = 0.f;
 
-			else if (MousePos.y > (float)RS.Height)
-				MousePos.y = (float)RS.Height;
+			else if (MousePos.y > ImgSize.y)
+				MousePos.y = ImgSize.y;
 
 			m_DragObj->SetEndPos(MousePos);
 
@@ -194,24 +199,23 @@ void CEditorManager::MouseLButtonPush(float DeltaTime)
 		{			
 			m_CurMousePos = Vector3(MousePos.x, MousePos.y, 0.f);
 
-			Resolution	RS = CDevice::GetInst()->GetResolution();
 			Vector3	Result3D = m_CurMousePos - m_PrevMousePos;
 			Vector3	DragWorldPos = m_DragObj->GetWorldPos();
 			Vector2	DragSize = m_DragObj->GetEndPos() - m_DragObj->GetStartPos();
 			DragSize = Vector2(abs(DragSize.x), abs(DragSize.y));
 
 			// Left, Top
-			if (Result3D.x + DragWorldPos.x <= 0.f)
+			if (Result3D.x + DragWorldPos.x < 0.f)
 				Result3D.x = -DragWorldPos.x;
 
-			else if (Result3D.x + DragWorldPos.x + DragSize.x >= (float)RS.Width)
-				Result3D.x = (float)RS.Width - DragWorldPos.x - DragSize.x;
+			else if (Result3D.x + DragWorldPos.x + DragSize.x > ImgSize.x)
+				Result3D.x = ImgSize.x - DragWorldPos.x - DragSize.x;
 
-			if (Result3D.y + DragWorldPos.y - DragSize.y <= 0.f)
+			if (Result3D.y + DragWorldPos.y - DragSize.y < 0.f)
 				Result3D.y = -DragWorldPos.y + DragSize.y;
 
-			else if (Result3D.y + DragWorldPos.y >= (float)RS.Height)
-				Result3D.y = (float)RS.Height - DragWorldPos.y;
+			else if (Result3D.y + DragWorldPos.y > ImgSize.y)
+				Result3D.y = ImgSize.y - DragWorldPos.y;
 
 			m_DragObj->AddWorldPos(Result3D);
 

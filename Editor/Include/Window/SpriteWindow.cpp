@@ -49,6 +49,14 @@ CSpriteWindow::~CSpriteWindow()
 	SAFE_DELETE(m_AnimInstance);
 }
 
+Vector3 CSpriteWindow::GetSpriteSize() const
+{
+	if (!m_SpriteObject)
+		return Vector3();
+
+	return m_SpriteObject->GetSpriteComponent()->GetWorldScale();
+}
+
 bool CSpriteWindow::Init()
 {
 	if (!CIMGUIWindow::Init())
@@ -141,6 +149,7 @@ bool CSpriteWindow::Init()
 	m_AnimEndFrameX = AddWidget<CIMGUITextInput>("EndXInput", 40.f, 20.f);
 	m_AnimEndFrameX->SetHideName();
 	m_AnimEndFrameX->AddFlag(ImGuiInputTextFlags_CharsDecimal); // 숫자와 - 등 기호까지만 입력
+	m_AnimEndFrameX->ReadOnly();
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 	Line->SetSpacing(24.f);
@@ -154,6 +163,7 @@ bool CSpriteWindow::Init()
 	m_AnimEndFrameY = AddWidget<CIMGUITextInput>("EndYInput", 40.f, 20.f);
 	m_AnimEndFrameY->SetHideName();
 	m_AnimEndFrameY->AddFlag(ImGuiInputTextFlags_CharsDecimal); // 숫자와 - 등 기호까지만 입력
+	m_AnimEndFrameY->ReadOnly();
 
 	Button = AddWidget<CIMGUIButton>("LoadTexture", 200.f, 20.f);
 	Button->SetClickCallback<CSpriteWindow>(this, &CSpriteWindow::LoadTextureButton);
@@ -408,6 +418,18 @@ void CSpriteWindow::CaptureMode()
 
 void CSpriteWindow::Modify()
 {
+	float StartX = static_cast<float>(atoi(m_AnimStartFrameX->GetTextMultibyte()));
+	float StartY = static_cast<float>(atoi(m_AnimStartFrameY->GetTextMultibyte()));
+	float EndX = static_cast<float>(atoi(m_AnimEndFrameX->GetTextMultibyte()));
+	float EndY = static_cast<float>(atoi(m_AnimEndFrameY->GetTextMultibyte()));
+	float SizeX = static_cast<float>(atoi(m_AnimSizeX->GetTextMultibyte()));
+	float SizeY = static_cast<float>(atoi(m_AnimSizeY->GetTextMultibyte()));
+
+	CDragObject* DragObj = CEditorManager::GetInst()->GetDragObj();
+
+	DragObj->SetStartPos(Vector2(StartX, StartY));
+	DragObj->SetEndPos(Vector2(StartX + SizeX, StartY - SizeY));
+
 	int SelectFrameIndex = m_AnimationFrameList->GetSelectIndex();
 
 	if (SelectFrameIndex == -1)
@@ -422,30 +444,41 @@ void CSpriteWindow::Modify()
 		m_AnimEndFrameX->Empty() || m_AnimEndFrameY->Empty())
 		return;
 
-	float StartX = static_cast<float>(atoi(m_AnimStartFrameX->GetTextMultibyte()));
-	float StartY = static_cast<float>(atoi(m_AnimStartFrameY->GetTextMultibyte()));
-	float EndX = static_cast<float>(atoi(m_AnimEndFrameX->GetTextMultibyte()));
-	float EndY = static_cast<float>(atoi(m_AnimEndFrameY->GetTextMultibyte()));
+	Vector2 ImageStartPos = DragObj->GetStartPos();
+	Vector2 ImageEndPos = DragObj->GetEndPos();
 
-	float SizeX = abs(StartX - EndX);
-	float SizeY = abs(StartY - EndY);
+	Vector3	SpriteWorldPos = m_SpriteObject->GetWorldPos();
 
-	m_AnimSizeX->SetText(SizeX);
-	m_AnimSizeY->SetText(SizeY);
+	unsigned int SpriteHeight = m_SpriteObject->GetSpriteComponent()->GetMaterial()->GetTexture()->GetHeight();
+
+	ImageStartPos.x -= SpriteWorldPos.x;
+	ImageStartPos.y -= SpriteWorldPos.y;
+
+	ImageEndPos.x -= SpriteWorldPos.x;
+	ImageEndPos.y -= SpriteWorldPos.y;
+
+	ImageEndPos.y = SpriteHeight - ImageEndPos.y;
+	ImageStartPos.y = SpriteHeight - ImageStartPos.y;
+
+	Vector2 StartPos, EndPos;
+	StartPos.x = ImageStartPos.x < ImageEndPos.x ? ImageStartPos.x : ImageEndPos.x;
+	StartPos.y = ImageStartPos.y < ImageEndPos.y ? ImageStartPos.y : ImageEndPos.y;
+
+	EndPos.x = ImageStartPos.x > ImageEndPos.x ? ImageStartPos.x : ImageEndPos.x;
+	EndPos.y = ImageStartPos.y > ImageEndPos.y ? ImageStartPos.y : ImageEndPos.y;
+
+	m_SpriteFrame->SetImageStart(StartPos.x, StartPos.y);
+	m_SpriteFrame->SetImageEnd(EndPos.x, EndPos.y);
 
 	CSceneResource* Resource = CSceneManager::GetInst()->GetScene()->GetResource();
 
 	CAnimationSequence2D* Anim = Resource->FindAnimationSequence2D(m_AnimationList->GetItem(SelectAnimIndex));
 
-	Anim->SetFrameData(SelectFrameIndex, Vector2(StartX, StartY), Vector2(SizeX, SizeY));
+	Vector2	Size = Vector2(abs(EndPos.x - StartPos.x), abs(EndPos.y - StartPos.y));
 
-	m_SpriteFrame->SetImageStart(StartX, StartY);
-	m_SpriteFrame->SetImageEnd(EndX, EndY);
+	Anim->SetFrameData(SelectFrameIndex, StartPos, Size);
 
-	CDragObject* DragObject = CEditorManager::GetInst()->GetDragObj();
-
-	DragObject->SetStartPos(Vector2(StartX, StartY));
-	DragObject->SetEndPos(Vector2(EndX, EndY));
+	RefreshInput();
 }
 
 void CSpriteWindow::DeleteAnimation(const std::string& SequenceName)

@@ -24,6 +24,9 @@
     <Filter Include="01. Object\02. Monster">
       <UniqueIdentifier>{7526515e-b606-45aa-b3a3-821c8cc39806}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Object\03. Test">
+      <UniqueIdentifier>{3f806700-ca87-4c24-8059-1c81e37b1e07}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -53,6 +56,12 @@
     <ClCompile Include="Object\Monster.cpp">
       <Filter>01. Object\02. Monster</Filter>
     </ClCompile>
+    <ClCompile Include="Object\BulletCamera.cpp">
+      <Filter>01. Object\01. Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\PixelTest.cpp">
+      <Filter>01. Object\03. Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene\MainScene.h">
@@ -81,6 +90,12 @@
     </ClInclude>
     <ClInclude Include="Object\MonsterAnimation.h">
       <Filter>01. Object\02. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\BulletCamera.h">
+      <Filter>01. Object\01. Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\PixelTest.h">
+      <Filter>01. Object\03. Test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

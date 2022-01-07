@@ -1,8 +1,13 @@
 
 #include "ColliderBox2D.h"
+#include "CameraComponent.h"
+#include "ColliderCircle.h"
+#include "ColliderPixel.h"
 #include "../Collision/Collision.h"
 #include "../Scene/Scene.h"
 #include "../Scene/SceneResource.h"
+#include "../Scene/Scene.h"
+#include "../Scene/CameraManager.h"
 #include "../Resource/Shader/ColliderConstantBuffer.h"
 
 CColliderBox2D::CColliderBox2D()
@@ -111,9 +116,12 @@ void CColliderBox2D::Render()
 {
 	CColliderComponent::Render();
 
-	Matrix	matWorld, matProj, matWVP;
+	CCameraComponent* Camera = m_Scene->GetCameraManager()->GetCurrentCamera();
 
-	matProj = XMMatrixOrthographicOffCenterLH(0.f, 1280.f, 0.f, 720.f, 0.f, 1000.f);
+	Matrix	matWorld, matView, matProj, matWVP;
+
+	matView = Camera->GetViewMatrix();
+	matProj = Camera->GetProjMatrix();
 
 	Matrix	matScale, matRot, matTrans;
 
@@ -123,7 +131,7 @@ void CColliderBox2D::Render()
 
 	matWorld = matScale * matRot * matTrans;
 
-	matWVP = matWorld * matProj;
+	matWVP = matWorld * matView * matProj;
 
 	matWVP.Transpose();
 
@@ -175,6 +183,10 @@ bool CColliderBox2D::Collision(CColliderComponent* Dest)
 	{
 	case Collider_Type::Box2D:
 		return CCollision::CollisionBox2DToBox2D(this, (CColliderBox2D*)Dest);
+	case Collider_Type::Circle:
+		return CCollision::CollisionBox2DToCircle(this, (CColliderCircle*)Dest);
+	case Collider_Type::Pixel:
+		return CCollision::CollisionBox2DToPixel(this, (CColliderPixel*)Dest);
 	}
 
 	return false;

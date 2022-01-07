@@ -3,6 +3,7 @@
 #include "GameObject/GameObject.h"
 #include "Component/SpriteComponent.h"
 #include "Component/ColliderBox2D.h"
+#include "Component/CameraComponent.h"
 
 class CPlayer2D :
 	public CGameObject
@@ -29,6 +30,7 @@ private:
 	CSharedPtr<CSpriteComponent>    m_Child4Sprite;
 
 	CSharedPtr<CColliderBox2D>       m_Body;
+	CSharedPtr<CCameraComponent>     m_Camera;
 
 	bool        m_SolW;
 	float       m_WDistance;
@@ -64,5 +66,6 @@ private:
 
 private:
 	void Action(float DeltaTime);
+	void Skill1(float DeltaTime);
 };
 

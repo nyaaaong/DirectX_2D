@@ -52,3 +52,9 @@ void CComponent::Load(FILE* File)
 
 	fread(&m_ComponentType, sizeof(Component_Type), 1, File);
 }
+
+
+void CComponent::Destroy()
+{
+	CRef::Destroy();
+}

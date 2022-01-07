@@ -3,6 +3,8 @@
 #include "SceneMode.h"
 #include "SceneResource.h"
 #include "SceneCollision.h"
+#include "CameraManager.h"
+#include "Viewport.h"
 #include "../GameObject/GameObject.h"
 
 class CScene
@@ -17,6 +19,8 @@ private:
 	CSharedPtr<CSceneMode> m_Mode;
 	CSceneResource* m_Resource;
 	CSceneCollision* m_Collision;
+	CCameraManager* m_CameraManager;
+	CViewport* m_Viewport;
 	std::list<CSharedPtr<CGameObject>>	m_ObjList;
 	bool		m_Start;
 
@@ -24,6 +28,16 @@ public:
 	CSceneResource* GetResource()	const
 	{
 		return m_Resource;
+	}
+
+	CCameraManager* GetCameraManager()	const
+	{
+		return m_CameraManager;
+	}
+
+	CViewport* GetViewport()	const
+	{
+		return m_Viewport;
 	}
 
 	CSceneCollision* GetCollision()	const
@@ -76,6 +90,7 @@ public:
 		return true;
 	}
 
+public:
 	template <typename T>
 	bool LoadSceneMode()
 	{
@@ -86,6 +101,7 @@ public:
 		return true;
 	}
 
+public:
 	template <typename T>
 	T* CreateGameObject(const std::string& Name)
 	{
@@ -108,6 +124,7 @@ public:
 		return Obj;
 	}
 
+public:
 	template <typename T>
 	T* LoadGameObject()
 	{

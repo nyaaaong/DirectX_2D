@@ -26,6 +26,9 @@ bool CCollisionManager::Init()
 	CreateProfile("PlayerAttack", Collision_Channel::PlayerAttack, true);
 	CreateProfile("MonsterAttack", Collision_Channel::MonsterAttack, true);
 
+	SetCollisionState("Object", Collision_Channel::Object, Collision_Interaction::Ignore);
+	SetCollisionState("Object", Collision_Channel::PlayerAttack, Collision_Interaction::Ignore);
+
 	SetCollisionState("Player", Collision_Channel::Player, Collision_Interaction::Ignore);
 	SetCollisionState("Player", Collision_Channel::PlayerAttack, Collision_Interaction::Ignore);
 
@@ -35,6 +38,7 @@ bool CCollisionManager::Init()
 	SetCollisionState("PlayerAttack", Collision_Channel::Player, Collision_Interaction::Ignore);
 	SetCollisionState("PlayerAttack", Collision_Channel::PlayerAttack, Collision_Interaction::Ignore);
 	SetCollisionState("PlayerAttack", Collision_Channel::MonsterAttack, Collision_Interaction::Ignore);
+	SetCollisionState("PlayerAttack", Collision_Channel::Object, Collision_Interaction::Ignore);
 
 	SetCollisionState("MonsterAttack", Collision_Channel::Monster, Collision_Interaction::Ignore);
 	SetCollisionState("MonsterAttack", Collision_Channel::PlayerAttack, Collision_Interaction::Ignore);

@@ -41,7 +41,7 @@ private:
 private:
 	CollisionSectionInfo* m_Section;
 	std::list<CSharedPtr<class CColliderComponent>>	m_ColliderList;
-	class CColliderComponent* m_MouseCollision;
+	CSharedPtr<class CColliderComponent> m_MouseCollision;
 
 public:
 	void Start();

@@ -2,10 +2,11 @@
 #include "Player2D.h"
 #include "Bullet.h"
 #include "BulletTornaido.h"
-#include "Scene/Scene.h"
 #include "Input.h"
-#include "Resource/Material/Material.h"
 #include "PlayerAnimation2D.h"
+#include "BulletCamera.h"
+#include "Scene/Scene.h"
+#include "Resource/Material/Material.h"
 
 CPlayer2D::CPlayer2D()	:
 	m_EnableInput(true),
@@ -61,9 +62,17 @@ bool CPlayer2D::Init()
 	m_Child3Sprite = CreateComponent<CSpriteComponent>("PlayerChild3Sprite");
 	m_Child4Sprite = CreateComponent<CSpriteComponent>("PlayerChild4Sprite");
 
+	m_Camera = CreateComponent<CCameraComponent>("Camera");
+
 	SetRootComponent(m_Sprite);
 
+	m_Body->SetCollisionProfile("Player");
+
+	m_Camera->OnViewportCenter();
+	//m_Camera->SetViewportRatio(0.7f, 0.7f);
+
 	m_Sprite->AddChild(m_Body);
+	m_Sprite->AddChild(m_Camera);
 	m_Sprite->AddChild(m_ChildLeftSprite);
 	m_Sprite->AddChild(m_ChildRightSprite);
 	m_Sprite->AddChild(m_Muzzle);
@@ -147,6 +156,7 @@ bool CPlayer2D::Init()
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Dodge", KeyState_Down, this, &CPlayer2D::Dodge);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Attack1", KeyState_Push, this, &CPlayer2D::Attack1);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("test", KeyState_Push, this, &CPlayer2D::test);
+	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Skill1", KeyState_Down, this, &CPlayer2D::Skill1);
 
 	return true;
 }
@@ -274,18 +284,21 @@ void CPlayer2D::Attack(float DeltaTime)
 		return;
 
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
+	Bullet->SetOwner(this);
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
 	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot());
 
 	Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
+	Bullet->SetOwner(this);
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
 	Bullet->SetWorldPos(m_ChildLeftMuzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot());
 
 	Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
+	Bullet->SetOwner(this);
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
 	Bullet->SetWorldPos(m_ChildRightMuzzle->GetWorldPos());
@@ -298,18 +311,21 @@ void CPlayer2D::Attack1(float DeltaTime)
 		return;
 
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
+	Bullet->SetOwner(this);
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
 	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot());
 
 	Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
+	Bullet->SetOwner(this);
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
 	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot() + Vector3(0.f, 0.f, 45.f));
 
 	Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
+	Bullet->SetOwner(this);
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
 	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
@@ -334,4 +350,13 @@ void CPlayer2D::Action(float DeltaTime)
 		else
 			m_Sprite->AddRelativePos(m_Sprite->GetWorldAxis(AXIS_Y) * -600.f * DeltaTime);
 	}
+}
+
+void CPlayer2D::Skill1(float DeltaTime)
+{
+	CBulletCamera* Bullet = m_Scene->CreateGameObject<CBulletCamera>("Bullet");
+
+	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
+	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
+	Bullet->SetWorldRotation(GetWorldRot());
 }

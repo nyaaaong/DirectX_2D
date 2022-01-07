@@ -241,3 +241,17 @@ void CGameObject::Load(FILE* File)
 		m_vecObjectComponent.push_back((CObjectComponent*)Component);
 	}
 }
+
+void CGameObject::Destroy()
+{
+	CRef::Destroy();
+
+	m_RootComponent->Destroy();
+
+	size_t	Size = m_vecObjectComponent.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		m_vecObjectComponent[i]->Destroy();
+	}
+}

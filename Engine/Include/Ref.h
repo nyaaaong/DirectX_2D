@@ -16,12 +16,12 @@ protected:
 	size_t		m_TypeID;
 
 public:
-	void Enable(bool bEnable)
+	virtual void Enable(bool bEnable)
 	{
 		m_Enable = bEnable;
 	}
 
-	void Destroy()
+	virtual void Destroy()
 	{
 		m_Active = false;
 	}

@@ -5,6 +5,7 @@
 #include "Mesh2DShader.h"
 #include "PosMeshShader.h"
 #include "ColliderShader.h"
+#include "ColliderPixelShader.h"
 
 CShaderManager::CShaderManager()
 {
@@ -28,6 +29,8 @@ bool CShaderManager::Init()
 	if (!CreateShader<CColliderShader>("ColliderShader"))
 		return false;
 
+	if (!CreateShader<CColliderPixelShader>("ColliderPixelShader"))
+		return false;
 
 	// =================== 상수버퍼 ===================
 	CreateConstantBuffer("TransformCBuffer", sizeof(TransformCBuffer), 0,

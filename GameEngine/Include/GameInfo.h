@@ -43,6 +43,17 @@
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
+#include "Resource/Texture/DirectXTex.h"
+
+#ifdef _DEBUG
+
+#pragma comment(lib, "DirectXTex_Debug.lib")
+
+#else
+
+#pragma comment(lib, "DirectXTex.lib")
+
+#endif // _DEBUG
 
 #define	ASSERT(text)	assert(!text);
 
@@ -258,6 +269,40 @@ struct Box2DInfo
 	Vector2	Length;
 	Vector2	Min;
 	Vector2	Max;
+};
+
+struct CircleInfo
+{
+	Vector2	Center;
+	float	Radius;
+	Vector2	Min;
+	Vector2	Max;
+};
+
+struct PixelInfo
+{
+	unsigned char* Pixel;
+	unsigned int	Width;
+	unsigned int	Height;
+	PixelCollision_Type	Type;
+	unsigned char	Color[4];
+	Box2DInfo		Box;
+	Vector2	Min;
+	Vector2	Max;
+	ID3D11ShaderResourceView* SRV;
+	int		RefCount;
+
+	PixelInfo() :
+		RefCount(1),
+		Pixel(nullptr),
+		SRV(nullptr),
+		Width(0),
+		Height(0),
+		Box{},
+		Color{},
+		Type(PixelCollision_Type::Color_Confirm)
+	{
+	}
 };
 
 struct ColliderCBuffer

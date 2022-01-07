@@ -1,7 +1,8 @@
 
 #include "Scene.h"
-#include "../PathManager.h"
 #include "SceneManager.h"
+#include "../PathManager.h"
+#include "../Component/CameraComponent.h"
 
 CScene::CScene()	:
 	m_Start(false)
@@ -9,16 +10,24 @@ CScene::CScene()	:
 	m_Mode = DBG_NEW CSceneMode;
 	m_Resource = DBG_NEW CSceneResource;
 	m_Collision = DBG_NEW CSceneCollision;
+	m_CameraManager = DBG_NEW CCameraManager;
+	m_Viewport = DBG_NEW CViewport;
 
 	m_Mode->m_Scene = this;
 	m_Resource->m_Scene = this;
 	m_Collision->m_Scene = this;
+	m_CameraManager->m_Scene = this;
+	m_Viewport->m_Scene = this;
 
 	m_Collision->Init();
+	m_CameraManager->Init();
+	m_Viewport->Init();
 }
 
 CScene::~CScene()
 {
+	SAFE_DELETE(m_Viewport);
+	SAFE_DELETE(m_CameraManager);
 	SAFE_DELETE(m_Collision);
 	SAFE_DELETE(m_Resource);
 }
@@ -37,7 +46,19 @@ void CScene::Start()
 		(*iter)->Start();
 	}
 
+	m_CameraManager->Start();
 	m_Collision->Start();
+	m_Viewport->Start();
+
+	CGameObject* PlayerObj = m_Mode->GetPlayerObject();
+
+	if (PlayerObj)
+	{
+		CCameraComponent* Camera = PlayerObj->FindComponentFromType<CCameraComponent>();
+
+		if (Camera)
+			m_CameraManager->SetCurrentCamera(Camera);
+	}
 }
 
 void CScene::Update(float DeltaTime)
@@ -65,6 +86,8 @@ void CScene::Update(float DeltaTime)
 		(*iter)->Update(DeltaTime);
 		++iter;
 	}
+
+	m_Viewport->Update(DeltaTime);
 }
 
 void CScene::PostUpdate(float DeltaTime)
@@ -92,6 +115,8 @@ void CScene::PostUpdate(float DeltaTime)
 		(*iter)->PostUpdate(DeltaTime);
 		++iter;
 	}
+
+	m_Viewport->PostUpdate(DeltaTime);
 
 	// 충돌체들을 충돌 영역에 포함시킨다.
 	iter = m_ObjList.begin();

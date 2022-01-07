@@ -4,7 +4,9 @@
 #include "Resource/Material/Material.h"
 #include "MonsterAnimation.h"
 
-CMonster::CMonster()
+CMonster::CMonster()	:
+	m_HP(50),
+	m_HPMax(50)
 {
 	SetTypeID<CMonster>();
 }
@@ -13,21 +15,35 @@ CMonster::CMonster(const CMonster& obj) :
 	CGameObject(obj)
 {
 	m_Sprite = (CSpriteComponent*)FindComponent("PlayerSprite");
-	m_Body = (CColliderBox2D*)FindComponent("Body");
+	m_Body = (CColliderCircle*)FindComponent("Body");
+
+	m_HP = obj.m_HP;
+	m_HPMax = obj.m_HPMax;
 }
 
 CMonster::~CMonster()
 {
 }
 
+void CMonster::Destroy()
+{
+	CGameObject::Destroy();
+
+	m_Sprite->Destroy();
+	m_Body->Destroy();
+}
+
 bool CMonster::Init()
 {
 	m_Sprite = CreateComponent<CSpriteComponent>("PlayerSprite");
-	m_Body = CreateComponent<CColliderBox2D>("Body");
+	m_Body = CreateComponent<CColliderCircle>("Body");
 
 	SetRootComponent(m_Sprite);
 
 	m_Sprite->AddChild(m_Body);
+
+	m_Body->SetCollisionProfile("Monster");
+
 
 	m_Sprite->SetTransparency(true);
 	//m_Sprite->SetOpacity(0.5f);

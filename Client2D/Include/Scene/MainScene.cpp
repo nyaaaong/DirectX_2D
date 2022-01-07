@@ -4,6 +4,7 @@
 #include "Scene/SceneResource.h"
 #include "../Object/Player2D.h"
 #include "../Object/Monster.h"
+#include "../Object/PixelTest.h"
 
 CMainScene::CMainScene()
 {
@@ -25,6 +26,8 @@ bool CMainScene::Init()
 	SetPlayerObject(Player);
 
 	CMonster* Monster = m_Scene->CreateGameObject<CMonster>("Monster");
+
+	CPixelTest* PixelTest = m_Scene->CreateGameObject<CPixelTest>("PixelTest");
 
 	return true;
 }

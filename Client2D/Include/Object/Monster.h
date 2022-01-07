@@ -2,7 +2,7 @@
 
 #include "GameObject/GameObject.h"
 #include "Component/SpriteComponent.h"
-#include "Component/ColliderBox2D.h"
+#include "Component/ColliderCircle.h"
 
 class CMonster :
     public CGameObject
@@ -16,9 +16,21 @@ protected:
 
 private:
     CSharedPtr<CSpriteComponent>    m_Sprite;
-    CSharedPtr<CColliderBox2D>       m_Body;
+    CSharedPtr<CColliderCircle>       m_Body;
+	int		m_HP;
+	int		m_HPMax;
 
 public:
+	void SetDamage(int Value)
+	{
+		m_HP -= Value;
+
+		if (m_HP <= 0)
+			Destroy();
+	}
+
+public:
+	virtual void Destroy();
     virtual bool Init();
     virtual void Update(float DeltaTime);
     virtual void PostUpdate(float DeltaTime);

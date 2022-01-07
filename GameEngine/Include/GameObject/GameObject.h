@@ -24,6 +24,7 @@ public:
 
 public:
 	void SetScene(class CScene* Scene);
+	virtual void Destroy();
 
 protected:
 	CSharedPtr<CSceneComponent> m_RootComponent;
@@ -578,6 +579,25 @@ public:
 
 public:
 	template <typename T>
+	T* FindComponentFromType()
+	{
+		if (m_SceneComponentList.empty())
+			return nullptr;
+
+		auto	iter = m_SceneComponentList.begin();
+		auto	iterEnd = m_SceneComponentList.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if ((*iter)->CheckType<T>())
+				return (T*)*iter;
+		}
+
+		return nullptr;
+	}
+
+public:
+	template <typename T>
 	T* CreateComponent(const std::string& Name)
 	{
 		T* Component = DBG_NEW T;
@@ -606,6 +626,7 @@ public:
 		return Component;
 	}
 
+public:
 	template <typename T>
 	T* LoadComponent()
 	{
