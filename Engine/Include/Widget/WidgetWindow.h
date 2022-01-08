@@ -15,9 +15,9 @@ protected:
 protected:
 	class CViewport* m_Viewport;
 	int m_ZOrder;
-	bool    m_Visibility;
 	Vector2 m_Pos;
 	Vector2 m_Size;
+	bool	m_Start;
 
 	std::list<CSharedPtr<CWidget>>    m_WidgetList;
 

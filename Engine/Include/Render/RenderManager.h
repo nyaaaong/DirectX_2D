@@ -23,6 +23,7 @@ private:
 	class CRenderStateManager* m_RenderStateManager;
 	class CStandard2DConstantBuffer* m_Standard2DCBuffer;
 	class CRenderState* m_DepthDisable;
+	class CRenderState* m_AlphaBlend;
 	std::vector<RenderLayer*>	m_RenderLayerList;
 	std::vector<class CSceneComponent*>	m_RenderList;
 	const std::list<CSharedPtr<class CGameObject>>* m_ObjectList;

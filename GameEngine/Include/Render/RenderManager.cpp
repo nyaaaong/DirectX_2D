@@ -1,10 +1,13 @@
 
 #include "RenderManager.h"
+#include "RenderStateManager.h"
+#include "RenderState.h"
 #include "../GameObject/GameObject.h"
 #include "../Component/SceneComponent.h"
-#include "RenderStateManager.h"
 #include "../Resource/Shader/Standard2DConstantBuffer.h"
-#include "RenderState.h"
+#include "../Scene/SceneManager.h"
+#include "../Scene/Scene.h"
+#include "../Scene/Viewport.h"
 
 DEFINITION_SINGLE(CRenderManager)
 
@@ -108,6 +111,7 @@ bool CRenderManager::Init()
 	m_RenderLayerList.push_back(Layer);
 
 	m_DepthDisable = m_RenderStateManager->FindRenderState("DepthDisable");
+	m_AlphaBlend = m_RenderStateManager->FindRenderState("AlphaBlend");
 
 	return true;
 }
@@ -161,6 +165,13 @@ void CRenderManager::Render()
 			}
 		}
 	}
+
+	// Widget Ãâ·Â
+	m_AlphaBlend->SetState();
+
+	CSceneManager::GetInst()->GetScene()->GetViewport()->Render();
+
+	m_AlphaBlend->ResetState();
 
 	m_DepthDisable->ResetState();
 }

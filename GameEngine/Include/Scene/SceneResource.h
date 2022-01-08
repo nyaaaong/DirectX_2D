@@ -55,7 +55,6 @@ public:	// =================== Sequence2D =====================
 	CAnimationSequence2D* FindAnimationSequence2D(const std::string& Name);
 	class CAnimation2DConstantBuffer* GetAnimation2DCBuffer()	const;
 	bool CreateAnimationSequence2D(const std::string& Name, class CTexture* Texture);
-	bool SaveSequence2D(FILE* File, const std::string& Name, const char* FullPath);
 	bool SaveSequence2D(const std::string& Name, const char* FileName, const std::string& PathName = ANIMATION_PATH);
 	bool SaveSequence2DFullPath(const std::string& Name, const char* FullPath);
 	bool LoadSequence2D(const char* FileName, const std::string& PathName = ANIMATION_PATH);

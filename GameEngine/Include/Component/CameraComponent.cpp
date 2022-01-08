@@ -2,7 +2,8 @@
 #include "CameraComponent.h"
 #include "../Device.h"
 
-CCameraComponent::CCameraComponent()
+CCameraComponent::CCameraComponent()	:
+	m_RS{}
 {
 	SetTypeID<CCameraComponent>();
 	m_Render = false;

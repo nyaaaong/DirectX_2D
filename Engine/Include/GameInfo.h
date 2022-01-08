@@ -1,7 +1,11 @@
 #pragma once
 
+#pragma warning(disable:6011)
+#pragma warning(disable:6029)
 #pragma warning(disable:6387)
+#pragma warning(disable:26451)
 #pragma warning(disable:26812)
+#pragma warning(disable:28182)
 
 #define	DIRECTINPUT_VERSION	0x0800
 #define _CRTDBG_MAP_ALLOC
@@ -309,4 +313,12 @@ struct ColliderCBuffer
 {
 	Vector4	Color;
 	Matrix	matWVP;
+};
+
+struct WidgetCBuffer
+{
+	Vector4	Tint;
+	Matrix	matWP;
+	int		UseTexture;
+	Vector3	Empty;
 };

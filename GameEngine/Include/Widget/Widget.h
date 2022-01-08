@@ -17,6 +17,12 @@ protected:
 	int     m_ZOrder;
 	Vector2	m_Pos;
 	Vector2	m_Size;
+	float	m_Angle;
+	bool	m_Start;
+	Vector4	m_Tint;
+	class CWidgetConstantBuffer* m_CBuffer;
+	CSharedPtr<class CShader>	m_Shader;
+	CSharedPtr<class CMesh>		m_Mesh;
 
 public:
 	virtual void Enable(bool bEnable)
@@ -44,6 +50,11 @@ public:
 		return m_ZOrder;
 	}
 
+	float GetAngle()	const
+	{
+		return m_Angle;
+	}
+
 public:
 	void SetZOrder(int ZOrder)
 	{
@@ -69,6 +80,19 @@ public:
 	{
 		m_Size = Vector2(x, y);
 	}
+
+	void SetOwner(class CWidgetWindow* Owner)
+	{
+		m_Owner = Owner;
+	}
+
+	void SetAngle(float Angle)
+	{
+		m_Angle = Angle;
+	}
+
+	void SetShader(const std::string& Name);
+	void SetUseTexture(bool Use);
 
 public:
 	virtual void Start();

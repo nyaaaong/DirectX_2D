@@ -28,6 +28,8 @@ public:
 	bool Init();
 	void Update(float DeltaTime);
 	void PostUpdate(float DeltaTime);
+	bool CollisionMouse();
+	void Collision();
 	void Render();
 
 public:
@@ -47,7 +49,7 @@ public:
 	}
 
 	template <typename T>
-	T* CreateWidgetWindow(std::string& Name)
+	T* CreateWidgetWindow(const std::string& Name)
 	{
 		T* Window = DBG_NEW T;
 

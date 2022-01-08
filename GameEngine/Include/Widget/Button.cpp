@@ -29,6 +29,8 @@ bool CButton::SetTexture(Button_State State, const std::string& Name, const TCHA
 
 	m_Info[(int)State].Texture = Resource->FindTexture(Name);
 
+	SetUseTexture(true);
+
 	return true;
 }
 
@@ -40,6 +42,8 @@ bool CButton::SetTextureFullPath(Button_State State, const std::string& Name,  c
 		return false;
 
 	m_Info[(int)State].Texture = Resource->FindTexture(Name);
+
+	SetUseTexture(true);
 
 	return true;
 }
@@ -88,5 +92,10 @@ void CButton::PostUpdate(float DeltaTime)
 
 void CButton::Render()
 {
+	if (m_Info[(int)m_State].Texture)
+		m_Info[(int)m_State].Texture->SetShader(0, (int)ConstantBuffer_Shader_Type::Pixel, 0);
+
+	m_Tint = m_Info[(int)m_State].Tint;
+
 	CWidget::Render();
 }

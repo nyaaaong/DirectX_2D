@@ -1,6 +1,8 @@
 
 #include "SceneCollision.h"
 #include "CollisionSection.h"
+#include "Viewport.h"
+#include "Scene.h"
 #include "../Engine.h"
 #include "../Component/ColliderComponent.h"
 #include "../Input.h"
@@ -103,6 +105,7 @@ void CSceneCollision::CollisionMouse(float DeltaTime)
 	bool	MouseCollision = false;
 
 	// UI와 마우스와의 충돌처리를 한다.
+	MouseCollision = m_Scene->GetViewport()->CollisionMouse();
 
 
 
@@ -152,6 +155,15 @@ void CSceneCollision::CollisionMouse(float DeltaTime)
 
 		else
 		{
+		}
+	}
+
+	else
+	{
+		if (m_MouseCollision)
+		{
+			m_MouseCollision->CallCollisionMouseCallback(Collision_State::End);
+			m_MouseCollision = nullptr;
 		}
 	}
 

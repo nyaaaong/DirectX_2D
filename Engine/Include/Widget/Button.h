@@ -44,6 +44,8 @@ public:
 	void SetTexture(Button_State State, CTexture* Texture)
 	{
 		m_Info[(int)State].Texture = Texture;
+
+		SetUseTexture(true);
 	}
 
 	bool SetTexture(Button_State State, const std::string& Name, const TCHAR* FileName, const std::string& PathName = TEXTURE_PATH);

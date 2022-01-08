@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Scene/SceneMode.h"
+#include "../Widget/MainWidget.h"
 
 class CMainScene :
     public CSceneMode
@@ -8,6 +9,9 @@ class CMainScene :
 public:
     CMainScene();
     ~CMainScene();
+
+private:
+	CSharedPtr<CMainWidget> m_MainWidget;
 
 public:
     virtual bool Init();

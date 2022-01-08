@@ -27,6 +27,9 @@
     <Filter Include="01. Object\03. Test">
       <UniqueIdentifier>{3f806700-ca87-4c24-8059-1c81e37b1e07}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. UI">
+      <UniqueIdentifier>{2fcfbd2d-0e82-413c-bd3e-8c29a713674a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -62,6 +65,9 @@
     <ClCompile Include="Object\PixelTest.cpp">
       <Filter>01. Object\03. Test</Filter>
     </ClCompile>
+    <ClCompile Include="Widget\MainWidget.cpp">
+      <Filter>02. UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene\MainScene.h">
@@ -96,6 +102,9 @@
     </ClInclude>
     <ClInclude Include="Object\PixelTest.h">
       <Filter>01. Object\03. Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\MainWidget.h">
+      <Filter>02. UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
