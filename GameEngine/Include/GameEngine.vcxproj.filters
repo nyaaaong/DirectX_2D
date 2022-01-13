@@ -185,6 +185,15 @@
     <Filter Include="01. Resource\01. Shader\03. ConstantBuffer\05. Widget">
       <UniqueIdentifier>{cc17fd08-8abf-4249-ae05-6a0bb793868f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Resource\05. Sound">
+      <UniqueIdentifier>{13dfa01d-9208-466b-81cc-b4a7b27e8d90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\05. Sound\00. FMOD">
+      <UniqueIdentifier>{eb7c6f11-4ad0-4064-aea2-27a6bb83c20b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\06. Font">
+      <UniqueIdentifier>{2263d8de-2e5c-4e2a-9780-8c7422ecb2fd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -508,9 +517,6 @@
     <ClInclude Include="Component\ColliderPixel.h">
       <Filter>04. Component\00. SceneComponent\01. Collider</Filter>
     </ClInclude>
-    <ClInclude Include="Widget\WidgetWindow.h">
-      <Filter>09. Widget</Filter>
-    </ClInclude>
     <ClInclude Include="Widget\Button.h">
       <Filter>09. Widget\01. Widget</Filter>
     </ClInclude>
@@ -525,6 +531,45 @@
     </ClInclude>
     <ClInclude Include="Resource\Shader\WidgetConstantBuffer.h">
       <Filter>01. Resource\01. Shader\03. ConstantBuffer\05. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Sound\SoundManager.h">
+      <Filter>01. Resource\05. Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Sound\Sound.h">
+      <Filter>01. Resource\05. Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_dsp.h">
+      <Filter>01. Resource\05. Sound\00. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_dsp_effects.h">
+      <Filter>01. Resource\05. Sound\00. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_errors.h">
+      <Filter>01. Resource\05. Sound\00. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_output.h">
+      <Filter>01. Resource\05. Sound\00. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod.h">
+      <Filter>01. Resource\05. Sound\00. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod.hpp">
+      <Filter>01. Resource\05. Sound\00. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_codec.h">
+      <Filter>01. Resource\05. Sound\00. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_common.h">
+      <Filter>01. Resource\05. Sound\00. FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Font\FontManager.h">
+      <Filter>01. Resource\06. Font</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\WidgetWindow.h">
+      <Filter>09. Widget\00. WIndow</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\Text.h">
+      <Filter>09. Widget\01. Widget</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -798,9 +843,6 @@
     <ClCompile Include="Component\ColliderPixel.cpp">
       <Filter>04. Component\00. SceneComponent\01. Collider</Filter>
     </ClCompile>
-    <ClCompile Include="Widget\WidgetWindow.cpp">
-      <Filter>09. Widget</Filter>
-    </ClCompile>
     <ClCompile Include="Widget\Widget.cpp">
       <Filter>09. Widget\01. Widget</Filter>
     </ClCompile>
@@ -815,6 +857,21 @@
     </ClCompile>
     <ClCompile Include="Resource\Shader\WidgetConstantBuffer.cpp">
       <Filter>01. Resource\01. Shader\03. ConstantBuffer\05. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Sound\Sound.cpp">
+      <Filter>01. Resource\05. Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Sound\SoundManager.cpp">
+      <Filter>01. Resource\05. Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Font\FontManager.cpp">
+      <Filter>01. Resource\06. Font</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\WidgetWindow.cpp">
+      <Filter>09. Widget\00. WIndow</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\Text.cpp">
+      <Filter>09. Widget\01. Widget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -840,6 +897,15 @@
     </None>
     <None Include="Excel\libxl.dll">
       <Filter>06. Excel\00. Library</Filter>
+    </None>
+    <None Include="fmod_errors.cs">
+      <Filter>01. Resource\05. Sound\00. FMOD</Filter>
+    </None>
+    <None Include="fmod.cs">
+      <Filter>01. Resource\05. Sound\00. FMOD</Filter>
+    </None>
+    <None Include="fmod_dsp.cs">
+      <Filter>01. Resource\05. Sound\00. FMOD</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

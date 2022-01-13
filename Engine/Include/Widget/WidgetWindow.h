@@ -79,6 +79,10 @@ public:
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
 	virtual void Render();
+	virtual bool CollisionMouse(const Vector2& MousePos);
+
+private:
+	static bool SortWidget(CSharedPtr<CWidget> Src, CSharedPtr<CWidget> Dest);
 
 public:
 	template <typename T>

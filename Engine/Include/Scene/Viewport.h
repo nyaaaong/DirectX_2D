@@ -32,6 +32,9 @@ public:
 	void Collision();
 	void Render();
 
+private:
+	static bool SortWindow(CSharedPtr<CWidgetWindow> Src, CSharedPtr<CWidgetWindow> Dest);
+
 public:
 	template <typename T>
 	T* FindWidgetWindow(const std::string& Name)

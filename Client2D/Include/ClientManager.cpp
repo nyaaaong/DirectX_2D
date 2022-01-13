@@ -1,9 +1,10 @@
 #include "ClientManager.h"
 #include "Engine.h"
 #include "resource.h"
+#include "Input.h"
 #include "Scene/SceneManager.h"
 #include "Scene/MainScene.h"
-#include "Input.h"
+#include "Resource/ResourceManager.h"
 
 DEFINITION_SINGLE(CClientManager)
 
@@ -38,6 +39,8 @@ bool CClientManager::Init(HINSTANCE hInst)
 	CInput::GetInst()->CreateKey("Attack1", VK_LBUTTON);
 	CInput::GetInst()->CreateKey("test", VK_RETURN);
 	CInput::GetInst()->CreateKey("Skill1", '1');
+
+	CResourceManager::GetInst()->CreateSoundChannelGroup("UI");
 
 	return true;
 }

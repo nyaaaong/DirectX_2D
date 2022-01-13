@@ -4,6 +4,7 @@
 CWidgetWindow::CWidgetWindow()	:
 	m_Viewport(nullptr),
 	m_ZOrder(0),
+	m_Size(100.f, 100.f),
 	m_Start(false)
 {
 }
@@ -112,4 +113,51 @@ void CWidgetWindow::Render()
 		(*iter)->Render();
 		++iter;
 	}
+}
+
+bool CWidgetWindow::CollisionMouse(const Vector2& MousePos)
+{
+	m_WidgetList.sort(CWidgetWindow::SortWidget);
+
+	// 윈도우 영역 안에 들어오는지 판단한다.
+	if (m_Pos.x > MousePos.x)
+		return false;
+
+	else if (m_Pos.x + m_Size.x < MousePos.x)
+		return false;
+
+	else if (m_Pos.y > MousePos.y)
+		return false;
+
+	else if (m_Pos.y + m_Size.y < MousePos.y)
+		return false;
+
+	auto	iter = m_WidgetList.rbegin();
+	auto	iterEnd = m_WidgetList.rend();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if (!(*iter)->IsEnable())
+		{
+			continue;
+		}
+
+		if ((*iter)->CollisionMouse(MousePos))
+		{
+			(*iter)->m_MouseHovered = true;
+			return true;
+		}
+
+		else
+		{
+			(*iter)->m_MouseHovered = false;
+		}
+	}
+
+	return false;
+}
+
+bool CWidgetWindow::SortWidget(CSharedPtr<CWidget> Src, CSharedPtr<CWidget> Dest)
+{
+	return Src->GetZOrder() < Dest->GetZOrder();
 }

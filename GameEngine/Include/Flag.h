@@ -170,3 +170,10 @@ enum class Button_State
 	Disable,
 	Max
 };
+
+enum class Button_Sound_State
+{
+	MouseOn,
+	Click,
+	Max
+};

@@ -1,7 +1,8 @@
 
 #include "CameraManager.h"
 
-CCameraManager::CCameraManager()
+CCameraManager::CCameraManager()	:
+	m_Scene(nullptr)
 {
 }
 

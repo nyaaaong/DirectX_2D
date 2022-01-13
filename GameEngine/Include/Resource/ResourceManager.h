@@ -5,6 +5,8 @@
 #include "Material/MaterialManager.h"
 #include "Texture/TextureManager.h"
 #include "Animation/AnimationManager.h"
+#include "Sound/SoundManager.h"
+#include "Font/FontManager.h"
 
 class CResourceManager
 {
@@ -14,9 +16,12 @@ private:
 	CMaterialManager* m_MaterialManager;
 	CTextureManager* m_TextureManager;
 	CAnimationManager* m_AnimationManager;
+	CSoundManager* m_SoundManager;
+	CFontManager* m_FontManager;
 
 public:
 	bool Init();
+	void Update();
 
 public:	// =================== Mesh =====================
 
@@ -69,6 +74,43 @@ public:	// =================== Sequence2D =====================
 	bool SaveSequence2D(const std::string& Name, const char* FileName, const std::string& PathName = ANIMATION_PATH);
 	bool LoadSequence2D(const char* FileName, const std::string& PathName = ANIMATION_PATH, class CScene* Scene = nullptr);
 	bool LoadSequence2D(std::string& resultName, const char* FileName, const std::string& PathName = ANIMATION_PATH, class CScene* Scene = nullptr);
+
+public:	// =================== Sound =====================
+	bool LoadSound(const std::string& ChannelGroupName, bool Loop, const std::string& Name, const char* FileName,
+		const std::string& PathName = SOUND_PATH);
+	bool CreateSoundChannelGroup(const std::string& Name);
+	bool SetVolume(int Volume);
+	bool SetVolume(const std::string& ChannelGroupName, int Volume);
+	bool SoundPlay(const std::string& Name);
+	bool SoundStop(const std::string& Name);
+	bool SoundPause(const std::string& Name);
+	bool SoundResume(const std::string& Name);
+	class CSound* FindSound(const std::string& Name);
+	FMOD::ChannelGroup* FindChannelGroup(const std::string& Name);
+	void ReleaseSound(const std::string& Name);
+
+
+public:	// =================== Font =====================
+	bool CreateFontFile(const std::string& Name, const TCHAR* FileName, const std::string& PathName = FONT_PATH);
+	bool LoadFont(const std::string& Name, const TCHAR* FontName, int Weight, float FontSize, const TCHAR* LocalName, int Stretch = DWRITE_FONT_STRETCH_NORMAL);
+	const TCHAR* GetFontFaceName(const std::string& Name);
+	const char* GetFontFaceNameMultibyte(const std::string& Name);
+	bool CreateFontColor(float r, float g, float b, float a);
+	bool CreateFontColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+	bool CreateFontColor(const Vector4& Color);
+	bool CreateFontColor(unsigned int Color);
+	ID2D1SolidColorBrush* FindFontColor(float r, float g, float b, float a);
+	ID2D1SolidColorBrush* FindFontColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+	ID2D1SolidColorBrush* FindFontColor(const Vector4& Color);
+	ID2D1SolidColorBrush* FindFontColor(unsigned int Color);
+	unsigned int CreateFontColorKey(float r, float g, float b, float a);
+	unsigned int CreateFontColorKey(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+	unsigned int CreateFontColorKey(const Vector4& Color);
+	IDWriteTextLayout* CreateTextLayout(const TCHAR* Text, IDWriteTextFormat* Font, float Width, float Height);
+	IDWriteTextLayout* CreateTextLayout(const TCHAR* Text, const std::string& FontName, float Width, float Height);
+
+	IDWriteFontCollection1* FindFontFile(const std::string& Name);
+	IDWriteTextFormat* FindFont(const std::string& Name);
 
 public:
 	DECLARE_SINGLE(CResourceManager)

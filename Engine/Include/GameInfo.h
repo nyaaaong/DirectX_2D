@@ -30,6 +30,9 @@
 #include <d3dcompiler.h>
 #include <dinput.h>
 #include <assert.h>
+#include <dwrite.h>
+#include <dwrite_3.h>
+#include <d2d1.h>
 
 #include "Excel/include_cpp/libxl.h"
 
@@ -38,6 +41,8 @@
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "libxl.lib")
+#pragma comment(lib, "dwrite.lib")
+#pragma comment(lib, "d2d1.lib")
 
 #include "Vector2.h"
 #include "Vector3.h"
@@ -47,6 +52,7 @@
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
+#include "fmod.hpp"
 #include "Resource/Texture/DirectXTex.h"
 
 #ifdef _DEBUG
@@ -59,6 +65,8 @@
 
 #endif // _DEBUG
 
+#pragma comment(lib, "fmod64_vc.lib")
+
 #define	ASSERT(text)	assert(!text);
 
 #define	ROOT_PATH	"Root"
@@ -68,6 +76,7 @@
 #define	FONT_PATH		"Font"
 #define	ANIMATION_PATH	"Animation"
 #define	SCENE_PATH		"Scene"
+#define	SOUND_PATH		"Sound"
 
 #define	SAFE_DELETE(p)	if(p)	{ delete p; p = nullptr; }
 #define	SAFE_DELETE_ARRAY(p)	if(p)	{ delete[] p; p = nullptr; }

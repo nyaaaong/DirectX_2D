@@ -10,7 +10,8 @@
 CSceneCollision::CSceneCollision() :
 	m_Scene(nullptr),
 	m_Section(nullptr),
-	m_MouseCollision(nullptr)
+	m_MouseCollision(nullptr),
+	m_WidgetClick(false)
 {
 }
 
@@ -39,6 +40,13 @@ bool CSceneCollision::Init()
 
 	return true;
 }
+
+bool CSceneCollision::CollisionWidget(float DeltaTime)
+{
+	// UI와 마우스와의 충돌처리를 한다.
+	return m_WidgetClick = m_Scene->GetViewport()->CollisionMouse();
+}
+
 void CSceneCollision::Collision(float DeltaTime)
 {
 	// 마우스와 충돌을 하고 있던 물체가 제거가 된다면 마우스와 충돌한 충돌체 정보를 nullptr로 바꿔준다.
@@ -102,11 +110,7 @@ void CSceneCollision::Collision(float DeltaTime)
 
 void CSceneCollision::CollisionMouse(float DeltaTime)
 {
-	bool	MouseCollision = false;
-
-	// UI와 마우스와의 충돌처리를 한다.
-	MouseCollision = m_Scene->GetViewport()->CollisionMouse();
-
+	bool	MouseCollision = m_WidgetClick;
 
 
 	// UI와 마우스가 충돌된 물체가 없다면 월드공간의 물체와 충돌을 진행한다.

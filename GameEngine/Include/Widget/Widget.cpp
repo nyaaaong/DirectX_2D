@@ -12,12 +12,18 @@ CWidget::CWidget()	:
 	m_Start(false),
 	m_Angle(0.f),
 	m_CBuffer(nullptr),
-	m_Size(50.f, 50.f)
+	m_Size(50.f, 50.f),
+	m_MouseHovered(false)
 {
+	m_MouseHovered = false;
 }
 
 CWidget::CWidget(const CWidget& widget)	:
-	m_ZOrder(0)
+	m_ZOrder(0),
+	m_Start(false),
+	m_Angle(0.f),
+	m_CBuffer(nullptr),
+	m_MouseHovered(false)
 {
 	m_Owner = widget.m_Owner;
 }
@@ -64,6 +70,11 @@ void CWidget::PostUpdate(float DeltaTime)
 {
 	if (!m_Start)
 		Start();
+
+	m_RenderPos = m_Pos;
+
+	if (m_Owner)
+		m_RenderPos += m_Owner->GetWindowPos();
 }
 
 void CWidget::Render()
@@ -75,7 +86,7 @@ void CWidget::Render()
 
 	matScale.Scaling(m_Size.x, m_Size.y, 1.f);
 	matRot.Rotation(0.f, 0.f, m_Angle);
-	matTrans.Translation(m_Pos.x, m_Pos.y, 0.f);
+	matTrans.Translation(m_RenderPos.x, m_RenderPos.y, 0.f);
 
 	CCameraComponent* UICamera = m_Owner->GetViewport()->GetScene()->GetCameraManager()->GetUICamera();
 
@@ -90,4 +101,21 @@ void CWidget::Render()
 	m_Shader->SetShader();
 
 	m_Mesh->Render();
+}
+
+bool CWidget::CollisionMouse(const Vector2& MousePos)
+{
+	if (m_RenderPos.x > MousePos.x)
+		return false;
+
+	else if (m_RenderPos.x + m_Size.x < MousePos.x)
+		return false;
+
+	else if (m_RenderPos.y > MousePos.y)
+		return false;
+
+	else if (m_RenderPos.y + m_Size.y < MousePos.y)
+		return false;
+
+	return true;
 }

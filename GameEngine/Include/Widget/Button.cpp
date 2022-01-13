@@ -4,14 +4,19 @@
 #include "../Scene/Viewport.h"
 #include "../Scene/Scene.h"
 #include "../Scene/SceneResource.h"
+#include "../Input.h"
 
 CButton::CButton()	:
-	m_State(Button_State::Normal)
+	m_State(Button_State::Normal),
+	m_MouseOnSound(false),
+	m_ClickSound(false)
 {
 }
 
 CButton::CButton(const CButton& widget)	:
-	CWidget(widget)
+	CWidget(widget),
+	m_MouseOnSound(false),
+	m_ClickSound(false)
 {
 	m_State = Button_State::Normal;
 }
@@ -67,6 +72,24 @@ void CButton::AddFrameData(Button_State State, const Vector2& Start, const Vecto
 	m_Info[(int)State].vecFrameData.push_back(Data);
 }
 
+void CButton::SetSound(Button_Sound_State State, const std::string& Name)
+{
+	m_Sound[(int)State] = m_Owner->GetViewport()->GetScene()->GetResource()->FindSound(Name);
+}
+
+void CButton::SetSound(Button_Sound_State State, CSound* Sound)
+{
+	m_Sound[(int)State] = Sound;
+}
+
+void CButton::SetSound(Button_Sound_State State, const std::string& ChannelGroupName,
+	const std::string& Name, const char* FileName, const std::string& PathName)
+{
+	m_Owner->GetViewport()->GetScene()->GetResource()->LoadSound(ChannelGroupName, false,
+		Name, FileName, PathName);
+	m_Sound[(int)State] = m_Owner->GetViewport()->GetScene()->GetResource()->FindSound(Name);
+}
+
 void CButton::Start()
 {
 	CWidget::Start();
@@ -83,6 +106,55 @@ bool CButton::Init()
 void CButton::Update(float DeltaTime)
 {
 	CWidget::Update(DeltaTime);
+
+	if (m_State != Button_State::Disable)
+	{
+		if (m_MouseHovered)
+		{
+			if (!m_MouseOnSound)
+			{
+				m_MouseOnSound = true;
+
+				if (m_Sound[(int)Button_Sound_State::MouseOn])
+					m_Sound[(int)Button_Sound_State::MouseOn]->Play();
+			}
+
+			if (CInput::GetInst()->GetMouseLButtonClick())
+			{
+				m_State = Button_State::Click;
+
+				if (!m_ClickSound)
+				{
+					m_ClickSound = true;
+
+					if (m_Sound[(int)Button_Sound_State::Click])
+						m_Sound[(int)Button_Sound_State::Click]->Play();
+				}
+			}
+
+			else if (m_State == Button_State::Click)
+			{
+				if (m_ClickCallback)
+					m_ClickCallback();
+
+				m_State = Button_State::MouseOn;
+				m_ClickSound = false;
+			}
+
+			else
+			{
+				m_ClickSound = false;
+				m_State = Button_State::MouseOn;
+			}
+		}
+
+		else
+		{
+			m_ClickSound = false;
+			m_MouseOnSound = false;
+			m_State = Button_State::Normal;
+		}
+	}
 }
 
 void CButton::PostUpdate(float DeltaTime)

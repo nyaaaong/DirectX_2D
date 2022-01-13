@@ -19,7 +19,10 @@ CInput::CInput()	:
 	m_InputType((Input_Type)0),
 	m_Ctrl(false),
 	m_Alt(false),
-	m_Shift(false)
+	m_Shift(false),
+	m_LButtonClick(false),
+	m_RButtonClick(false),
+	m_CollisionWidget(false)
 {
 	m_vecKeyState.resize(256);
 
@@ -198,14 +201,17 @@ void CInput::Update(float DeltaTime)
 		ReadDirectInputMouse();
 	}
 
+	// 마우스 입력처리를 한다.
+	UpdateMouse(DeltaTime);
+
+	// UI : 마우스 충돌
+	m_CollisionWidget = CSceneManager::GetInst()->GetScene()->GetCollision()->CollisionWidget(DeltaTime);
+
 	// 키 상태를 업데이트 해준다.
 	UpdateKeyState();
 
 	// 키보드 키 입력처리를 한다.
 	UpdateKeyInfo(DeltaTime);
-
-	// 마우스 입력처리를 한다.
-	UpdateMouse(DeltaTime);
 }
 
 void CInput::ReadDirectInputKeyboard()
@@ -280,6 +286,27 @@ void CInput::UpdateKeyState()
 
 		else
 			m_Shift = false;
+
+
+		/* 
+		rgbButtons[0] = 좌클릭
+		rgbButtons[1] = 우클릭
+		rgbButtons[2] = 휠클릭
+		rgbButtons[3] = 확장버튼
+		* 
+		*/
+		if (m_MouseState.rgbButtons[0] & 0x80)
+			m_LButtonClick = true;
+
+		else
+			m_LButtonClick = false;
+
+		if (m_MouseState.rgbButtons[1] & 0x80)
+			m_RButtonClick = true;
+
+		else
+			m_RButtonClick = false;
+
 		break;
 	case Input_Type::Window:
 		if (GetAsyncKeyState(VK_CONTROL) & 0x8000)
@@ -317,12 +344,18 @@ void CInput::UpdateKeyState()
 			switch (Key)
 			{
 			case DIK_MOUSELBUTTON:
-				if (m_MouseState.rgbButtons[0] & 0x80)
+				if (m_MouseState.rgbButtons[0] & 0x80 && !m_CollisionWidget)
+				{
+					m_LButtonClick = true;
 					KeyPush = true;
+				}
 				break;
 			case DIK_MOUSERBUTTON:
-				if (m_MouseState.rgbButtons[1] & 0x80)
+				if (m_MouseState.rgbButtons[1] & 0x80 && !m_CollisionWidget)
+				{
+					m_RButtonClick = true;
 					KeyPush = true;
+				}
 				break;
 			case DIK_MOUSEWHEEL:
 				break;

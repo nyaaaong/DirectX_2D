@@ -55,8 +55,21 @@ private:
 	Vector2		m_MousePos;
 	Vector2		m_MouseWorldPos;
 	Vector2		m_MouseMove;
+	bool		m_LButtonClick;
+	bool		m_RButtonClick;
+	bool		m_CollisionWidget;
 
 public:
+	bool GetMouseLButtonClick()	const
+	{
+		return m_LButtonClick;
+	}
+
+	bool GetMouseRButtonClick()	const
+	{
+		return m_RButtonClick;
+	}
+
 	Vector2 GetMousePos()	const
 	{
 		return m_MousePos;

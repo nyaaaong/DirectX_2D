@@ -242,6 +242,14 @@
     <ClInclude Include="Excel\include_cpp\libxl.h" />
     <ClInclude Include="Excel\include_cpp\setup.h" />
     <ClInclude Include="Flag.h" />
+    <ClInclude Include="fmod.h" />
+    <ClInclude Include="fmod.hpp" />
+    <ClInclude Include="fmod_codec.h" />
+    <ClInclude Include="fmod_common.h" />
+    <ClInclude Include="fmod_dsp.h" />
+    <ClInclude Include="fmod_dsp_effects.h" />
+    <ClInclude Include="fmod_errors.h" />
+    <ClInclude Include="fmod_output.h" />
     <ClInclude Include="GameInfo.h" />
     <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="imconfig.h" />
@@ -278,6 +286,7 @@
     <ClInclude Include="Render\RenderStateManager.h" />
     <ClInclude Include="Resource\Animation\AnimationManager.h" />
     <ClInclude Include="Resource\Animation\AnimationSequence2D.h" />
+    <ClInclude Include="Resource\Font\FontManager.h" />
     <ClInclude Include="Resource\Material\Material.h" />
     <ClInclude Include="Resource\Material\MaterialManager.h" />
     <ClInclude Include="Resource\Mesh\Mesh.h" />
@@ -303,6 +312,8 @@
     <ClInclude Include="Resource\Shader\TransformConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\WidgetConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\WidgetShader.h" />
+    <ClInclude Include="Resource\Sound\Sound.h" />
+    <ClInclude Include="Resource\Sound\SoundManager.h" />
     <ClInclude Include="Resource\Texture\DirectXTex.h" />
     <ClInclude Include="Resource\Texture\Texture.h" />
     <ClInclude Include="Resource\Texture\TextureManager.h" />
@@ -320,6 +331,7 @@
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="Widget\Button.h" />
+    <ClInclude Include="Widget\Text.h" />
     <ClInclude Include="Widget\Widget.h" />
     <ClInclude Include="Widget\WidgetWindow.h" />
   </ItemGroup>
@@ -378,6 +390,7 @@
     <ClCompile Include="Render\RenderStateManager.cpp" />
     <ClCompile Include="Resource\Animation\AnimationManager.cpp" />
     <ClCompile Include="Resource\Animation\AnimationSequence2D.cpp" />
+    <ClCompile Include="Resource\Font\FontManager.cpp" />
     <ClCompile Include="Resource\Material\Material.cpp" />
     <ClCompile Include="Resource\Material\MaterialManager.cpp" />
     <ClCompile Include="Resource\Mesh\Mesh.cpp" />
@@ -403,6 +416,8 @@
     <ClCompile Include="Resource\Shader\TransformConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\WidgetConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\WidgetShader.cpp" />
+    <ClCompile Include="Resource\Sound\Sound.cpp" />
+    <ClCompile Include="Resource\Sound\SoundManager.cpp" />
     <ClCompile Include="Resource\Texture\Texture.cpp" />
     <ClCompile Include="Resource\Texture\TextureManager.cpp" />
     <ClCompile Include="Scene\CameraManager.cpp" />
@@ -418,6 +433,7 @@
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="Widget\Button.cpp" />
+    <ClCompile Include="Widget\Text.cpp" />
     <ClCompile Include="Widget\Widget.cpp" />
     <ClCompile Include="Widget\WidgetWindow.cpp" />
   </ItemGroup>
@@ -490,6 +506,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Excel\libxl.dll" />
+    <None Include="fmod.cs" />
+    <None Include="fmod_dsp.cs" />
+    <None Include="fmod_errors.cs" />
     <None Include="Resource\Texture\DirectXTex.inl" />
   </ItemGroup>
   <ItemGroup>

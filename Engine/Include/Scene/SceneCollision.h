@@ -42,10 +42,12 @@ private:
 	CollisionSectionInfo* m_Section;
 	std::list<CSharedPtr<class CColliderComponent>>	m_ColliderList;
 	CSharedPtr<class CColliderComponent> m_MouseCollision;
+	bool	m_WidgetClick;
 
 public:
 	void Start();
 	bool Init();
+	bool CollisionWidget(float DeltaTime);
 	void Collision(float DeltaTime);
 
 protected:

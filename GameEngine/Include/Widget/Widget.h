@@ -16,10 +16,12 @@ protected:
 	class CWidgetWindow* m_Owner;
 	int     m_ZOrder;
 	Vector2	m_Pos;
+	Vector2	m_RenderPos;
 	Vector2	m_Size;
 	float	m_Angle;
 	bool	m_Start;
 	Vector4	m_Tint;
+	bool	m_MouseHovered;
 	class CWidgetConstantBuffer* m_CBuffer;
 	CSharedPtr<class CShader>	m_Shader;
 	CSharedPtr<class CMesh>		m_Mesh;
@@ -100,5 +102,6 @@ public:
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
 	virtual void Render();
+	virtual bool CollisionMouse(const Vector2& MousePos);
 };
 

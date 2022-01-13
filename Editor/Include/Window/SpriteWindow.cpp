@@ -178,32 +178,9 @@ bool CSpriteWindow::Init()
 	Button = AddWidget<CIMGUIButton>("Modify", 92.f, 20.f);
 	Button->SetClickCallback<CSpriteWindow>(this, &CSpriteWindow::Modify);
 
-	Label = AddWidget<CIMGUILabel>("AnimationListName", 200.f, 20.f);
+	Label = AddWidget<CIMGUILabel>("Animation", 408.f, 20.f);
 	Label->SetColor(31, 81, 150);
 	Label->SetAlign(0.5f, 0.f);
-
-	Line = AddWidget<CIMGUISameLine>("Line");
-
-	Label = AddWidget<CIMGUILabel>("AnimationFrameName", 200.f, 20.f);
-	Label->SetColor(31, 81, 183);
-	Label->SetAlign(0.5f, 0.f);
-
-	m_AnimationList = AddWidget<CIMGUIListBox>("AnimationList", 200.f, 300.f);
-	m_AnimationList->SetHideName(true);
-	m_AnimationList->SetPageItemCount(6);
-	m_AnimationList->SetSelectCallback<CSpriteWindow>(this, &CSpriteWindow::SelectAnimation);
-
-	Line = AddWidget<CIMGUISameLine>("Line");
-
-	m_AnimationFrameList = AddWidget<CIMGUIListBox>("AnimationFrameList", 200.f, 300.f);
-	m_AnimationFrameList->SetHideName(true);
-	m_AnimationFrameList->SetPageItemCount(6);
-	m_AnimationFrameList->SetSelectCallback<CSpriteWindow>(this, &CSpriteWindow::SelectAnimationFrame);
-
-	m_AnimName = AddWidget<CIMGUITextInput>("AnimNameInput", 200.f, 20.f);
-	m_AnimName->SetHideName(true);
-
-	Line = AddWidget<CIMGUISameLine>("Line");
 
 	Button = AddWidget<CIMGUIButton>("SaveSequence", 100.f, 20.f);
 	Button->SetClickCallback<CSpriteWindow>(this, &CSpriteWindow::SaveSequence);
@@ -213,6 +190,8 @@ bool CSpriteWindow::Init()
 	Button = AddWidget<CIMGUIButton>("LoadSequence", 92.f, 20.f);
 	Button->SetClickCallback<CSpriteWindow>(this, &CSpriteWindow::LoadSequence);
 
+	Line = AddWidget<CIMGUISameLine>("Line");
+
 	Button = AddWidget<CIMGUIButton>("AddAnim", 100.f, 20.f);
 	Button->SetClickCallback<CSpriteWindow>(this, &CSpriteWindow::AddAnimationButton);
 
@@ -221,14 +200,29 @@ bool CSpriteWindow::Init()
 	Button = AddWidget<CIMGUIButton>("DeleteAnim", 92.f, 20.f);
 	Button->SetClickCallback<CSpriteWindow>(this, &CSpriteWindow::DeleteAnimationButton);
 
+	m_AnimationList = AddWidget<CIMGUIListBox>("AnimationList", 200.f, 20.f);
+	m_AnimationList->SetHideName(true);
+	m_AnimationList->SetPageItemCount(1);
+	m_AnimationList->SetSelectCallback<CSpriteWindow>(this, &CSpriteWindow::SelectAnimation);
+
 	Line = AddWidget<CIMGUISameLine>("Line");
 
-	Button = AddWidget<CIMGUIButton>("AddFrame", 100.f, 20.f);
+	m_AnimName = AddWidget<CIMGUITextInput>("AnimNameInput", 200.f, 22.f);
+	m_AnimName->SetHideName(true);
+
+	m_AnimationFrameList = AddWidget<CIMGUIListBox>("AnimationFrameList", 200.f, 300.f);
+	m_AnimationFrameList->SetHideName(true);
+	m_AnimationFrameList->SetPageItemCount(5);
+	m_AnimationFrameList->SetSelectCallback<CSpriteWindow>(this, &CSpriteWindow::SelectAnimationFrame);
+
+	Line = AddWidget<CIMGUISameLine>("Line");
+
+	Button = AddWidget<CIMGUIButton>("AddFrame", 100.f, 95.f);
 	Button->SetClickCallback<CSpriteWindow>(this, &CSpriteWindow::AddAnimationFrameButton);
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 
-	Button = AddWidget<CIMGUIButton>("DeleteFrame", 92.f, 20.f);
+	Button = AddWidget<CIMGUIButton>("DeleteFrame", 92.f, 95.f);
 	Button->SetClickCallback<CSpriteWindow>(this, &CSpriteWindow::DeleteFrameButton);
 
 	m_Sprite = AddWidget<CIMGUIImage>("Sprite", 200.f, 200.f);

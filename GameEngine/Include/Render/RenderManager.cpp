@@ -13,6 +13,7 @@ DEFINITION_SINGLE(CRenderManager)
 
 CRenderManager::CRenderManager()	:
 	m_ObjectList(nullptr),
+	m_AlphaBlend(nullptr),
 	m_RenderCount(0),
 	m_RenderStateManager(nullptr),
 	m_Standard2DCBuffer(nullptr),

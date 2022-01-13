@@ -7,6 +7,7 @@
 #include "../Resource/Texture/Texture.h"
 #include "../Resource/ResourceManager.h"
 #include "../Resource/Animation/AnimationSequence2D.h"
+#include "../Resource/Sound/Sound.h"
 
 class CSceneResource
 {
@@ -25,6 +26,7 @@ private:
 	std::unordered_map<std::string, CSharedPtr<CMaterial>>	m_mapMaterial;
 	std::unordered_map<std::string, CSharedPtr<CTexture>>	m_mapTexture;
 	std::unordered_map<std::string, CSharedPtr<CAnimationSequence2D>>	m_mapSequence2D;
+	std::unordered_map<std::string, CSharedPtr<CSound>>		m_mapSound;
 
 public:
 	int GetSequence2DSize()	const
@@ -55,7 +57,6 @@ public:	// =================== Sequence2D =====================
 	CAnimationSequence2D* FindAnimationSequence2D(const std::string& Name);
 	class CAnimation2DConstantBuffer* GetAnimation2DCBuffer()	const;
 	bool CreateAnimationSequence2D(const std::string& Name, class CTexture* Texture);
-	bool SaveSequence2D(FILE* File, const std::string& Name, const char* FullPath);
 	bool SaveSequence2D(const std::string& Name, const char* FileName, const std::string& PathName = ANIMATION_PATH);
 	bool SaveSequence2DFullPath(const std::string& Name, const char* FullPath);
 	bool LoadSequence2D(const char* FileName, const std::string& PathName = ANIMATION_PATH);
@@ -69,6 +70,19 @@ public:	// =================== Texture =====================
 		const std::string& PathName = TEXTURE_PATH);
 	bool LoadTextureFullPath(const std::string& Name, const TCHAR* FullPath);
 	class CTexture* FindTexture(const std::string& Name);
+
+public:	// =================== Sound =====================
+	bool LoadSound(const std::string& ChannelGroupName, bool Loop, const std::string& Name, const char* FileName,
+		const std::string& PathName = SOUND_PATH);
+	bool CreateSoundChannelGroup(const std::string& Name);
+	bool SetVolume(int Volume);
+	bool SetVolume(const std::string& ChannelGroupName, int Volume);
+	bool SoundPlay(const std::string& Name);
+	bool SoundStop(const std::string& Name);
+	bool SoundPause(const std::string& Name);
+	bool SoundResume(const std::string& Name);
+	class CSound* FindSound(const std::string& Name);
+	FMOD::ChannelGroup* FindChannelGroup(const std::string& Name);
 
 public:
 	template <typename T>

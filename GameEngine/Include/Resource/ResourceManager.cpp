@@ -8,12 +8,16 @@ CResourceManager::CResourceManager()	:
 	m_ShaderManager(nullptr),
 	m_MaterialManager(nullptr),
 	m_TextureManager(nullptr),
-	m_AnimationManager(nullptr)
+	m_AnimationManager(nullptr),
+	m_SoundManager(nullptr),
+	m_FontManager(nullptr)
 {
 }
 
 CResourceManager::~CResourceManager()
 {
+	SAFE_DELETE(m_FontManager);
+	SAFE_DELETE(m_SoundManager);
 	SAFE_DELETE(m_AnimationManager);
 	SAFE_DELETE(m_MaterialManager);
 	SAFE_DELETE(m_ShaderManager);
@@ -48,7 +52,23 @@ bool CResourceManager::Init()
 	if (!m_AnimationManager->Init())
 		return false;
 
+	m_SoundManager = DBG_NEW CSoundManager;
+
+	if (!m_SoundManager->Init())
+		return false;
+
+	m_FontManager = DBG_NEW CFontManager;
+
+	if (!m_FontManager->Init())
+		return false;
+
+
 	return true;
+}
+
+void CResourceManager::Update()
+{
+	m_SoundManager->Update();
 }
 
 CMesh* CResourceManager::FindMesh(const std::string& Name)
@@ -193,4 +213,159 @@ bool CResourceManager::LoadSequence2D(const char* FileName, const std::string& P
 bool CResourceManager::LoadSequence2D(std::string& resultName, const char* FileName, const std::string& PathName, CScene* Scene)
 {
 	return m_AnimationManager->LoadSequence(resultName, FileName, PathName, Scene);
+}
+
+bool CResourceManager::LoadSound(const std::string& ChannelGroupName, bool Loop, const std::string& Name,
+	const char* FileName, const std::string& PathName)
+{
+	return m_SoundManager->LoadSound(ChannelGroupName, Loop, Name, FileName, PathName);
+}
+
+bool CResourceManager::CreateSoundChannelGroup(const std::string& Name)
+{
+	return m_SoundManager->CreateSoundChannelGroup(Name);
+}
+
+bool CResourceManager::SetVolume(int Volume)
+{
+	return m_SoundManager->SetVolume(Volume);
+}
+
+bool CResourceManager::SetVolume(const std::string& ChannelGroupName, int Volume)
+{
+	return m_SoundManager->SetVolume(ChannelGroupName, Volume);
+}
+
+bool CResourceManager::SoundPlay(const std::string& Name)
+{
+	return m_SoundManager->SoundPlay(Name);
+}
+
+bool CResourceManager::SoundStop(const std::string& Name)
+{
+	return m_SoundManager->SoundStop(Name);
+}
+
+bool CResourceManager::SoundPause(const std::string& Name)
+{
+	return m_SoundManager->SoundPause(Name);
+}
+
+bool CResourceManager::SoundResume(const std::string& Name)
+{
+	return m_SoundManager->SoundResume(Name);
+}
+
+CSound* CResourceManager::FindSound(const std::string& Name)
+{
+	return m_SoundManager->FindSound(Name);
+}
+
+FMOD::ChannelGroup* CResourceManager::FindChannelGroup(const std::string& Name)
+{
+	return m_SoundManager->FindChannelGroup(Name);
+}
+
+void CResourceManager::ReleaseSound(const std::string& Name)
+{
+	m_SoundManager->ReleaseSound(Name);
+}
+
+bool CResourceManager::CreateFontFile(const std::string& Name, const TCHAR* FileName,
+	const std::string& PathName)
+{
+	return m_FontManager->CreateFontFile(Name, FileName, PathName);
+}
+
+bool CResourceManager::LoadFont(const std::string& Name, const TCHAR* FontName,
+	int Weight, float FontSize, const TCHAR* LocalName, int Stretch)
+{
+	return m_FontManager->LoadFont(Name, FontName, Weight, FontSize, LocalName, Stretch);
+}
+
+const TCHAR* CResourceManager::GetFontFaceName(const std::string& Name)
+{
+	return m_FontManager->GetFontFaceName(Name);
+}
+
+const char* CResourceManager::GetFontFaceNameMultibyte(const std::string& Name)
+{
+	return m_FontManager->GetFontFaceNameMultibyte(Name);
+}
+
+bool CResourceManager::CreateFontColor(float r, float g, float b, float a)
+{
+	return m_FontManager->CreateFontColor(r, g, b, a);
+}
+
+bool CResourceManager::CreateFontColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+{
+	return m_FontManager->CreateFontColor(r, g, b, a);
+}
+
+bool CResourceManager::CreateFontColor(const Vector4& Color)
+{
+	return m_FontManager->CreateFontColor(Color);
+}
+
+bool CResourceManager::CreateFontColor(unsigned int Color)
+{
+	return m_FontManager->CreateFontColor(Color);
+}
+
+ID2D1SolidColorBrush* CResourceManager::FindFontColor(float r, float g, float b, float a)
+{
+	return m_FontManager->FindFontColor(r, g, b, a);
+}
+
+ID2D1SolidColorBrush* CResourceManager::FindFontColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+{
+	return m_FontManager->FindFontColor(r, g, b, a);
+}
+
+ID2D1SolidColorBrush* CResourceManager::FindFontColor(const Vector4& Color)
+{
+	return m_FontManager->FindFontColor(Color);
+}
+
+ID2D1SolidColorBrush* CResourceManager::FindFontColor(unsigned int Color)
+{
+	return m_FontManager->FindFontColor(Color);
+}
+
+unsigned int CResourceManager::CreateFontColorKey(float r, float g, float b, float a)
+{
+	return m_FontManager->CreateFontColorKey(r, g, b, a);
+}
+
+unsigned int CResourceManager::CreateFontColorKey(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+{
+	return m_FontManager->CreateFontColorKey(r, g, b, a);
+}
+
+unsigned int CResourceManager::CreateFontColorKey(const Vector4& Color)
+{
+	return m_FontManager->CreateFontColorKey(Color);
+}
+
+IDWriteTextLayout* CResourceManager::CreateTextLayout(const TCHAR* Text, IDWriteTextFormat* Font,
+	float Width, float Height)
+{
+	return m_FontManager->CreateTextLayout(Text, Font, Width, Height);
+}
+
+IDWriteTextLayout* CResourceManager::CreateTextLayout(const TCHAR* Text, const std::string& FontName,
+	float Width, float Height)
+{
+	return m_FontManager->CreateTextLayout(Text, FontName, Width, Height);
+}
+
+IDWriteFontCollection1* CResourceManager::FindFontFile(const std::string& Name)
+{
+	return m_FontManager->FindFontFile(Name);
+}
+
+IDWriteTextFormat* CResourceManager::FindFont(const std::string& Name)
+{
+	return m_FontManager->FindFont(Name);
 }
