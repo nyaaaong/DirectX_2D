@@ -3,6 +3,7 @@
 #include "GameObject/GameObject.h"
 #include "Component/SpriteComponent.h"
 #include "Component/ColliderCircle.h"
+#include "Component/WidgetComponent.h"
 
 class CMonster :
     public CGameObject
@@ -19,6 +20,9 @@ private:
     CSharedPtr<CColliderCircle>       m_Body;
 	int		m_HP;
 	int		m_HPMax;
+
+	CSharedPtr<CWidgetComponent>     m_SimpleHUDWidget;
+	class CSimpleHUD* m_SimpleHUD;
 
 public:
 	void SetDamage(int Value)

@@ -13,7 +13,8 @@ CWidget::CWidget()	:
 	m_Angle(0.f),
 	m_CBuffer(nullptr),
 	m_Size(50.f, 50.f),
-	m_MouseHovered(false)
+	m_MouseHovered(false),
+	m_CollisionMouseEnable(true)
 {
 	m_MouseHovered = false;
 }
@@ -25,7 +26,16 @@ CWidget::CWidget(const CWidget& widget)	:
 	m_CBuffer(nullptr),
 	m_MouseHovered(false)
 {
-	m_Owner = widget.m_Owner;
+	*this = widget;
+
+	m_RefCount = 0;
+
+	m_Owner = nullptr;
+	m_MouseHovered = false;
+
+	m_CBuffer = DBG_NEW CWidgetConstantBuffer;
+
+	m_CBuffer->Init();
 }
 
 CWidget::~CWidget()
@@ -105,6 +115,9 @@ void CWidget::Render()
 
 bool CWidget::CollisionMouse(const Vector2& MousePos)
 {
+	if (!m_CollisionMouseEnable)
+		return false;
+
 	if (m_RenderPos.x > MousePos.x)
 		return false;
 
@@ -118,4 +131,9 @@ bool CWidget::CollisionMouse(const Vector2& MousePos)
 		return false;
 
 	return true;
+}
+
+CWidget* CWidget::Clone()
+{
+	return DBG_NEW CWidget(*this);
 }

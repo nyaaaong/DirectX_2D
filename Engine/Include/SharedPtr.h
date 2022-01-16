@@ -86,5 +86,10 @@ public:
 	{
 		return m_Ptr;
 	}
+
+	T* operator * ()	const
+	{
+		return m_Ptr;
+	}
 };
 

@@ -1,13 +1,37 @@
 
 #include "WidgetWindow.h"
+#include "../Component/WidgetComponent.h"
+#include "../Scene/Scene.h"
 
 CWidgetWindow::CWidgetWindow()	:
 	m_Viewport(nullptr),
+	m_OwnerComponent(nullptr),
 	m_ZOrder(0),
 	m_Size(100.f, 100.f),
 	m_Start(false)
 {
 }
+
+CWidgetWindow::CWidgetWindow(const CWidgetWindow& window)
+{
+	*this = window;
+	m_OwnerComponent = nullptr;
+
+	auto	iter = window.m_WidgetList.begin();
+	auto	iterEnd = window.m_WidgetList.end();
+
+	m_WidgetList.clear();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		CWidget* Widget = (*iter)->Clone();
+
+		Widget->m_Owner = this;
+
+		m_WidgetList.push_back(Widget);
+	}
+}
+
 
 CWidgetWindow::~CWidgetWindow()
 {
@@ -23,6 +47,11 @@ void CWidgetWindow::Start()
 	for (; iter != iterEnd; ++iter)
 	{
 		(*iter)->Start();
+	}
+
+	if (m_OwnerComponent)
+	{
+		m_Viewport = m_OwnerComponent->GetScene()->GetViewport();
 	}
 }
 
@@ -155,6 +184,11 @@ bool CWidgetWindow::CollisionMouse(const Vector2& MousePos)
 	}
 
 	return false;
+}
+
+CWidgetWindow* CWidgetWindow::Clone()
+{
+	return DBG_NEW CWidgetWindow(*this);
 }
 
 bool CWidgetWindow::SortWidget(CSharedPtr<CWidget> Src, CSharedPtr<CWidget> Dest)

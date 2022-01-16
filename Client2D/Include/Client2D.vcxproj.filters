@@ -68,6 +68,9 @@
     <ClCompile Include="Widget\MainWidget.cpp">
       <Filter>02. UI</Filter>
     </ClCompile>
+    <ClCompile Include="Widget\SimpleHUD.cpp">
+      <Filter>02. UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene\MainScene.h">
@@ -104,6 +107,9 @@
       <Filter>01. Object\03. Test</Filter>
     </ClInclude>
     <ClInclude Include="Widget\MainWidget.h">
+      <Filter>02. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\SimpleHUD.h">
       <Filter>02. UI</Filter>
     </ClInclude>
   </ItemGroup>

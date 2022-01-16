@@ -194,6 +194,24 @@
     <Filter Include="01. Resource\06. Font">
       <UniqueIdentifier>{2263d8de-2e5c-4e2a-9780-8c7422ecb2fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="09. Widget\01. Widget\00. Button">
+      <UniqueIdentifier>{b9eb06a8-7456-41af-97ba-df7d2ed76c9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="09. Widget\01. Widget\01. Text">
+      <UniqueIdentifier>{b1901ea0-f4e6-4a79-83e4-941087a7ab1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="09. Widget\01. Widget\02. Progress">
+      <UniqueIdentifier>{98f7a72c-7a72-4f15-8543-f3b0beb169c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="09. Widget\01. Widget\03. Image">
+      <UniqueIdentifier>{d4f9298e-0de7-4b9a-9a25-62a17267b260}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="09. Widget\01. Widget\04. Slider">
+      <UniqueIdentifier>{01f320ab-e237-43cf-87d3-68c10558b85a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\00. SceneComponent\03. Widget">
+      <UniqueIdentifier>{66808573-5b28-477f-95da-9772cb2af709}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -517,9 +535,6 @@
     <ClInclude Include="Component\ColliderPixel.h">
       <Filter>04. Component\00. SceneComponent\01. Collider</Filter>
     </ClInclude>
-    <ClInclude Include="Widget\Button.h">
-      <Filter>09. Widget\01. Widget</Filter>
-    </ClInclude>
     <ClInclude Include="Widget\Widget.h">
       <Filter>09. Widget\01. Widget</Filter>
     </ClInclude>
@@ -568,8 +583,32 @@
     <ClInclude Include="Widget\WidgetWindow.h">
       <Filter>09. Widget\00. WIndow</Filter>
     </ClInclude>
+    <ClInclude Include="Widget\Button.h">
+      <Filter>09. Widget\01. Widget\00. Button</Filter>
+    </ClInclude>
     <ClInclude Include="Widget\Text.h">
-      <Filter>09. Widget\01. Widget</Filter>
+      <Filter>09. Widget\01. Widget\01. Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\ProgressBar.h">
+      <Filter>09. Widget\01. Widget\02. Progress</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\Image.h">
+      <Filter>09. Widget\01. Widget\03. Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\Slider.h">
+      <Filter>09. Widget\01. Widget\04. Slider</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\SliderBar.h">
+      <Filter>09. Widget\01. Widget\04. Slider</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\ProgressBarConstantBuffer.h">
+      <Filter>01. Resource\01. Shader\03. ConstantBuffer\05. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\ProgressBarShader.h">
+      <Filter>01. Resource\01. Shader\02. ShaderClass\03. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\WidgetComponent.h">
+      <Filter>04. Component\00. SceneComponent\03. Widget</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -846,9 +885,6 @@
     <ClCompile Include="Widget\Widget.cpp">
       <Filter>09. Widget\01. Widget</Filter>
     </ClCompile>
-    <ClCompile Include="Widget\Button.cpp">
-      <Filter>09. Widget\01. Widget</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\Viewport.cpp">
       <Filter>02. Scene\04. ViewPort</Filter>
     </ClCompile>
@@ -870,8 +906,32 @@
     <ClCompile Include="Widget\WidgetWindow.cpp">
       <Filter>09. Widget\00. WIndow</Filter>
     </ClCompile>
+    <ClCompile Include="Widget\Button.cpp">
+      <Filter>09. Widget\01. Widget\00. Button</Filter>
+    </ClCompile>
     <ClCompile Include="Widget\Text.cpp">
-      <Filter>09. Widget\01. Widget</Filter>
+      <Filter>09. Widget\01. Widget\01. Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\ProgressBar.cpp">
+      <Filter>09. Widget\01. Widget\02. Progress</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\Image.cpp">
+      <Filter>09. Widget\01. Widget\03. Image</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\SliderBar.cpp">
+      <Filter>09. Widget\01. Widget\04. Slider</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\Slider.cpp">
+      <Filter>09. Widget\01. Widget\04. Slider</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ProgressBarConstantBuffer.cpp">
+      <Filter>01. Resource\01. Shader\03. ConstantBuffer\05. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ProgressBarShader.cpp">
+      <Filter>01. Resource\01. Shader\02. ShaderClass\03. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\WidgetComponent.cpp">
+      <Filter>04. Component\00. SceneComponent\03. Widget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -25,17 +25,21 @@ CText::CText()	:
 	m_AlignV(TEXT_ALIGN_V::Middle)
 
 {
-	m_Text = new TCHAR[m_TextCapacity];
+	m_CollisionMouseEnable = false;
+	m_Text = DBG_NEW TCHAR[m_TextCapacity];
 
 	memset(m_Text, 0, sizeof(TCHAR) * m_TextCapacity);
 
-	m_FontName = new TCHAR[128];
+	m_FontName = DBG_NEW TCHAR[128];
 
 	memset(m_FontName, 0, sizeof(TCHAR) * 128);
 
 	lstrcpy(m_Text, TEXT("Text"));
 
 	m_TextCount = 4;
+
+	m_Color.w = 1.f;
+	m_ShadowColor.w = 1.f;
 }
 
 CText::CText(const CText& widget) :
@@ -43,14 +47,14 @@ CText::CText(const CText& widget) :
 {
 	*this = widget;
 
-	m_Text = new TCHAR[m_TextCapacity];
+	m_Text = DBG_NEW TCHAR[m_TextCapacity];
 
 	memset(m_Text, 0, sizeof(TCHAR) * m_TextCapacity);
 
 	if (m_TextCount > 0)
 		memcpy(m_Text, widget.m_Text, sizeof(TCHAR) * m_TextCount);
 
-	m_FontName = new TCHAR[128];
+	m_FontName = DBG_NEW TCHAR[128];
 
 	memset(m_FontName, 0, sizeof(TCHAR) * 128);
 
@@ -334,4 +338,9 @@ void CText::Render()
 		D2D1_DRAW_TEXT_OPTIONS_NONE);
 
 	m_2DTarget->EndDraw();
+}
+
+CText* CText::Clone()
+{
+	return DBG_NEW CText(*this);
 }

@@ -41,6 +41,7 @@ bool CClientManager::Init(HINSTANCE hInst)
 	CInput::GetInst()->CreateKey("Skill1", '1');
 
 	CResourceManager::GetInst()->CreateSoundChannelGroup("UI");
+	CResourceManager::GetInst()->SetVolume(10);
 
 	return true;
 }

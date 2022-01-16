@@ -19,6 +19,9 @@ CButton::CButton(const CButton& widget)	:
 	m_ClickSound(false)
 {
 	m_State = Button_State::Normal;
+	m_ClickCallback = nullptr;
+	m_MouseOnSound = false;
+	m_ClickSound = false;
 }
 
 CButton::~CButton()
@@ -170,4 +173,9 @@ void CButton::Render()
 	m_Tint = m_Info[(int)m_State].Tint;
 
 	CWidget::Render();
+}
+
+CButton* CButton::Clone()
+{
+	return DBG_NEW CButton(*this);
 }

@@ -1,6 +1,19 @@
 #pragma once
 
 #include "../Ref.h"
+#include "../Resource/Texture/Texture.h"
+
+struct WidgetImageInfo
+{
+	CSharedPtr<CTexture>	Texture;
+	Vector4			Tint;
+	std::vector<AnimationFrameData> vecFrameData;
+
+	WidgetImageInfo()
+	{
+		Tint = Vector4::White;
+	}
+};
 
 class CWidget :
 	public CRef
@@ -22,6 +35,7 @@ protected:
 	bool	m_Start;
 	Vector4	m_Tint;
 	bool	m_MouseHovered;
+	bool	m_CollisionMouseEnable;
 	class CWidgetConstantBuffer* m_CBuffer;
 	CSharedPtr<class CShader>	m_Shader;
 	CSharedPtr<class CMesh>		m_Mesh;
@@ -73,12 +87,12 @@ public:
 		m_Pos = Vector2(x, y);
 	}
 
-	void SetSize(const Vector2& Size)
+	virtual void SetSize(const Vector2& Size)
 	{
 		m_Size = Size;
 	}
 
-	void SetSize(float x, float y)
+	virtual void SetSize(float x, float y)
 	{
 		m_Size = Vector2(x, y);
 	}
@@ -103,5 +117,6 @@ public:
 	virtual void PostUpdate(float DeltaTime);
 	virtual void Render();
 	virtual bool CollisionMouse(const Vector2& MousePos);
+	virtual CWidget* Clone();
 };
 

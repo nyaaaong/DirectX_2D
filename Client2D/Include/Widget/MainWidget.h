@@ -2,6 +2,7 @@
 
 #include "Widget/WidgetWindow.h"
 #include "Widget/Button.h"
+#include "Widget/Text.h"
 
 class CMainWidget :
     public CWidgetWindow
@@ -10,10 +11,14 @@ class CMainWidget :
 
 protected:
 	CMainWidget();
+	CMainWidget(const CMainWidget& window);
 	virtual ~CMainWidget();
 
 private:
 	CSharedPtr<CButton>	m_Button;
+
+	CSharedPtr<CButton>	m_Button1;
+	CSharedPtr<CText>	m_Button1Text;
 
 public:
 	virtual void Start();
@@ -21,8 +26,10 @@ public:
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
 	virtual void Render();
+	virtual CMainWidget* Clone();
 
 public:
 	void StartButtonClick();
+	void Button1Click();
 };
 

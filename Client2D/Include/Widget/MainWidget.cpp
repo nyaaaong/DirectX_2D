@@ -4,6 +4,15 @@ CMainWidget::CMainWidget()
 {
 }
 
+CMainWidget::CMainWidget(const CMainWidget& window) :
+	CWidgetWindow(window)
+{
+	m_Button = FindWidget<CButton>("Button");
+	m_Button1 = FindWidget<CButton>("Button1");
+	m_Button1Text = FindWidget<CText>("Text");
+}
+
+
 CMainWidget::~CMainWidget()
 {
 }
@@ -38,6 +47,32 @@ bool CMainWidget::Init()
 	m_Button->SetSound(Button_Sound_State::MouseOn, "UI", "ButtonMouseOn", "TeemoSmile.mp3");
 	m_Button->SetSound(Button_Sound_State::Click, "UI", "ButtonClick", "TeemoStartClicck.mp3");
 
+	m_Button1 = CreateWidget<CButton>("Button1");
+
+	m_Button1->SetPos(50.f, 200.f);
+	m_Button1->SetSize(100.f, 40.f);
+
+	m_Button1->SetTextureTint(Button_State::Normal, 220, 220, 220, 255);
+	m_Button1->SetTextureTint(Button_State::MouseOn, 255, 255, 255, 255);
+	m_Button1->SetTextureTint(Button_State::Click, 150, 150, 150, 255);
+
+	m_Button1->SetSound(Button_Sound_State::MouseOn, "UI", "ButtonMouseOn", "TeemoSmile.mp3");
+	m_Button1->SetSound(Button_Sound_State::Click, "UI", "ButtonClick", "TeemoStartClicck.mp3");
+
+	m_Button1->SetClickCallback<CMainWidget>(this, &CMainWidget::Button1Click);
+
+	m_Button1Text = CreateWidget<CText>("Text");
+
+	m_Button1Text->SetText(TEXT("Button1"));
+	m_Button1Text->SetPos(50.f, 200.f);
+	m_Button1Text->SetSize(100.f, 40.f);
+	m_Button1Text->SetZOrder(1);
+	m_Button1Text->SetColor(1.f, 0.f, 0.f);
+	//m_Button1Text->SetOpacity(0.5f);
+	m_Button1Text->SetAlignH(TEXT_ALIGN_H::Center);
+	m_Button1Text->SetShadowEnable(true);
+	m_Button1Text->SetShadowOffset(2.f, 2.f);
+
     return true;
 }
 
@@ -56,7 +91,16 @@ void CMainWidget::Render()
     CWidgetWindow::Render();
 }
 
+CMainWidget* CMainWidget::Clone()
+{
+	return DBG_NEW CMainWidget(*this);
+}
+
 void CMainWidget::StartButtonClick()
 {
 	//MessageBox(0, TEXT("Click"), TEXT("Click"), MB_OK);
+}
+
+void CMainWidget::Button1Click()
+{
 }

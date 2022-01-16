@@ -1,19 +1,6 @@
 #pragma once
 
 #include "Widget.h"
-#include "../Resource/Texture/Texture.h"
-
-struct ButtonStateInfo
-{
-	CSharedPtr<CTexture>	Texture;
-	Vector4			Tint;
-	std::vector<AnimationFrameData> vecFrameData;
-
-	ButtonStateInfo()
-	{
-		Tint = Vector4::White;
-	}
-};
 
 class CButton :
 	public CWidget
@@ -27,7 +14,7 @@ protected:
 
 protected:
 	Button_State	m_State;
-	ButtonStateInfo	m_Info[(int)Button_State::Max];
+	WidgetImageInfo	m_Info[(int)Button_State::Max];
 	std::function<void()>	m_ClickCallback;
 	CSharedPtr<class CSound>	m_Sound[(int)Button_Sound_State::Max];
 	bool			m_MouseOnSound;
@@ -66,6 +53,7 @@ public:
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
 	virtual void Render();
+	virtual CButton* Clone();
 
 public:
 	template <typename T>

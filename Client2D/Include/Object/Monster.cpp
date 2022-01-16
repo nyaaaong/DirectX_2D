@@ -3,6 +3,7 @@
 #include "Scene/Scene.h"
 #include "Resource/Material/Material.h"
 #include "MonsterAnimation.h"
+#include "../Widget/SimpleHUD.h"
 
 CMonster::CMonster()	:
 	m_HP(50),
@@ -16,6 +17,7 @@ CMonster::CMonster(const CMonster& obj) :
 {
 	m_Sprite = (CSpriteComponent*)FindComponent("PlayerSprite");
 	m_Body = (CColliderCircle*)FindComponent("Body");
+	m_SimpleHUDWidget = (CWidgetComponent*)FindComponent("SimpleHUD");
 
 	m_HP = obj.m_HP;
 	m_HPMax = obj.m_HPMax;
@@ -38,9 +40,20 @@ bool CMonster::Init()
 	m_Sprite = CreateComponent<CSpriteComponent>("PlayerSprite");
 	m_Body = CreateComponent<CColliderCircle>("Body");
 
+	m_SimpleHUDWidget = CreateComponent<CWidgetComponent>("SimpleHUD");
+
+	m_SimpleHUD = m_SimpleHUDWidget->CreateWidgetWindow<CSimpleHUD>("SimpleHUDWidget");
+
 	SetRootComponent(m_Sprite);
 
 	m_Sprite->AddChild(m_Body);
+	m_Sprite->AddChild(m_SimpleHUDWidget);
+
+	m_SimpleHUDWidget->SetRelativePos(-50.f, 50.f, 0.f);
+
+	m_SimpleHUD->SetText(TEXT("¶ì¸ð"));
+	m_SimpleHUD->SetHPPercent(0.5f);
+	m_SimpleHUD->SetHPDir(ProgressBar_Dir::BottomToTop);
 
 	m_Body->SetCollisionProfile("Monster");
 

@@ -65,6 +65,18 @@ public:
 		return m_TextCount;
 	}
 
+	virtual void SetSize(const Vector2& Size)
+	{
+		CWidget::SetSize(Size);
+		CreateTextLayout();
+	}
+
+	virtual void SetSize(float x, float y)
+	{
+		CWidget::SetSize(x, y);
+		CreateTextLayout();
+	}
+
 public:
 	void SetText(const TCHAR* Text)
 	{
@@ -76,7 +88,7 @@ public:
 
 			SAFE_DELETE_ARRAY(m_Text);
 
-			m_Text = new TCHAR[m_TextCapacity];
+			m_Text = DBG_NEW TCHAR[m_TextCapacity];
 
 			memset(m_Text, 0, sizeof(TCHAR) * m_TextCapacity);
 		}
@@ -95,7 +107,7 @@ public:
 		{
 			m_TextCapacity = Length + 1;
 
-			TCHAR* NewText = new TCHAR[m_TextCapacity];
+			TCHAR* NewText = DBG_NEW TCHAR[m_TextCapacity];
 
 			memset(NewText, 0, sizeof(TCHAR) * m_TextCapacity);
 
@@ -169,5 +181,6 @@ public:
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
 	virtual void Render();
+	virtual CText* Clone();
 };
 

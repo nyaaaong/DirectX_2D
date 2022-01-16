@@ -7,6 +7,7 @@
 #include "BulletCamera.h"
 #include "Scene/Scene.h"
 #include "Resource/Material/Material.h"
+#include "../Widget/SimpleHUD.h"
 
 CPlayer2D::CPlayer2D()	:
 	m_EnableInput(true),
@@ -35,6 +36,8 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_Child4Sprite = (CSpriteComponent*)FindComponent("PlayerChild4Sprite");
 
 	m_Body = (CColliderBox2D*)FindComponent("Body");
+	m_Camera = (CCameraComponent*)FindComponent("Camera");
+	m_SimpleHUDWidget = (CWidgetComponent*)FindComponent("SimpleHUD");
 
 	m_Opacity = obj.m_Opacity;
 	m_Dodge = false;
@@ -64,6 +67,10 @@ bool CPlayer2D::Init()
 
 	m_Camera = CreateComponent<CCameraComponent>("Camera");
 
+	m_SimpleHUDWidget = CreateComponent<CWidgetComponent>("SimpleHUD");
+
+	m_SimpleHUDWidget->CreateWidgetWindow<CSimpleHUD>("SimpleHUDWidget");
+
 	SetRootComponent(m_Sprite);
 
 	m_Body->SetCollisionProfile("Player");
@@ -77,6 +84,9 @@ bool CPlayer2D::Init()
 	m_Sprite->AddChild(m_ChildRightSprite);
 	m_Sprite->AddChild(m_Muzzle);
 	m_Sprite->AddChild(m_ChildRoot);
+	m_Sprite->AddChild(m_SimpleHUDWidget);
+
+	m_SimpleHUDWidget->SetRelativePos(-50.f, 50.f, 0.f);
 
 	m_Sprite->SetTransparency(true);
 
@@ -105,10 +115,6 @@ bool CPlayer2D::Init()
 
 	m_ChildRightMuzzle->SetRelativePos(0.f, 100.f, 0.f);
 	m_ChildRightMuzzle->SetInheritRotZ(true);
-
-	m_Sprite->SetRelativeScale(42.f, 66.f, 1.f);
-	m_Sprite->SetRelativePos(100.f, 50.f, 0.f);
-	m_Sprite->SetPivot(0.5f, 1.f, 0.f);
 
 	m_ChildRightSprite->SetRelativeScale(50.f, 50.f, 1.f);
 	m_ChildRightSprite->SetInheritScale(false);
@@ -145,6 +151,10 @@ bool CPlayer2D::Init()
 	m_Child4Sprite->SetRelativePos(0.f, -200.f, 0.f);
 	m_Child4Sprite->SetPivot(0.5f, 0.5f, 0.f);
 	m_Child4Sprite->SetInheritRotZ(true);
+
+	m_Sprite->SetRelativeScale(100.f, 100.f, 1.f);
+	m_Sprite->SetRelativePos(100.f, 50.f, 0.f);
+	m_Sprite->SetPivot(0.5f, 0.5f, 0.f);
 
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveUp", KeyState_Push, this, &CPlayer2D::MoveUp);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveDown", KeyState_Push, this, &CPlayer2D::MoveDown);
