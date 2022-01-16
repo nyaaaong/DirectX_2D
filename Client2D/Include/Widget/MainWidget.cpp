@@ -73,6 +73,17 @@ bool CMainWidget::Init()
 	m_Button1Text->SetShadowEnable(true);
 	m_Button1Text->SetShadowOffset(2.f, 2.f);
 
+	m_SliderBar = CreateWidget<CSliderBar>("SliderBar");
+	m_SliderBar->SetTexture("SliderBar", TEXT("SliderBar.png"));
+	m_SliderBar->SetPos(400.f, 100.f);
+	m_SliderBar->SetSize(760.f, 10.f);
+
+	m_Slider = CreateWidget<CSlider>("Slider");
+	m_Slider->SetTexture("Slider", TEXT("Slider.png"));
+	m_Slider->SetSize(76.f, 28.f);
+	m_Slider->SetSliderInfo<CSliderBar>(m_SliderBar);
+	m_Slider->SetSliderCallback<CMainWidget>(this, &CMainWidget::SetScale);
+
     return true;
 }
 
@@ -103,4 +114,9 @@ void CMainWidget::StartButtonClick()
 
 void CMainWidget::Button1Click()
 {
+}
+
+void CMainWidget::SetScale(float val)
+{
+
 }

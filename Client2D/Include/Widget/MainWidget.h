@@ -3,6 +3,9 @@
 #include "Widget/WidgetWindow.h"
 #include "Widget/Button.h"
 #include "Widget/Text.h"
+#include "Widget/SliderBar.h"
+#include "Widget/Slider.h"
+#include "Widget/Image.h"
 
 class CMainWidget :
     public CWidgetWindow
@@ -20,6 +23,11 @@ private:
 	CSharedPtr<CButton>	m_Button1;
 	CSharedPtr<CText>	m_Button1Text;
 
+	CSharedPtr<CSliderBar>	m_SliderBar;
+	CSharedPtr<CSlider>		m_Slider;
+
+	CSharedPtr<CImage>		m_Image;
+
 public:
 	virtual void Start();
 	virtual bool Init();
@@ -31,5 +39,8 @@ public:
 public:
 	void StartButtonClick();
 	void Button1Click();
+
+private:
+	void SetScale(float val);
 };
 
