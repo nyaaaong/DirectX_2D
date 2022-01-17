@@ -44,15 +44,15 @@ public:
 	virtual CImage* Clone();
 
 public:
+	void SetClickCallback(void (*Func)())
+	{
+		m_ClickCallback = std::bind(Func);
+	}
+public:
 	template <typename T>
 	void SetClickCallback(T* Obj, void (T::* Func)())
 	{
 		m_ClickCallback = std::bind(Func, Obj);
-	}
-
-	void SetClickCallback(void (*Func)())
-	{
-		m_ClickCallback = std::bind(Func);
 	}
 };
 

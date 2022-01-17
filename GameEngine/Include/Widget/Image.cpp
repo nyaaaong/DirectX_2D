@@ -5,7 +5,8 @@
 #include "../Scene/Scene.h"
 #include "../Scene/SceneResource.h"
 
-CImage::CImage()
+CImage::CImage()	:
+	m_ClickCallback(nullptr)
 {
 }
 

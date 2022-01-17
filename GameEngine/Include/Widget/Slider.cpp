@@ -132,24 +132,24 @@ void CSlider::Update(float DeltaTime)
 			m_CheckSliderInClick = false;
 
 			m_PrevMousePosX = m_CurMousePosX = 0.f;
-
-			if (m_SliderCallback)
-				m_SliderCallback(m_Value);
 		}
 
 		else
 		{
 			m_CurMousePosX = CInput::GetInst()->GetMousePos().x;
 
-			float	Value = m_CurMousePosX - m_Gap;
+			m_Value = m_CurMousePosX - m_Gap;
 
-			if (Value < m_SliderBarMin)
-				Value = m_SliderBarMin;
+			if (m_Value < m_SliderBarMin)
+				m_Value = m_SliderBarMin;
 
-			else if (Value > m_SliderBarMax)
-				Value = m_SliderBarMax;
+			else if (m_Value > m_SliderBarMax)
+				m_Value = m_SliderBarMax;
 
-			m_Pos.x = Value;
+			m_Pos.x = m_Value;
+
+			if (m_SliderCallback)
+				m_SliderCallback(m_Value - m_SliderBarMin);
 		}
 	}
 }

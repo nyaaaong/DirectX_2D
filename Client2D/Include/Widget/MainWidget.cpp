@@ -1,4 +1,6 @@
 #include "MainWidget.h"
+#include "Animation/AnimationSequence2DInstance.h"
+#include "Scene/SceneManager.h"
 
 CMainWidget::CMainWidget()
 {
@@ -10,6 +12,10 @@ CMainWidget::CMainWidget(const CMainWidget& window) :
 	m_Button = FindWidget<CButton>("Button");
 	m_Button1 = FindWidget<CButton>("Button1");
 	m_Button1Text = FindWidget<CText>("Text");
+
+	m_SliderBar = CreateWidget<CSliderBar>("SliderBar");
+	m_Slider = CreateWidget<CSlider>("Slider");
+	m_Image = CreateWidget<CImage>("Image");
 }
 
 
@@ -84,6 +90,25 @@ bool CMainWidget::Init()
 	m_Slider->SetSliderInfo<CSliderBar>(m_SliderBar);
 	m_Slider->SetSliderCallback<CMainWidget>(this, &CMainWidget::SetScale);
 
+	m_Image = CreateWidget<CImage>("Image");
+	m_Image->SetTexture("Image", TEXT("Teemo.jpg"));
+	/*
+		m_AnimInstance->Load(File);
+
+		fclose(File);
+
+		CAnimationSequence2DData* Anim = m_AnimInstance->GetCurrentAnimation();
+
+		if (!Anim)
+			return;
+
+		AddFrameListBoxData(Anim->GetName());
+
+		m_SpriteFrame->SetTexture(m_SpriteObject->GetSpriteComponent()->GetMaterial()->GetTexture());
+
+		RefreshInput();
+	*/
+
     return true;
 }
 
@@ -118,5 +143,6 @@ void CMainWidget::Button1Click()
 
 void CMainWidget::SetScale(float val)
 {
-
+	if (m_Image)
+		m_Image->SetPos(Vector2(val, val));
 }
