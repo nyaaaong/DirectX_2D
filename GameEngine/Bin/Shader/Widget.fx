@@ -23,7 +23,11 @@ cbuffer WidgetCBuffer : register(b11)
 	float4	g_WidgetTint;
 	matrix	g_matWidgetWP;
 	int		g_WidgetUseTexture;
-	float3	g_WidgetEmpty;
+	int		g_WidgetAnimType;
+	float2	g_WidgetAnimStartUV;
+	float2	g_WidgetAnimEndUV;
+	int		g_WidgetAnimEnable;
+	int		g_WidgetEmpty;
 };
 
 cbuffer ProgressBarCBuffer : register(b12)
@@ -33,12 +37,36 @@ cbuffer ProgressBarCBuffer : register(b12)
 	float2	g_ProgressBarEmpty;
 };
 
+float2 ComputeWidgetAnimationUV(float2 UV)
+{
+	float2	result = (float2)0.f;
+
+	if (UV.x == 0.f)
+		result.x = g_WidgetAnimStartUV.x;
+
+	else
+		result.x = g_WidgetAnimEndUV.x;
+
+	if (UV.y == 0.f)
+		result.y = g_WidgetAnimStartUV.y;
+
+	else
+		result.y = g_WidgetAnimEndUV.y;
+
+	return result;
+}
+
 VertexUVOutput WidgetVS(VertexUV input)
 {
 	VertexUVOutput	output = (VertexUVOutput)0;
 
 	output.Pos = mul(float4(input.Pos, 1.f), g_matWidgetWP);
-	output.UV = input.UV;
+
+	if (g_WidgetAnimEnable == 0)
+		output.UV = input.UV;
+
+	else
+		output.UV = ComputeWidgetAnimationUV(input.UV);
 
 	return output;
 }
@@ -79,7 +107,7 @@ VertexUVOutput ProgressBarVS(VertexUV input)
 	if (g_ProgressBarDir == PROGRESSBAR_TOPTOBOTTOM)
 	{
 		if (Pos.y == 1.f)
-			Pos.y = 1.f - g_ProgressBarPercent;
+			Pos.y = g_ProgressBarPercent;
 
 		if (UV.y == 0.f)
 			UV.y = g_ProgressBarPercent;
@@ -89,7 +117,7 @@ VertexUVOutput ProgressBarVS(VertexUV input)
 	if (g_ProgressBarDir == PROGRESSBAR_BOTTOMTOTOP)
 	{
 		if (Pos.y == 0.f)
-			Pos.y = g_ProgressBarPercent;
+			Pos.y = 1.f - g_ProgressBarPercent;
 
 		if (UV.y == 1.f)
 			UV.y = 1.f - g_ProgressBarPercent;

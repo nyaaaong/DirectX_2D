@@ -9,9 +9,20 @@ struct WidgetImageInfo
 	Vector4			Tint;
 	std::vector<AnimationFrameData> vecFrameData;
 
+	int		Frame;		// 현재 애니메이션 프레임
+	float	Time;			// 애니메이션 동작 시간
+	float	FrameTime;	// 1프레임당 시간
+	float	PlayTime;
+	float	PlayScale;		// 재생 비율
+
 	WidgetImageInfo()
 	{
 		Tint = Vector4::White;
+		Frame = 0;
+		Time = 0.f;
+		FrameTime = 0.f;
+		PlayTime = 1.f;
+		PlayScale = 1.f;
 	}
 };
 

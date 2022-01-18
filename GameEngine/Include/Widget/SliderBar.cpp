@@ -20,12 +20,20 @@ CSliderBar::~CSliderBar()
 
 bool CSliderBar::SetTexture(const std::string& Name, const TCHAR* FileName, const std::string& PathName)
 {
-	CSceneResource* Resource = m_Owner->GetViewport()->GetScene()->GetResource();
+	if (m_Owner->GetViewport())
+	{
+		if (!m_Owner->GetViewport()->GetScene()->GetResource()->LoadTexture(Name, FileName, PathName))
+			return false;
 
-	if (!Resource->LoadTexture(Name, FileName, PathName))
-		return false;
+		m_Info.Texture = m_Owner->GetViewport()->GetScene()->GetResource()->FindTexture(Name);
+	}
 
-	m_Info.Texture = Resource->FindTexture(Name);
+	else
+	{
+		CResourceManager::GetInst()->LoadTexture(Name, FileName, PathName);
+
+		m_Info.Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
 
 	SetUseTexture(true);
 
@@ -34,12 +42,64 @@ bool CSliderBar::SetTexture(const std::string& Name, const TCHAR* FileName, cons
 
 bool CSliderBar::SetTextureFullPath(const std::string& Name, const TCHAR* FullPath)
 {
-	CSceneResource* Resource = m_Owner->GetViewport()->GetScene()->GetResource();
+	if (m_Owner->GetViewport())
+	{
+		if (!m_Owner->GetViewport()->GetScene()->GetResource()->LoadTextureFullPath(Name, FullPath))
+			return false;
 
-	if (!Resource->LoadTextureFullPath(Name, FullPath))
-		return false;
+		m_Info.Texture = m_Owner->GetViewport()->GetScene()->GetResource()->FindTexture(Name);
+	}
 
-	m_Info.Texture = Resource->FindTexture(Name);
+	else
+	{
+		CResourceManager::GetInst()->LoadTextureFullPath(Name, FullPath);
+
+		m_Info.Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
+
+	SetUseTexture(true);
+
+	return true;
+}
+
+bool CSliderBar::SetTexture(const std::string& Name, const std::vector<TCHAR*>& vecFileName, const std::string& PathName)
+{
+	if (m_Owner->GetViewport())
+	{
+		if (!m_Owner->GetViewport()->GetScene()->GetResource()->LoadTexture(Name, vecFileName, PathName))
+			return false;
+
+		m_Info.Texture = m_Owner->GetViewport()->GetScene()->GetResource()->FindTexture(Name);
+	}
+
+	else
+	{
+		CResourceManager::GetInst()->LoadTexture(Name, vecFileName, PathName);
+
+		m_Info.Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
+
+	SetUseTexture(true);
+
+	return true;
+}
+
+bool CSliderBar::SetTextureFullPath(const std::string& Name, const std::vector<TCHAR*>& vecFullPath)
+{
+	if (m_Owner->GetViewport())
+	{
+		if (!m_Owner->GetViewport()->GetScene()->GetResource()->LoadTextureFullPath(Name, vecFullPath))
+			return false;
+
+		m_Info.Texture = m_Owner->GetViewport()->GetScene()->GetResource()->FindTexture(Name);
+	}
+
+	else
+	{
+		CResourceManager::GetInst()->LoadTextureFullPath(Name, vecFullPath);
+
+		m_Info.Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
 
 	SetUseTexture(true);
 
@@ -63,6 +123,16 @@ void CSliderBar::AddFrameData(const Vector2& Start, const Vector2& Size)
 	Data.Size = Size;
 
 	m_Info.vecFrameData.push_back(Data);
+}
+
+void CSliderBar::SetPlayTime(float PlayTime)
+{
+	m_Info.PlayTime = PlayTime;
+}
+
+void CSliderBar::SetPlayScale(float PlayScale)
+{
+	m_Info.PlayScale = PlayScale;
 }
 
 void CSliderBar::Render()

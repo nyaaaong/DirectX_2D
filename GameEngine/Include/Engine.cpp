@@ -22,7 +22,8 @@ CEngine::CEngine()	:
 	m_RS{},
 	m_Start(false),
 	m_Play(true),
-	m_Space(Engine_Space::Space2D)
+	m_Space(Engine_Space::Space2D),
+	m_MouseState(Mouse_State::Normal)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(172854);

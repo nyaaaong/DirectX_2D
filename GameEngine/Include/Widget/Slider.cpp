@@ -40,12 +40,20 @@ CSlider::~CSlider()
 
 bool CSlider::SetTexture(const std::string& Name, const TCHAR* FileName, const std::string& PathName)
 {
-	CSceneResource* Resource = m_Owner->GetViewport()->GetScene()->GetResource();
+	if (m_Owner->GetViewport())
+	{
+		if (!m_Owner->GetViewport()->GetScene()->GetResource()->LoadTexture(Name, FileName, PathName))
+			return false;
 
-	if (!Resource->LoadTexture(Name, FileName, PathName))
-		return false;
+		m_Info.Texture = m_Owner->GetViewport()->GetScene()->GetResource()->FindTexture(Name);
+	}
 
-	m_Info.Texture = Resource->FindTexture(Name);
+	else
+	{
+		CResourceManager::GetInst()->LoadTexture(Name, FileName, PathName);
+
+		m_Info.Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
 
 	SetUseTexture(true);
 
@@ -54,12 +62,64 @@ bool CSlider::SetTexture(const std::string& Name, const TCHAR* FileName, const s
 
 bool CSlider::SetTextureFullPath(const std::string& Name, const TCHAR* FullPath)
 {
-	CSceneResource* Resource = m_Owner->GetViewport()->GetScene()->GetResource();
+	if (m_Owner->GetViewport())
+	{
+		if (!m_Owner->GetViewport()->GetScene()->GetResource()->LoadTextureFullPath(Name, FullPath))
+			return false;
 
-	if (!Resource->LoadTextureFullPath(Name, FullPath))
-		return false;
+		m_Info.Texture = m_Owner->GetViewport()->GetScene()->GetResource()->FindTexture(Name);
+	}
 
-	m_Info.Texture = Resource->FindTexture(Name);
+	else
+	{
+		CResourceManager::GetInst()->LoadTextureFullPath(Name, FullPath);
+
+		m_Info.Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
+
+	SetUseTexture(true);
+
+	return true;
+}
+
+bool CSlider::SetTexture(const std::string& Name, const std::vector<TCHAR*>& vecFileName, const std::string& PathName)
+{
+	if (m_Owner->GetViewport())
+	{
+		if (!m_Owner->GetViewport()->GetScene()->GetResource()->LoadTexture(Name, vecFileName, PathName))
+			return false;
+
+		m_Info.Texture = m_Owner->GetViewport()->GetScene()->GetResource()->FindTexture(Name);
+	}
+
+	else
+	{
+		CResourceManager::GetInst()->LoadTexture(Name, vecFileName, PathName);
+
+		m_Info.Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
+
+	SetUseTexture(true);
+
+	return true;
+}
+
+bool CSlider::SetTextureFullPath(const std::string& Name, const std::vector<TCHAR*>& vecFullPath)
+{
+	if (m_Owner->GetViewport())
+	{
+		if (!m_Owner->GetViewport()->GetScene()->GetResource()->LoadTextureFullPath(Name, vecFullPath))
+			return false;
+
+		m_Info.Texture = m_Owner->GetViewport()->GetScene()->GetResource()->FindTexture(Name);
+	}
+
+	else
+	{
+		CResourceManager::GetInst()->LoadTextureFullPath(Name, vecFullPath);
+
+		m_Info.Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
 
 	SetUseTexture(true);
 
@@ -85,17 +145,14 @@ void CSlider::AddFrameData(const Vector2& Start, const Vector2& Size)
 	m_Info.vecFrameData.push_back(Data);
 }
 
-void CSlider::Start()
+void CSlider::SetPlayTime(float PlayTime)
 {
-	CWidget::Start();
+	m_Info.PlayTime = PlayTime;
 }
 
-bool CSlider::Init()
+void CSlider::SetPlayScale(float PlayScale)
 {
-	if (!CWidget::Init())
-		return false;
-
-	return true;
+	m_Info.PlayScale = PlayScale;
 }
 
 void CSlider::Update(float DeltaTime)
@@ -152,11 +209,6 @@ void CSlider::Update(float DeltaTime)
 				m_SliderCallback(m_Value - m_SliderBarMin);
 		}
 	}
-}
-
-void CSlider::PostUpdate(float DeltaTime)
-{
-	CWidget::PostUpdate(DeltaTime);
 }
 
 void CSlider::Render()

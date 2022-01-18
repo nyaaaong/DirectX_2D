@@ -43,6 +43,8 @@ public:
 	void SetTextureTint(Button_State State, const Vector4& Tint);
 	void SetTextureTint(Button_State State, unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 	void AddFrameData(Button_State State, const Vector2& Start, const Vector2& Size);
+	void SetPlayTime(Button_State State, float PlayTime);
+	void SetPlayScale(Button_State State, float PlayScale);
 	void SetSound(Button_Sound_State State, const std::string& Name);
 	void SetSound(Button_Sound_State State, class CSound* Sound);
 	void SetSound(Button_Sound_State State, const std::string& ChannelGroupName, const std::string& Name, const char* FileName, const std::string& PathName = SOUND_PATH);

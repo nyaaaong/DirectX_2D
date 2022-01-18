@@ -5,6 +5,8 @@
 #include "../Scene/Scene.h"
 #include "../Scene/SceneResource.h"
 #include "../Input.h"
+#include "../Resource/ResourceManager.h"
+#include "../Scene/SceneManager.h"
 
 CButton::CButton()	:
 	m_State(Button_State::Normal),
@@ -30,12 +32,21 @@ CButton::~CButton()
 
 bool CButton::SetTexture(Button_State State, const std::string& Name, const TCHAR* FileName, const std::string& PathName)
 {
-	CSceneResource* Resource = m_Owner->GetViewport()->GetScene()->GetResource();
+	if (m_Owner->GetViewport())
+	{
+		if (!m_Owner->GetViewport()->GetScene()->GetResource()->LoadTexture(Name, FileName, PathName))
+			return false;
 
-	if (!Resource->LoadTexture(Name, FileName, PathName))
-		return false;
+		m_Info[(int)State].Texture = m_Owner->GetViewport()->GetScene()->GetResource()->FindTexture(Name);
+	}
 
-	m_Info[(int)State].Texture = Resource->FindTexture(Name);
+	else
+	{
+		if (!CResourceManager::GetInst()->LoadTexture(Name, FileName, PathName))
+			return false;
+
+		m_Info[(int)State].Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
 
 	SetUseTexture(true);
 
@@ -44,12 +55,21 @@ bool CButton::SetTexture(Button_State State, const std::string& Name, const TCHA
 
 bool CButton::SetTextureFullPath(Button_State State, const std::string& Name,  const TCHAR* FullPath)
 {
-	CSceneResource* Resource = m_Owner->GetViewport()->GetScene()->GetResource();
+	if (m_Owner->GetViewport())
+	{
+		if (!m_Owner->GetViewport()->GetScene()->GetResource()->LoadTextureFullPath(Name, FullPath))
+			return false;
 
-	if (!Resource->LoadTextureFullPath(Name, FullPath))
-		return false;
+		m_Info[(int)State].Texture = m_Owner->GetViewport()->GetScene()->GetResource()->FindTexture(Name);
+	}
 
-	m_Info[(int)State].Texture = Resource->FindTexture(Name);
+	else
+	{
+		if (!CResourceManager::GetInst()->LoadTextureFullPath(Name, FullPath))
+			return false;
+
+		m_Info[(int)State].Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
 
 	SetUseTexture(true);
 
@@ -75,9 +95,23 @@ void CButton::AddFrameData(Button_State State, const Vector2& Start, const Vecto
 	m_Info[(int)State].vecFrameData.push_back(Data);
 }
 
+void CButton::SetPlayTime(Button_State State, float PlayTime)
+{
+	m_Info[(int)State].PlayTime = PlayTime;
+}
+
+void CButton::SetPlayScale(Button_State State, float PlayScale)
+{
+	m_Info[(int)State].PlayScale = PlayScale;
+}
+
 void CButton::SetSound(Button_Sound_State State, const std::string& Name)
 {
-	m_Sound[(int)State] = m_Owner->GetViewport()->GetScene()->GetResource()->FindSound(Name);
+	if (m_Owner->GetViewport())
+		m_Sound[(int)State] = m_Owner->GetViewport()->GetScene()->GetResource()->FindSound(Name);
+
+	else
+		m_Sound[(int)State] = CResourceManager::GetInst()->FindSound(Name);
 }
 
 void CButton::SetSound(Button_Sound_State State, CSound* Sound)
@@ -85,17 +119,31 @@ void CButton::SetSound(Button_Sound_State State, CSound* Sound)
 	m_Sound[(int)State] = Sound;
 }
 
-void CButton::SetSound(Button_Sound_State State, const std::string& ChannelGroupName,
-	const std::string& Name, const char* FileName, const std::string& PathName)
+void CButton::SetSound(Button_Sound_State State, const std::string& ChannelGroupName, const std::string& Name, const char* FileName, const std::string& PathName)
 {
-	m_Owner->GetViewport()->GetScene()->GetResource()->LoadSound(ChannelGroupName, false,
-		Name, FileName, PathName);
-	m_Sound[(int)State] = m_Owner->GetViewport()->GetScene()->GetResource()->FindSound(Name);
+	if (m_Owner->GetViewport())
+	{
+		m_Owner->GetViewport()->GetScene()->GetResource()->LoadSound(ChannelGroupName, false, Name, FileName, PathName);
+
+		m_Sound[(int)State] = m_Owner->GetViewport()->GetScene()->GetResource()->FindSound(Name);
+	}
+
+	else
+	{
+		CResourceManager::GetInst()->LoadSound(ChannelGroupName, false, Name, FileName, PathName);
+		m_Sound[(int)State] = CResourceManager::GetInst()->FindSound(Name);
+	}
 }
 
 void CButton::Start()
 {
 	CWidget::Start();
+
+	for (int i = 0; i < (int)Button_State::Max; ++i)
+	{
+		if (!m_Info[i].vecFrameData.empty())
+			m_Info[i].FrameTime = m_Info[i].PlayTime / m_Info[i].vecFrameData.size();
+	}
 }
 
 bool CButton::Init()

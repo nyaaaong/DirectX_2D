@@ -71,6 +71,9 @@
     <ClCompile Include="Widget\SimpleHUD.cpp">
       <Filter>02. UI</Filter>
     </ClCompile>
+    <ClCompile Include="Widget\MouseNormal.cpp">
+      <Filter>02. UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene\MainScene.h">
@@ -110,6 +113,9 @@
       <Filter>02. UI</Filter>
     </ClInclude>
     <ClInclude Include="Widget\SimpleHUD.h">
+      <Filter>02. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\MouseNormal.h">
       <Filter>02. UI</Filter>
     </ClInclude>
   </ItemGroup>

@@ -54,8 +54,7 @@ bool CTextureManager::Init()
 	return true;
 }
 
-bool CTextureManager::LoadTexture(const std::string& Name, const TCHAR* FileName,
-	const std::string& PathName)
+bool CTextureManager::LoadTexture(const std::string& Name, const TCHAR* FileName, const std::string& PathName)
 {
 	CTexture* Texture = FindTexture(Name);
 
@@ -95,6 +94,46 @@ bool CTextureManager::LoadTextureFullPath(const std::string& Name, const TCHAR* 
 	return true;
 }
 
+bool CTextureManager::LoadTexture(const std::string& Name, const std::vector<TCHAR*>& vecFileName, const std::string& PathName)
+{
+	CTexture* Texture = FindTexture(Name);
+
+	if (Texture)
+		return true;
+
+	Texture = DBG_NEW CTexture;
+
+	if (!Texture->LoadTexture(Name, vecFileName, PathName))
+	{
+		SAFE_RELEASE(Texture);
+		return false;
+	}
+
+	m_mapTexture.insert(std::make_pair(Name, Texture));
+
+	return true;
+}
+
+bool CTextureManager::LoadTextureFullPath(const std::string& Name, const std::vector<TCHAR*>& vecFullPath)
+{
+	CTexture* Texture = FindTexture(Name);
+
+	if (Texture)
+		return true;
+
+	Texture = DBG_NEW CTexture;
+
+	if (!Texture->LoadTextureFullPath(Name, vecFullPath))
+	{
+		SAFE_RELEASE(Texture);
+		return false;
+	}
+
+	m_mapTexture.insert(std::make_pair(Name, Texture));
+
+	return true;
+}
+
 CTexture* CTextureManager::FindTexture(const std::string& Name)
 {
 	auto	iter = m_mapTexture.find(Name);
@@ -117,10 +156,7 @@ void CTextureManager::ReleaseTexture(const std::string& Name)
 }
 
 
-bool CTextureManager::CreateSampler(const std::string& Name,
-	D3D11_FILTER Filter, D3D11_TEXTURE_ADDRESS_MODE AddressU,
-	D3D11_TEXTURE_ADDRESS_MODE AddressV, D3D11_TEXTURE_ADDRESS_MODE AddressW,
-	float BorderColor[4])
+bool CTextureManager::CreateSampler(const std::string& Name, D3D11_FILTER Filter, D3D11_TEXTURE_ADDRESS_MODE AddressU, D3D11_TEXTURE_ADDRESS_MODE AddressV, D3D11_TEXTURE_ADDRESS_MODE AddressW, float BorderColor[4])
 {
 	ID3D11SamplerState* Sampler = FindSampler(Name);
 
@@ -158,8 +194,7 @@ ID3D11SamplerState* CTextureManager::FindSampler(const std::string& Name)
 	return iter->second;
 }
 
-void CTextureManager::SetSampler(const std::string& Name, int Register,
-	int ShaderType)
+void CTextureManager::SetSampler(const std::string& Name, int Register, int ShaderType)
 {
 	ID3D11SamplerState* Sampler = FindSampler(Name);
 

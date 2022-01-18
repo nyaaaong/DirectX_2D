@@ -91,8 +91,7 @@ void CResourceManager::ReleaseShader(const std::string& Name)
 	m_ShaderManager->ReleaseShader(Name);
 }
 
-bool CResourceManager::CreateConstantBuffer(const std::string& Name, int Size, int Register,
-	int ConstantBufferShaderType)
+bool CResourceManager::CreateConstantBuffer(const std::string& Name, int Size, int Register, int ConstantBufferShaderType)
 {
 	return m_ShaderManager->CreateConstantBuffer(Name, Size, Register, ConstantBufferShaderType);
 }
@@ -122,6 +121,15 @@ bool CResourceManager::LoadTextureFullPath(const std::string& Name, const TCHAR*
 	return m_TextureManager->LoadTextureFullPath(Name, FullPath);
 }
 
+bool CResourceManager::LoadTexture(const std::string& Name, const std::vector<TCHAR*>& vecFileName, const std::string& PathName)
+{
+	return m_TextureManager->LoadTexture(Name, vecFileName, PathName);
+}
+
+bool CResourceManager::LoadTextureFullPath(const std::string& Name, const std::vector<TCHAR*>& vecFullPath)
+{
+	return m_TextureManager->LoadTextureFullPath(Name, vecFullPath);
+}
 
 CTexture* CResourceManager::FindTexture(const std::string& Name)
 {
@@ -133,32 +141,29 @@ void CResourceManager::ReleaseTexture(const std::string& Name)
 	m_TextureManager->ReleaseTexture(Name);
 }
 
-bool CResourceManager::CreateAnimationSequence2D(const std::string& Name,
-	const std::string& TextureName, const TCHAR* FileName, const std::string& PathName)
+bool CResourceManager::CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, const std::string& PathName)
 {
 	return m_AnimationManager->CreateAnimationSequence2D(Name, TextureName, FileName, PathName);
 }
 
-bool CResourceManager::CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, const Vector2& Start, const Vector2& Size,
-	int CountX, int InterX, int CountY, int InterY, const std::string& PathName)
+bool CResourceManager::CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, const Vector2& Start, const Vector2& Size, int CountX, int InterX, int CountY, int InterY, 
+	const std::string& PathName)
 {
 	return m_AnimationManager->CreateAnimationSequence2D(Name, TextureName, FileName, Start, Size, CountX, InterX, CountY, InterY, PathName);
 }
 
-bool CResourceManager::CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, float StartX, float StartY, float Width, float Height,
-	int CountX, int InterX, int CountY, int InterY, const std::string& PathName)
+bool CResourceManager::CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, float StartX, float StartY, float Width, float Height, int CountX, int InterX, int CountY, int InterY, 
+	const std::string& PathName)
 {
 	return m_AnimationManager->CreateAnimationSequence2D(Name, TextureName, FileName, StartX, StartY, Width, Height, CountX, InterX, CountY, InterY, PathName);
 }
 
-void CResourceManager::AddAnimationSequence2DFrame(const std::string& Name, const Vector2& Start,
-	const Vector2& Size)
+void CResourceManager::AddAnimationSequence2DFrame(const std::string& Name, const Vector2& Start, const Vector2& Size)
 {
 	m_AnimationManager->AddFrame(Name, Start, Size);
 }
 
-void CResourceManager::AddAnimationSequence2DFrame(const std::string& Name, float StartX,
-	float StartY, float Width, float Height)
+void CResourceManager::AddAnimationSequence2DFrame(const std::string& Name, float StartX, float StartY, float Width, float Height)
 {
 	m_AnimationManager->AddFrame(Name, StartX, StartY, Width, Height);
 }
@@ -215,8 +220,7 @@ bool CResourceManager::LoadSequence2D(std::string& resultName, const char* FileN
 	return m_AnimationManager->LoadSequence(resultName, FileName, PathName, Scene);
 }
 
-bool CResourceManager::LoadSound(const std::string& ChannelGroupName, bool Loop, const std::string& Name,
-	const char* FileName, const std::string& PathName)
+bool CResourceManager::LoadSound(const std::string& ChannelGroupName, bool Loop, const std::string& Name, const char* FileName, const std::string& PathName)
 {
 	return m_SoundManager->LoadSound(ChannelGroupName, Loop, Name, FileName, PathName);
 }
@@ -277,8 +281,7 @@ bool CResourceManager::CreateFontFile(const std::string& Name, const TCHAR* File
 	return m_FontManager->CreateFontFile(Name, FileName, PathName);
 }
 
-bool CResourceManager::LoadFont(const std::string& Name, const TCHAR* FontName,
-	int Weight, float FontSize, const TCHAR* LocalName, int Stretch)
+bool CResourceManager::LoadFont(const std::string& Name, const TCHAR* FontName, int Weight, float FontSize, const TCHAR* LocalName, int Stretch)
 {
 	return m_FontManager->LoadFont(Name, FontName, Weight, FontSize, LocalName, Stretch);
 }
@@ -348,14 +351,12 @@ unsigned int CResourceManager::CreateFontColorKey(const Vector4& Color)
 	return m_FontManager->CreateFontColorKey(Color);
 }
 
-IDWriteTextLayout* CResourceManager::CreateTextLayout(const TCHAR* Text, IDWriteTextFormat* Font,
-	float Width, float Height)
+IDWriteTextLayout* CResourceManager::CreateTextLayout(const TCHAR* Text, IDWriteTextFormat* Font, float Width, float Height)
 {
 	return m_FontManager->CreateTextLayout(Text, Font, Width, Height);
 }
 
-IDWriteTextLayout* CResourceManager::CreateTextLayout(const TCHAR* Text, const std::string& FontName,
-	float Width, float Height)
+IDWriteTextLayout* CResourceManager::CreateTextLayout(const TCHAR* Text, const std::string& FontName, float Width, float Height)
 {
 	return m_FontManager->CreateTextLayout(Text, FontName, Width, Height);
 }

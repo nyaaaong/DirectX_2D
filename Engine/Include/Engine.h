@@ -14,6 +14,8 @@ private:
 	bool		m_Start;
 	bool		m_Play;
 	Engine_Space	m_Space;
+	Mouse_State		m_MouseState;
+	CSharedPtr<class CWidgetWindow>	m_MouseWidget[(int)Mouse_State::Max];
 
 public:
 	Engine_Space GetEngineSpace()	const
@@ -64,6 +66,25 @@ private:
 	ATOM Register(const TCHAR* Name, int IconID);
 	BOOL Create(const TCHAR* Name);
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+public:
+	template <typename T>
+	T* CreateMouse(Mouse_State State, const std::string& Name)
+	{
+		T* Window = DBG_NEW T;
+
+		Window->SetName(Name);
+
+		if (!Window->Init())
+		{
+			SAFE_RELEASE(Window);
+			return nullptr;
+		}
+
+		m_MouseWidget[(int)State] = Window;
+
+		return Window;
+	}
 
 	DECLARE_SINGLE(CEngine)
 };

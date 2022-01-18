@@ -5,6 +5,8 @@
 #include "../Scene/CameraManager.h"
 #include "../Component/CameraComponent.h"
 #include "../Resource/Shader/WidgetConstantBuffer.h"
+#include "../Resource/ResourceManager.h"
+#include "../Scene/SceneManager.h"
 
 CWidget::CWidget()	:
 	m_Owner(nullptr),
@@ -45,7 +47,11 @@ CWidget::~CWidget()
 
 void CWidget::SetShader(const std::string& Name)
 {
-	m_Shader = m_Owner->GetViewport()->GetScene()->GetResource()->FindShader(Name);
+	if (m_Owner->GetViewport())
+		m_Shader = m_Owner->GetViewport()->GetScene()->GetResource()->FindShader(Name);
+
+	else
+		m_Shader = CResourceManager::GetInst()->FindShader(Name);
 }
 
 void CWidget::SetUseTexture(bool Use)
@@ -60,8 +66,18 @@ void CWidget::Start()
 
 bool CWidget::Init()
 {
-	m_Shader = m_Owner->GetViewport()->GetScene()->GetResource()->FindShader("WidgetShader");
-	m_Mesh = m_Owner->GetViewport()->GetScene()->GetResource()->FindMesh("WidgetMesh");
+	if (m_Owner->GetViewport())
+		m_Shader = m_Owner->GetViewport()->GetScene()->GetResource()->FindShader("WidgetShader");
+
+	else
+		m_Shader = CResourceManager::GetInst()->FindShader("WidgetShader");
+
+
+	if (m_Owner->GetViewport())
+		m_Mesh = m_Owner->GetViewport()->GetScene()->GetResource()->FindMesh("WidgetMesh");
+
+	else
+		m_Mesh = CResourceManager::GetInst()->FindMesh("WidgetMesh");
 
 	m_CBuffer = DBG_NEW CWidgetConstantBuffer;
 
@@ -98,7 +114,13 @@ void CWidget::Render()
 	matRot.Rotation(0.f, 0.f, m_Angle);
 	matTrans.Translation(m_RenderPos.x, m_RenderPos.y, 0.f);
 
-	CCameraComponent* UICamera = m_Owner->GetViewport()->GetScene()->GetCameraManager()->GetUICamera();
+	CCameraComponent* UICamera = nullptr;
+
+	if (m_Owner->GetViewport())
+		UICamera = m_Owner->GetViewport()->GetScene()->GetCameraManager()->GetUICamera();
+
+	else
+		UICamera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetUICamera();
 
 	Matrix	matWP = matScale * matRot * matTrans * UICamera->GetProjMatrix();
 	matWP.Transpose();

@@ -329,7 +329,11 @@ struct WidgetCBuffer
 	Vector4	Tint;
 	Matrix	matWP;
 	int		UseTexture;
-	Vector3	Empty;
+	int		WidgetAnimType;
+	Vector2	WidgetAnimStartUV;
+	Vector2	WidgetAnimEndUV;
+	int		WidgetAnimEnable;
+	int		Empty;
 };
 
 struct ProgressBarCBuffer

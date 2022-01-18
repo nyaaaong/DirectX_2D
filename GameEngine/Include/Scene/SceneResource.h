@@ -35,11 +35,8 @@ public:
 	}
 
 public:	// =================== Mesh =====================
-
-
 	CMesh* FindMesh(const std::string& Name);
 	CShader* FindShader(const std::string& Name);
-
 
 public:	// =================== Material =====================
 	CMaterial* FindMaterial(const std::string& Name);
@@ -47,11 +44,11 @@ public:	// =================== Material =====================
 public:	// =================== Sequence2D =====================
 	bool CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, const std::string& PathName = TEXTURE_PATH);
 	// Count는 이미지(애니메이션)의 프레임 가로, 세로 개수를 뜻하고, Inter는 이미지 간격 가로, 세로 크기를 말한다.
-	bool CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, const Vector2& Start, const Vector2& Size,
-		int CountX, int InterX = 0, int CountY = 0, int InterY = 0, const std::string& PathName = TEXTURE_PATH);
+	bool CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, const Vector2& Start, const Vector2& Size, int CountX, int InterX = 0, int CountY = 0, int InterY = 0, 
+		const std::string& PathName = TEXTURE_PATH);
 	// Count는 이미지(애니메이션)의 프레임 가로, 세로 개수를 뜻하고, Inter는 이미지 간격 가로, 세로 크기를 말한다.
-	bool CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, float StartX, float StartY, float Width, float Height,
-		int CountX, int InterX = 0, int CountY = 0, int InterY = 0, const std::string& PathName = TEXTURE_PATH);
+	bool CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, float StartX, float StartY, float Width, float Height, int CountX, int InterX = 0, int CountY = 0, int InterY = 0, 
+		const std::string& PathName = TEXTURE_PATH);
 	void AddAnimationSequence2DFrame(const std::string& Name, const Vector2& Start, const Vector2& Size);
 	void AddAnimationSequence2DFrame(const std::string& Name, float StartX, float StartY, float Width, float Height);
 	CAnimationSequence2D* FindAnimationSequence2D(const std::string& Name);
@@ -66,14 +63,14 @@ public:	// =================== Sequence2D =====================
 	void ReleaseAnimationSequence2D(const std::string& Name);
 
 public:	// =================== Texture =====================
-	bool LoadTexture(const std::string& Name, const TCHAR* FileName,
-		const std::string& PathName = TEXTURE_PATH);
+	bool LoadTexture(const std::string& Name, const TCHAR* FileName, const std::string& PathName = TEXTURE_PATH);
 	bool LoadTextureFullPath(const std::string& Name, const TCHAR* FullPath);
+	bool LoadTexture(const std::string& Name, const std::vector<TCHAR*>& vecFileName, const std::string& PathName = TEXTURE_PATH);
+	bool LoadTextureFullPath(const std::string& Name, const std::vector<TCHAR*>& vecFullPath);
 	class CTexture* FindTexture(const std::string& Name);
 
 public:	// =================== Sound =====================
-	bool LoadSound(const std::string& ChannelGroupName, bool Loop, const std::string& Name, const char* FileName,
-		const std::string& PathName = SOUND_PATH);
+	bool LoadSound(const std::string& ChannelGroupName, bool Loop, const std::string& Name, const char* FileName, const std::string& PathName = SOUND_PATH);
 	bool CreateSoundChannelGroup(const std::string& Name);
 	bool SetVolume(int Volume);
 	bool SetVolume(const std::string& ChannelGroupName, int Volume);

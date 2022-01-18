@@ -81,9 +81,10 @@ public:
 	void ResetShader(int Register, int ShaderType, int Index);
 
 public:
-	bool LoadTexture(const std::string& Name, const TCHAR* FileName,
-		const std::string& PathName = TEXTURE_PATH);
+	bool LoadTexture(const std::string& Name, const TCHAR* FileName, const std::string& PathName = TEXTURE_PATH);
 	bool LoadTextureFullPath(const std::string& Name, const TCHAR* FullPath);
+	bool LoadTexture(const std::string& Name, const std::vector<TCHAR*>& vecFileName, const std::string& PathName = TEXTURE_PATH);
+	bool LoadTextureFullPath(const std::string& Name, const std::vector<TCHAR*>& vecFullPath);
 	void Save(FILE* pFile);
 };
 

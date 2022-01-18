@@ -24,44 +24,36 @@ public:
 	void Update();
 
 public:	// =================== Mesh =====================
-
-
 	class CMesh* FindMesh(const std::string& Name);
-
 	void ReleaseMesh(const std::string& Name);
 
 	
 public:// =================== Shader =====================
 	class CShader* FindShader(const std::string& Name);
-
 	void ReleaseShader(const std::string& Name);
-
-	bool CreateConstantBuffer(const std::string& Name, int Size, int Register,
-		int ConstantBufferShaderType = (int)ConstantBuffer_Shader_Type::All);
-
+	bool CreateConstantBuffer(const std::string& Name, int Size, int Register, int ConstantBufferShaderType = (int)ConstantBuffer_Shader_Type::All);
 	class CConstantBuffer* FindConstantBuffer(const std::string& Name);
-
 
 public:	// =================== Material =====================
 	CMaterial* FindMaterial(const std::string& Name);
-
 	void ReleaseMaterial(const std::string& Name);
 
 public:	// =================== Texture =====================
-	bool LoadTexture(const std::string& Name, const TCHAR* FileName,
-		const std::string& PathName = TEXTURE_PATH);
+	bool LoadTexture(const std::string& Name, const TCHAR* FileName, const std::string& PathName = TEXTURE_PATH);
 	bool LoadTextureFullPath(const std::string& Name, const TCHAR* FullPath);
+	bool LoadTexture(const std::string& Name, const std::vector<TCHAR*>& vecFileName, const std::string& PathName = TEXTURE_PATH);
+	bool LoadTextureFullPath(const std::string& Name, const std::vector<TCHAR*>& vecFullPath);
 	class CTexture* FindTexture(const std::string& Name);
 	void ReleaseTexture(const std::string& Name);
 
 public:	// =================== Sequence2D =====================
 	bool CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, const std::string& PathName = TEXTURE_PATH);
 	// Count는 이미지(애니메이션)의 프레임 가로, 세로 개수를 뜻하고, Inter는 이미지 간격 가로, 세로 크기를 말한다.
-	bool CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, const Vector2& Start, const Vector2& Size,
-		int CountX, int InterX = 0, int CountY = 0, int InterY = 0, const std::string& PathName = TEXTURE_PATH);
+	bool CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, const Vector2& Start, const Vector2& Size, int CountX, int InterX = 0, int CountY = 0, int InterY = 0, 
+		const std::string& PathName = TEXTURE_PATH);
 	// Count는 이미지(애니메이션)의 프레임 가로, 세로 개수를 뜻하고, Inter는 이미지 간격 가로, 세로 크기를 말한다.
-	bool CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, float StartX, float StartY, float Width, float Height,
-		int CountX, int InterX = 0, int CountY = 0, int InterY = 0, const std::string& PathName = TEXTURE_PATH);
+	bool CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName, const TCHAR* FileName, float StartX, float StartY, float Width, float Height, int CountX, int InterX = 0, int CountY = 0, int InterY = 0, 
+		const std::string& PathName = TEXTURE_PATH);
 	void AddAnimationSequence2DFrame(const std::string& Name, const Vector2& Start, const Vector2& Size);
 	void AddAnimationSequence2DFrame(const std::string& Name, float StartX, float StartY, float Width, float Height);
 	CAnimationSequence2D* FindAnimationSequence2D(const std::string& Name);
@@ -76,8 +68,7 @@ public:	// =================== Sequence2D =====================
 	bool LoadSequence2D(std::string& resultName, const char* FileName, const std::string& PathName = ANIMATION_PATH, class CScene* Scene = nullptr);
 
 public:	// =================== Sound =====================
-	bool LoadSound(const std::string& ChannelGroupName, bool Loop, const std::string& Name, const char* FileName,
-		const std::string& PathName = SOUND_PATH);
+	bool LoadSound(const std::string& ChannelGroupName, bool Loop, const std::string& Name, const char* FileName, const std::string& PathName = SOUND_PATH);
 	bool CreateSoundChannelGroup(const std::string& Name);
 	bool SetVolume(int Volume);
 	bool SetVolume(const std::string& ChannelGroupName, int Volume);
@@ -108,13 +99,10 @@ public:	// =================== Font =====================
 	unsigned int CreateFontColorKey(const Vector4& Color);
 	IDWriteTextLayout* CreateTextLayout(const TCHAR* Text, IDWriteTextFormat* Font, float Width, float Height);
 	IDWriteTextLayout* CreateTextLayout(const TCHAR* Text, const std::string& FontName, float Width, float Height);
-
 	IDWriteFontCollection1* FindFontFile(const std::string& Name);
 	IDWriteTextFormat* FindFont(const std::string& Name);
 
 public:
-	DECLARE_SINGLE(CResourceManager)
-
 	template <typename T>
 	bool CreateMaterial(const std::string& Name)
 	{
@@ -134,4 +122,6 @@ public:
 	{
 		return m_ShaderManager->CreateShader<T>(Name);
 	}
+
+	DECLARE_SINGLE(CResourceManager)
 };

@@ -38,12 +38,20 @@ CProgressBar::~CProgressBar()
 bool CProgressBar::SetTexture(const std::string& Name, const TCHAR* FileName,
 	const std::string& PathName)
 {
-	CSceneResource* Resource = m_Owner->GetViewport()->GetScene()->GetResource();
+	if (m_Owner->GetViewport())
+	{
+		if (!m_Owner->GetViewport()->GetScene()->GetResource()->LoadTexture(Name, FileName, PathName))
+			return false;
 
-	if (!Resource->LoadTexture(Name, FileName, PathName))
-		return false;
+		m_Info.Texture = m_Owner->GetViewport()->GetScene()->GetResource()->FindTexture(Name);
+	}
 
-	m_Info.Texture = Resource->FindTexture(Name);
+	else
+	{
+		CResourceManager::GetInst()->LoadTexture(Name, FileName, PathName);
+
+		m_Info.Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
 
 	SetUseTexture(true);
 
@@ -53,12 +61,20 @@ bool CProgressBar::SetTexture(const std::string& Name, const TCHAR* FileName,
 bool CProgressBar::SetTextureFullPath(const std::string& Name,
 	const TCHAR* FullPath)
 {
-	CSceneResource* Resource = m_Owner->GetViewport()->GetScene()->GetResource();
+	if (m_Owner->GetViewport())
+	{
+		if (!m_Owner->GetViewport()->GetScene()->GetResource()->LoadTextureFullPath(Name, FullPath))
+			return false;
 
-	if (!Resource->LoadTextureFullPath(Name, FullPath))
-		return false;
+		m_Info.Texture = m_Owner->GetViewport()->GetScene()->GetResource()->FindTexture(Name);
+	}
 
-	m_Info.Texture = Resource->FindTexture(Name);
+	else
+	{
+		CResourceManager::GetInst()->LoadTextureFullPath(Name, FullPath);
+
+		m_Info.Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
 
 	SetUseTexture(true);
 
@@ -95,8 +111,11 @@ bool CProgressBar::Init()
 	if (!CWidget::Init())
 		return false;
 
-	m_Shader = m_Owner->GetViewport()->GetScene()->GetResource()->FindShader("ProgressBarShader");
+	if (m_Owner->GetViewport())
+		m_Shader = m_Owner->GetViewport()->GetScene()->GetResource()->FindShader("ProgressBarShader");
 
+	else
+		m_Shader = CResourceManager::GetInst()->FindShader("ProgressBarShader");	
 
 	m_ProgressCBuffer = DBG_NEW CProgressBarConstantBuffer;
 
