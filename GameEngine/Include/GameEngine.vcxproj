@@ -306,6 +306,7 @@
     <ClInclude Include="Resource\Shader\GraphicShader.h" />
     <ClInclude Include="Resource\Shader\MaterialConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\Mesh2DShader.h" />
+    <ClInclude Include="Resource\Shader\NumberShader.h" />
     <ClInclude Include="Resource\Shader\PosMeshShader.h" />
     <ClInclude Include="Resource\Shader\ProgressBarConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\ProgressBarShader.h" />
@@ -335,6 +336,7 @@
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="Widget\Button.h" />
     <ClInclude Include="Widget\Image.h" />
+    <ClInclude Include="Widget\Number.h" />
     <ClInclude Include="Widget\ProgressBar.h" />
     <ClInclude Include="Widget\Slider.h" />
     <ClInclude Include="Widget\SliderBar.h" />
@@ -417,6 +419,7 @@
     <ClCompile Include="Resource\Shader\GraphicShader.cpp" />
     <ClCompile Include="Resource\Shader\MaterialConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\Mesh2DShader.cpp" />
+    <ClCompile Include="Resource\Shader\NumberShader.cpp" />
     <ClCompile Include="Resource\Shader\PosMeshShader.cpp" />
     <ClCompile Include="Resource\Shader\ProgressBarConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\ProgressBarShader.cpp" />
@@ -444,6 +447,7 @@
     <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="Widget\Button.cpp" />
     <ClCompile Include="Widget\Image.cpp" />
+    <ClCompile Include="Widget\Number.cpp" />
     <ClCompile Include="Widget\ProgressBar.cpp" />
     <ClCompile Include="Widget\Slider.cpp" />
     <ClCompile Include="Widget\SliderBar.cpp" />

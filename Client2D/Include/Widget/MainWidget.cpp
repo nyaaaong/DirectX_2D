@@ -12,6 +12,9 @@ CMainWidget::CMainWidget(const CMainWidget& window) :
 	m_Button = FindWidget<CButton>("Button");
 	m_Button1 = FindWidget<CButton>("Button1");
 	m_Button1Text = FindWidget<CText>("Text");
+	m_Hour = FindWidget<CNumber>("Hour");
+	m_Minute = FindWidget<CNumber>("Minute");
+	m_Second = FindWidget<CNumber>("Second");
 
 	m_SliderBar = CreateWidget<CSliderBar>("SliderBar");
 	m_Slider = CreateWidget<CSlider>("Slider");
@@ -29,18 +32,18 @@ void CMainWidget::Start()
 
 bool CMainWidget::Init()
 {
-    if (!CWidgetWindow::Init())
-        return false;
+	if (!CWidgetWindow::Init())
+		return false;
 
 	SetSize(1280.f, 720.f);
 
-    m_Button = CreateWidget<CButton>("Button");
+	m_Button = CreateWidget<CButton>("Button");
 
-    m_Button->SetPos(400.f, 300.f);
-    m_Button->SetSize(200.f, 50.f);
-    m_Button->SetTexture(Button_State::Normal, "StartButton", TEXT("Start.png"));
+	m_Button->SetPos(400.f, 300.f);
+	m_Button->SetSize(200.f, 50.f);
+	m_Button->SetTexture(Button_State::Normal, "StartButton", TEXT("Start.png"));
 
-    m_Button->SetTextureTint(Button_State::Normal, 100, 100, 100, 255);
+	m_Button->SetTextureTint(Button_State::Normal, 100, 100, 100, 255);
 	m_Button->SetTexture(Button_State::MouseOn, "StartButton", TEXT("Start.png"));
 	m_Button->SetTexture(Button_State::Click, "StartButton", TEXT("Start.png"));
 
@@ -79,6 +82,74 @@ bool CMainWidget::Init()
 	m_Button1Text->SetShadowEnable(true);
 	m_Button1Text->SetShadowOffset(2.f, 2.f);
 
+	m_Hour = CreateWidget<CNumber>("Hour");
+	m_Minute = CreateWidget<CNumber>("Minute");
+	m_Second = CreateWidget<CNumber>("Second");
+
+	std::vector<TCHAR*> vecFileName;
+
+	for (int i = 0; i < 10; ++i)
+	{
+		TCHAR* FileName = DBG_NEW TCHAR[MAX_PATH];
+		memset(FileName, 0, sizeof(TCHAR) * MAX_PATH);
+
+		wsprintf(FileName, TEXT("Number/1.NoRed0.%d.png"), i);
+
+		vecFileName.push_back(FileName);
+	}
+
+	m_Hour->SetTexture("Number", vecFileName);
+	m_Hour->AddFrameData(10);
+
+	for (int i = 0; i < 10; ++i)
+	{
+		SAFE_DELETE_ARRAY(vecFileName[i]);
+	}
+
+	vecFileName.clear();
+
+	for (int i = 0; i < 10; ++i)
+	{
+		TCHAR* FileName = DBG_NEW TCHAR[MAX_PATH];
+		memset(FileName, 0, sizeof(TCHAR) * MAX_PATH);
+
+		wsprintf(FileName, TEXT("Number/1.NoRed0.%d.png"), i);
+
+		vecFileName.push_back(FileName);
+	}
+
+	m_Minute->SetTexture("Number", vecFileName);
+	m_Minute->AddFrameData(10);
+	m_Minute->SetPos(100.f, 0.f);
+
+	for (int i = 0; i < 10; ++i)
+	{
+		SAFE_DELETE_ARRAY(vecFileName[i]);
+	}
+
+	vecFileName.clear();
+
+	for (int i = 0; i < 10; ++i)
+	{
+		TCHAR* FileName = DBG_NEW TCHAR[MAX_PATH];
+		memset(FileName, 0, sizeof(TCHAR) * MAX_PATH);
+
+		wsprintf(FileName, TEXT("Number/1.NoRed0.%d.png"), i);
+
+		vecFileName.push_back(FileName);
+	}
+
+	m_Second->SetTexture("Number", vecFileName);
+	m_Second->AddFrameData(10);
+	m_Second->SetPos(200.f, 0.f);
+
+	for (int i = 0; i < 10; ++i)
+	{
+		SAFE_DELETE_ARRAY(vecFileName[i]);
+	}
+
+	vecFileName.clear();
+
 	m_SliderBar = CreateWidget<CSliderBar>("SliderBar");
 	m_SliderBar->SetTexture("SliderBar", TEXT("SliderBar.png"));
 	m_SliderBar->SetPos(400.f, 100.f);
@@ -109,22 +180,30 @@ bool CMainWidget::Init()
 		RefreshInput();
 	*/
 
-    return true;
+	return true;
 }
 
 void CMainWidget::Update(float DeltaTime)
 {
-    CWidgetWindow::Update(DeltaTime);
+	CWidgetWindow::Update(DeltaTime);
+
+	SYSTEMTIME  time;
+
+	GetLocalTime(&time);
+
+	m_Hour->SetNumber((int)time.wHour);
+	m_Minute->SetNumber((int)time.wMinute);
+	m_Second->SetNumber((int)time.wSecond);
 }
 
 void CMainWidget::PostUpdate(float DeltaTime)
 {
-    CWidgetWindow::PostUpdate(DeltaTime);
+	CWidgetWindow::PostUpdate(DeltaTime);
 }
 
 void CMainWidget::Render()
 {
-    CWidgetWindow::Render();
+	CWidgetWindow::Render();
 }
 
 CMainWidget* CMainWidget::Clone()

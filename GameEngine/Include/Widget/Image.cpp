@@ -131,6 +131,18 @@ void CImage::AddFrameData(const Vector2& Start, const Vector2& Size)
 	m_Info.vecFrameData.push_back(Data);
 }
 
+void CImage::AddFrameData(int Count)
+{
+	for (int i = 0; i < Count; ++i)
+	{
+		AnimationFrameData	Data;
+		Data.Start = Vector2(0.f, 0.f);
+		Data.Size = Vector2((float)m_Info.Texture->GetWidth(i), (float)m_Info.Texture->GetHeight(i));
+
+		m_Info.vecFrameData.push_back(Data);
+	}
+}
+
 void CImage::SetPlayTime(float PlayTime)
 {
 	m_Info.PlayTime = PlayTime;

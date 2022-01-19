@@ -1,11 +1,13 @@
 
 #include "Monster.h"
+#include "Engine.h"
 #include "Scene/Scene.h"
 #include "Resource/Material/Material.h"
 #include "MonsterAnimation.h"
 #include "../Widget/SimpleHUD.h"
 
 CMonster::CMonster()	:
+	m_SimpleHUD(nullptr),
 	m_HP(50),
 	m_HPMax(50)
 {
@@ -67,6 +69,9 @@ bool CMonster::Init()
 	m_Sprite->SetRelativePos(500.f, 300.f, 0.f);
 	m_Sprite->SetPivot(0.5f, 0.5f, 0.f);
 
+	m_Body->AddCollisionMouseCallback(Collision_State::Begin, this, &CMonster::OnMouseBegin);
+	m_Body->AddCollisionMouseCallback(Collision_State::End, this, &CMonster::OnMouseEnd);
+
 	return true;
 }
 
@@ -83,4 +88,14 @@ void CMonster::PostUpdate(float DeltaTime)
 CMonster* CMonster::Clone()
 {
 	return DBG_NEW CMonster(*this);
+}
+
+void CMonster::OnMouseBegin(const CollisionResult& result)
+{
+	CEngine::GetInst()->SetMouseState(Mouse_State::State1);
+}
+
+void CMonster::OnMouseEnd(const CollisionResult& result)
+{
+	CEngine::GetInst()->SetMouseState(Mouse_State::Normal);
 }

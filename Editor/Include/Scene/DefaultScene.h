@@ -6,11 +6,5 @@ class CDefaultScene :
 public:
     CDefaultScene();
     ~CDefaultScene();
-
-public:
-    virtual bool Init();
-
-private:
-	bool LoadAnimationSequence2D();
 };
 

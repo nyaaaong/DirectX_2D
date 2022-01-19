@@ -5,6 +5,8 @@
 #include "Scene/SceneManager.h"
 #include "Scene/MainScene.h"
 #include "Resource/ResourceManager.h"
+#include "Widget/MouseNormal.h"
+#include "Widget/MouseAttack.h"
 
 DEFINITION_SINGLE(CClientManager)
 
@@ -42,6 +44,10 @@ bool CClientManager::Init(HINSTANCE hInst)
 
 	CResourceManager::GetInst()->CreateSoundChannelGroup("UI");
 	CResourceManager::GetInst()->SetVolume(10);
+
+	// 마우스 위젯 설정
+	CMouseNormal* MouseNormal = CEngine::GetInst()->CreateMouse<CMouseNormal>(Mouse_State::Normal, "MouseNormal");
+	CMouseAttack* MouseAttack = CEngine::GetInst()->CreateMouse<CMouseAttack>(Mouse_State::State1, "MouseAttack");
 
 	return true;
 }

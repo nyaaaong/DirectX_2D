@@ -39,5 +39,9 @@ public:
     virtual void Update(float DeltaTime);
     virtual void PostUpdate(float DeltaTime);
     virtual CMonster* Clone();
+
+public:
+	void OnMouseBegin(const CollisionResult& result);
+	void OnMouseEnd(const CollisionResult& result);
 };
 

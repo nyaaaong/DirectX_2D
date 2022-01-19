@@ -152,3 +152,37 @@ PSOutput_Single WidgetPS(VertexUVOutput input)
 
 	return output;
 }
+
+VertexUVOutput NumberVS(VertexUV input)
+{
+	VertexUVOutput	output = (VertexUVOutput)0;
+
+	output.Pos = mul(float4(input.Pos, 1.f), g_matWidgetWP);
+	output.UV = ComputeWidgetAnimationUV(input.UV);
+
+	return output;
+}
+
+PSOutput_Single NumberPS(VertexUVOutput input)
+{
+	PSOutput_Single	output = (PSOutput_Single)0;
+
+	if (g_WidgetUseTexture == 1)
+	{
+		float4	BaseTextureColor = g_BaseTexture.Sample(g_BaseSmp, input.UV);
+
+		output.Color.rgb = BaseTextureColor.rgb * g_WidgetTint.rgb;
+
+		if (BaseTextureColor.a == 0.f)
+			clip(-1);
+
+		output.Color.a = BaseTextureColor.a * g_WidgetTint.a;
+	}
+
+	else
+	{
+		output.Color = g_WidgetTint;
+	}
+
+	return output;
+}

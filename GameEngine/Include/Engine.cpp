@@ -23,6 +23,7 @@ CEngine::CEngine()	:
 	m_Start(false),
 	m_Play(true),
 	m_Space(Engine_Space::Space2D),
+	m_ShowCursorCount(0),
 	m_MouseState(Mouse_State::Normal)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -53,6 +54,16 @@ CEngine::~CEngine()
 	CDevice::DestroyInst();
 
 	SAFE_DELETE(m_Timer);
+}
+
+void CEngine::SetMouseState(Mouse_State State)
+{
+	if (m_MouseWidget[(int)m_MouseState])
+	{
+		// 초기화?
+	}
+
+	m_MouseState = State;
 }
 
 bool CEngine::Init(HINSTANCE hInst, const TCHAR* Name, unsigned int Width,
@@ -189,6 +200,37 @@ bool CEngine::Update(float DeltaTime)
 	if (CSceneManager::GetInst()->Update(DeltaTime))
 		return true;
 
+	if (m_MouseWidget[(int)m_MouseState])
+	{
+		// 마우스 위치를 얻어온다.
+		Vector2 Pos = CInput::GetInst()->GetMousePos();
+
+		// 마우스가 윈도우 창을 벗어났다면 보이게 한다.
+		if (Pos.x < 0.f || Pos.x > m_RS.Width || Pos.y < 0.f || Pos.y > m_RS.Height)
+		{
+			if (m_ShowCursorCount < 0)
+			{
+				ShowCursor(true);
+				m_ShowCursorCount = 0;
+			}
+		}
+
+		else
+		{
+			if (m_ShowCursorCount == 0)
+			{
+				ShowCursor(false);
+				--m_ShowCursorCount;
+			}
+		}
+
+		Pos.y -= m_MouseWidget[(int)m_MouseState]->GetWindowSize().y;
+
+		m_MouseWidget[(int)m_MouseState]->SetPos(Pos);
+
+		m_MouseWidget[(int)m_MouseState]->Update(DeltaTime);
+	}
+
 	return false;
 }
 
@@ -196,6 +238,9 @@ bool CEngine::PostUpdate(float DeltaTime)
 {
 	if (CSceneManager::GetInst()->PostUpdate(DeltaTime))
 		return true;
+
+	if (m_MouseWidget[(int)m_MouseState])
+		m_MouseWidget[(int)m_MouseState]->PostUpdate(DeltaTime);
 
 	return false;
 }

@@ -36,6 +36,7 @@ public:
 	void SetTextureTint(const Vector4& Tint);
 	void SetTextureTint(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 	void AddFrameData(const Vector2& Start, const Vector2& Size);
+	void AddFrameData(int Count);
 	void SetPlayTime(float PlayTime);
 	void SetPlayScale(float PlayScale);
 

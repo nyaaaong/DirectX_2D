@@ -212,6 +212,9 @@
     <Filter Include="04. Component\00. SceneComponent\03. Widget">
       <UniqueIdentifier>{66808573-5b28-477f-95da-9772cb2af709}</UniqueIdentifier>
     </Filter>
+    <Filter Include="09. Widget\01. Widget\05. Number">
+      <UniqueIdentifier>{cfc65ac6-2e44-4e78-9753-3ed2e3aa4489}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -610,6 +613,12 @@
     <ClInclude Include="Component\WidgetComponent.h">
       <Filter>04. Component\00. SceneComponent\03. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Shader\NumberShader.h">
+      <Filter>01. Resource\01. Shader\02. ShaderClass\03. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\Number.h">
+      <Filter>09. Widget\01. Widget\05. Number</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -932,6 +941,12 @@
     </ClCompile>
     <ClCompile Include="Component\WidgetComponent.cpp">
       <Filter>04. Component\00. SceneComponent\03. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\NumberShader.cpp">
+      <Filter>01. Resource\01. Shader\02. ShaderClass\03. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\Number.cpp">
+      <Filter>09. Widget\01. Widget\05. Number</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

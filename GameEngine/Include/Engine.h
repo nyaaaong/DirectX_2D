@@ -14,10 +14,16 @@ private:
 	bool		m_Start;
 	bool		m_Play;
 	Engine_Space	m_Space;
+	int				m_ShowCursorCount;
 	Mouse_State		m_MouseState;
 	CSharedPtr<class CWidgetWindow>	m_MouseWidget[(int)Mouse_State::Max];
 
 public:
+	class CWidgetWindow* GetMouseWidget()	const
+	{
+		return m_MouseWidget[(int)m_MouseState];
+	}
+
 	Engine_Space GetEngineSpace()	const
 	{
 		return m_Space;
@@ -47,6 +53,9 @@ public:
 	{
 		return m_hInst;
 	}
+
+public:
+	void SetMouseState(Mouse_State State);
 
 public:
 	bool Init(HINSTANCE hInst, const TCHAR* Name, unsigned int Width,

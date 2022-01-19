@@ -8,6 +8,7 @@
 #include "ColliderPixelShader.h"
 #include "WidgetShader.h"
 #include "ProgressBarShader.h"
+#include "NumberShader.h"
 
 CShaderManager::CShaderManager()
 {
@@ -38,6 +39,9 @@ bool CShaderManager::Init()
 		return false;
 
 	if (!CreateShader<CProgressBarShader>("ProgressBarShader"))
+		return false;
+
+	if (!CreateShader<CNumberShader>("NumberShader"))
 		return false;
 
 	// =================== 상수버퍼 ===================

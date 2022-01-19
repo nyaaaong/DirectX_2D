@@ -6,6 +6,7 @@
 #include "Widget/SliderBar.h"
 #include "Widget/Slider.h"
 #include "Widget/Image.h"
+#include "Widget/Number.h"
 
 class CMainWidget :
     public CWidgetWindow
@@ -22,6 +23,9 @@ private:
 
 	CSharedPtr<CButton>	m_Button1;
 	CSharedPtr<CText>	m_Button1Text;
+	CSharedPtr<CNumber>	m_Hour;
+	CSharedPtr<CNumber>	m_Minute;
+	CSharedPtr<CNumber>	m_Second;
 
 	CSharedPtr<CSliderBar>	m_SliderBar;
 	CSharedPtr<CSlider>		m_Slider;

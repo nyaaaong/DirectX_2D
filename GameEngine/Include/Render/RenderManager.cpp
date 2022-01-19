@@ -8,6 +8,7 @@
 #include "../Scene/SceneManager.h"
 #include "../Scene/Scene.h"
 #include "../Scene/Viewport.h"
+#include "../Engine.h"
 
 DEFINITION_SINGLE(CRenderManager)
 
@@ -177,6 +178,12 @@ void CRenderManager::Render()
 	m_AlphaBlend->SetState();
 
 	CSceneManager::GetInst()->GetScene()->GetViewport()->Render();
+
+	// 마우스 출력
+	CWidgetWindow* MouseWidget = CEngine::GetInst()->GetMouseWidget();
+
+	if (MouseWidget)
+		MouseWidget->Render();
 
 	m_AlphaBlend->ResetState();
 
