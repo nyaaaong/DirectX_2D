@@ -22,6 +22,11 @@ CBulletCamera::~CBulletCamera()
 {
 }
 
+void CBulletCamera::SetCollisionProfile(const std::string& Name)
+{
+	m_Body->SetCollisionProfile(Name);
+}
+
 void CBulletCamera::Start()
 {
 	CGameObject::Start();

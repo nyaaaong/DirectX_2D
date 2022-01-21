@@ -57,6 +57,7 @@ public:
 	void ClearFrame();
 	bool SaveFullPath(const char* FullPath);
 	bool LoadFullPath(const char* FullPath);
+	bool LoadFullPath(TCHAR* resultSpritePath, const char* FullPath);
 	bool Save(const char* FileName, const std::string& PathName);
 	bool Load(const char* FileName, const std::string& PathName);
 };

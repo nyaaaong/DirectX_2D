@@ -215,6 +215,9 @@
     <Filter Include="09. Widget\01. Widget\05. Number">
       <UniqueIdentifier>{cfc65ac6-2e44-4e78-9753-3ed2e3aa4489}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00. Engine\08. Thread">
+      <UniqueIdentifier>{3aa2d37c-4be3-4655-9e0e-2a098e7989d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -619,6 +622,12 @@
     <ClInclude Include="Widget\Number.h">
       <Filter>09. Widget\01. Widget\05. Number</Filter>
     </ClInclude>
+    <ClInclude Include="Thread.h">
+      <Filter>00. Engine\08. Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Sync.h">
+      <Filter>00. Engine\08. Thread</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -947,6 +956,9 @@
     </ClCompile>
     <ClCompile Include="Widget\Number.cpp">
       <Filter>09. Widget\01. Widget\05. Number</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread.cpp">
+      <Filter>00. Engine\08. Thread</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

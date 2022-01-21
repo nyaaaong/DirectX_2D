@@ -20,7 +20,8 @@ bool CPlayerAnimation2D::Init()
 	if (!CAnimationSequence2DInstance::Init())
 		return false;
 
-	AddAnimation("PlayerIdleD", "PlayerIdleD", true, 0.3f);
+	//AddAnimation("PlayerIdleD", "PlayerIdleD", true, 0.3f);
+	AddAnimation(TEXT("Player/Idle/Player_Idle_D.sqc"), "PlayerIdleD", ANIMATION_PATH);
 	/*AddAnimation("PlayerIdleL", "PlayerIdleL", true, 0.3f);
 	AddAnimation("PlayerIdleR", "PlayerIdleR", true, 0.3f);
 	AddAnimation("PlayerIdleU", "PlayerIdleU", true, 0.3f);*/

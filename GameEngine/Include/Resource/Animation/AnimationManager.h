@@ -33,6 +33,7 @@ public:
 	bool CreateAnimationSequence2D(const std::string& Name, class CTexture* Texture);
 	bool SaveSequenceFullPath(const std::string& Name, const char* FullPath);
 	bool LoadSequenceFullPath(std::string& resultName, const char* FullPath, class CScene* Scene = nullptr);
+	bool LoadSequenceFullPath(std::string& resultName, TCHAR* resultSpritePath, const char* FullPath, class CScene* Scene = nullptr);
 	bool SaveSequence(const std::string& Name, const char* FileName, const std::string& PathName);
 	bool LoadSequence(std::string& resultName, const char* FileName, const std::string& PathName, class CScene* Scene = nullptr);
 

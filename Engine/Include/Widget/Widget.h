@@ -44,9 +44,10 @@ protected:
 	Vector2	m_Size;
 	float	m_Angle;
 	bool	m_Start;
-	Vector4	m_Tint;
+	float	m_Opacity;
 	bool	m_MouseHovered;
 	bool	m_CollisionMouseEnable;
+	Vector4	m_Tint;
 	class CWidgetConstantBuffer* m_CBuffer;
 	CSharedPtr<class CShader>	m_Shader;
 	CSharedPtr<class CMesh>		m_Mesh;
@@ -82,7 +83,17 @@ public:
 		return m_Angle;
 	}
 
+	float GetOpacity()	const
+	{
+		return m_Opacity;
+	}
+
 public:
+	void SetOpacity(float Opacity)
+	{
+		m_Opacity = Opacity;
+	}
+
 	void SetZOrder(int ZOrder)
 	{
 		m_ZOrder = ZOrder;

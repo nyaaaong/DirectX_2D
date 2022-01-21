@@ -42,6 +42,7 @@ CSpriteWindow::CSpriteWindow()  :
 	m_PlayAnim(false),
 	m_Mode(0)
 {
+	m_AnimInstance = DBG_NEW CAnimationSequence2DInstance;
 }
 
 CSpriteWindow::~CSpriteWindow()
@@ -192,13 +193,13 @@ bool CSpriteWindow::Init()
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 
-	Button = AddWidget<CIMGUIButton>("AddAnim", 100.f, 20.f);
-	Button->SetClickCallback<CSpriteWindow>(this, &CSpriteWindow::AddAnimationButton);
+	Button = AddWidget<CIMGUIButton>("AddSequence", 100.f, 20.f);
+	Button->SetClickCallback<CSpriteWindow>(this, &CSpriteWindow::AddSequenceButton);
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 
-	Button = AddWidget<CIMGUIButton>("DeleteAnim", 92.f, 20.f);
-	Button->SetClickCallback<CSpriteWindow>(this, &CSpriteWindow::DeleteAnimationButton);
+	Button = AddWidget<CIMGUIButton>("DelSequence", 92.f, 20.f);
+	Button->SetClickCallback<CSpriteWindow>(this, &CSpriteWindow::DeleteSequenceButton);
 
 	m_AnimationList = AddWidget<CIMGUIListBox>("AnimationList", 200.f, 20.f);
 	m_AnimationList->SetHideName(true);
@@ -232,10 +233,7 @@ bool CSpriteWindow::Init()
 
 	m_SpriteFrame = AddWidget<CIMGUIImage>("SpriteFrame", 200.f, 200.f);
 
-	m_AnimInstance = DBG_NEW CAnimationSequence2DInstance;
-
 	m_AnimInstance->Init();
-	m_AnimInstance->Stop();
 
 	return true;
 }
@@ -315,7 +313,7 @@ bool CSpriteWindow::Start()
 	return true;
 }
 
-void CSpriteWindow::AddAnimationButton()
+void CSpriteWindow::AddSequenceButton()
 {
 	if (m_AnimName->Empty())
 		return;
@@ -537,7 +535,7 @@ void CSpriteWindow::AddFrameListBoxData(const std::string& SequenceName)
 	}
 }
 
-void CSpriteWindow::DeleteAnimationButton()
+void CSpriteWindow::DeleteSequenceButton()
 {
 	int SelectAnimIndex = m_AnimationList->GetSelectIndex();
 
@@ -787,16 +785,7 @@ void CSpriteWindow::SaveSequence()
 		Length = WideCharToMultiByte(CP_ACP, 0, ANMPath, -1, 0, 0, 0, 0);
 		WideCharToMultiByte(CP_ACP, 0, ANMPath, -1, ANMFullPath, Length, 0, 0);
 
-		FILE* File = nullptr;
-
-		fopen_s(&File, ANMFullPath, "wb");
-
-		if (!File)
-			return;
-
-		m_AnimInstance->Save(File);
-
-		fclose(File);
+		m_AnimInstance->Save(ANMFullPath);
 	}
 }
 
@@ -865,7 +854,16 @@ void CSpriteWindow::LoadSequence()
 
 		std::string	SequenceName;
 
-		Resource->LoadSequence2DFullPath(SequenceName, SQCFullPath);
+		TCHAR SpritePath[MAX_PATH] = {};
+
+		Resource->LoadSequence2DFullPath(SequenceName, SpritePath, SQCFullPath);
+
+		m_Sprite->SetTextureFullPath(SequenceName, SpritePath);
+
+		m_SpriteObject->GetSpriteComponent()->SetTextureFullPath(0, 0, (int)ConstantBuffer_Shader_Type::Pixel, SequenceName, SpritePath);
+
+		m_SpriteObject->GetSpriteComponent()->SetWorldScale((float)m_SpriteObject->GetSpriteComponent()->GetMaterial()->GetTextureWidth(), 
+			(float)m_SpriteObject->GetSpriteComponent()->GetMaterial()->GetTextureHeight(), 1.f);
 
 		AddListBoxData(SequenceName);
 
@@ -875,16 +873,7 @@ void CSpriteWindow::LoadSequence()
 		if (!m_AnimInstance)
 			ASSERT("if (!m_AnimInstance)");
 
-		FILE* File = nullptr;
-
-		fopen_s(&File, ANMFullPath, "rb");
-
-		if (!File)
-			return;
-
-		m_AnimInstance->Load(File);
-
-		fclose(File);
+		m_AnimInstance->Load(ANMFullPath);
 
 		CAnimationSequence2DData* Anim = m_AnimInstance->GetCurrentAnimation();
 

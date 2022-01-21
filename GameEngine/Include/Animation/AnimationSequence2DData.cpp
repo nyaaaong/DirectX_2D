@@ -88,7 +88,6 @@ void CAnimationSequence2DData::Save(FILE* File)
 	fwrite(&Length, sizeof(int), 1, File);
 	fwrite(m_Name.c_str(), sizeof(char), Length, File);
 
-
 	fwrite(&m_Frame, sizeof(int), 1, File);
 	fwrite(&m_Time, sizeof(float), 1, File);
 	fwrite(&m_FrameTime, sizeof(float), 1, File);
@@ -113,7 +112,6 @@ void CAnimationSequence2DData::Load(FILE* File)
 	fread(&Length, sizeof(int), 1, File);
 	fread(Name, sizeof(char), Length, File);
 	m_Name = Name;
-
 
 	fread(&m_Frame, sizeof(int), 1, File);
 	fread(&m_Time, sizeof(float), 1, File);

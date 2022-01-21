@@ -27,7 +27,7 @@ cbuffer WidgetCBuffer : register(b11)
 	float2	g_WidgetAnimStartUV;
 	float2	g_WidgetAnimEndUV;
 	int		g_WidgetAnimEnable;
-	int		g_WidgetEmpty;
+	float	g_WidgetOpacity;
 };
 
 cbuffer ProgressBarCBuffer : register(b12)
@@ -146,9 +146,9 @@ PSOutput_Single WidgetPS(VertexUVOutput input)
 	}
 
 	else
-	{
 		output.Color = g_WidgetTint;
-	}
+
+	output.Color.a *= g_WidgetOpacity;
 
 	return output;
 }
@@ -180,9 +180,9 @@ PSOutput_Single NumberPS(VertexUVOutput input)
 	}
 
 	else
-	{
 		output.Color = g_WidgetTint;
-	}
+
+	output.Color.a *= g_WidgetOpacity;
 
 	return output;
 }

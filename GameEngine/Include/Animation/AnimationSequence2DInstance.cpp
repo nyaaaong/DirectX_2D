@@ -7,13 +7,14 @@
 #include "../Resource/Shader/Animation2DConstantBuffer.h"
 #include "../Resource/Texture/Texture.h"
 #include "../IMGUIListBox.h"
+#include "../PathManager.h"
 
 CAnimationSequence2DInstance::CAnimationSequence2DInstance()	:
 	m_Scene(nullptr),
 	m_Owner(nullptr),
 	m_CurrentAnimation(nullptr),
 	m_CBuffer(nullptr),
-	m_PlayAnimation(true)
+	m_PlayAnimation(false)
 {
 	SetTypeID<CAnimationSequence2DInstance>();
 }
@@ -60,9 +61,7 @@ CAnimationSequence2DInstance::~CAnimationSequence2DInstance()
 	}
 }
 
-void CAnimationSequence2DInstance::AddAnimation(const std::string& SequenceName,
-	const std::string& Name, bool Loop,
-	float PlayTime, float PlayScale, bool Reverse)
+void CAnimationSequence2DInstance::AddAnimation(const std::string& SequenceName, const std::string& Name, bool Loop, float PlayTime, float PlayScale, bool Reverse)
 {
 	CAnimationSequence2DData* Anim = FindAnimation(Name);
 
@@ -95,18 +94,13 @@ void CAnimationSequence2DInstance::AddAnimation(const std::string& SequenceName,
 		m_CurrentAnimation = Anim;
 
 		if (m_Owner)
-		{
-			m_Owner->SetTexture(0, 0, (int)ConstantBuffer_Shader_Type::Pixel, Anim->m_Sequence->GetTexture()->GetName(),
-				Anim->m_Sequence->GetTexture());
-		}
+			m_Owner->SetTexture(0, 0, (int)ConstantBuffer_Shader_Type::Pixel, Anim->m_Sequence->GetTexture()->GetName(), Anim->m_Sequence->GetTexture());
 	}
 
 	m_mapAnimation.insert(std::make_pair(Name, Anim));
 }
 
-void CAnimationSequence2DInstance::AddAnimation(const TCHAR* FileName,
-	const std::string& PathName, const std::string& Name,
-	bool Loop, float PlayTime, float PlayScale, bool Reverse)
+void CAnimationSequence2DInstance::AddAnimation(const TCHAR* FileName, const std::string& Name, const std::string& PathName)
 {
 	CAnimationSequence2DData* Anim = FindAnimation(Name);
 
@@ -138,29 +132,17 @@ void CAnimationSequence2DInstance::AddAnimation(const TCHAR* FileName,
 
 	if (!Sequence)
 		return;
+	
+	const PathInfo* Path = CPathManager::GetInst()->FindPath(PathName);
 
-	Anim = DBG_NEW CAnimationSequence2DData;
+	char	FullPath[MAX_PATH] = {};
 
-	Anim->m_Sequence = Sequence;
-	Anim->m_Name = Name;
-	Anim->m_Loop = Loop;
-	Anim->m_PlayTime = PlayTime;
-	Anim->m_PlayScale = PlayScale;
-	Anim->m_Reverse = Reverse;
-	Anim->m_FrameTime = PlayTime / Sequence->GetFrameCount();
+	if (Path)
+		strcpy_s(FullPath, Path->PathMultibyte);
 
-	if (m_mapAnimation.empty())
-	{
-		m_CurrentAnimation = Anim;
+	strcat_s(FullPath, FileNameMultibyte);
 
-		if (m_Owner)
-		{
-			m_Owner->SetTexture(0, 0, (int)ConstantBuffer_Shader_Type::Pixel, Anim->m_Sequence->GetTexture()->GetName(),
-				Anim->m_Sequence->GetTexture());
-		}
-	}
-
-	m_mapAnimation.insert(std::make_pair(Name, Anim));
+	Load(FullPath);
 }
 
 void CAnimationSequence2DInstance::DeleteAnimation(const std::string& Name)
@@ -489,7 +471,126 @@ void CAnimationSequence2DInstance::Load(FILE* File)
 
 	fread(&m_PlayAnimation, sizeof(bool), 1, File);
 
-
 	if (m_Scene)
 		m_CBuffer = m_Scene->GetResource()->GetAnimation2DCBuffer();
+}
+
+void CAnimationSequence2DInstance::Save(const char* FullPath)
+{
+	char	Convert[MAX_PATH] = {};
+
+	strcat_s(Convert, FullPath);
+
+	int	iPathLength = static_cast<int>(strlen(Convert));
+
+	char	sqc[5] = "cqs.";
+	char	anm[5] = "mna.";
+
+	bool	SQCFind = true;
+	bool	ANMFind = true;
+
+	for (int i = 1; i < 5; ++i)
+	{
+		if (Convert[iPathLength - i] != sqc[i - 1])
+		{
+			SQCFind = false;
+			break;
+		}
+	}
+
+	if (!SQCFind)
+	{
+		for (int i = 1; i < 5; ++i)
+		{
+			if (Convert[iPathLength - i] != anm[i - 1])
+			{
+				ANMFind = false;
+				break;
+			}
+		}
+	}
+
+	if (!SQCFind && !ANMFind)
+		strcat_s(Convert, ".anm");
+
+	else if (SQCFind)
+	{
+		for (int i = 1; i < 5; ++i)
+		{
+			Convert[iPathLength - i] = 0;
+		}
+
+		strcat_s(Convert, ".anm");
+	}
+
+	FILE* File = nullptr;
+
+	fopen_s(&File, Convert, "wb");
+
+	if (!File)
+		return;
+
+	Save(File);
+
+	fclose(File);
+}
+
+void CAnimationSequence2DInstance::Load(const char* FullPath)
+{
+	char	Convert[MAX_PATH] = {};
+
+	strcat_s(Convert, FullPath);
+
+	int	iPathLength = static_cast<int>(strlen(Convert));
+
+	char	sqc[5] = "cqs.";
+	char	anm[5] = "mna.";
+
+	bool	SQCFind = true;
+	bool	ANMFind = true;
+
+	for (int i = 1; i < 5; ++i)
+	{
+		if (Convert[iPathLength - i] != sqc[i - 1])
+		{
+			SQCFind = false;
+			break;
+		}
+	}
+
+	if (!SQCFind)
+	{
+		for (int i = 1; i < 5; ++i)
+		{
+			if (Convert[iPathLength - i] != anm[i - 1])
+			{
+				ANMFind = false;
+				break;
+			}
+		}
+	}
+
+	if (!SQCFind && !ANMFind)
+		strcat_s(Convert, ".anm");
+
+	else if (SQCFind)
+	{
+		for (int i = 1; i < 5; ++i)
+		{
+			Convert[iPathLength - i] = 0;
+		}
+
+		strcat_s(Convert, ".anm");
+	}
+
+	FILE* File = nullptr;
+
+	fopen_s(&File, Convert, "rb");
+
+	if (!File)
+		return;
+
+	Load(File);
+
+	fclose(File);
 }

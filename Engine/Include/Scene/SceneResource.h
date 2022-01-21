@@ -60,6 +60,7 @@ public:	// =================== Sequence2D =====================
 	bool LoadSequence2D(std::string& resultName, const char* FileName, const std::string& PathName = ANIMATION_PATH);
 	bool LoadSequence2DFullPath(const char* FullPath);
 	bool LoadSequence2DFullPath(std::string& resultName, const char* FullPath);
+	bool LoadSequence2DFullPath(std::string& resultName, TCHAR* resultSpritePath, const char* FullPath);
 	void ReleaseAnimationSequence2D(const std::string& Name);
 
 public:	// =================== Texture =====================

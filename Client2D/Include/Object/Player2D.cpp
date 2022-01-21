@@ -193,6 +193,7 @@ void CPlayer2D::Update(float DeltaTime)
 		//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
 		Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
 		Bullet->SetWorldRotation(GetWorldRot());
+		Bullet->SetCollisionProfile("PlayerAttack");
 
 		Hide = true;
 	}
@@ -294,25 +295,25 @@ void CPlayer2D::Attack(float DeltaTime)
 		return;
 
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
-	Bullet->SetOwner(this);
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
 	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot());
+	Bullet->SetCollisionProfile("PlayerAttack");
 
 	Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
-	Bullet->SetOwner(this);
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
 	Bullet->SetWorldPos(m_ChildLeftMuzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot());
+	Bullet->SetCollisionProfile("PlayerAttack");
 
 	Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
-	Bullet->SetOwner(this);
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
 	Bullet->SetWorldPos(m_ChildRightMuzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot());
+	Bullet->SetCollisionProfile("PlayerAttack");
 }
 
 void CPlayer2D::Attack1(float DeltaTime)
@@ -321,25 +322,25 @@ void CPlayer2D::Attack1(float DeltaTime)
 		return;
 
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
-	Bullet->SetOwner(this);
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
 	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot());
+	Bullet->SetCollisionProfile("PlayerAttack");
 
 	Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
-	Bullet->SetOwner(this);
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
 	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot() + Vector3(0.f, 0.f, 45.f));
+	Bullet->SetCollisionProfile("PlayerAttack");
 
 	Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
-	Bullet->SetOwner(this);
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
 	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot() + Vector3(0.f, 0.f, -45.f));
+	Bullet->SetCollisionProfile("PlayerAttack");
 }
 
 void CPlayer2D::test(float DeltatTime)
@@ -369,4 +370,5 @@ void CPlayer2D::Skill1(float DeltaTime)
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
 	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot());
+	Bullet->SetCollisionProfile("PlayerAttack");
 }

@@ -51,11 +51,11 @@ public:
 
 private:
 	void LoadTextureButton();
-	void AddAnimationButton();
+	void AddSequenceButton();
 	void AddAnimationFrameButton();
 	void SelectAnimation(int Index, const char* Item);
 	void SelectAnimationFrame(int Index, const char* Item);
-	void DeleteAnimationButton();
+	void DeleteSequenceButton();
 	void DeleteFrameButton();
 	void PlayAnimation();
 	void InputSize(const Vector2& size);

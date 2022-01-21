@@ -22,6 +22,9 @@ private:
     float   m_Distance;
 
 public:
+	void SetCollisionProfile(const std::string& Name);
+
+public:
     virtual void Start();
     virtual bool Init();
     virtual void Update(float DeltaTime);

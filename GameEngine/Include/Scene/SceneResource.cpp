@@ -356,6 +356,21 @@ bool CSceneResource::LoadSequence2DFullPath(std::string& resultName, const char*
 	return true;
 }
 
+bool CSceneResource::LoadSequence2DFullPath(std::string& resultName, TCHAR* resultSpritePath, const char* FullPath)
+{
+	if (!CResourceManager::GetInst()->LoadSequence2DFullPath(resultName, resultSpritePath, FullPath, m_Scene))
+		return false;
+
+	if (FindAnimationSequence2D(resultName))
+		return true;
+
+	CAnimationSequence2D* Sequence = CResourceManager::GetInst()->FindAnimationSequence2D(resultName);
+
+	m_mapSequence2D.insert(std::make_pair(resultName, Sequence));
+
+	return true;
+}
+
 bool CSceneResource::SaveSequence2D(const std::string& Name, const char* FileName, const std::string& PathName)
 {
 	return CResourceManager::GetInst()->SaveSequence2D(Name, FileName, PathName);

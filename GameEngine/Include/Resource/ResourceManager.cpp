@@ -198,6 +198,11 @@ bool CResourceManager::LoadSequence2DFullPath(std::string& resultName, const cha
 	return m_AnimationManager->LoadSequenceFullPath(resultName, FullPath, Scene);
 }
 
+bool CResourceManager::LoadSequence2DFullPath(std::string& resultName, TCHAR* resultSpritePath, const char* FullPath, class CScene* Scene)
+{
+	return m_AnimationManager->LoadSequenceFullPath(resultName, resultSpritePath, FullPath, Scene);
+}
+
 bool CResourceManager::LoadSequence2DFullPath(const char* FullPath, CScene* Scene)
 {
 	std::string	Name;

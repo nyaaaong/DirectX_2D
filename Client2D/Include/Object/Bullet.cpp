@@ -5,9 +5,7 @@
 #include "Component/ColliderCircle.h"
 
 CBullet::CBullet() :
-	m_Distance(600.f),
-	m_Owner(nullptr),
-	m_NeedChangeOwner(false)
+	m_Distance(600.f)
 {
 	SetTypeID<CBullet>();
 }
@@ -16,15 +14,18 @@ CBullet::CBullet(const CBullet& obj) :
 	CGameObject(obj)
 {
 	m_Sprite = (CSpriteComponent*)FindComponent("BulletSprite");
-	m_Owner = obj.m_Owner;
 	m_Distance = obj.m_Distance;
-	m_NeedChangeOwner = false;
 
 	m_Body = (CColliderCircle*)FindComponent("Body");
 }
 
 CBullet::~CBullet()
 {
+}
+
+void CBullet::SetCollisionProfile(const std::string& Name)
+{
+	m_Body->SetCollisionProfile(Name);
 }
 
 void CBullet::SetDamage(const CollisionResult& result)
@@ -64,11 +65,14 @@ bool CBullet::Init()
 	m_Sprite->SetRelativeScale(50.f, 50.f, 1.f);
 	m_Sprite->SetPivot(0.5f, 0.5f, 0.f);
 
-	m_Body = (CColliderCircle*)CreateComponent<CColliderCircle>("Body");
+	m_Body = CreateComponent<CColliderCircle>("Body");
 
 	m_Body->SetRadius(25.f);
 
 	m_Sprite->AddChild(m_Body);
+
+	m_Body->AddCollisionCallback(Collision_State::Begin, this, &CBullet::OnCollisionBegin);
+	m_Body->AddCollisionCallback(Collision_State::End, this, &CBullet::OnCollisionEnd);
 
 	return true;
 }
@@ -76,22 +80,6 @@ bool CBullet::Init()
 void CBullet::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
-
-	if (m_NeedChangeOwner)
-	{
-		m_NeedChangeOwner = false;
-
-		std::string	OwnerName = m_Owner->GetName();
-
-		if (OwnerName == "Player")
-		{
-			m_Body->SetCollisionProfile("PlayerAttack");
-			m_Body->AddCollisionCallback<CBullet>(Collision_State::Begin, this, &CBullet::SetDamage);
-		}
-
-		else if (OwnerName == "Monster")
-			m_Body->SetCollisionProfile("MonsterAttack");
-	}
 
 	float	Dist = 500.f * DeltaTime;
 
@@ -113,4 +101,13 @@ void CBullet::PostUpdate(float DeltaTime)
 CBullet* CBullet::Clone()
 {
 	return DBG_NEW CBullet(*this);
+}
+
+void CBullet::OnCollisionBegin(const CollisionResult& result)
+{
+	Destroy();
+}
+
+void CBullet::OnCollisionEnd(const CollisionResult& result)
+{
 }

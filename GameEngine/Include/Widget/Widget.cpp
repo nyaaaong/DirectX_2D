@@ -16,7 +16,8 @@ CWidget::CWidget()	:
 	m_CBuffer(nullptr),
 	m_Size(50.f, 50.f),
 	m_MouseHovered(false),
-	m_CollisionMouseEnable(true)
+	m_CollisionMouseEnable(true),
+	m_Opacity(1.f)
 {
 	m_MouseHovered = false;
 }
@@ -127,6 +128,7 @@ void CWidget::Render()
 
 	m_CBuffer->SetWP(matWP);
 	m_CBuffer->SetTint(m_Tint);
+	m_CBuffer->SetOpacity(m_Opacity);
 
 	m_CBuffer->UpdateCBuffer();
 

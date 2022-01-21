@@ -145,6 +145,31 @@ bool CAnimationManager::LoadSequenceFullPath(std::string& resultName, const char
 	return true;
 }
 
+bool CAnimationManager::LoadSequenceFullPath(std::string& resultName, TCHAR* resultSpritePath, const char* FullPath, class CScene* Scene)
+{
+	CAnimationSequence2D* Sequence = DBG_NEW CAnimationSequence2D;
+
+	Sequence->SetScene(Scene);
+
+	if (!Sequence->LoadFullPath(resultSpritePath, FullPath))
+	{
+		SAFE_DELETE(Sequence);
+		return false;
+	}
+
+	resultName = Sequence->GetName();
+
+	if (FindSequence(resultName))
+	{
+		SAFE_RELEASE(Sequence);
+		return true;
+	}
+
+	m_mapSequence2D.insert(std::make_pair(resultName, Sequence));
+
+	return true;
+}
+
 bool CAnimationManager::SaveSequence(const std::string& Name, const char* FileName,
 	const std::string& PathName)
 {

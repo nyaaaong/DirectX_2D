@@ -34,6 +34,7 @@
 #include <dwrite_3.h>
 #include <d2d1.h>
 #include <stack>
+#include <process.h>
 
 #include "Excel/include_cpp/libxl.h"
 
@@ -334,7 +335,7 @@ struct WidgetCBuffer
 	Vector2	WidgetAnimStartUV;
 	Vector2	WidgetAnimEndUV;
 	int		WidgetAnimEnable;
-	int		Empty;
+	float	Opacity;
 };
 
 struct ProgressBarCBuffer

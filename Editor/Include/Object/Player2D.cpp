@@ -42,8 +42,8 @@ bool CPlayer2D::Init()
 	m_Sprite->CreateAnimationInstance<CAnimationSequence2DInstance>();
 
 	CAnimationSequence2DInstance* Anim = m_Sprite->GetAnimationInstance();
-
-	Anim->AddAnimation(TEXT("Player_Idle_Down.sqc"), ANIMATION_PATH, "PlayerIdleD", true);
+	
+	Anim->AddAnimation(TEXT("Player/Idle/Player_Idle_D.sqc"), ANIMATION_PATH, "PlayerIdleD");
 
 	m_Sprite->SetRelativeScale(100.f, 100.f, 1.f);
 	m_Sprite->SetRelativePos(100.f, 50.f, 0.f);

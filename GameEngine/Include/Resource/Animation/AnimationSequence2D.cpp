@@ -178,37 +178,117 @@ bool CAnimationSequence2D::LoadFullPath(const char* FullPath)
 			if (vecFileName.size() == 1)
 			{
 				if (m_Scene)
-				{
 					m_Scene->GetResource()->LoadTexture(TexName, vecFileName[0].c_str(), PathName);
-				}
 
 				else
-				{
 					CResourceManager::GetInst()->LoadTexture(TexName, vecFileName[0].c_str(), PathName);
-				}
-			}
-
-			else
-			{
 			}
 			break;
 		case Image_Type::Frame:
-			if (vecFileName.size() == 1)
-			{
-			}
-
-			else
-			{
-			}
 			break;
 		case Image_Type::Array:
+			break;
+		}
+
+		if (m_Scene)
+			m_Texture = m_Scene->GetResource()->FindTexture(TexName);
+
+		else
+			m_Texture = CResourceManager::GetInst()->FindTexture(TexName);
+	}
+
+	int	FrameCount = 0;
+
+	fread(&FrameCount, sizeof(int), 1, pFile);
+
+	m_vecFrameData.resize((const size_t)FrameCount);
+
+	fread(&m_vecFrameData[0], sizeof(AnimationFrameData), FrameCount, pFile);
+
+	fclose(pFile);
+
+	return true;
+}
+
+bool CAnimationSequence2D::LoadFullPath(TCHAR* resultSpritePath, const char* FullPath)
+{
+	FILE* pFile = nullptr;
+
+	fopen_s(&pFile, FullPath, "rb");
+
+	if (!pFile)
+		return false;
+
+	int	Length = 0;
+	fread(&Length, sizeof(int), 1, pFile);
+
+	char	Name[256] = {};
+	fread(Name, sizeof(char), Length, pFile);
+	m_Name = Name;
+
+	bool	TexEnable = false;
+
+	fread(&TexEnable, sizeof(bool), 1, pFile);
+
+	if (TexEnable)
+	{
+		int	TexNameLength = 0;
+		fread(&TexNameLength, sizeof(int), 1, pFile);
+		char	TexName[256] = {};
+		fread(TexName, sizeof(char), TexNameLength, pFile);
+
+		Image_Type	ImageType;
+		fread(&ImageType, sizeof(Image_Type), 1, pFile);
+
+		int	InfoCount = 0;
+
+		fread(&InfoCount, sizeof(int), 1, pFile);
+
+		std::vector<std::wstring>	vecFullPath;
+		std::vector<std::wstring>	vecFileName;
+		std::string	PathName;
+
+		for (int i = 0; i < InfoCount; ++i)
+		{
+			int	PathSize = 0;
+
+			fread(&PathSize, sizeof(int), 1, pFile);
+
+			TCHAR	FullPath[MAX_PATH] = {};
+			fread(FullPath, sizeof(TCHAR), PathSize, pFile);
+			vecFullPath.push_back(FullPath);
+
+			lstrcpy(resultSpritePath, FullPath);
+
+			fread(&PathSize, sizeof(int), 1, pFile);
+
+			TCHAR	TexFileName[MAX_PATH] = {};
+			fread(TexFileName, sizeof(TCHAR), PathSize, pFile);
+			vecFileName.push_back(TexFileName);
+
+			fread(&PathSize, sizeof(int), 1, pFile);
+
+			char	TexPathName[MAX_PATH] = {};
+			fread(TexPathName, sizeof(char), PathSize, pFile);
+
+			PathName = TexPathName;
+		}
+
+		switch (ImageType)
+		{
+		case Image_Type::Atlas:
 			if (vecFileName.size() == 1)
 			{
-			}
+				if (m_Scene)
+					m_Scene->GetResource()->LoadTexture(TexName, vecFileName[0].c_str(), PathName);
 
-			else
-			{
+				else
+					CResourceManager::GetInst()->LoadTexture(TexName, vecFileName[0].c_str(), PathName);
 			}
+			break;
+		case Image_Type::Frame:
+			break;
+		case Image_Type::Array:
 			break;
 		}
 

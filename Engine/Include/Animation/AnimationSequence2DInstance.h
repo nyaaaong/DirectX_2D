@@ -60,12 +60,14 @@ public:
 	}
 
 public:
-	virtual void Save(FILE* File);
-	virtual void Load(FILE* File);
+	void Save(FILE* File);
+	void Load(FILE* File);
+	void Save(const char* FullPath);
+	void Load(const char* FullPath);
 
 public:
 	void AddAnimation(const std::string& SequenceName, const std::string& Name, bool Loop = true, float PlayTime = 1.f, float PlayScale = 1.f, bool Reverse = false);
-	void AddAnimation(const TCHAR* FileName, const std::string& PathName, const std::string& Name, bool Loop = true, float PlayTime = 1.f, float PlayScale = 1.f, bool Reverse = false);
+	void AddAnimation(const TCHAR* FileName, const std::string& Name, const std::string& PathName);
 	void DeleteAnimation(const std::string& Name);
 	void SetPlayTime(const std::string& Name, float PlayTime);
 	void SetPlayScale(const std::string& Name, float PlayScale);
