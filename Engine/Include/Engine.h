@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameInfo.h"
+#include "Timer.h"
 
 class CEngine
 {
@@ -52,6 +53,16 @@ public:
 	HINSTANCE GetWindowInstance()	const
 	{
 		return m_hInst;
+	}
+
+	float GetFPS()	const
+	{
+		return m_Timer->GetFPS();
+	}
+
+	float GetDeltaTime()	const
+	{
+		return m_Timer->GetDeltaTime();
 	}
 
 public:

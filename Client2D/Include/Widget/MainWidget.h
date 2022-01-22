@@ -26,6 +26,7 @@ private:
 	CSharedPtr<CNumber>	m_Hour;
 	CSharedPtr<CNumber>	m_Minute;
 	CSharedPtr<CNumber>	m_Second;
+	CSharedPtr<CText>	m_FPSText;
 
 	CSharedPtr<CSliderBar>	m_SliderBar;
 	CSharedPtr<CSlider>		m_Slider;

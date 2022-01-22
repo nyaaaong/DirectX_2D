@@ -1,4 +1,5 @@
 #include "MainWidget.h"
+#include "Engine.h"
 #include "Animation/AnimationSequence2DInstance.h"
 #include "Scene/SceneManager.h"
 
@@ -15,6 +16,7 @@ CMainWidget::CMainWidget(const CMainWidget& window) :
 	m_Hour = FindWidget<CNumber>("Hour");
 	m_Minute = FindWidget<CNumber>("Minute");
 	m_Second = FindWidget<CNumber>("Second");
+	m_FPSText = FindWidget<CText>("FPSText");
 
 	m_SliderBar = CreateWidget<CSliderBar>("SliderBar");
 	m_Slider = CreateWidget<CSlider>("Slider");
@@ -150,6 +152,18 @@ bool CMainWidget::Init()
 
 	vecFileName.clear();
 
+	m_FPSText = CreateWidget<CText>("FPSText");
+
+	m_FPSText->SetText(TEXT("Button1"));
+	m_FPSText->SetPos(900.f, 650.f);
+	m_FPSText->SetSize(300.f, 40.f);
+	m_FPSText->SetZOrder(1);
+	m_FPSText->SetColor(1.f, 0.f, 0.f);
+	//m_Button1Text->SetOpacity(0.5f);
+	m_FPSText->SetAlignH(TEXT_ALIGN_H::Center);
+	m_FPSText->SetShadowEnable(true);
+	m_FPSText->SetShadowOffset(2.f, 2.f);
+
 	m_SliderBar = CreateWidget<CSliderBar>("SliderBar");
 	m_SliderBar->SetTexture("SliderBar", TEXT("SliderBar.png"));
 	m_SliderBar->SetPos(400.f, 100.f);
@@ -194,6 +208,16 @@ void CMainWidget::Update(float DeltaTime)
 	m_Hour->SetNumber((int)time.wHour);
 	m_Minute->SetNumber((int)time.wMinute);
 	m_Second->SetNumber((int)time.wSecond);
+
+	char    FPS[256] = {};
+	sprintf_s(FPS, "FPS : %.5f", CEngine::GetInst()->GetFPS());
+
+	TCHAR   ConvertFPS[256] = {};
+
+	int Length = MultiByteToWideChar(CP_ACP, 0, FPS, -1, 0, 0);
+	MultiByteToWideChar(CP_ACP, 0, FPS, -1, ConvertFPS, Length);
+
+	m_FPSText->SetText(ConvertFPS);
 }
 
 void CMainWidget::PostUpdate(float DeltaTime)

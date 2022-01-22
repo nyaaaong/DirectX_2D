@@ -94,7 +94,7 @@ void CAnimationSequence2DInstance::AddAnimation(const std::string& SequenceName,
 		m_CurrentAnimation = Anim;
 
 		if (m_Owner)
-			m_Owner->SetTexture(0, 0, (int)ConstantBuffer_Shader_Type::Pixel, Anim->m_Sequence->GetTexture()->GetName(), Anim->m_Sequence->GetTexture());
+			m_Owner->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, Anim->m_Sequence->GetTexture()->GetName(), Anim->m_Sequence->GetTexture());
 	}
 
 	m_mapAnimation.insert(std::make_pair(Name, Anim));
@@ -212,7 +212,7 @@ bool CAnimationSequence2DInstance::SetCurrentAnimation(const std::string& Name)
 		m_CurrentAnimation->m_vecNotify[i]->Call = false;
 
 	if (m_Owner)
-		m_Owner->SetTexture(0, 0, (int)ConstantBuffer_Shader_Type::Pixel, m_CurrentAnimation->m_Sequence->GetTexture()->GetName(), m_CurrentAnimation->m_Sequence->GetTexture());
+		m_Owner->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, m_CurrentAnimation->m_Sequence->GetTexture()->GetName(), m_CurrentAnimation->m_Sequence->GetTexture());
 
 	return true;
 }
@@ -242,7 +242,7 @@ void CAnimationSequence2DInstance::ChangeAnimation(const std::string& Name)
 
 	if (m_Owner)
 	{
-		m_Owner->SetTexture(0, 0, (int)ConstantBuffer_Shader_Type::Pixel, m_CurrentAnimation->m_Sequence->GetTexture()->GetName(),
+		m_Owner->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, m_CurrentAnimation->m_Sequence->GetTexture()->GetName(),
 			m_CurrentAnimation->m_Sequence->GetTexture());
 	}
 }
@@ -256,7 +256,7 @@ void CAnimationSequence2DInstance::Start()
 {
 	if (m_Owner && m_CurrentAnimation)
 	{
-		m_Owner->SetTexture(0, 0, (int)ConstantBuffer_Shader_Type::Pixel, m_CurrentAnimation->m_Sequence->GetTexture()->GetName(),
+		m_Owner->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, m_CurrentAnimation->m_Sequence->GetTexture()->GetName(),
 			m_CurrentAnimation->m_Sequence->GetTexture());
 	}
 }

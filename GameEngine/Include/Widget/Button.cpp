@@ -216,7 +216,7 @@ void CButton::PostUpdate(float DeltaTime)
 void CButton::Render()
 {
 	if (m_Info[(int)m_State].Texture)
-		m_Info[(int)m_State].Texture->SetShader(0, (int)ConstantBuffer_Shader_Type::Pixel, 0);
+		m_Info[(int)m_State].Texture->SetShader(0, (int)Buffer_Shader_Type::Pixel, 0);
 
 	m_Tint = m_Info[(int)m_State].Tint;
 

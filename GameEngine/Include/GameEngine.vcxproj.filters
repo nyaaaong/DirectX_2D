@@ -77,15 +77,6 @@
     <Filter Include="01. Resource\01. Shader">
       <UniqueIdentifier>{4a493139-9a7a-4136-942c-2c2dc8ed406a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Resource\01. Shader\01. HLSL">
-      <UniqueIdentifier>{033bd553-5774-4dc0-b4b3-cf1852e94352}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Resource\01. Shader\02. ShaderClass">
-      <UniqueIdentifier>{540f031b-8dd7-498e-9682-61f43088858b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Resource\01. Shader\03. ConstantBuffer">
-      <UniqueIdentifier>{04e4f3e7-af79-428d-a598-5673c9918fa4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Resource\02. Material">
       <UniqueIdentifier>{1d0aad1e-368c-424e-bd85-2807d5080d60}</UniqueIdentifier>
     </Filter>
@@ -155,36 +146,6 @@
     <Filter Include="04. Component\00. SceneComponent\02. Camera">
       <UniqueIdentifier>{fa0f5041-440b-43ac-994d-1ce17c1789d5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Resource\01. Shader\02. ShaderClass\00. ColorMesh">
-      <UniqueIdentifier>{94cb0ef2-bcf6-4ff2-912a-e7a8fffd25e1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Resource\01. Shader\02. ShaderClass\01. Mesh2D">
-      <UniqueIdentifier>{58bf3e92-b007-4207-9fc5-d70cbe8ae0a0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Resource\01. Shader\02. ShaderClass\02. Collider">
-      <UniqueIdentifier>{538c56d5-dc96-49b0-8cc6-fa7a865f70c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Resource\01. Shader\02. ShaderClass\03. Widget">
-      <UniqueIdentifier>{316a33b6-bdb7-4799-88e6-5c96702a88ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Resource\01. Shader\03. ConstantBuffer\00. Transform">
-      <UniqueIdentifier>{84ff1ef9-4296-4323-882b-4ee9c37c783b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Resource\01. Shader\03. ConstantBuffer\01. Material">
-      <UniqueIdentifier>{3355a160-79cb-43e9-84d0-0de207401a5e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Resource\01. Shader\03. ConstantBuffer\02. Animation2D">
-      <UniqueIdentifier>{f4d2b0e2-bb32-4f9a-804e-2614ab9d17b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Resource\01. Shader\03. ConstantBuffer\03. Standard2D">
-      <UniqueIdentifier>{d7b330d1-e9c2-41bc-8841-c7d85ebcde3c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Resource\01. Shader\03. ConstantBuffer\04. Collider">
-      <UniqueIdentifier>{1b16fee4-c1ad-4288-8936-097dbac80d72}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Resource\01. Shader\03. ConstantBuffer\05. Widget">
-      <UniqueIdentifier>{cc17fd08-8abf-4249-ae05-6a0bb793868f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Resource\05. Sound">
       <UniqueIdentifier>{13dfa01d-9208-466b-81cc-b4a7b27e8d90}</UniqueIdentifier>
     </Filter>
@@ -217,6 +178,48 @@
     </Filter>
     <Filter Include="00. Engine\08. Thread">
       <UniqueIdentifier>{3aa2d37c-4be3-4655-9e0e-2a098e7989d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\00. HLSL">
+      <UniqueIdentifier>{033bd553-5774-4dc0-b4b3-cf1852e94352}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\01. ShaderClass">
+      <UniqueIdentifier>{540f031b-8dd7-498e-9682-61f43088858b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\01. ShaderClass\00. ColorMesh">
+      <UniqueIdentifier>{94cb0ef2-bcf6-4ff2-912a-e7a8fffd25e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\01. ShaderClass\01. Mesh2D">
+      <UniqueIdentifier>{58bf3e92-b007-4207-9fc5-d70cbe8ae0a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\01. ShaderClass\02. Collider">
+      <UniqueIdentifier>{538c56d5-dc96-49b0-8cc6-fa7a865f70c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\01. ShaderClass\03. Widget">
+      <UniqueIdentifier>{316a33b6-bdb7-4799-88e6-5c96702a88ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\02. ConstantBuffer">
+      <UniqueIdentifier>{04e4f3e7-af79-428d-a598-5673c9918fa4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\02. ConstantBuffer\00. Transform">
+      <UniqueIdentifier>{84ff1ef9-4296-4323-882b-4ee9c37c783b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\02. ConstantBuffer\01. Material">
+      <UniqueIdentifier>{3355a160-79cb-43e9-84d0-0de207401a5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\02. ConstantBuffer\02. Animation2D">
+      <UniqueIdentifier>{f4d2b0e2-bb32-4f9a-804e-2614ab9d17b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\02. ConstantBuffer\03. Standard2D">
+      <UniqueIdentifier>{d7b330d1-e9c2-41bc-8841-c7d85ebcde3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\02. ConstantBuffer\04. Collider">
+      <UniqueIdentifier>{1b16fee4-c1ad-4288-8936-097dbac80d72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\02. ConstantBuffer\05. Widget">
+      <UniqueIdentifier>{cc17fd08-8abf-4249-ae05-6a0bb793868f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\03. StructuredBuffer">
+      <UniqueIdentifier>{55d46824-cfc6-4f36-9e14-74ace3c2f551}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -257,16 +260,16 @@
       <Filter>01. Resource</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\ComputeShader.h">
-      <Filter>01. Resource\01. Shader\02. ShaderClass</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\GraphicShader.h">
-      <Filter>01. Resource\01. Shader\02. ShaderClass</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\Shader.h">
-      <Filter>01. Resource\01. Shader\02. ShaderClass</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\ColorMeshShader.h">
-      <Filter>01. Resource\01. Shader\02. ShaderClass\00. ColorMesh</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass\00. ColorMesh</Filter>
     </ClInclude>
     <ClInclude Include="PathManager.h">
       <Filter>00. Engine\04. Path</Filter>
@@ -320,13 +323,13 @@
       <Filter>04. Component\00. SceneComponent</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\ConstantBuffer.h">
-      <Filter>01. Resource\01. Shader\03. ConstantBuffer</Filter>
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\ConstantBufferBase.h">
-      <Filter>01. Resource\01. Shader\03. ConstantBuffer</Filter>
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\TransformConstantBuffer.h">
-      <Filter>01. Resource\01. Shader\03. ConstantBuffer\00. Transform</Filter>
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\00. Transform</Filter>
     </ClInclude>
     <ClInclude Include="Render\RenderManager.h">
       <Filter>05. Render</Filter>
@@ -380,7 +383,7 @@
       <Filter>06. Excel\00. Library\00. Include</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\Mesh2DShader.h">
-      <Filter>01. Resource\01. Shader\02. ShaderClass\01. Mesh2D</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass\01. Mesh2D</Filter>
     </ClInclude>
     <ClInclude Include="Excel\Excel.h">
       <Filter>06. Excel</Filter>
@@ -389,7 +392,7 @@
       <Filter>06. Excel\01. Character\00. Player</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\MaterialConstantBuffer.h">
-      <Filter>01. Resource\01. Shader\03. ConstantBuffer\01. Material</Filter>
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\01. Material</Filter>
     </ClInclude>
     <ClInclude Include="Render\RenderStateManager.h">
       <Filter>05. Render\00. RenderState</Filter>
@@ -416,10 +419,10 @@
       <Filter>01. Resource\04. Animation</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\Standard2DConstantBuffer.h">
-      <Filter>01. Resource\01. Shader\03. ConstantBuffer\03. Standard2D</Filter>
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\03. Standard2D</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\Animation2DConstantBuffer.h">
-      <Filter>01. Resource\01. Shader\03. ConstantBuffer\02. Animation2D</Filter>
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\02. Animation2D</Filter>
     </ClInclude>
     <ClInclude Include="imstb_rectpack.h">
       <Filter>00. Engine\07. IMGUI\00. Lib</Filter>
@@ -488,7 +491,7 @@
       <Filter>00. Engine\07. IMGUI\02. Widget\02. List</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\PosMeshShader.h">
-      <Filter>01. Resource\01. Shader\02. ShaderClass\00. ColorMesh</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass\00. ColorMesh</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Mesh\StaticMesh.h">
       <Filter>01. Resource\00. Mesh</Filter>
@@ -518,7 +521,7 @@
       <Filter>02. Scene\02. Collision</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\ColliderConstantBuffer.h">
-      <Filter>01. Resource\01. Shader\03. ConstantBuffer\04. Collider</Filter>
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\04. Collider</Filter>
     </ClInclude>
     <ClInclude Include="Collision\Collision.h">
       <Filter>08. Collision</Filter>
@@ -533,10 +536,10 @@
       <Filter>04. Component\00. SceneComponent\01. Collider</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\ColliderShader.h">
-      <Filter>01. Resource\01. Shader\02. ShaderClass\02. Collider</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass\02. Collider</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\ColliderPixelShader.h">
-      <Filter>01. Resource\01. Shader\02. ShaderClass\02. Collider</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass\02. Collider</Filter>
     </ClInclude>
     <ClInclude Include="Component\ColliderPixel.h">
       <Filter>04. Component\00. SceneComponent\01. Collider</Filter>
@@ -548,10 +551,10 @@
       <Filter>02. Scene\04. ViewPort</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\WidgetShader.h">
-      <Filter>01. Resource\01. Shader\02. ShaderClass\03. Widget</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass\03. Widget</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\WidgetConstantBuffer.h">
-      <Filter>01. Resource\01. Shader\03. ConstantBuffer\05. Widget</Filter>
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\05. Widget</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Sound\SoundManager.h">
       <Filter>01. Resource\05. Sound</Filter>
@@ -608,16 +611,16 @@
       <Filter>09. Widget\01. Widget\04. Slider</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\ProgressBarConstantBuffer.h">
-      <Filter>01. Resource\01. Shader\03. ConstantBuffer\05. Widget</Filter>
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\05. Widget</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\ProgressBarShader.h">
-      <Filter>01. Resource\01. Shader\02. ShaderClass\03. Widget</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass\03. Widget</Filter>
     </ClInclude>
     <ClInclude Include="Component\WidgetComponent.h">
       <Filter>04. Component\00. SceneComponent\03. Widget</Filter>
     </ClInclude>
     <ClInclude Include="Resource\Shader\NumberShader.h">
-      <Filter>01. Resource\01. Shader\02. ShaderClass\03. Widget</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass\03. Widget</Filter>
     </ClInclude>
     <ClInclude Include="Widget\Number.h">
       <Filter>09. Widget\01. Widget\05. Number</Filter>
@@ -626,6 +629,12 @@
       <Filter>00. Engine\08. Thread</Filter>
     </ClInclude>
     <ClInclude Include="Sync.h">
+      <Filter>00. Engine\08. Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\StructuredBuffer.h">
+      <Filter>01. Resource\01. Shader\03. StructuredBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Source\DirectX\GameEngine\Include\ThreadQueue.h">
       <Filter>00. Engine\08. Thread</Filter>
     </ClInclude>
   </ItemGroup>
@@ -655,16 +664,16 @@
       <Filter>01. Resource</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\Shader.cpp">
-      <Filter>01. Resource\01. Shader\02. ShaderClass</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\GraphicShader.cpp">
-      <Filter>01. Resource\01. Shader\02. ShaderClass</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\ComputeShader.cpp">
-      <Filter>01. Resource\01. Shader\02. ShaderClass</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\ColorMeshShader.cpp">
-      <Filter>01. Resource\01. Shader\02. ShaderClass\00. ColorMesh</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass\00. ColorMesh</Filter>
     </ClCompile>
     <ClCompile Include="PathManager.cpp">
       <Filter>00. Engine\04. Path</Filter>
@@ -718,13 +727,13 @@
       <Filter>04. Component\00. SceneComponent</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\ConstantBuffer.cpp">
-      <Filter>01. Resource\01. Shader\03. ConstantBuffer</Filter>
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\ConstantBufferBase.cpp">
-      <Filter>01. Resource\01. Shader\03. ConstantBuffer</Filter>
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\TransformConstantBuffer.cpp">
-      <Filter>01. Resource\01. Shader\03. ConstantBuffer\00. Transform</Filter>
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\00. Transform</Filter>
     </ClCompile>
     <ClCompile Include="Render\RenderManager.cpp">
       <Filter>05. Render</Filter>
@@ -742,7 +751,7 @@
       <Filter>06. Excel</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\Mesh2DShader.cpp">
-      <Filter>01. Resource\01. Shader\02. ShaderClass\01. Mesh2D</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass\01. Mesh2D</Filter>
     </ClCompile>
     <ClCompile Include="Excel\Excel.cpp">
       <Filter>06. Excel</Filter>
@@ -751,7 +760,7 @@
       <Filter>06. Excel\01. Character\00. Player</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\MaterialConstantBuffer.cpp">
-      <Filter>01. Resource\01. Shader\03. ConstantBuffer\01. Material</Filter>
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\01. Material</Filter>
     </ClCompile>
     <ClCompile Include="Render\RenderStateManager.cpp">
       <Filter>05. Render\00. RenderState</Filter>
@@ -778,10 +787,10 @@
       <Filter>01. Resource\04. Animation</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\Standard2DConstantBuffer.cpp">
-      <Filter>01. Resource\01. Shader\03. ConstantBuffer\03. Standard2D</Filter>
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\03. Standard2D</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\Animation2DConstantBuffer.cpp">
-      <Filter>01. Resource\01. Shader\03. ConstantBuffer\02. Animation2D</Filter>
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\02. Animation2D</Filter>
     </ClCompile>
     <ClCompile Include="imgui_tables.cpp">
       <Filter>00. Engine\07. IMGUI\00. Lib</Filter>
@@ -847,7 +856,7 @@
       <Filter>00. Engine\07. IMGUI\02. Widget\02. List</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\PosMeshShader.cpp">
-      <Filter>01. Resource\01. Shader\02. ShaderClass\00. ColorMesh</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass\00. ColorMesh</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Mesh\StaticMesh.cpp">
       <Filter>01. Resource\00. Mesh</Filter>
@@ -877,7 +886,7 @@
       <Filter>02. Scene\02. Collision</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\ColliderConstantBuffer.cpp">
-      <Filter>01. Resource\01. Shader\03. ConstantBuffer\04. Collider</Filter>
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\04. Collider</Filter>
     </ClCompile>
     <ClCompile Include="Collision\Collision.cpp">
       <Filter>08. Collision</Filter>
@@ -892,10 +901,10 @@
       <Filter>04. Component\00. SceneComponent\01. Collider</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\ColliderShader.cpp">
-      <Filter>01. Resource\01. Shader\02. ShaderClass\02. Collider</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass\02. Collider</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\ColliderPixelShader.cpp">
-      <Filter>01. Resource\01. Shader\02. ShaderClass\02. Collider</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass\02. Collider</Filter>
     </ClCompile>
     <ClCompile Include="Component\ColliderPixel.cpp">
       <Filter>04. Component\00. SceneComponent\01. Collider</Filter>
@@ -907,10 +916,10 @@
       <Filter>02. Scene\04. ViewPort</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\WidgetShader.cpp">
-      <Filter>01. Resource\01. Shader\02. ShaderClass\03. Widget</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass\03. Widget</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\WidgetConstantBuffer.cpp">
-      <Filter>01. Resource\01. Shader\03. ConstantBuffer\05. Widget</Filter>
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\05. Widget</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Sound\Sound.cpp">
       <Filter>01. Resource\05. Sound</Filter>
@@ -943,16 +952,16 @@
       <Filter>09. Widget\01. Widget\04. Slider</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\ProgressBarConstantBuffer.cpp">
-      <Filter>01. Resource\01. Shader\03. ConstantBuffer\05. Widget</Filter>
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\05. Widget</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\ProgressBarShader.cpp">
-      <Filter>01. Resource\01. Shader\02. ShaderClass\03. Widget</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass\03. Widget</Filter>
     </ClCompile>
     <ClCompile Include="Component\WidgetComponent.cpp">
       <Filter>04. Component\00. SceneComponent\03. Widget</Filter>
     </ClCompile>
     <ClCompile Include="Resource\Shader\NumberShader.cpp">
-      <Filter>01. Resource\01. Shader\02. ShaderClass\03. Widget</Filter>
+      <Filter>01. Resource\01. Shader\01. ShaderClass\03. Widget</Filter>
     </ClCompile>
     <ClCompile Include="Widget\Number.cpp">
       <Filter>09. Widget\01. Widget\05. Number</Filter>
@@ -960,22 +969,28 @@
     <ClCompile Include="Thread.cpp">
       <Filter>00. Engine\08. Thread</Filter>
     </ClCompile>
+    <ClCompile Include="Resource\Shader\StructuredBuffer.cpp">
+      <Filter>01. Resource\01. Shader\03. StructuredBuffer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Shader\ShaderInfo.fx">
-      <Filter>01. Resource\01. Shader\01. HLSL</Filter>
+      <Filter>01. Resource\01. Shader\00. HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\ColorMesh.fx">
-      <Filter>01. Resource\01. Shader\01. HLSL</Filter>
+      <Filter>01. Resource\01. Shader\00. HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\Mesh2D.fx">
-      <Filter>01. Resource\01. Shader\01. HLSL</Filter>
+      <Filter>01. Resource\01. Shader\00. HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\Collider.fx">
-      <Filter>01. Resource\01. Shader\01. HLSL</Filter>
+      <Filter>01. Resource\01. Shader\00. HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\Widget.fx">
-      <Filter>01. Resource\01. Shader\01. HLSL</Filter>
+      <Filter>01. Resource\01. Shader\00. HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\Particle.fx">
+      <Filter>01. Resource\01. Shader\00. HLSL</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

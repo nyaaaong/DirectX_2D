@@ -243,7 +243,7 @@ void CNumber::Render()
 				break;
 			}
 
-			m_Info.Texture->SetShader(0, (int)ConstantBuffer_Shader_Type::Pixel, Frame);
+			m_Info.Texture->SetShader(0, (int)Buffer_Shader_Type::Pixel, Frame);
 		}
 
 		m_Tint = m_Info.Tint;

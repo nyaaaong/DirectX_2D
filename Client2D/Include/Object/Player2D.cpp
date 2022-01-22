@@ -96,8 +96,8 @@ bool CPlayer2D::Init()
 	m_ChildRightSprite->AddChild(m_ChildRightMuzzle);
 
 
-	m_ChildLeftSprite->SetTexture(0, 0, (int)ConstantBuffer_Shader_Type::Pixel, "Teemo", TEXT("Teemo.jpg"));
-	m_ChildRightSprite->SetTexture(0, 0, (int)ConstantBuffer_Shader_Type::Pixel, "Teemo", TEXT("Teemo.jpg"));
+	m_ChildLeftSprite->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "Teemo", TEXT("Teemo.jpg"));
+	m_ChildRightSprite->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "Teemo", TEXT("Teemo.jpg"));
 
 	m_ChildLeftSprite->SetBaseColor(1.f, 0.f, 0.f, 1.f);
 	m_ChildRightSprite->SetBaseColor(1.f, 0.f, 0.f, 1.f);

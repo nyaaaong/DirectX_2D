@@ -31,7 +31,7 @@ public:	// =================== Mesh =====================
 public:// =================== Shader =====================
 	class CShader* FindShader(const std::string& Name);
 	void ReleaseShader(const std::string& Name);
-	bool CreateConstantBuffer(const std::string& Name, int Size, int Register, int ConstantBufferShaderType = (int)ConstantBuffer_Shader_Type::All);
+	bool CreateConstantBuffer(const std::string& Name, int Size, int Register, int ConstantBufferShaderType = (int)Buffer_Shader_Type::All);
 	class CConstantBuffer* FindConstantBuffer(const std::string& Name);
 
 public:	// =================== Material =====================

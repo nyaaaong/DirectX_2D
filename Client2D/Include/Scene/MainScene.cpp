@@ -22,11 +22,20 @@ bool CMainScene::Init()
 
 	CreateAnimationSequence();
 
+	if (m_LoadingFunction)
+		m_LoadingFunction(false, 0.3f);
+
 	CPlayer2D* Player = m_Scene->CreateGameObject<CPlayer2D>("Player");
 
 	SetPlayerObject(Player);
 
+	if (m_LoadingFunction)
+		m_LoadingFunction(false, 0.6f);
+
 	CMonster* Monster = m_Scene->CreateGameObject<CMonster>("Monster");
+
+	if (m_LoadingFunction)
+		m_LoadingFunction(false, 0.8f);
 
 	CPixelTest* PixelTest = m_Scene->CreateGameObject<CPixelTest>("PixelTest");
 
