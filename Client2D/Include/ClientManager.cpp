@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "Scene/SceneManager.h"
 #include "Scene/MainScene.h"
+#include "Scene/StartScene.h"
 #include "Resource/ResourceManager.h"
 #include "Widget/MouseNormal.h"
 #include "Widget/MouseAttack.h"
@@ -54,7 +55,7 @@ bool CClientManager::Init(HINSTANCE hInst)
 
 void CClientManager::CreateDefaultSceneMode()
 {
-	CSceneManager::GetInst()->CreateSceneMode<CMainScene>();
+	CSceneManager::GetInst()->CreateSceneMode<CStartScene>();
 }
 
 int CClientManager::Run()

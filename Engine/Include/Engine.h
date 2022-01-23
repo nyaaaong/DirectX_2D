@@ -55,6 +55,11 @@ public:
 		return m_hInst;
 	}
 
+	void Exit()
+	{
+		DestroyWindow(m_hWnd);
+	}
+
 	float GetFPS()	const
 	{
 		return m_Timer->GetFPS();

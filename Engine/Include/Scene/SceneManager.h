@@ -5,6 +5,7 @@
 class CSceneManager
 {
 private:
+	CRITICAL_SECTION	m_Crt;
 	CScene* m_Scene;
 	CScene* m_NextScene;
 	std::function<void(CScene*, size_t)>	m_CreateSceneModeCallback;
@@ -52,14 +53,28 @@ public:
 	bool Update(float DeltaTime);
 	bool PostUpdate(float DeltaTime);
 
+private:
+	bool ChangeScene();
+
 public:
-	DECLARE_SINGLE(CSceneManager)
+	void CreateNextScene(bool AutoChange = true);
+	void ChangeNextScene();
 
 public:
 	template <typename T>
 	void SetCreateSceneModeFunction(T* Obj, void(T::* Func)(CScene*, size_t))
 	{
 		m_CreateSceneModeCallback = std::bind(Func, Obj, std::placeholders::_1, std::placeholders::_2);
+	}
+
+public:
+	template <typename T>
+	T* CreateSceneModeEmpty(bool Current = true)
+	{
+		if (Current)
+			return m_Scene->CreateSceneModeEmpty<T>();
+
+		return m_NextScene->CreateSceneModeEmpty<T>();
 	}
 
 public:
@@ -96,5 +111,7 @@ public:
 	{
 		m_CreateAnimInstanceCallback = std::bind(Func, Obj, std::placeholders::_1, std::placeholders::_2);
 	}
+
+	DECLARE_SINGLE(CSceneManager)
 };
 
