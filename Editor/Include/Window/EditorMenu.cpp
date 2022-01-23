@@ -17,6 +17,11 @@
 #include "Scene/SceneResource.h"
 #include "Component/SpriteComponent.h"
 #include "Component/StaticMeshComponent.h"
+#include "Component/ColliderBox2D.h"
+#include "Component/ColliderCircle.h"
+#include "Component/ColliderPixel.h"
+#include "Component/CameraComponent.h"
+#include "Component/WidgetComponent.h"
 #include "Resource/Animation/AnimationSequence2D.h"
 #include "Animation/AnimationSequence2DInstance.h"
 #include "Animation/AnimationSequence2DData.h"
@@ -43,7 +48,7 @@ bool CEditorMenu::Init()
 {
 	CIMGUIWindow::Init();
 
-	m_ObjectCombo = AddWidget<CIMGUIComboBox>("Object", 200.f, 20.f);
+	m_ObjectCombo = AddWidget<CIMGUIComboBox>("ObjectList", 200.f, 20.f);
 
 	m_ObjectCombo->SetHideName(true);
 	m_ObjectCombo->AddItem("GameObject");
@@ -62,11 +67,16 @@ bool CEditorMenu::Init()
 
 
 	// Component
-	m_ComponentCombo = AddWidget<CIMGUIComboBox>("Component", 200.f, 20.f);
+	m_ComponentCombo = AddWidget<CIMGUIComboBox>("ComponentList", 200.f, 20.f);
 
 	m_ComponentCombo->SetHideName(true);
 	m_ComponentCombo->AddItem("SpriteComponent");
 	m_ComponentCombo->AddItem("StaticMeshComponent");
+	m_ComponentCombo->AddItem("ColliderBox2D");
+	m_ComponentCombo->AddItem("ColliderCircle2D");
+	m_ComponentCombo->AddItem("ColliderPixel2D");
+	m_ComponentCombo->AddItem("CameraComponent");
+	m_ComponentCombo->AddItem("WidgetComponent");
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 
@@ -148,14 +158,34 @@ void CEditorMenu::ComponentCreateButton()
 	if (SelectIndex == -1)
 		return;
 
-	switch ((SceneComponent_Type)SelectIndex)
+	CSceneComponent* Root = Obj->GetRootComponent();
+
+	if (Root)
 	{
-	case SceneComponent_Type::Sprite:
-		Obj->CreateComponent<CSpriteComponent>(m_ComponentNameInput->GetTextMultibyte());
-		break;
-	case SceneComponent_Type::StaticMesh:
-		Obj->CreateComponent<CStaticMeshComponent>(m_ComponentNameInput->GetTextMultibyte());
-		break;
+		switch ((SceneComponent_Type)SelectIndex)
+		{
+		case SceneComponent_Type::Sprite:
+			Root->AddChild(Obj->CreateComponent<CSpriteComponent>(m_ComponentNameInput->GetTextMultibyte()));
+			break;
+		case SceneComponent_Type::StaticMesh:
+			Root->AddChild(Obj->CreateComponent<CStaticMeshComponent>(m_ComponentNameInput->GetTextMultibyte()));
+			break;
+		case SceneComponent_Type::ColliderBox2D:
+			Root->AddChild(Obj->CreateComponent<CColliderBox2D>(m_ComponentNameInput->GetTextMultibyte()));
+			break;
+		case SceneComponent_Type::ColliderCircle2D:
+			Root->AddChild(Obj->CreateComponent<CColliderCircle>(m_ComponentNameInput->GetTextMultibyte()));
+			break;
+		case SceneComponent_Type::ColliderPixel2D:
+			Root->AddChild(Obj->CreateComponent<CColliderPixel>(m_ComponentNameInput->GetTextMultibyte()));
+			break;
+		case SceneComponent_Type::Camera:
+			Root->AddChild(Obj->CreateComponent<CCameraComponent>(m_ComponentNameInput->GetTextMultibyte()));
+			break;
+		case SceneComponent_Type::Widget:
+			Root->AddChild(Obj->CreateComponent<CWidgetComponent>(m_ComponentNameInput->GetTextMultibyte()));
+			break;
+		}
 	}
 
 	if (Hierarchy)
