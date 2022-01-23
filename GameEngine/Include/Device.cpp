@@ -57,6 +57,10 @@ bool CDevice::Init(HWND hWnd, unsigned int Width,
 
 #ifdef _DEBUG
 
+	Flag |= D3D11_CREATE_DEVICE_DEBUG;
+
+#endif // _DEBUG
+
 	D3D_FEATURE_LEVEL	FLevel = D3D_FEATURE_LEVEL_11_0;
 	D3D_FEATURE_LEVEL	FLevel1 = D3D_FEATURE_LEVEL_11_0;
 
@@ -71,10 +75,6 @@ bool CDevice::Init(HWND hWnd, unsigned int Width,
 
 	if (Check < 1)
 		SampleCount = 1;
-	
-	Flag |= D3D11_CREATE_DEVICE_DEBUG;
-
-#endif // _DEBUG
 
 	DXGI_SWAP_CHAIN_DESC	SwapDesc = {};
 
@@ -165,7 +165,9 @@ bool CDevice::Init(HWND hWnd, unsigned int Width,
 	m_SwapChain->GetBuffer(0, IID_PPV_ARGS(&BackSurface));
 
 	// 2D용 렌더타겟을 만들어준다.
-	D2D1_RENDER_TARGET_PROPERTIES	props = D2D1::RenderTargetProperties(D2D1_RENDER_TARGET_TYPE_HARDWARE, D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_PREMULTIPLIED));
+	D2D1_RENDER_TARGET_PROPERTIES	props = D2D1::RenderTargetProperties(
+		D2D1_RENDER_TARGET_TYPE_HARDWARE,
+		D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_PREMULTIPLIED));
 
 	if (FAILED(m_2DFactory->CreateDxgiSurfaceRenderTarget(BackSurface, props, &m_2DTarget)))
 		return false;

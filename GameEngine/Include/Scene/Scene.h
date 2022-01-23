@@ -23,6 +23,13 @@ private:
 	CViewport* m_Viewport;
 	std::list<CSharedPtr<CGameObject>>	m_ObjList;
 	bool		m_Start;
+	bool		m_Change;
+
+public:
+	void SetAutoChange(bool Change)
+	{
+		m_Change = Change;
+	}
 
 public:
 	CSceneResource* GetResource()	const
@@ -88,6 +95,17 @@ public:
 		}
 
 		return true;
+	}
+
+public:
+	template <typename T>
+	T* CreateSceneModeEmpty()
+	{
+		m_Mode = new T;
+
+		m_Mode->m_Scene = this;
+
+		return (T*)*m_Mode;
 	}
 
 public:

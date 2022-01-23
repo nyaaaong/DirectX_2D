@@ -157,9 +157,7 @@ int CEngine::Run()
 
 		// 윈도우가 데드타임일 경우 여기로 들어오게 된다.
 		else
-		{
 			Logic();
-		}
 	}
 
 	return (int)msg.wParam;

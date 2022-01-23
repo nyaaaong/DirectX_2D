@@ -277,8 +277,9 @@ void CAnimationSequence2DInstance::Update(float DeltaTime)
 	m_CurrentAnimation->m_Time += DeltaTime * m_CurrentAnimation->m_PlayScale;
 
 	bool	AnimEnd = false;
+	int FrameCount = m_CurrentAnimation->m_Sequence->GetFrameCount();
 
-	m_CurrentAnimation->m_FrameTime = m_CurrentAnimation->m_PlayTime / m_CurrentAnimation->m_Sequence->GetFrameCount();
+	m_CurrentAnimation->m_FrameTime = m_CurrentAnimation->m_PlayTime / FrameCount;
 
 	if (m_CurrentAnimation->m_Time >= m_CurrentAnimation->m_FrameTime)
 	{
@@ -296,7 +297,7 @@ void CAnimationSequence2DInstance::Update(float DeltaTime)
 		{
 			++m_CurrentAnimation->m_Frame;
 
-			if (m_CurrentAnimation->m_Frame == m_CurrentAnimation->m_Sequence->GetFrameCount())
+			if (m_CurrentAnimation->m_Frame == FrameCount)
 				AnimEnd = true;
 		}
 	}
@@ -319,7 +320,7 @@ void CAnimationSequence2DInstance::Update(float DeltaTime)
 		if (m_CurrentAnimation->m_Loop)
 		{
 			if (m_CurrentAnimation->m_Reverse)
-				m_CurrentAnimation->m_Frame = m_CurrentAnimation->m_Sequence->GetFrameCount() - 1;
+				m_CurrentAnimation->m_Frame = FrameCount - 1;
 
 			else
 				m_CurrentAnimation->m_Frame = 0;
@@ -331,7 +332,7 @@ void CAnimationSequence2DInstance::Update(float DeltaTime)
 				m_CurrentAnimation->m_Frame = 0;
 
 			else
-				m_CurrentAnimation->m_Frame = m_CurrentAnimation->m_Sequence->GetFrameCount() - 1;
+				m_CurrentAnimation->m_Frame = FrameCount - 1;
 		}
 
 		if (m_CurrentAnimation->m_EndFunction)

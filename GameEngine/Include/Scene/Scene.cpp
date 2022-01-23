@@ -22,6 +22,8 @@ CScene::CScene()	:
 	m_Collision->Init();
 	m_CameraManager->Init();
 	m_Viewport->Init();
+
+	m_Change = true;
 }
 
 CScene::~CScene()
