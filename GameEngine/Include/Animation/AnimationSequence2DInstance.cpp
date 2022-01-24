@@ -407,6 +407,9 @@ void CAnimationSequence2DInstance::Save(FILE* File)
 
 	fwrite(&AnimCount, sizeof(int), 1, File);
 
+	if (m_mapAnimation.size() > 1)
+		int a = 0;
+
 	auto	iter = m_mapAnimation.begin();
 	auto	iterEnd = m_mapAnimation.end();
 

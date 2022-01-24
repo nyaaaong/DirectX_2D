@@ -621,7 +621,12 @@ void CSpriteWindow::ClearFrameButton()
 	int SelectAnimIndex = m_AnimationList->GetSelectIndex();
 
 	if (SelectAnimIndex == -1)
-		return;
+	{
+		if (m_AnimationList->GetItemCount() == 0)
+			return;
+
+		SelectAnimIndex = 0;
+	}
 
 	CSceneResource* Resource = CSceneManager::GetInst()->GetScene()->GetResource();
 
@@ -922,6 +927,7 @@ void CSpriteWindow::ClearSequenceList()
 {
 	while (m_AnimationList->GetItemCount() > 0)
 	{
+		ClearFrameButton();
 		DeleteAnimation(m_AnimationList->GetItem(0));
 	}
 }
