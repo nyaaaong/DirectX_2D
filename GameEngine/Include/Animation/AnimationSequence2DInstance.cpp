@@ -156,6 +156,19 @@ void CAnimationSequence2DInstance::DeleteAnimation(const std::string& Name)
 	}
 }
 
+void CAnimationSequence2DInstance::ClearAnimation()
+{
+	auto	iter = m_mapAnimation.begin();
+	auto	iterEnd = m_mapAnimation.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		SAFE_DELETE(iter->second);
+	}
+
+	m_mapAnimation.clear();
+}
+
 void CAnimationSequence2DInstance::SetPlayTime(const std::string& Name, float PlayTime)
 {
 	CAnimationSequence2DData* Anim = FindAnimation(Name);

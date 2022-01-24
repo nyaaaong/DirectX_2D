@@ -927,6 +927,7 @@ void CSpriteWindow::ClearSequenceList()
 {
 	while (m_AnimationList->GetItemCount() > 0)
 	{
+		m_AnimInstance->ClearAnimation();
 		ClearFrameButton();
 		DeleteAnimation(m_AnimationList->GetItem(0));
 	}
