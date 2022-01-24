@@ -1,5 +1,6 @@
 #pragma once
 
+#pragma warning(disable:4005)
 #pragma warning(disable:6011)
 #pragma warning(disable:6029)
 #pragma warning(disable:6387)
@@ -262,6 +263,11 @@ struct CollisionProfile
 	bool				CollisionEnable;
 
 	std::vector<Collision_Interaction>	vecInteraction;
+
+	CollisionProfile()	:
+		Channel(Collision_Channel::Max),
+		CollisionEnable(true)
+	{}
 };
 
 struct CollisionResult
@@ -292,6 +298,10 @@ struct CircleInfo
 	float	Radius;
 	Vector2	Min;
 	Vector2	Max;
+
+	CircleInfo()	:
+		Radius(1.f)
+	{}
 };
 
 struct PixelInfo
@@ -336,6 +346,13 @@ struct WidgetCBuffer
 	Vector2	WidgetAnimEndUV;
 	int		WidgetAnimEnable;
 	float	Opacity;
+
+	WidgetCBuffer()	:
+		UseTexture(0),
+		WidgetAnimType(0),
+		WidgetAnimEnable(0),
+		Opacity(0.f)
+	{}
 };
 
 struct ProgressBarCBuffer
@@ -343,4 +360,9 @@ struct ProgressBarCBuffer
 	float	Percent;
 	int		Dir;
 	Vector2	Empty;
+
+	ProgressBarCBuffer()	:
+		Percent(0.f),
+		Dir(0)
+	{}
 };

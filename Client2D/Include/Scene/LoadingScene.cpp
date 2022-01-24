@@ -6,7 +6,8 @@
 #include "LoadingThread.h"
 #include "Scene/SceneManager.h"
 
-CLoadingScene::CLoadingScene()
+CLoadingScene::CLoadingScene()	:
+	m_LoadingThread(nullptr)
 {
 	SetTypeID<CLoadingScene>();
 }
