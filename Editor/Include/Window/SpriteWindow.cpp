@@ -427,7 +427,7 @@ void CSpriteWindow::Modify()
 	CDragObject* DragObj = CEditorManager::GetInst()->GetDragObj();
 
 	DragObj->SetStartPos(Vector2(StartX, StartY));
-	DragObj->SetEndPos(Vector2(StartX + SizeX, StartY - SizeY));
+	DragObj->SetEndPos(Vector2(EndX, EndY));
 
 	int SelectFrameIndex = m_AnimationFrameList->GetSelectIndex();
 
