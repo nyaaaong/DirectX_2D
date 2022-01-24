@@ -328,6 +328,8 @@ void CSpriteWindow::AddSequenceButton()
 	if (m_AnimationList->CheckItem(Text))
 		return;
 
+	ClearSequenceList();
+
 	m_AnimationList->Clear();
 	m_AnimationFrameList->Clear();
 
@@ -816,8 +818,6 @@ void CSpriteWindow::SaveSequence()
 
 void CSpriteWindow::LoadSequence()
 {
-	m_AnimationList->Clear();
-	m_AnimationFrameList->Clear();
 
 	TCHAR   SQCPath[MAX_PATH] = {};
 	TCHAR	ANMPath[MAX_PATH] = {};
@@ -875,6 +875,11 @@ void CSpriteWindow::LoadSequence()
 		int Length = WideCharToMultiByte(CP_ACP, 0, SQCPath, -1, 0, 0, 0, 0);
 		WideCharToMultiByte(CP_ACP, 0, SQCPath, -1, SQCFullPath, Length, 0, 0);
 
+		ClearSequenceList();
+
+		m_AnimationList->Clear();
+		m_AnimationFrameList->Clear();
+
 		CSceneResource* Resource = CSceneManager::GetInst()->GetScene()->GetResource();
 
 		std::string	SequenceName;
@@ -910,6 +915,14 @@ void CSpriteWindow::LoadSequence()
 		m_SpriteFrame->SetTexture(m_SpriteObject->GetSpriteComponent()->GetMaterial()->GetTexture());
 
 		RefreshInput();
+	}
+}
+
+void CSpriteWindow::ClearSequenceList()
+{
+	while (m_AnimationList->GetItemCount() > 0)
+	{
+		DeleteAnimation(m_AnimationList->GetItem(0));
 	}
 }
 

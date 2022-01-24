@@ -64,6 +64,7 @@ private:
 	void InputEndFrameData(const Vector2& Data);
 	void SaveSequence();
 	void LoadSequence();
+	void ClearSequenceList();
 
 public:
 	void RefreshInput();
