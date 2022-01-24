@@ -218,13 +218,18 @@ bool CSpriteWindow::Init()
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 
-	Button = AddWidget<CIMGUIButton>("AddFrame", 100.f, 95.f);
+	Button = AddWidget<CIMGUIButton>("Add", 65.f, 95.f);
 	Button->SetClickCallback<CSpriteWindow>(this, &CSpriteWindow::AddAnimationFrameButton);
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 
-	Button = AddWidget<CIMGUIButton>("DeleteFrame", 92.f, 95.f);
+	Button = AddWidget<CIMGUIButton>("Delete", 60.f, 95.f);
 	Button->SetClickCallback<CSpriteWindow>(this, &CSpriteWindow::DeleteFrameButton);
+
+	Line = AddWidget<CIMGUISameLine>("Line");
+
+	Button = AddWidget<CIMGUIButton>("Clear", 59.f, 95.f);
+	Button->SetClickCallback<CSpriteWindow>(this, &CSpriteWindow::ClearFrameButton);
 
 	m_Sprite = AddWidget<CIMGUIImage>("Sprite", 200.f, 200.f);
 	m_Sprite->SetTexture("Teemo", TEXT("teemo.png"));
@@ -322,6 +327,9 @@ void CSpriteWindow::AddSequenceButton()
 
 	if (m_AnimationList->CheckItem(Text))
 		return;
+
+	m_AnimationList->Clear();
+	m_AnimationFrameList->Clear();
 
 	CSceneResource* Resource = CSceneManager::GetInst()->GetScene()->GetResource();
 
@@ -604,6 +612,23 @@ void CSpriteWindow::DeleteFrameButton()
 
 	else
 		m_AnimationFrameList->SetSelectIndex(-1);
+}
+
+void CSpriteWindow::ClearFrameButton()
+{
+	int SelectAnimIndex = m_AnimationList->GetSelectIndex();
+
+	if (SelectAnimIndex == -1)
+		return;
+
+	CSceneResource* Resource = CSceneManager::GetInst()->GetScene()->GetResource();
+
+	CAnimationSequence2D* Anim = Resource->FindAnimationSequence2D(m_AnimationList->GetItem(SelectAnimIndex));
+
+	Anim->ClearFrame();
+
+	m_AnimationFrameList->Clear();	
+	m_AnimationFrameList->SetSelectIndex(-1);
 }
 
 void CSpriteWindow::SelectAnimation(int Index, const char* Item)

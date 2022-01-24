@@ -154,8 +154,7 @@ void CEditorManager::MouseLButtonDown(float DeltaTime)
 			m_PrevMousePos = m_CurMousePos;
 			break;
 		}
-	}
-	
+	}	
 }
 
 void CEditorManager::MouseLButtonPush(float DeltaTime)
@@ -239,14 +238,19 @@ void CEditorManager::KeyboardUp(float DeltaTime)
 {
 	if (m_DragObj)
 	{
-		if (m_DragObj->GetStartPos().y >= (float)CDevice::GetInst()->GetResolution().Height)
-			return;
-
 		m_DragObj->AddWorldPos(0.f, 1.f, 0.f);
 
 		Vector2	Result2D = Vector2(0.f, 1.f);
 		m_DragObj->AddStartPos(Result2D);
 		m_DragObj->AddEndPos(Result2D);
+
+		Vector3		RectPos = m_DragObj->GetWorldPos();
+		Vector3		ImgSize = m_SpriteWindow->GetSpriteSize();
+
+		if (RectPos.y > ImgSize.y)
+			RectPos.y = ImgSize.y;
+
+		m_DragObj->SetWorldPos(RectPos);
 
 		m_SpriteWindow->RefreshInput();
 	}
@@ -256,14 +260,20 @@ void CEditorManager::KeyboardDown(float DeltaTime)
 {
 	if (m_DragObj)
 	{
-		if (m_DragObj->GetEndPos().y <= 0.f)
-			return;
-
 		m_DragObj->AddWorldPos(0.f, -1.f, 0.f);
 
 		Vector2	Result2D = Vector2(0.f, -1.f);
 		m_DragObj->AddStartPos(Result2D);
 		m_DragObj->AddEndPos(Result2D);
+
+		Vector3		RectPos = m_DragObj->GetWorldPos();
+		Vector3		ImgSize = m_SpriteWindow->GetSpriteSize();
+		Vector2		DragSize = m_DragObj->GetEndPos() - m_DragObj->GetStartPos();
+
+		if (RectPos.y + DragSize.y < 0.f)
+			RectPos.y = -DragSize.y;
+
+		m_DragObj->SetWorldPos(RectPos);
 
 		m_SpriteWindow->RefreshInput();
 	}
@@ -273,14 +283,19 @@ void CEditorManager::KeyboardLeft(float DeltaTime)
 {
 	if (m_DragObj)
 	{
-		if (m_DragObj->GetStartPos().x <= 0.f)
-			return;
-
 		m_DragObj->AddWorldPos(-1.f, 0.f, 0.f);
 
 		Vector2	Result2D = Vector2(-1.f, 0.f);
 		m_DragObj->AddStartPos(Result2D);
 		m_DragObj->AddEndPos(Result2D);
+
+		Vector3		RectPos = m_DragObj->GetWorldPos();
+		Vector3		ImgSize = m_SpriteWindow->GetSpriteSize();
+
+		if (RectPos.x < 0.f)
+			RectPos.x = 0.f;
+
+		m_DragObj->SetWorldPos(RectPos);
 
 		m_SpriteWindow->RefreshInput();
 	}
@@ -290,14 +305,20 @@ void CEditorManager::KeyboardRight(float DeltaTime)
 {
 	if (m_DragObj)
 	{
-		if (m_DragObj->GetEndPos().x >= (float)CDevice::GetInst()->GetResolution().Width)
-			return;
-
 		m_DragObj->AddWorldPos(1.f, 0.f, 0.f);
 
 		Vector2	Result2D = Vector2(1.f, 0.f);
 		m_DragObj->AddStartPos(Result2D);
 		m_DragObj->AddEndPos(Result2D);
+
+		Vector3		RectPos = m_DragObj->GetWorldPos();
+		Vector3		ImgSize = m_SpriteWindow->GetSpriteSize();
+		Vector2		DragSize = m_DragObj->GetEndPos() - m_DragObj->GetStartPos();
+
+		if (RectPos.x + DragSize.x > ImgSize.x)
+			RectPos.x = ImgSize.x - DragSize.x;
+
+		m_DragObj->SetWorldPos(RectPos);
 
 		m_SpriteWindow->RefreshInput();
 	}
@@ -325,6 +346,14 @@ void CEditorManager::MoveTabUp(float DeltaTime)
 		m_DragObj->AddStartPos(Result2D);
 		m_DragObj->AddEndPos(Result2D);
 
+		Vector3		RectPos = m_DragObj->GetWorldPos();
+		Vector3		ImgSize = m_SpriteWindow->GetSpriteSize();
+
+		if (RectPos.y > ImgSize.y)
+			RectPos.y = ImgSize.y;
+
+		m_DragObj->SetWorldPos(RectPos);
+
 		m_SpriteWindow->RefreshInput();
 	}
 }
@@ -349,6 +378,15 @@ void CEditorManager::MoveTabDown(float DeltaTime)
 		Vector2	Result2D = Vector2(0.f, ResultY);
 		m_DragObj->AddStartPos(Result2D);
 		m_DragObj->AddEndPos(Result2D);
+
+		Vector3		RectPos = m_DragObj->GetWorldPos();
+		Vector3		ImgSize = m_SpriteWindow->GetSpriteSize();
+		Vector2		DragSize = m_DragObj->GetEndPos() - m_DragObj->GetStartPos();
+
+		if (RectPos.y + DragSize.y < 0.f)
+			RectPos.y = -DragSize.y;
+
+		m_DragObj->SetWorldPos(RectPos);
 
 		m_SpriteWindow->RefreshInput();
 	}
@@ -375,6 +413,14 @@ void CEditorManager::MoveTabLeft(float DeltaTime)
 		m_DragObj->AddStartPos(Result2D);
 		m_DragObj->AddEndPos(Result2D);
 
+		Vector3		RectPos = m_DragObj->GetWorldPos();
+		Vector3		ImgSize = m_SpriteWindow->GetSpriteSize();
+
+		if (RectPos.x < 0.f)
+			RectPos.x = 0.f;
+
+		m_DragObj->SetWorldPos(RectPos);
+
 		m_SpriteWindow->RefreshInput();
 	}
 }
@@ -400,6 +446,15 @@ void CEditorManager::MoveTabRight(float DeltaTime)
 		Vector2	Result2D = Vector2(ResultX, 0.f);
 		m_DragObj->AddStartPos(Result2D);
 		m_DragObj->AddEndPos(Result2D);
+
+		Vector3		RectPos = m_DragObj->GetWorldPos();
+		Vector3		ImgSize = m_SpriteWindow->GetSpriteSize();
+		Vector2		DragSize = m_DragObj->GetEndPos() - m_DragObj->GetStartPos();
+
+		if (RectPos.x + DragSize.x > ImgSize.x)
+			RectPos.x = ImgSize.x - DragSize.x;
+
+		m_DragObj->SetWorldPos(RectPos);
 
 		m_SpriteWindow->RefreshInput();
 	}
