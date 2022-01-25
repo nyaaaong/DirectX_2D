@@ -3,7 +3,7 @@
 #include "IMGUIWidget.h"
 
 class CIMGUIListBox :
-    public CIMGUIWidget
+	public CIMGUIWidget
 {
 	friend class CIMGUIWindow;
 
@@ -15,6 +15,7 @@ protected:
 	std::vector<std::string>	m_vecItem;
 	std::vector<std::string>	m_vecItemUTF8;
 	bool		m_Select;
+	bool		m_SelectCancel;
 	int			m_SelectIndex;
 	int			m_PageItemCount;
 	bool		m_Sort;
@@ -58,9 +59,24 @@ public:
 	}
 
 public:
+	void SetSelectCancel(bool Cancel)
+	{
+		m_SelectCancel = Cancel;
+	}
+
 	void SetSelectIndex(int Index)
 	{
 		m_SelectIndex = Index;
+	}
+
+	void SetSelectItem(const char* Item)
+	{
+		SetSelectIndex(GetItemIndex(Item));
+	}
+
+	void SetSelectItem(const std::string& Item)
+	{
+		SetSelectIndex(GetItemIndex(Item.c_str()));
 	}
 
 	bool CheckItem(const char* Item)
@@ -70,6 +86,19 @@ public:
 		for (size_t i = 0; i < Size; ++i)
 		{
 			if (m_vecItem[i] == Item)
+				return true;
+		}
+
+		return false;
+	}
+
+	bool CheckItem(const std::string& Item)
+	{
+		size_t	Size = m_vecItem.size();
+
+		for (size_t i = 0; i < Size; ++i)
+		{
+			if (m_vecItem[i] == Item.c_str())
 				return true;
 		}
 
