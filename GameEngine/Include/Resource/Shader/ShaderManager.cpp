@@ -51,6 +51,8 @@ bool CShaderManager::Init()
 
 	CreateConstantBuffer("Standard2DCBuffer", sizeof(Standard2DCBuffer), 2, (int)Buffer_Shader_Type::Graphic);
 
+	CreateConstantBuffer("GlobalCBuffer", sizeof(GlobalCBuffer), 3, (int)Buffer_Shader_Type::All);
+
 	CreateConstantBuffer("Animation2DCBuffer", sizeof(Animation2DCBuffer), 10, (int)Buffer_Shader_Type::Graphic);
 
 	CreateConstantBuffer("ColliderCBuffer", sizeof(ColliderCBuffer), 11, (int)Buffer_Shader_Type::Graphic);
@@ -58,6 +60,8 @@ bool CShaderManager::Init()
 	CreateConstantBuffer("WidgetCBuffer", sizeof(WidgetCBuffer), 11, (int)Buffer_Shader_Type::Graphic);
 
 	CreateConstantBuffer("ProgressBarCBuffer", sizeof(ProgressBarCBuffer), 12, (int)Buffer_Shader_Type::Graphic);
+
+	CreateConstantBuffer("ParticleCBuffer", sizeof(ParticleCBuffer), 11, (int)Buffer_Shader_Type::Compute);
 
 	return true;
 }

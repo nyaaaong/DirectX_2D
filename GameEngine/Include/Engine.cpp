@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "IMGUIManager.h"
 #include "Resource/ResourceManager.h"
+#include "Resource/Shader/GlobalConstantBuffer.h"
 #include "Scene/SceneManager.h"
 #include "Render/RenderManager.h"
 #include "Excel/ExcelManager.h"
@@ -24,18 +25,24 @@ CEngine::CEngine()	:
 	m_Play(true),
 	m_Space(Engine_Space::Space2D),
 	m_ShowCursorCount(0),
-	m_MouseState(Mouse_State::Normal)
+	m_MouseState(Mouse_State::Normal),
+	m_GlobalCBuffer(nullptr),
+	m_GlobalAccTime(0.f)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(172854);
 	m_ClearColor[0] = 0.09019f;
 	m_ClearColor[1] = 0.37254f;
 	m_ClearColor[2] = 0.18823f;
+
+	m_GlobalCBuffer = new CGlobalConstantBuffer;
 }
 
 CEngine::~CEngine()
 {
 	CSceneManager::DestroyInst();
+
+	SAFE_DELETE(m_GlobalCBuffer);
 
 	CInput::DestroyInst();
 
@@ -123,9 +130,21 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 	if (!CRenderManager::GetInst()->Init())
 		return false;
 
+	if (!m_GlobalCBuffer->Init())
+		return false;
+
+	m_GlobalCBuffer->SetResolution(m_RS);
+
 	// 장면 관리자 초기화
 	if (!CSceneManager::GetInst()->Init())
 		return false;
+
+	// NoiseTexture
+	CResourceManager::GetInst()->LoadTexture("GlobalNoiseTexture", TEXT("noise_01.png"));
+
+	m_GlobalNoiseTexture = CResourceManager::GetInst()->FindTexture("GlobalNoiseTexture");
+
+	m_GlobalNoiseTexture->SetShader(100, (int)Buffer_Shader_Type::All, 0);
 
 	return true;
 }
@@ -179,6 +198,13 @@ void CEngine::Logic()
 
 	if (!m_Play)
 		DeltaTime = 0.f;
+
+	m_GlobalAccTime += DeltaTime;
+
+	m_GlobalCBuffer->SetDeltaTime(DeltaTime);
+	m_GlobalCBuffer->SetAccTime(m_GlobalAccTime);
+
+	m_GlobalCBuffer->UpdateCBuffer();
 
 	CIMGUIManager::GetInst()->Update(DeltaTime);
 

@@ -221,6 +221,12 @@
     <Filter Include="01. Resource\01. Shader\03. StructuredBuffer">
       <UniqueIdentifier>{55d46824-cfc6-4f36-9e14-74ace3c2f551}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Resource\01. Shader\02. ConstantBuffer\06. Global">
+      <UniqueIdentifier>{a984c230-6496-49b6-94d7-82ea0c20921e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\02. ConstantBuffer\07. Particle">
+      <UniqueIdentifier>{36b9ae75-1d15-4f02-9293-1211645d6a99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -637,6 +643,12 @@
     <ClInclude Include="..\..\..\..\Source\DirectX\GameEngine\Include\ThreadQueue.h">
       <Filter>00. Engine\08. Thread</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Shader\GlobalConstantBuffer.h">
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\06. Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\ParticleConstantBuffer.h">
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\07. Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -971,6 +983,12 @@
     </ClCompile>
     <ClCompile Include="Resource\Shader\StructuredBuffer.cpp">
       <Filter>01. Resource\01. Shader\03. StructuredBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\GlobalConstantBuffer.cpp">
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\06. Global</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ParticleConstantBuffer.cpp">
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\07. Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
