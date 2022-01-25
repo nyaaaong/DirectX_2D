@@ -40,6 +40,8 @@ public:
 	int Run();
 
 public:
+	void Esc(float DeltaTime);
+
 	void MouseLButtonDown(float DeltaTime);
 	void MouseLButtonPush(float DeltaTime);
 	void MouseLButtonUp(float DeltaTime);

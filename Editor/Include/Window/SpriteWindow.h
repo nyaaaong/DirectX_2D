@@ -68,9 +68,9 @@ private:
 
 public:
 	void RefreshInput();
+	void SelectCancelFrameList();
 	
 private:
-	void CaptureMode();
 	void Modify();
 	void DeleteAnimation(const std::string& SequenceName);
 	void AddListBoxData(const std::string& SequenceName);

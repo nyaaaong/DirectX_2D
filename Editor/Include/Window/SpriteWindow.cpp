@@ -150,7 +150,6 @@ bool CSpriteWindow::Init()
 	m_AnimEndFrameX = AddWidget<CIMGUITextInput>("EndXInput", 40.f, 20.f);
 	m_AnimEndFrameX->SetHideName();
 	m_AnimEndFrameX->AddFlag(ImGuiInputTextFlags_CharsDecimal); // 숫자와 - 등 기호까지만 입력
-	m_AnimEndFrameX->ReadOnly();
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 	Line->SetSpacing(24.f);
@@ -164,7 +163,6 @@ bool CSpriteWindow::Init()
 	m_AnimEndFrameY = AddWidget<CIMGUITextInput>("EndYInput", 40.f, 20.f);
 	m_AnimEndFrameY->SetHideName();
 	m_AnimEndFrameY->AddFlag(ImGuiInputTextFlags_CharsDecimal); // 숫자와 - 등 기호까지만 입력
-	m_AnimEndFrameY->ReadOnly();
 
 	Button = AddWidget<CIMGUIButton>("LoadTexture", 200.f, 20.f);
 	Button->SetClickCallback<CSpriteWindow>(this, &CSpriteWindow::LoadTextureButton);
@@ -260,12 +258,9 @@ void CSpriteWindow::Update(float DeltaTime)
 			AnimationFrameData  FrameData = AnimData->GetAnimationSequence()->GetFrameData(Frame);
 
 			m_SpriteFrame->SetImageStart(FrameData.Start.x, FrameData.Start.y);
-
 			m_SpriteFrame->SetImageEnd(FrameData.Start.x + FrameData.Size.x, FrameData.Start.y + FrameData.Size.y);
 		}
 	}
-
-	CaptureMode();
 }
 
 void CSpriteWindow::LoadTextureButton()
@@ -400,21 +395,6 @@ void CSpriteWindow::AddAnimationFrameButton()
 	m_SpriteFrame->SetImageEnd(EndPos.x, EndPos.y);
 
 	RefreshInput();
-}
-
-void CSpriteWindow::CaptureMode()
-{
-	if (m_Mode == EM_CAPTURE)
-	{
-		m_AnimSizeX->ReadOnly(false);
-		m_AnimSizeY->ReadOnly(false);
-	}
-
-	else
-	{
-		m_AnimSizeX->ReadOnly(true);
-		m_AnimSizeY->ReadOnly(true);
-	}
 }
 
 void CSpriteWindow::Modify()
@@ -947,4 +927,9 @@ void CSpriteWindow::RefreshInput()
 	InputSize(Size);
 	InputStartFrameData(StartPos);
 	InputEndFrameData(EndPos);
+}
+
+void CSpriteWindow::SelectCancelFrameList()
+{
+	m_AnimationFrameList->SetSelectCancel(true);
 }

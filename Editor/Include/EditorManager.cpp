@@ -73,6 +73,9 @@ bool CEditorManager::Init(HINSTANCE hInst)
 
 	CInput::GetInst()->CreateKey("MouseClick", VK_LBUTTON);
 
+	CInput::GetInst()->CreateKey("Esc", VK_ESCAPE);
+	CInput::GetInst()->SetKeyCallback("Esc", KeyState_Down, this, &CEditorManager::Esc);
+
 	CRenderManager::GetInst()->CreateLayer("DragLayer", INT_MAX);
 
 	CInput::GetInst()->CreateKey("MouseLButton", VK_LBUTTON);
@@ -116,6 +119,14 @@ void CEditorManager::CreateDefaultSceneMode()
 int CEditorManager::Run()
 {
 	return CEngine::GetInst()->Run();
+}
+
+void CEditorManager::Esc(float DeltaTime)
+{
+	if (!m_SpriteWindow)
+		return;
+
+	m_SpriteWindow->SelectCancelFrameList();
 }
 
 void CEditorManager::MouseLButtonDown(float DeltaTime)
