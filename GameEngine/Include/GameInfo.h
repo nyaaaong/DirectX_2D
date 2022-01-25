@@ -387,6 +387,19 @@ struct	ParticleCBuffer
 	int		Is2D;			// 2D용 파티클인지
 	Vector3	MoveAngle;	// 이동을 한다면 기준이 될 방향으로부터 x, y, z 에 저장된 각도만큼 틀어진 랜덤한 방향을 구한다.
 	float	Empty;
+
+	ParticleCBuffer()	:
+		SpawnCount(0),
+		SpawnCountMax(0),
+		Move(0),
+		Gravity(0),
+		Is2D(0),
+		LifeTimeMin(0.f),
+		LifeTimeMax(0.f),
+		SpeedMin(0.f),
+		SpeedMax(0.f),
+		Empty(0.f)
+	{}
 };
 
 struct GlobalCBuffer
@@ -396,4 +409,9 @@ struct GlobalCBuffer
 	Vector2	Resolution;
 	Vector2	NoiseResolution;
 	Vector2	Empty;
+
+	GlobalCBuffer()	:
+		DeltaTime(0.f),
+		AccTime(0.f)
+	{}
 };
