@@ -347,7 +347,9 @@ void CSpriteWindow::AddAnimationFrameButton()
 
 	CSceneResource* Resource = CSceneManager::GetInst()->GetScene()->GetResource();
 
-	CAnimationSequence2D* Anim = Resource->FindAnimationSequence2D(m_AnimationList->GetItem(SelectIndex));
+	std::string	CurAnimSequence = m_AnimationList->GetItem(SelectIndex);
+
+	CAnimationSequence2D* Anim = Resource->FindAnimationSequence2D(CurAnimSequence);
 
 	CDragObject* DragObj = CEditorManager::GetInst()->GetDragObj();
 
@@ -393,6 +395,10 @@ void CSpriteWindow::AddAnimationFrameButton()
 
 	m_SpriteFrame->SetImageStart(StartPos.x, StartPos.y);
 	m_SpriteFrame->SetImageEnd(EndPos.x, EndPos.y);
+
+	// 추가된 프레임을 자동으로 선택되게 한다.
+	m_AnimationFrameList->SetSelectIndex(FrameCount);
+	SelectAnimationFrame(FrameCount, FrameName);
 
 	RefreshInput();
 }
