@@ -7,6 +7,7 @@
 #include "Animation/AnimationManager.h"
 #include "Sound/SoundManager.h"
 #include "Font/FontManager.h"
+#include "Particle/ParticleManager.h"
 
 class CResourceManager
 {
@@ -18,6 +19,7 @@ private:
 	CAnimationManager* m_AnimationManager;
 	CSoundManager* m_SoundManager;
 	CFontManager* m_FontManager;
+	CParticleManager* m_ParticleManager;
 
 public:
 	bool Init();
@@ -102,6 +104,11 @@ public:	// =================== Font =====================
 	IDWriteTextLayout* CreateTextLayout(const TCHAR* Text, const std::string& FontName, float Width, float Height);
 	IDWriteFontCollection1* FindFontFile(const std::string& Name);
 	IDWriteTextFormat* FindFont(const std::string& Name);
+
+public:	// =================== Particle =====================
+	bool CreateParticle(const std::string& Name);
+	CParticle* FindParticle(const std::string& Name);
+	void ReleaseParticle(const std::string& Name);
 
 public:
 	template <typename T>

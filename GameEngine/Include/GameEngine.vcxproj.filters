@@ -227,6 +227,15 @@
     <Filter Include="01. Resource\01. Shader\02. ConstantBuffer\07. Particle">
       <UniqueIdentifier>{36b9ae75-1d15-4f02-9293-1211645d6a99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Resource\01. Shader\01. ShaderClass\04. Particle">
+      <UniqueIdentifier>{bc0d4afd-f449-4411-91d0-75314cd02eca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\07. Particle">
+      <UniqueIdentifier>{d87e5561-0581-4457-bf7c-1d67e9ec3a0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\00. SceneComponent\04. Particle">
+      <UniqueIdentifier>{e2f3fe75-94b5-43f8-9994-d0855878607e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -649,6 +658,18 @@
     <ClInclude Include="Resource\Shader\ParticleConstantBuffer.h">
       <Filter>01. Resource\01. Shader\02. ConstantBuffer\07. Particle</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Shader\ParticleUpdateShader.h">
+      <Filter>01. Resource\01. Shader\01. ShaderClass\04. Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Particle\ParticleManager.h">
+      <Filter>01. Resource\07. Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Particle\Particle.h">
+      <Filter>01. Resource\07. Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ParticleComponent.h">
+      <Filter>04. Component\00. SceneComponent\04. Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -989,6 +1010,18 @@
     </ClCompile>
     <ClCompile Include="Resource\Shader\ParticleConstantBuffer.cpp">
       <Filter>01. Resource\01. Shader\02. ConstantBuffer\07. Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ParticleUpdateShader.cpp">
+      <Filter>01. Resource\01. Shader\01. ShaderClass\04. Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Particle\ParticleManager.cpp">
+      <Filter>01. Resource\07. Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Particle\Particle.cpp">
+      <Filter>01. Resource\07. Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ParticleComponent.cpp">
+      <Filter>04. Component\00. SceneComponent\04. Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

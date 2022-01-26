@@ -10,12 +10,14 @@ CResourceManager::CResourceManager()	:
 	m_TextureManager(nullptr),
 	m_AnimationManager(nullptr),
 	m_SoundManager(nullptr),
-	m_FontManager(nullptr)
+	m_FontManager(nullptr),
+	m_ParticleManager(nullptr)
 {
 }
 
 CResourceManager::~CResourceManager()
 {
+	SAFE_DELETE(m_ParticleManager);
 	SAFE_DELETE(m_FontManager);
 	SAFE_DELETE(m_SoundManager);
 	SAFE_DELETE(m_AnimationManager);
@@ -61,7 +63,11 @@ bool CResourceManager::Init()
 
 	if (!m_FontManager->Init())
 		return false;
+	
+	m_ParticleManager = DBG_NEW CParticleManager;
 
+	if (!m_ParticleManager->Init())
+		return false;
 
 	return true;
 }
@@ -374,4 +380,19 @@ IDWriteFontCollection1* CResourceManager::FindFontFile(const std::string& Name)
 IDWriteTextFormat* CResourceManager::FindFont(const std::string& Name)
 {
 	return m_FontManager->FindFont(Name);
+}
+
+bool CResourceManager::CreateParticle(const std::string& Name)
+{
+	return m_ParticleManager->CreateParticle(Name);
+}
+
+CParticle* CResourceManager::FindParticle(const std::string& Name)
+{
+	return m_ParticleManager->FindParticle(Name);
+}
+
+void CResourceManager::ReleaseParticle(const std::string& Name)
+{
+	m_ParticleManager->ReleaseParticle(Name);
 }

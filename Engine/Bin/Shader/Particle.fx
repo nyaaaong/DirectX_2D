@@ -3,7 +3,7 @@
 
 cbuffer	ParticleCBuffer : register(b11)
 {
-	uint	g_ParticleSpawnCount;	// 현재 파티클이 생성된 수
+	uint	g_ParticleSpawnEnable;	// 파티클 생성여부
 	float3	g_ParticleStartMin;		// 파티클이 생성될 영역의 Min
 	float3	g_ParticleStartMax;		// 파티클이 생성될 영역의 Max
 	uint	g_ParticleSpawnCountMax;	// 생성될 파티클의 최대
@@ -39,7 +39,7 @@ struct ParticleInfo
 
 struct ParticleInfoShared
 {
-	uint	SpawnCount;
+	uint	SpawnEnable;
 
 	float3	ScaleMin;
 	float3	ScaleMax;
@@ -56,7 +56,7 @@ RWStructuredBuffer<ParticleInfoShared>	g_ParticleShare	: register(u1);
 [numthreads(64, 1, 1)]	// 스레드 그룹 스레드 수를 지정한다.
 void ParticleUpdate(uint3 ThreadID : SV_DispatchThreadID)
 {
-	g_ParticleShare[0].SpawnCount = g_ParticleSpawnCount;
+	g_ParticleShare[0].SpawnEnable = g_ParticleSpawnEnable;
 	g_ParticleShare[0].ScaleMin = g_ParticleScaleMin;
 	g_ParticleShare[0].ScaleMax = g_ParticleScaleMax;
 	g_ParticleShare[0].ColorMin = g_ParticleColorMin;
@@ -71,19 +71,19 @@ void ParticleUpdate(uint3 ThreadID : SV_DispatchThreadID)
 	// 파티클이 살아있는 파티클인지 판단한다.
 	if (g_ParticleArray[ThreadID.x].Alive == 0)
 	{
-		int	SpawnCount = g_ParticleShare[0].SpawnCount;
+		int	SpawnEnable = g_ParticleShare[0].SpawnEnable;
 		int	Exchange = 0;
 
-		if (g_ParticleShare[0].SpawnCount == 1)
+		if (g_ParticleShare[0].SpawnEnable == 1)
 		{
-			int	InputValue = SpawnCount - 1;
+			int	InputValue = SpawnEnable - 1;
 
 			// 함수의 인자는 in, in, out으로 구성되어 있다.
 			// in은 일반적으로 변수의 값을 넘겨줄때 사용한다.
 			// out은 반쪽짜리 레퍼런스처럼 결과값을 여기의 변수에 받아올때 사용한다.
-			InterlockedExchange(g_ParticleShare[0].SpawnCount, InputValue, Exchange);
+			InterlockedExchange(g_ParticleShare[0].SpawnEnable, InputValue, Exchange);
 
-			if (Exchange == SpawnCount)
+			if (Exchange == SpawnEnable)
 				g_ParticleArray[ThreadID.x].Alive = 1;
 		}
 
@@ -139,4 +139,48 @@ void ParticleUpdate(uint3 ThreadID : SV_DispatchThreadID)
 			g_ParticleArray[ThreadID.x].Alive = 0;
 		}
 	}
+}
+
+struct VertexParticle
+{
+	float3	Pos	: POSITION;
+	uint InstanceID : SV_InstanceID;	// 정점버퍼에 만들어서 넣어주는것이 아니다.
+};
+
+struct VertexParticleOutput
+{
+	uint	InstanceID : TEXCOORD;
+};
+
+VertexParticleOutput ParticleVS(VertexParticle input)
+{
+	VertexParticleOutput	output = (VertexParticleOutput)0;
+
+	output.InstanceID = input.InstanceID;
+
+	return output;
+}
+
+struct GeometryParticleOutput
+{
+	float4	Pos : SV_POSITION;
+	float4	Color : COLOR;
+	float2	UV	: TEXCOORD;
+	float4	ProjPos : POSITION;
+};
+
+// in : 값을 함수 안으로 넘겨줄때
+// out : 함수안에서 결과를 넘겨받을때. 단 함수 안에서 이 값을 사용한 연산은 할 수 없다.
+// inout : 그냥 레퍼런스.
+[maxvertexcount(6)]
+void ParticleGS(point VertexParticleOutput input[1],
+	inout TriangleStream<GeometryParticleOutput> output)
+{
+}
+
+PSOutput_Single ParticlePS(GeometryParticleOutput input)
+{
+	PSOutput_Single	output = (PSOutput_Single)0;
+
+	return output;
 }

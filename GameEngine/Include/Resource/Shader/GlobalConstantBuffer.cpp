@@ -31,5 +31,5 @@ void CGlobalConstantBuffer::UpdateCBuffer()
 
 CGlobalConstantBuffer* CGlobalConstantBuffer::Clone()
 {
-	return new CGlobalConstantBuffer(*this);
+	return DBG_NEW CGlobalConstantBuffer(*this);
 }

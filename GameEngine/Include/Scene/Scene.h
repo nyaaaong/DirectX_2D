@@ -101,7 +101,7 @@ public:
 	template <typename T>
 	T* CreateSceneModeEmpty()
 	{
-		m_Mode = new T;
+		m_Mode = DBG_NEW T;
 
 		m_Mode->m_Scene = this;
 

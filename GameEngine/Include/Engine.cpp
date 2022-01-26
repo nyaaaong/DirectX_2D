@@ -35,7 +35,7 @@ CEngine::CEngine()	:
 	m_ClearColor[1] = 0.37254f;
 	m_ClearColor[2] = 0.18823f;
 
-	m_GlobalCBuffer = new CGlobalConstantBuffer;
+	m_GlobalCBuffer = DBG_NEW CGlobalConstantBuffer;
 }
 
 CEngine::~CEngine()

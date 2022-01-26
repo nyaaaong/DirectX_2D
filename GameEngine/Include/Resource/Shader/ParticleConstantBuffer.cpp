@@ -31,5 +31,5 @@ void CParticleConstantBuffer::UpdateCBuffer()
 
 CParticleConstantBuffer* CParticleConstantBuffer::Clone()
 {
-	return new CParticleConstantBuffer(*this);
+	return DBG_NEW CParticleConstantBuffer(*this);
 }

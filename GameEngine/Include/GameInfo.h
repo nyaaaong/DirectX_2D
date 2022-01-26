@@ -369,7 +369,7 @@ struct ProgressBarCBuffer
 
 struct	ParticleCBuffer
 {
-	unsigned int	SpawnCount;	// 현재 파티클이 생성된 수
+	unsigned int	SpawnEnable;	// 현재 파티클 생성 여부
 	Vector3	StartMin;		// 파티클이 생성될 영역의 Min
 	Vector3	StartMax;		// 파티클이 생성될 영역의 Max
 	unsigned int	SpawnCountMax;	// 생성될 파티클의 최대
@@ -389,17 +389,39 @@ struct	ParticleCBuffer
 	float	Empty;
 
 	ParticleCBuffer()	:
-		SpawnCount(0),
+		SpawnEnable(0),
 		SpawnCountMax(0),
 		Move(0),
 		Gravity(0),
-		Is2D(0),
+		Is2D(1),
 		LifeTimeMin(0.f),
 		LifeTimeMax(0.f),
 		SpeedMin(0.f),
 		SpeedMax(0.f),
 		Empty(0.f)
 	{}
+};
+
+struct ParticleInfo
+{
+	Vector3	WorldPos;
+	Vector3	Dir;
+	float	Speed;
+	float	LifeTime;
+	float	LifeTimeMax;
+	int		Alive;
+	float	FallTime;
+	float	FallStartY;
+};
+
+struct ParticleInfoShared
+{
+	unsigned int	SpawnEnable;
+	Vector3	ScaleMin;
+	Vector3	ScaleMax;
+	Vector4	ColorMin;
+	Vector4	ColorMax;
+	int		GravityEnable;
 };
 
 struct GlobalCBuffer

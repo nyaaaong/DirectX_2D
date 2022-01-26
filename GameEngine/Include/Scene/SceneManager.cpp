@@ -76,7 +76,7 @@ void CSceneManager::CreateNextScene(bool AutoChange)
 
 	SAFE_DELETE(m_NextScene);
 
-	m_NextScene = new CScene;
+	m_NextScene = DBG_NEW CScene;
 
 	m_NextScene->SetAutoChange(AutoChange);
 }
