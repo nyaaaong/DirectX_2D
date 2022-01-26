@@ -345,46 +345,37 @@ void CSpriteWindow::AddAnimationFrameButton()
 	if (SelectIndex == -1)
 		return;
 
-	CSceneResource* Resource = CSceneManager::GetInst()->GetScene()->GetResource();
-
-	std::string	CurAnimSequence = m_AnimationList->GetItem(SelectIndex);
-
-	CAnimationSequence2D* Anim = Resource->FindAnimationSequence2D(CurAnimSequence);
+	float StartX = static_cast<float>(atoi(m_AnimStartFrameX->GetTextMultibyte()));
+	float StartY = static_cast<float>(atoi(m_AnimStartFrameY->GetTextMultibyte()));
+	float EndX = static_cast<float>(atoi(m_AnimEndFrameX->GetTextMultibyte()));
+	float EndY = static_cast<float>(atoi(m_AnimEndFrameY->GetTextMultibyte()));
+	float SizeX = static_cast<float>(atoi(m_AnimSizeX->GetTextMultibyte()));
+	float SizeY = static_cast<float>(atoi(m_AnimSizeY->GetTextMultibyte()));
 
 	CDragObject* DragObj = CEditorManager::GetInst()->GetDragObj();
 
-	Vector2 Size = DragObj->GetEndPos() - DragObj->GetStartPos();
-	Size.x = abs(Size.x);
-	Size.y = abs(Size.y);
+	DragObj->SetStartPos(Vector2(StartX, StartY));
+	DragObj->SetEndPos(Vector2(EndX, EndY));
 
-	// StartPos를 이미지에서의 위치로 변경한다.
-
-	Vector2 ConvertImagePos;
-	ConvertImagePos.x = DragObj->GetStartPos().x - m_SpriteObject->GetWorldPos().x;
-	ConvertImagePos.y = m_SpriteObject->GetSpriteComponent()->GetMaterial()->GetTexture()->GetHeight() - (DragObj->GetStartPos().y - m_SpriteObject->GetWorldPos().y);
-
-	Anim->AddFrame(ConvertImagePos, Size);
-
-	int FrameCount = Anim->GetFrameCount() - 1;
-
-	char    FrameName[32] = {};
-	sprintf_s(FrameName, "%d", FrameCount);
-
-	m_AnimationFrameList->AddItem(FrameName);
-
-	m_SpriteFrame->SetTexture(m_SpriteObject->GetSpriteComponent()->GetMaterial()->GetTexture());
+	if (m_AnimStartFrameX->Empty() || m_AnimStartFrameY->Empty() ||
+		m_AnimEndFrameX->Empty() || m_AnimEndFrameY->Empty())
+		return;
 
 	Vector2 ImageStartPos = DragObj->GetStartPos();
 	Vector2 ImageEndPos = DragObj->GetEndPos();
 
-	ImageStartPos.x -= m_SpriteObject->GetWorldPos().x;
-	ImageStartPos.y -= m_SpriteObject->GetWorldPos().y;
+	Vector3	SpriteWorldPos = m_SpriteObject->GetWorldPos();
 
-	ImageEndPos.x -= m_SpriteObject->GetWorldPos().x;
-	ImageEndPos.y -= m_SpriteObject->GetWorldPos().y;
+	unsigned int SpriteHeight = m_SpriteObject->GetSpriteComponent()->GetMaterial()->GetTexture()->GetHeight();
 
-	ImageEndPos.y = m_SpriteObject->GetSpriteComponent()->GetMaterial()->GetTexture()->GetHeight() - ImageEndPos.y;
-	ImageStartPos.y = m_SpriteObject->GetSpriteComponent()->GetMaterial()->GetTexture()->GetHeight() - ImageStartPos.y;
+	ImageStartPos.x -= SpriteWorldPos.x;
+	ImageStartPos.y -= SpriteWorldPos.y;
+
+	ImageEndPos.x -= SpriteWorldPos.x;
+	ImageEndPos.y -= SpriteWorldPos.y;
+
+	ImageEndPos.y = SpriteHeight - ImageEndPos.y;
+	ImageStartPos.y = SpriteHeight - ImageStartPos.y;
 
 	Vector2 StartPos, EndPos;
 	StartPos.x = ImageStartPos.x < ImageEndPos.x ? ImageStartPos.x : ImageEndPos.x;
@@ -395,6 +386,21 @@ void CSpriteWindow::AddAnimationFrameButton()
 
 	m_SpriteFrame->SetImageStart(StartPos.x, StartPos.y);
 	m_SpriteFrame->SetImageEnd(EndPos.x, EndPos.y);
+
+	CSceneResource* Resource = CSceneManager::GetInst()->GetScene()->GetResource();
+
+	CAnimationSequence2D* Anim = Resource->FindAnimationSequence2D(m_AnimationList->GetItem(m_AnimationList->GetSelectIndex()));
+
+	Vector2	Size = Vector2(abs(EndPos.x - StartPos.x), abs(EndPos.y - StartPos.y));
+
+	Anim->AddFrame(StartPos, Size);
+
+	int FrameCount = Anim->GetFrameCount() - 1;
+
+	char    FrameName[32] = {};
+	sprintf_s(FrameName, "%d", FrameCount);
+
+	m_AnimationFrameList->AddItem(FrameName);
 
 	// 추가된 프레임을 자동으로 선택되게 한다.
 	m_AnimationFrameList->SetSelectIndex(FrameCount);
