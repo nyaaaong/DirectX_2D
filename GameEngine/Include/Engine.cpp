@@ -146,6 +146,8 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 
 	m_GlobalNoiseTexture->SetShader(100, (int)Buffer_Shader_Type::All, 0);
 
+	m_GlobalCBuffer->SetNoiseResolution((float)m_GlobalNoiseTexture->GetWidth(), (float)m_GlobalNoiseTexture->GetHeight());
+
 	return true;
 }
 

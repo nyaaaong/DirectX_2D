@@ -50,6 +50,10 @@ CStructuredBuffer::~CStructuredBuffer()
 bool CStructuredBuffer::Init(const std::string& Name, unsigned int Size, unsigned int Count, int Register,
 	bool Dynamic, int StructuredBufferShaderType)
 {
+	SAFE_RELEASE(m_SRV);
+	SAFE_RELEASE(m_UAV);
+	SAFE_RELEASE(m_Buffer);
+
 	m_Dynamic = Dynamic;
 	m_Name = Name;
 	m_Size = Size;

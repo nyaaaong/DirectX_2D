@@ -34,5 +34,11 @@ public:
 		m_BufferData.Resolution.x = (float)RS.Width;
 		m_BufferData.Resolution.y = (float)RS.Height;
 	}
+
+	void SetNoiseResolution(float Width, float Height)
+	{
+		m_BufferData.NoiseResolution.x = Width;
+		m_BufferData.NoiseResolution.y = Height;
+	}
 };
 

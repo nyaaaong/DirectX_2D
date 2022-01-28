@@ -93,10 +93,7 @@ void ParticleUpdate(uint3 ThreadID : SV_DispatchThreadID)
 		// 살려야 하는 파티클이라면 파티클 생성정보를 만들어낸다.
 		float	key = ThreadID.x / g_ParticleSpawnCountMax;
 
-		// Rand는 0 ~ 25사이의 값이다.
 		float3	RandomPos = float3(Rand(key), Rand(key * 2.f), Rand(key * 3.f));
-
-		RandomPos /= 25.f;
 
 		float3	StartRange = g_ParticleStartMax - g_ParticleStartMin;
 
@@ -110,8 +107,12 @@ void ParticleUpdate(uint3 ThreadID : SV_DispatchThreadID)
 
 		if (g_ParticleMove == 1)
 		{
+			float3	Dir = RandomPos.xyz * 2.f - 1.f;
+			Dir.z = 0;
+			Dir = normalize(Dir);
+
 			g_ParticleArray[ThreadID.x].Speed = RandomPos.x * (g_ParticleSpeedMax - g_ParticleSpeedMin) + g_ParticleSpeedMin;
-			g_ParticleArray[ThreadID.x].Dir = normalize(RandomPos.xyz * 2.f - 1.f + g_ParticleMoveDir);
+			g_ParticleArray[ThreadID.x].Dir = normalize(Dir + g_ParticleMoveDir);
 
 			// 각도로 처리한다면 x, y, z 의 랜덤한 각도를 3개 얻어오고 기준 방향을 중심으로 회전된 행렬을 곱해서'
 			// 회전된 방향을 구해주도록 한다.
@@ -152,6 +153,9 @@ struct VertexParticleOutput
 	uint	InstanceID : TEXCOORD;
 };
 
+StructuredBuffer<ParticleInfo>		g_ParticleArraySRV	: register(t30);
+StructuredBuffer<ParticleInfoShared>	g_ParticleShareSRV	: register(t31);
+
 VertexParticleOutput ParticleVS(VertexParticle input)
 {
 	VertexParticleOutput	output = (VertexParticleOutput)0;
@@ -169,6 +173,14 @@ struct GeometryParticleOutput
 	float4	ProjPos : POSITION;
 };
 
+static float3	g_ParticleLocalPos[4] =
+{
+	{-0.5f, 0.5f, 0.f},
+	{0.5f, 0.5f, 0.f},
+	{-0.5f, -0.5f, 0.f},
+	{0.5f, -0.5f, 0.f}
+};
+
 // in : 값을 함수 안으로 넘겨줄때
 // out : 함수안에서 결과를 넘겨받을때. 단 함수 안에서 이 값을 사용한 연산은 할 수 없다.
 // inout : 그냥 레퍼런스.
@@ -176,11 +188,64 @@ struct GeometryParticleOutput
 void ParticleGS(point VertexParticleOutput input[1],
 	inout TriangleStream<GeometryParticleOutput> output)
 {
+	// 점을 사각형으로 확장한다.
+	uint	InstanceID = input[0].InstanceID;
+
+	if (g_ParticleArraySRV[InstanceID].Alive == 0)
+		return;
+
+	GeometryParticleOutput	OutputArray[4] =
+	{
+		(GeometryParticleOutput)0.f,
+		(GeometryParticleOutput)0.f,
+		(GeometryParticleOutput)0.f,
+		(GeometryParticleOutput)0.f
+	};
+
+	OutputArray[0].UV = float2(0.f, 0.f);
+	OutputArray[1].UV = float2(1.f, 0.f);
+	OutputArray[2].UV = float2(0.f, 1.f);
+	OutputArray[3].UV = float2(1.f, 1.f);
+
+	float	Ratio = g_ParticleArraySRV[InstanceID].LifeTime / g_ParticleArraySRV[InstanceID].LifeTimeMax;
+
+	float3	Scale = lerp(g_ParticleShareSRV[0].ScaleMin, g_ParticleShareSRV[0].ScaleMax, float3(Ratio, Ratio, Ratio));
+
+	float4	Color = lerp(g_ParticleShareSRV[0].ColorMin, g_ParticleShareSRV[0].ColorMax, float4(Ratio, Ratio, Ratio, Ratio));
+
+	// 4개의 최종 정점정보를 만들어준다.
+	for (int i = 0; i < 4; ++i)
+	{
+		float3	WorldPos = g_ParticleArraySRV[InstanceID].WorldPos + g_ParticleLocalPos[i] * Scale;
+
+		OutputArray[i].ProjPos = mul(float4(WorldPos, 1.f), g_matVP);
+		OutputArray[i].Pos = OutputArray[i].ProjPos;
+		OutputArray[i].Color = Color;
+	}
+
+	output.Append(OutputArray[0]);
+	output.Append(OutputArray[1]);
+	output.Append(OutputArray[3]);
+	output.RestartStrip();
+
+	output.Append(OutputArray[0]);
+	output.Append(OutputArray[3]);
+	output.Append(OutputArray[2]);
+	output.RestartStrip();
 }
 
 PSOutput_Single ParticlePS(GeometryParticleOutput input)
 {
 	PSOutput_Single	output = (PSOutput_Single)0;
+
+	float4	Color = g_BaseTexture.Sample(g_BaseSmp, input.UV);
+
+	output.Color.rgb = Color.rgb * input.Color.rgb;
+
+	if (Color.a == 0.f || input.Color.a == 0.f)
+		clip(-1);
+
+	output.Color.a = Color.a * input.Color.a;
 
 	return output;
 }

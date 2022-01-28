@@ -23,6 +23,8 @@ public:
 		D3D11_USAGE IdxUsage = D3D11_USAGE_DEFAULT, DXGI_FORMAT Fmt = DXGI_FORMAT_UNKNOWN);
 	virtual bool Init();
 	virtual void Render();
+	virtual void RenderInstancing(int Count);
+	virtual void RenderInstancing(ID3D11Buffer* InstancingBuffer, unsigned int InstanceSize, int Count);
 
 protected:
 	bool CreateBuffer(Buffer_Type Type, void* Data, int Size, int Count,

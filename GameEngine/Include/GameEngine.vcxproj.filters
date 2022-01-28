@@ -670,6 +670,9 @@
     <ClInclude Include="Component\ParticleComponent.h">
       <Filter>04. Component\00. SceneComponent\04. Particle</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Shader\ParticleRenderShader.h">
+      <Filter>01. Resource\01. Shader\01. ShaderClass\04. Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -1022,6 +1025,9 @@
     </ClCompile>
     <ClCompile Include="Component\ParticleComponent.cpp">
       <Filter>04. Component\00. SceneComponent\04. Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ParticleRenderShader.cpp">
+      <Filter>01. Resource\01. Shader\01. ShaderClass\04. Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

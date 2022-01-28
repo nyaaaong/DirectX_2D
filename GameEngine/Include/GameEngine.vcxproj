@@ -313,6 +313,7 @@
     <ClInclude Include="Resource\Shader\Mesh2DShader.h" />
     <ClInclude Include="Resource\Shader\NumberShader.h" />
     <ClInclude Include="Resource\Shader\ParticleConstantBuffer.h" />
+    <ClInclude Include="Resource\Shader\ParticleRenderShader.h" />
     <ClInclude Include="Resource\Shader\ParticleUpdateShader.h" />
     <ClInclude Include="Resource\Shader\PosMeshShader.h" />
     <ClInclude Include="Resource\Shader\ProgressBarConstantBuffer.h" />
@@ -435,6 +436,7 @@
     <ClCompile Include="Resource\Shader\Mesh2DShader.cpp" />
     <ClCompile Include="Resource\Shader\NumberShader.cpp" />
     <ClCompile Include="Resource\Shader\ParticleConstantBuffer.cpp" />
+    <ClCompile Include="Resource\Shader\ParticleRenderShader.cpp" />
     <ClCompile Include="Resource\Shader\ParticleUpdateShader.cpp" />
     <ClCompile Include="Resource\Shader\PosMeshShader.cpp" />
     <ClCompile Include="Resource\Shader\ProgressBarConstantBuffer.cpp" />

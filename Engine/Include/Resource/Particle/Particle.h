@@ -25,14 +25,47 @@ private:
 	CParticleConstantBuffer*				m_CBuffer;
 	float									m_SpawnTime;
 	bool									m_2D;
+	int										m_SpawnCountMax;
+
+public:
+	CMaterial* CloneMaterial()	const
+	{
+		return m_Material->Clone();
+	}
+
+	CParticleUpdateShader* GetUpdateShader()	const
+	{
+		return m_UpdateShader;
+	}
+
+	CParticleConstantBuffer* CloneConstantBuffer()	const
+	{
+		return m_CBuffer->Clone();
+	}
+
+	float GetSpawnTime()	const
+	{
+		return m_SpawnTime;
+	}
 
 public:
 	bool Init();
 
 public:
-	void AddStructuredBuffer(const std::string& Name, unsigned int Size, unsigned int Count,
-		int Register, bool Dynamic = false,
-		int StructuredBufferShaderType = (int)Buffer_Shader_Type::Compute);
+	void AddStructuredBuffer(const std::string& Name, unsigned int Size, unsigned int Count, int Register, bool Dynamic = false, int StructuredBufferShaderType = (int)Buffer_Shader_Type::Compute);
+	bool ResizeBuffer(const std::string& Name, unsigned int Size, unsigned int Count, int Register, bool Dynamic = false, int StructuredBufferShaderType = (int)Buffer_Shader_Type::Compute);
+	void CloneStructuredBuffer(std::vector<CStructuredBuffer*>& vecBuffer);
+
+public:
+	CParticleConstantBuffer* GetCBuffer()	const
+	{
+		return m_CBuffer;
+	}
+
+	int GetSpawnCountMax()	const
+	{
+		return m_SpawnCountMax;
+	}
 
 public:
 	void SetMaterial(CMaterial* Material)
@@ -58,11 +91,6 @@ public:
 	void SetStartMax(const Vector3& StartMax)
 	{
 		m_CBuffer->SetStartMax(StartMax);
-	}
-
-	void SetSpawnCountMax(unsigned int Count)
-	{
-		m_CBuffer->SetSpawnCountMax(Count);
 	}
 
 	void SetScaleMin(const Vector3& ScaleMin)
@@ -130,5 +158,8 @@ public:
 	{
 		m_CBuffer->SetMoveAngle(MoveAngle);
 	}
+
+public:
+	void SetSpawnCountMax(unsigned int Count);
 };
 

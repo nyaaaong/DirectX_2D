@@ -67,7 +67,21 @@ float GaussianSample(int2 UV, Texture2D Tex)
 	{
 		for (int j = 0; j < 5; ++j)
 		{
-			Output += Tex[UV + int2(i - 2, j - 2)] * Gaussian5x5[i * 5 + j];
+			int2	ConvertUV = UV + int2(i - 2, j - 2);
+
+			if (ConvertUV.x < 0)
+				ConvertUV.x = 0;
+
+			else if (ConvertUV.x > g_NoiseResolution.x)
+				ConvertUV.x = g_NoiseResolution.x - 1;
+
+			if (ConvertUV.y < 0)
+				ConvertUV.y = 0;
+
+			else if (ConvertUV.y > g_NoiseResolution.y)
+				ConvertUV.y = g_NoiseResolution.y - 1;
+
+			Output += Tex[ConvertUV] * Gaussian5x5[i * 5 + j];
 		}
 	}
 
