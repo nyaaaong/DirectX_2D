@@ -10,6 +10,8 @@
 #include "Render/RenderManager.h"
 #include "Excel/ExcelManager.h"
 #include "Collision/CollisionManager.h"
+#include "Resource/Shader/StructuredBuffer.h"
+#include <time.h>
 
 DEFINITION_SINGLE(CEngine)
 
@@ -42,7 +44,9 @@ CEngine::~CEngine()
 {
 	CSceneManager::DestroyInst();
 
+	m_RandomBuffer->ResetShader(90, (int)Buffer_Shader_Type::Compute);
 	SAFE_DELETE(m_GlobalCBuffer);
+	SAFE_DELETE(m_RandomBuffer);
 
 	CInput::DestroyInst();
 
@@ -139,6 +143,25 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 	if (!CSceneManager::GetInst()->Init())
 		return false;
 
+	// 난수 전용 구조화버퍼 생성
+	m_RandomBuffer = DBG_NEW CStructuredBuffer;
+
+	m_RandomBuffer->Init("RandomBuffer", sizeof(float), 10000, 10, true);
+
+	srand((unsigned int)time(0));
+	rand();
+
+	float	RandNumber[10000] = {};
+
+	for (int i = 0; i < 10000; ++i)
+	{
+		RandNumber[i] = rand() % 10001 / 10000.f;
+	}
+
+	m_RandomBuffer->UpdateBuffer(RandNumber, 10000);
+
+
+	m_RandomBuffer->SetShader(90, (int)Buffer_Shader_Type::Compute);
 	// NoiseTexture
 	CResourceManager::GetInst()->LoadTexture("GlobalNoiseTexture", TEXT("noise_01.png"));
 
@@ -191,7 +214,7 @@ void CEngine::Logic()
 		m_Start = true;
 
 		CSceneManager::GetInst()->Start();
-		CIMGUIManager::GetInst()->Start();
+		//CIMGUIManager::GetInst()->Start();
 	}
 
 	m_Timer->Update();

@@ -45,6 +45,9 @@ bool CMainScene::Init()
 
 	CBubbleParticle* BubbleParticle = m_Scene->CreateGameObject<CBubbleParticle>("BubbleParticle");
 
+	BubbleParticle = m_Scene->CreateGameObject<CBubbleParticle>("BubbleParticle");
+
+	BubbleParticle->SetRelativePos(-100.f, 0.f, 0.f);
 	m_MainWidget = m_Scene->GetViewport()->CreateWidgetWindow<CMainWidget>("MainWidget");
 
 	return true;
@@ -58,6 +61,8 @@ void CMainScene::CreateMaterial()
 	Material->AddTexture(0, (int)Buffer_Shader_Type::Pixel, "Bubble", TEXT("Particle/Bubbles99px.png"));
 
 	Material->SetShader("ParticleRenderShader");
+	Material->SetRenderState("AlphaBlend");
+
 }
 
 void CMainScene::CreateAnimationSequence()
@@ -75,9 +80,9 @@ void CMainScene::CreateParticle()
 	CMaterial* Material = m_Scene->GetResource()->FindMaterial("Bubble");
 
 	Particle->SetMaterial(Material);
-	Particle->SetSpawnCountMax(100);
-	Particle->SetLifeTimeMin(1.f);
-	Particle->SetLifeTimeMax(2.f);
+	Particle->SetSpawnCountMax(1000);
+	Particle->SetLifeTimeMin(3.f);
+	Particle->SetLifeTimeMax(5.f);
 	Particle->SetScaleMin(Vector3(20.f, 20.f, 1.f));
 	Particle->SetScaleMax(Vector3(50.f, 50.f, 1.f));
 	Particle->SetSpeedMin(100.f);
@@ -85,5 +90,9 @@ void CMainScene::CreateParticle()
 	Particle->SetMoveDir(Vector3(0.f, 1.f, 0.f));
 	Particle->SetStartMin(Vector3(-30.f, -30.f, 0.f));
 	Particle->SetStartMax(Vector3(30.f, 30.f, 0.f));
+	Particle->SetColorMin(Vector4(0.2f, 0.1f, 0.8f, 1.f));
+	Particle->SetColorMax(Vector4(0.2f, 0.1f, 0.8f, 1.f));
+	Particle->SetMoveAngle(Vector3(0.f, 0.f, 30.f));
+	Particle->SetGravity(true);
 	Particle->SetMove(true);
 }

@@ -4,7 +4,8 @@
 
 CGameObject::CGameObject()	:
 	m_Scene(nullptr),
-	m_Parent(nullptr)
+	m_Parent(nullptr),
+	m_LifeSpan(0.f)
 {
 	SetTypeID<CGameObject>();
 }
@@ -100,6 +101,17 @@ bool CGameObject::Init()
 
 void CGameObject::Update(float DeltaTime)
 {
+	if (m_LifeSpan > 0.f)
+	{
+		m_LifeSpan -= DeltaTime;
+
+		if (m_LifeSpan <= 0.f)
+		{
+			Destroy();
+			return;
+		}
+	}
+
 	size_t	Size = m_vecObjectComponent.size();
 
 	for (size_t i = 0; i < Size; ++i)

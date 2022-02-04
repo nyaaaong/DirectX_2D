@@ -53,6 +53,62 @@ struct ParticleInfoShared
 RWStructuredBuffer<ParticleInfo>		g_ParticleArray	: register(u0);
 RWStructuredBuffer<ParticleInfoShared>	g_ParticleShare	: register(u1);
 
+float3x3 ComputeRotationMatrix(float3 Angle)
+{
+	float3	ConvertAngle;
+	ConvertAngle.x = DegreeToRadian(Angle.x);
+	ConvertAngle.y = DegreeToRadian(Angle.y);
+	ConvertAngle.z = DegreeToRadian(Angle.z);
+
+	float3x3	matRotX, matRotY, matRotZ, matRot;
+
+	// 11, 12, 13
+	// 21, 22, 23
+	// 31, 32, 33
+	matRotX._11 = 1.f;
+	matRotX._21 = 0.f;
+	matRotX._31 = 0.f;
+
+	matRotX._12 = 0.f;
+	matRotX._22 = cos(ConvertAngle.x);
+	matRotX._32 = -sin(ConvertAngle.x);
+
+	matRotX._13 = 0.f;
+	matRotX._23 = sin(ConvertAngle.x);
+	matRotX._33 = cos(ConvertAngle.x);
+
+
+	matRotY._11 = cos(ConvertAngle.y);
+	matRotY._21 = 0.f;
+	matRotY._31 = -sin(ConvertAngle.y);
+
+	matRotY._12 = 0.f;
+	matRotY._22 = 1.f;
+	matRotY._32 = 0.f;
+
+	matRotY._13 = sin(ConvertAngle.y);
+	matRotY._23 = 0.f;
+	matRotY._33 = cos(ConvertAngle.y);
+
+
+	matRotZ._11 = cos(ConvertAngle.z);
+	matRotZ._21 = -sin(ConvertAngle.z);
+	matRotZ._31 = 0.f;
+
+	matRotZ._12 = sin(ConvertAngle.z);
+	matRotZ._22 = cos(ConvertAngle.z);
+	matRotZ._32 = 0.f;
+
+	matRotZ._13 = 0.f;
+	matRotZ._23 = 0.f;
+	matRotZ._33 = 1.f;
+
+	matRot = mul(matRotX, matRotY);
+	matRot = mul(matRot, matRotZ);
+
+
+	return matRot;
+}
 [numthreads(64, 1, 1)]	// 스레드 그룹 스레드 수를 지정한다.
 void ParticleUpdate(uint3 ThreadID : SV_DispatchThreadID)
 {
@@ -93,7 +149,8 @@ void ParticleUpdate(uint3 ThreadID : SV_DispatchThreadID)
 		// 살려야 하는 파티클이라면 파티클 생성정보를 만들어낸다.
 		float	key = ThreadID.x / g_ParticleSpawnCountMax;
 
-		float3	RandomPos = float3(Rand(key), Rand(key * 2.f), Rand(key * 3.f));
+		float3	RandomPos = float3(Rand(key), Rand(2.142f), Rand(key * 3.f));
+		float	Rand = (RandomPos.x + RandomPos.y + RandomPos.z) / 3.f;
 
 		float3	StartRange = g_ParticleStartMax - g_ParticleStartMin;
 
@@ -103,19 +160,18 @@ void ParticleUpdate(uint3 ThreadID : SV_DispatchThreadID)
 		g_ParticleArray[ThreadID.x].FallStartY = g_ParticleArray[ThreadID.x].WorldPos.y;
 
 		g_ParticleArray[ThreadID.x].LifeTime = 0.f;
-		g_ParticleArray[ThreadID.x].LifeTimeMax = RandomPos.x * (g_ParticleLifeTimeMax - g_ParticleLifeTimeMin) + g_ParticleLifeTimeMin;
+		g_ParticleArray[ThreadID.x].LifeTimeMax = Rand * (g_ParticleLifeTimeMax - g_ParticleLifeTimeMin) + g_ParticleLifeTimeMin;
 
 		if (g_ParticleMove == 1)
 		{
-			float3	Dir = RandomPos.xyz * 2.f - 1.f;
-			Dir.z = 0;
-			Dir = normalize(Dir);
+			float3	ConvertAngle = (RandomPos.xyz * 2.f - 1.f) * g_ParticleMoveAngle;
 
-			g_ParticleArray[ThreadID.x].Speed = RandomPos.x * (g_ParticleSpeedMax - g_ParticleSpeedMin) + g_ParticleSpeedMin;
-			g_ParticleArray[ThreadID.x].Dir = normalize(Dir + g_ParticleMoveDir);
+			float3x3 matRot = ComputeRotationMatrix(ConvertAngle);
 
-			// 각도로 처리한다면 x, y, z 의 랜덤한 각도를 3개 얻어오고 기준 방향을 중심으로 회전된 행렬을 곱해서'
-			// 회전된 방향을 구해주도록 한다.
+			float3	Dir = normalize(mul(g_ParticleMoveDir, matRot));
+
+			g_ParticleArray[ThreadID.x].Speed = Rand * (g_ParticleSpeedMax - g_ParticleSpeedMin) + g_ParticleSpeedMin;
+			g_ParticleArray[ThreadID.x].Dir = Dir;
 		}
 	}
 
@@ -124,16 +180,33 @@ void ParticleUpdate(uint3 ThreadID : SV_DispatchThreadID)
 	{
 		g_ParticleArray[ThreadID.x].LifeTime += g_DeltaTime;
 
+		float3	MovePos = (float3)0.f;
+		
 		if (g_ParticleMove == 1)
 		{
-			g_ParticleArray[ThreadID.x].WorldPos += g_ParticleArray[ThreadID.x].Dir *
+			MovePos = g_ParticleArray[ThreadID.x].Dir *
 				g_ParticleArray[ThreadID.x].Speed * g_DeltaTime;
 		}
 
 		// 중력 적용
 		if (g_ParticleShare[0].GravityEnable)
 		{
+			g_ParticleArray[ThreadID.x].FallTime += g_DeltaTime;
+
+			float	Velocity = 0.f;
+			
+			if (g_ParticleArray[ThreadID.x].Dir.y > 0.f)
+				Velocity = g_ParticleArray[ThreadID.x].Speed * g_ParticleArray[ThreadID.x].FallTime;
+
+			g_ParticleArray[ThreadID.x].WorldPos.y = g_ParticleArray[ThreadID.x].FallStartY +
+				(Velocity - 0.5f * GRAVITY * g_ParticleArray[ThreadID.x].FallTime * g_ParticleArray[ThreadID.x].FallTime * 10.f);
+
+			g_ParticleArray[ThreadID.x].WorldPos.x += MovePos.x;
+			g_ParticleArray[ThreadID.x].WorldPos.z += MovePos.z;
 		}
+
+		else
+			g_ParticleArray[ThreadID.x].WorldPos += MovePos;
 
 		if (g_ParticleArray[ThreadID.x].LifeTime >= g_ParticleArray[ThreadID.x].LifeTimeMax)
 		{
@@ -155,6 +228,7 @@ struct VertexParticleOutput
 
 StructuredBuffer<ParticleInfo>		g_ParticleArraySRV	: register(t30);
 StructuredBuffer<ParticleInfoShared>	g_ParticleShareSRV	: register(t31);
+
 
 VertexParticleOutput ParticleVS(VertexParticle input)
 {
@@ -209,9 +283,11 @@ void ParticleGS(point VertexParticleOutput input[1],
 
 	float	Ratio = g_ParticleArraySRV[InstanceID].LifeTime / g_ParticleArraySRV[InstanceID].LifeTimeMax;
 
-	float3	Scale = lerp(g_ParticleShareSRV[0].ScaleMin, g_ParticleShareSRV[0].ScaleMax, float3(Ratio, Ratio, Ratio));
+	float3	Scale = lerp(g_ParticleShareSRV[0].ScaleMin, g_ParticleShareSRV[0].ScaleMax,
+		float3(Ratio, Ratio, Ratio));
 
-	float4	Color = lerp(g_ParticleShareSRV[0].ColorMin, g_ParticleShareSRV[0].ColorMax, float4(Ratio, Ratio, Ratio, Ratio));
+	float4	Color = lerp(g_ParticleShareSRV[0].ColorMin, g_ParticleShareSRV[0].ColorMax,
+		float4(Ratio, Ratio, Ratio, Ratio));
 
 	// 4개의 최종 정점정보를 만들어준다.
 	for (int i = 0; i < 4; ++i)

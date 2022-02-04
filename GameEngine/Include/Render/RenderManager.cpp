@@ -94,9 +94,6 @@ void CRenderManager::SetLayerPriority(const std::string& Name, int Priority)
 
 bool CRenderManager::Init()
 {
-	m_RenderList.resize(500);
-	m_RenderCount = 0;
-
 	m_RenderStateManager = DBG_NEW CRenderStateManager;
 
 	m_RenderStateManager->Init();
@@ -113,11 +110,16 @@ bool CRenderManager::Init()
 	m_RenderLayerList.push_back(Layer);
 
 	Layer = DBG_NEW RenderLayer;
-	Layer->Name = "ScreenWidgetComponent";
+	Layer->Name = "Particle";
 	Layer->LayerPriority = 1;
 
 	m_RenderLayerList.push_back(Layer);
 
+	Layer = DBG_NEW RenderLayer;
+	Layer->Name = "ScreenWidgetComponent";
+	Layer->LayerPriority = 2;
+
+	m_RenderLayerList.push_back(Layer);
 	m_DepthDisable = m_RenderStateManager->FindRenderState("DepthDisable");
 	m_AlphaBlend = m_RenderStateManager->FindRenderState("AlphaBlend");
 

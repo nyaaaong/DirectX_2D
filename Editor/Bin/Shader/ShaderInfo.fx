@@ -48,7 +48,9 @@ SamplerState	g_BaseSmp : register(s3);
 
 Texture2D		g_BaseTexture	: register(t0);
 
-Texture2D		g_NoiseTexture	: register(t100);
+Texture2D<float4>		g_NoiseTexture	: register(t100);
+
+StructuredBuffer<float>	g_RandBuffer	: register(t90);
 
 static float Gaussian5x5[25] =
 {
@@ -61,13 +63,13 @@ static float Gaussian5x5[25] =
 
 float GaussianSample(int2 UV, Texture2D Tex)
 {
-	float4	Output = (float4)0.f;
+	float	Output = 0.f;
 
 	for (int i = 0; i < 5; ++i)
 	{
 		for (int j = 0; j < 5; ++j)
 		{
-			int2	ConvertUV = UV + int2(i - 2, j - 2);
+			int2	ConvertUV = UV + int2(j - 2, i - 2);
 
 			if (ConvertUV.x < 0)
 				ConvertUV.x = 0;
@@ -81,32 +83,24 @@ float GaussianSample(int2 UV, Texture2D Tex)
 			else if (ConvertUV.y > g_NoiseResolution.y)
 				ConvertUV.y = g_NoiseResolution.y - 1;
 
-			Output += Tex[ConvertUV] * Gaussian5x5[i * 5 + j];
+			Output += Tex[ConvertUV].r * Gaussian5x5[i * 5 + j];
 		}
 	}
 
-	return Output.x;
+	return Output;
 }
 
 float Rand(float Key)
 {
-	float2	UV = float2(Key + g_AccTime, g_AccTime);
+	float2	UV = float2(cos(Key + g_AccTime), sin(g_AccTime));
+	
+	UV = frac(UV);
 
-	UV.y += sin(UV.x * 2.f * 3.141592f);
-
-	if (UV.x > 0.f)
-		UV.x = frac(UV.x);
-
-	else
-		UV.x = 1.f - abs(UV.x);
-
-	if (UV.y > 0.f)
-		UV.y = frac(UV.y);
-
-	else
-		UV.y = 1.f - abs(UV.y);
-
-	UV = UV * g_NoiseResolution;
-
-	return GaussianSample(UV, g_NoiseTexture);
+	return GaussianSample(UV * g_NoiseResolution, g_NoiseTexture);
 }
+
+float DegreeToRadian(float Angle)
+{
+	return Angle / 180.f * 3.14159f;
+}
+

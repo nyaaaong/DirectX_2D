@@ -32,6 +32,7 @@ protected:
 	std::vector<CSharedPtr<CObjectComponent>>   m_vecObjectComponent;
 	CGameObject* m_Parent;
 	std::vector<CSharedPtr<CGameObject>>   m_vecChildObject;
+	float		m_LifeSpan;
 
 public:
 	void SetRootComponent(CSceneComponent* Component)
@@ -59,13 +60,13 @@ public:
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
+	void AddCollision();
 	virtual void PrevRender();
 	virtual void Render();
 	virtual void PostRender();
 	virtual CGameObject* Clone();
 	virtual void Save(FILE* File);
 	virtual void Load(FILE* File);
-	void AddCollision();
 
 public:
 	void SetInheritScale(bool Inherit)
