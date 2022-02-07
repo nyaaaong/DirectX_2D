@@ -24,8 +24,6 @@ bool CMainScene::Init()
 {
 	CreateMaterial();
 
-	CreateAnimationSequence();
-
 	CreateParticle();
 
 	if (m_LoadingFunction)
@@ -77,14 +75,6 @@ void CMainScene::CreateMaterial()
 
 	Material->SetShader("ParticleRenderShader");
 	Material->SetRenderState("AlphaBlend");
-
-}
-
-void CMainScene::CreateAnimationSequence()
-{
-	m_Scene->GetResource()->CreateAnimationSequence2D("PlayerIdleD", "Player", TEXT("Player.png"));
-
-	m_Scene->GetResource()->CreateAnimationSequence2D("PlayerDodgeD", "Player", TEXT("Player.png"));
 }
 
 void CMainScene::CreateParticle()
