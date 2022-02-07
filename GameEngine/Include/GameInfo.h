@@ -215,7 +215,8 @@ struct MaterialCBuffer
 {
 	Vector4	BaseColor;
 	float	Opacity;
-	Vector3	Empty;
+	int		PaperBurnEnable;
+	Vector2	Empty;
 
 	MaterialCBuffer()	:
 		Opacity(1.f)
@@ -436,4 +437,17 @@ struct GlobalCBuffer
 		DeltaTime(0.f),
 		AccTime(0.f)
 	{}
+};
+
+struct PaperBurnCBuffer
+{
+	Vector4	InLineColor;
+	Vector4	OutLineColor;
+	Vector4	CenterLineColor;
+	float	PaperBurn;
+	int		Inverse;
+	float	InFilter;
+	float	OutFilter;
+	float	CenterFilter;
+	Vector3	Empty;
 };

@@ -9,6 +9,7 @@ class CShader :
 
 protected:
     CShader();
+    CShader(const CShader& shader);
     virtual ~CShader() = 0;
 
 protected:
@@ -23,5 +24,6 @@ public:
 public:
     virtual bool Init() = 0;
     virtual void SetShader() = 0;
+    virtual CShader* Clone() = 0;
 };
 

@@ -16,8 +16,7 @@ CMesh::~CMesh()
 	}
 }
 
-bool CMesh::CreateMesh(void* VtxData, int Size, int Count, D3D11_USAGE Usage, D3D11_PRIMITIVE_TOPOLOGY Primitive,
-	void* IdxData, int IdxSize, int IdxCount, D3D11_USAGE IdxUsage, DXGI_FORMAT Fmt)
+bool CMesh::CreateMesh(void* VtxData, int Size, int Count, D3D11_USAGE Usage, D3D11_PRIMITIVE_TOPOLOGY Primitive, void* IdxData, int IdxSize, int IdxCount, D3D11_USAGE IdxUsage, DXGI_FORMAT Fmt)
 {
 	MeshContainer* Container = DBG_NEW MeshContainer;
 
@@ -25,8 +24,7 @@ bool CMesh::CreateMesh(void* VtxData, int Size, int Count, D3D11_USAGE Usage, D3
 	Container->VB.Count = Count;
 	Container->Primitive = Primitive;
 
-	if (!CreateBuffer(Buffer_Type::Vertex, VtxData, Size,
-		Count, Usage, &Container->VB.Buffer))
+	if (!CreateBuffer(Buffer_Type::Vertex, VtxData, Size, Count, Usage, &Container->VB.Buffer))
 		return false;
 
 	if (IdxData != nullptr)
@@ -37,8 +35,7 @@ bool CMesh::CreateMesh(void* VtxData, int Size, int Count, D3D11_USAGE Usage, D3
 		Container->vecIB[0].Count = IdxCount;
 		Container->vecIB[0].Fmt = Fmt;
 
-		if (!CreateBuffer(Buffer_Type::Index, IdxData, IdxSize,
-			IdxCount, IdxUsage, &Container->vecIB[0].Buffer))
+		if (!CreateBuffer(Buffer_Type::Index, IdxData, IdxSize, IdxCount, IdxUsage, &Container->vecIB[0].Buffer))
 			return false;
 	}
 
@@ -52,8 +49,7 @@ bool CMesh::Init()
 	return true;
 }
 
-bool CMesh::CreateBuffer(Buffer_Type Type, void* Data, int Size,
-	int Count, D3D11_USAGE Usage, ID3D11Buffer** Buffer)
+bool CMesh::CreateBuffer(Buffer_Type Type, void* Data, int Size, int Count, D3D11_USAGE Usage, ID3D11Buffer** Buffer)
 {
 	D3D11_BUFFER_DESC	Desc = {};
 	
@@ -76,8 +72,7 @@ bool CMesh::CreateBuffer(Buffer_Type Type, void* Data, int Size,
 
 	BufferData.pSysMem = Data;
 
-	if (FAILED(CDevice::GetInst()->GetDevice()->CreateBuffer(&Desc,
-		&BufferData, Buffer)))
+	if (FAILED(CDevice::GetInst()->GetDevice()->CreateBuffer(&Desc,&BufferData, Buffer)))
 		return false;
 
 
@@ -123,8 +118,7 @@ void CMesh::Render()
 		unsigned int	Offset = 0;
 
 		CDevice::GetInst()->GetContext()->IASetPrimitiveTopology(m_vecContainer[i]->Primitive);
-		CDevice::GetInst()->GetContext()->IASetVertexBuffers(0, 1,
-			&m_vecContainer[i]->VB.Buffer, &Stride, &Offset);
+		CDevice::GetInst()->GetContext()->IASetVertexBuffers(0, 1,&m_vecContainer[i]->VB.Buffer, &Stride, &Offset);
 
 		size_t	IdxCount = m_vecContainer[i]->vecIB.size();
 
@@ -132,20 +126,15 @@ void CMesh::Render()
 		{
 			for (size_t j = 0; j < IdxCount; ++j)
 			{
-				CDevice::GetInst()->GetContext()->IASetIndexBuffer(
-					m_vecContainer[i]->vecIB[j].Buffer,
-					m_vecContainer[i]->vecIB[j].Fmt, 0);
-				CDevice::GetInst()->GetContext()->DrawIndexed(
-					m_vecContainer[i]->vecIB[j].Count, 0, 0);
+				CDevice::GetInst()->GetContext()->IASetIndexBuffer(m_vecContainer[i]->vecIB[j].Buffer,m_vecContainer[i]->vecIB[j].Fmt, 0);
+				CDevice::GetInst()->GetContext()->DrawIndexed(m_vecContainer[i]->vecIB[j].Count, 0, 0);
 			}
 		}
 
 		else
 		{
-			CDevice::GetInst()->GetContext()->IASetIndexBuffer(
-				nullptr, DXGI_FORMAT_UNKNOWN, 0);
-			CDevice::GetInst()->GetContext()->Draw(
-				m_vecContainer[i]->VB.Count, 0);
+			CDevice::GetInst()->GetContext()->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
+			CDevice::GetInst()->GetContext()->Draw(m_vecContainer[i]->VB.Count, 0);
 		}
 	}
 }
@@ -160,8 +149,7 @@ void CMesh::RenderInstancing(int Count)
 		unsigned int	Offset = 0;
 
 		CDevice::GetInst()->GetContext()->IASetPrimitiveTopology(m_vecContainer[i]->Primitive);
-		CDevice::GetInst()->GetContext()->IASetVertexBuffers(0, 1,
-			&m_vecContainer[i]->VB.Buffer, &Stride, &Offset);
+		CDevice::GetInst()->GetContext()->IASetVertexBuffers(0, 1, &m_vecContainer[i]->VB.Buffer, &Stride, &Offset);
 
 		size_t	IdxCount = m_vecContainer[i]->vecIB.size();
 
@@ -169,20 +157,15 @@ void CMesh::RenderInstancing(int Count)
 		{
 			for (size_t j = 0; j < IdxCount; ++j)
 			{
-				CDevice::GetInst()->GetContext()->IASetIndexBuffer(
-					m_vecContainer[i]->vecIB[j].Buffer,
-					m_vecContainer[i]->vecIB[j].Fmt, 0);
-				CDevice::GetInst()->GetContext()->DrawIndexedInstanced(
-					m_vecContainer[i]->vecIB[j].Count, Count, 0, 0, 0);
+				CDevice::GetInst()->GetContext()->IASetIndexBuffer(m_vecContainer[i]->vecIB[j].Buffer, m_vecContainer[i]->vecIB[j].Fmt, 0);
+				CDevice::GetInst()->GetContext()->DrawIndexedInstanced(m_vecContainer[i]->vecIB[j].Count, Count, 0, 0, 0);
 			}
 		}
 
 		else
 		{
-			CDevice::GetInst()->GetContext()->IASetIndexBuffer(
-				nullptr, DXGI_FORMAT_UNKNOWN, 0);
-			CDevice::GetInst()->GetContext()->DrawInstanced(
-				m_vecContainer[i]->VB.Count, Count, 0, 0);
+			CDevice::GetInst()->GetContext()->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
+			CDevice::GetInst()->GetContext()->DrawInstanced(m_vecContainer[i]->VB.Count, Count, 0, 0);
 		}
 	}
 }
@@ -199,8 +182,7 @@ void CMesh::RenderInstancing(ID3D11Buffer* InstancingBuffer, unsigned int Instan
 		ID3D11Buffer* Buffer[2] = { m_vecContainer[i]->VB.Buffer , InstancingBuffer };
 
 		CDevice::GetInst()->GetContext()->IASetPrimitiveTopology(m_vecContainer[i]->Primitive);
-		CDevice::GetInst()->GetContext()->IASetVertexBuffers(0, 2,
-			Buffer, Stride, Offset);
+		CDevice::GetInst()->GetContext()->IASetVertexBuffers(0, 2,Buffer, Stride, Offset);
 
 		size_t	IdxCount = m_vecContainer[i]->vecIB.size();
 
@@ -208,20 +190,15 @@ void CMesh::RenderInstancing(ID3D11Buffer* InstancingBuffer, unsigned int Instan
 		{
 			for (size_t j = 0; j < IdxCount; ++j)
 			{
-				CDevice::GetInst()->GetContext()->IASetIndexBuffer(
-					m_vecContainer[i]->vecIB[j].Buffer,
-					m_vecContainer[i]->vecIB[j].Fmt, 0);
-				CDevice::GetInst()->GetContext()->DrawIndexedInstanced(
-					m_vecContainer[i]->vecIB[j].Count, Count, 0, 0, 0);
+				CDevice::GetInst()->GetContext()->IASetIndexBuffer(m_vecContainer[i]->vecIB[j].Buffer, m_vecContainer[i]->vecIB[j].Fmt, 0);
+				CDevice::GetInst()->GetContext()->DrawIndexedInstanced(m_vecContainer[i]->vecIB[j].Count, Count, 0, 0, 0);
 			}
 		}
 
 		else
 		{
-			CDevice::GetInst()->GetContext()->IASetIndexBuffer(
-				nullptr, DXGI_FORMAT_UNKNOWN, 0);
-			CDevice::GetInst()->GetContext()->DrawInstanced(
-				m_vecContainer[i]->VB.Count, Count, 0, 0);
+			CDevice::GetInst()->GetContext()->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
+			CDevice::GetInst()->GetContext()->DrawInstanced(m_vecContainer[i]->VB.Count, Count, 0, 0);
 		}
 	}
 }

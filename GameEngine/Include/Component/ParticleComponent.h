@@ -9,7 +9,7 @@
 #include "../Resource/Material/Material.h"
 
 class CParticleComponent :
-    public CSceneComponent
+	public CSceneComponent
 {
 	friend class CGameObject;
 
@@ -24,7 +24,7 @@ protected:
 	CSharedPtr<CMesh>						m_Mesh;
 	CSharedPtr<CMaterial>					m_Material;
 	CSharedPtr<CParticleUpdateShader>		m_UpdateShader;
-	CParticleConstantBuffer* m_CBuffer;
+	CParticleConstantBuffer*				m_CBuffer;
 	ParticleInfo							m_Info;
 	ParticleInfoShared						m_InfoShared;
 	float									m_SpawnTime;

@@ -13,9 +13,11 @@ public:
 private:
 	CSharedPtr<CMainWidget> m_MainWidget;
 	std::function<void(bool, float)> m_LoadingFunction;
+	class CBubbleParticle* m_BubbleParticle;
 
 public:
     virtual bool Init();
+    virtual void Update(float DeltaTime);
 
 private:
 	void CreateMaterial();

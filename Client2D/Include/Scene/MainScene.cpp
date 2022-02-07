@@ -1,5 +1,6 @@
 
 #include "MainScene.h"
+#include "Device.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneResource.h"
 #include "Scene/Viewport.h"
@@ -9,7 +10,8 @@
 #include "../Object/BubbleParticle.h"
 #include "Resource/Particle/Particle.h"
 
-CMainScene::CMainScene()
+CMainScene::CMainScene()	:
+	m_BubbleParticle(nullptr)
 {
 	SetTypeID<CMainScene>();
 }
@@ -43,14 +45,27 @@ bool CMainScene::Init()
 
 	CPixelTest* PixelTest = m_Scene->CreateGameObject<CPixelTest>("PixelTest");
 
-	CBubbleParticle* BubbleParticle = m_Scene->CreateGameObject<CBubbleParticle>("BubbleParticle");
+	m_BubbleParticle = m_Scene->CreateGameObject<CBubbleParticle>("BubbleParticle");
 
-	BubbleParticle = m_Scene->CreateGameObject<CBubbleParticle>("BubbleParticle");
+	/*BubbleParticle = m_Scene->CreateGameObject<CBubbleParticle>("BubbleParticle");
 
-	BubbleParticle->SetRelativePos(-100.f, 0.f, 0.f);
+	BubbleParticle->SetRelativePos(-100.f, 0.f, 0.f);*/
 	m_MainWidget = m_Scene->GetViewport()->CreateWidgetWindow<CMainWidget>("MainWidget");
 
 	return true;
+}
+
+void CMainScene::Update(float DeltaTime)
+{
+	if (!m_BubbleParticle)
+		return;
+
+	Resolution	RS = CDevice::GetInst()->GetResolution();
+
+	float	Rand = float(rand() % RS.Width - 500.f);
+	//rand() % (置企 - 置社 + 1) + 置社
+		
+	m_BubbleParticle->SetWorldPos(Rand, (float)RS.Height, 0.f);
 }
 
 void CMainScene::CreateMaterial()
@@ -67,31 +82,32 @@ void CMainScene::CreateMaterial()
 
 void CMainScene::CreateAnimationSequence()
 {
-	m_Scene->GetResource()->CreateAnimationSequence2D("PlayerIdleD", "Player", TEXT("Player.png"), Vector2(66.f, 117.f), Vector2(42.f, 66.f), 4, 6);
+	m_Scene->GetResource()->CreateAnimationSequence2D("PlayerIdleD", "Player", TEXT("Player.png"));
 
-	m_Scene->GetResource()->CreateAnimationSequence2D("PlayerDodgeD", "Player", TEXT("Player.png"), Vector2(66.f, 876.f), Vector2(48.f, 87.f), 9, 6);
+	m_Scene->GetResource()->CreateAnimationSequence2D("PlayerDodgeD", "Player", TEXT("Player.png"));
 }
 
 void CMainScene::CreateParticle()
 {
 	m_Scene->GetResource()->CreateParticle("Bubble");
+
 	CParticle* Particle = m_Scene->GetResource()->FindParticle("Bubble");
 
 	CMaterial* Material = m_Scene->GetResource()->FindMaterial("Bubble");
 
 	Particle->SetMaterial(Material);
 	Particle->SetSpawnCountMax(1000);
-	Particle->SetLifeTimeMin(3.f);
-	Particle->SetLifeTimeMax(5.f);
+	Particle->SetLifeTimeMin(10.f);
+	Particle->SetLifeTimeMax(10.f);
 	Particle->SetScaleMin(Vector3(20.f, 20.f, 1.f));
-	Particle->SetScaleMax(Vector3(50.f, 50.f, 1.f));
-	Particle->SetSpeedMin(100.f);
+	Particle->SetScaleMax(Vector3(20.f, 20.f, 1.f));
+	Particle->SetSpeedMin(300.f);
 	Particle->SetSpeedMax(300.f);
-	Particle->SetMoveDir(Vector3(0.f, 1.f, 0.f));
+	Particle->SetMoveDir(Vector3(0.f, -1.f, 0.f));
 	Particle->SetStartMin(Vector3(-30.f, -30.f, 0.f));
 	Particle->SetStartMax(Vector3(30.f, 30.f, 0.f));
-	Particle->SetColorMin(Vector4(0.2f, 0.1f, 0.8f, 1.f));
-	Particle->SetColorMax(Vector4(0.2f, 0.1f, 0.8f, 1.f));
+	Particle->SetColorMin(Vector4(1.f, 1.f, 1.f, 1.f));
+	Particle->SetColorMax(Vector4(1.f, 1.f, 1.f, 1.f));
 	Particle->SetMoveAngle(Vector3(0.f, 0.f, 30.f));
 	Particle->SetGravity(true);
 	Particle->SetMove(true);

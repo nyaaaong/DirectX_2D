@@ -2,6 +2,7 @@
 #include "Player2D.h"
 #include "Bullet.h"
 #include "BulletTornaido.h"
+#include "BubbleParticle.h"
 #include "Input.h"
 #include "PlayerAnimation2D.h"
 #include "BulletCamera.h"
@@ -11,12 +12,16 @@
 
 CPlayer2D::CPlayer2D()	:
 	m_EnableInput(true),
-	m_Dodge(false)
+	m_Dodge(false),
+	m_AttackTimer(0.f),
+	m_AttackCoolDown(false)
 {
 	SetTypeID<CPlayer2D>();
 	m_SolW = false;
 	m_WDistance = 0.f;
 	m_Opacity = 1.f;
+
+	m_AttackTimerMax = 0.3f;
 }
 
 CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
@@ -41,6 +46,11 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 
 	m_Opacity = obj.m_Opacity;
 	m_Dodge = false;
+
+
+	m_AttackTimer = 0.f;
+	m_AttackTimerMax = obj.m_AttackTimerMax;
+	m_AttackCoolDown = false;
 }
 
 CPlayer2D::~CPlayer2D()
@@ -175,6 +185,17 @@ void CPlayer2D::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
 
+	if (m_AttackCoolDown)
+	{
+		m_AttackTimer += DeltaTime;
+
+		if (m_AttackTimer >= m_AttackTimerMax)
+		{
+			m_AttackTimer = 0.f;
+			m_AttackCoolDown = false;
+		}
+	}
+
 	static bool Fire2 = false;
 
 	static bool	Hide = false;
@@ -291,8 +312,10 @@ void CPlayer2D::DodgeEnd(float DeltaTime)
 
 void CPlayer2D::Attack(float DeltaTime)
 {
-	if (!m_EnableInput)
+	if (!m_EnableInput || m_AttackCoolDown)
 		return;
+
+	m_AttackCoolDown = true;
 
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
 
@@ -318,8 +341,10 @@ void CPlayer2D::Attack(float DeltaTime)
 
 void CPlayer2D::Attack1(float DeltaTime)
 {
-	if (!m_EnableInput)
+	if (!m_EnableInput || m_AttackCoolDown)
 		return;
+
+	m_AttackCoolDown = true;
 
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
 
@@ -365,6 +390,11 @@ void CPlayer2D::Action(float DeltaTime)
 
 void CPlayer2D::Skill1(float DeltaTime)
 {
+	if (!m_EnableInput || m_AttackCoolDown)
+		return;
+
+	m_AttackCoolDown = true;
+
 	CBulletCamera* Bullet = m_Scene->CreateGameObject<CBulletCamera>("Bullet");
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);

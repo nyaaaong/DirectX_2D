@@ -236,6 +236,12 @@
     <Filter Include="04. Component\00. SceneComponent\04. Particle">
       <UniqueIdentifier>{e2f3fe75-94b5-43f8-9994-d0855878607e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Component\01. ObjectComponent\00. PaperBurn">
+      <UniqueIdentifier>{144c93c3-fce0-47bd-af20-ded24eac9e56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\02. ConstantBuffer\08. PaperBurn">
+      <UniqueIdentifier>{a091ce5e-3f80-4013-9aeb-4abc50807d41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -673,6 +679,12 @@
     <ClInclude Include="Resource\Shader\ParticleRenderShader.h">
       <Filter>01. Resource\01. Shader\01. ShaderClass\04. Particle</Filter>
     </ClInclude>
+    <ClInclude Include="Component\PaperBurnComponent.h">
+      <Filter>04. Component\01. ObjectComponent\00. PaperBurn</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\PaperBurnConstantBuffer.h">
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\08. PaperBurn</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -1028,6 +1040,12 @@
     </ClCompile>
     <ClCompile Include="Resource\Shader\ParticleRenderShader.cpp">
       <Filter>01. Resource\01. Shader\01. ShaderClass\04. Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\PaperBurnComponent.cpp">
+      <Filter>04. Component\01. ObjectComponent\00. PaperBurn</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\PaperBurnConstantBuffer.cpp">
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\08. PaperBurn</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

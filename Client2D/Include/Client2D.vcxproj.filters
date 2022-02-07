@@ -101,6 +101,9 @@
     <ClCompile Include="Object\BubbleParticle.cpp">
       <Filter>01. Object\04. Particle</Filter>
     </ClCompile>
+    <ClCompile Include="Object\SparkParticle.cpp">
+      <Filter>01. Object\04. Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene\MainScene.h">
@@ -167,6 +170,9 @@
       <Filter>00. SceneMode</Filter>
     </ClInclude>
     <ClInclude Include="Object\BubbleParticle.h">
+      <Filter>01. Object\04. Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\SparkParticle.h">
       <Filter>01. Object\04. Particle</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,11 +5,25 @@
 
 CComputeShader::CComputeShader() :
 	m_CS(nullptr),
-	m_CSBlob(nullptr)
+	m_CSBlob(nullptr),
+    m_EntryName{},
+    m_FileName{}
 {
 	m_Type = Shader_Type::Compute;
 }
 
+CComputeShader::CComputeShader(const CComputeShader& shader)    :
+    CShader(shader)
+{
+    m_CS = nullptr;
+    m_CSBlob = nullptr;
+
+    memcpy(m_EntryName, shader.m_EntryName, 64);
+    memcpy(m_FileName, shader.m_FileName, MAX_PATH);
+    m_PathName = shader.m_PathName;
+
+    LoadComputeShader(shader.m_EntryName, shader.m_FileName, shader.m_PathName);
+}
 CComputeShader::~CComputeShader()
 {
 	SAFE_RELEASE(m_CS);
@@ -21,11 +35,18 @@ void CComputeShader::SetShader()
 	CDevice::GetInst()->GetContext()->CSSetShader(m_CS, nullptr, 0);
 }
 
+CComputeShader* CComputeShader::Clone()
+{
+    return nullptr;
+}
 bool CComputeShader::LoadComputeShader(const char* EntryName, const TCHAR* FileName, const std::string& PathName)
 {
 	SAFE_RELEASE(m_CS);
 	SAFE_RELEASE(m_CSBlob);
 
+    strcpy_s(m_EntryName, EntryName);
+    lstrcpy(m_FileName, FileName);
+    m_PathName = PathName;
 	unsigned int Flag = 0;
 
 #ifdef _DEBUG
@@ -66,5 +87,5 @@ void CComputeShader::Excute(unsigned int x, unsigned int y, unsigned int z)
 	// ComputeShader를 실행시켜준다.
 	SetShader();
 	CDevice::GetInst()->GetContext()->Dispatch(x, y, z);
-	//CDevice::GetInst()->GetContext()->CSSetShader(nullptr, nullptr, 0);
+    CDevice::GetInst()->GetContext()->CSSetShader(nullptr, nullptr, 0);
 }

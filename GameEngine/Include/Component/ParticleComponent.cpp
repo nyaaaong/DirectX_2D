@@ -77,9 +77,11 @@ void CParticleComponent::SetParticle(CParticle* Particle)
 
 	SAFE_DELETE(m_CBuffer);
 
+	m_vecStructuredBuffer.clear();
+
 	m_Particle->CloneStructuredBuffer(m_vecStructuredBuffer);
 
-	m_UpdateShader = m_Particle->GetUpdateShader();
+	m_UpdateShader = m_Particle->CloneUpdateShader();
 
 	m_CBuffer = m_Particle->CloneConstantBuffer();
 
@@ -89,8 +91,6 @@ void CParticleComponent::SetParticle(CParticle* Particle)
 void CParticleComponent::SetSpawnTime(float Time)
 {
 	m_SpawnTimeMax = Time;
-
-	m_Particle->SetSpawnTime(m_SpawnTimeMax);
 }
 
 void CParticleComponent::Start()

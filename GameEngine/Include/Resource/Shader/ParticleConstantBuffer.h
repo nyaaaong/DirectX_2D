@@ -19,6 +19,11 @@ public:
 	virtual CParticleConstantBuffer* Clone();
 
 public:
+	unsigned int GetSpawnEnable()	const
+	{
+		return m_BufferData.SpawnEnable;
+	}
+
 	const Vector3& GetStartMin()	const
 	{
 		return m_BufferData.StartMin;

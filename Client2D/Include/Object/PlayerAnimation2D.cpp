@@ -32,6 +32,7 @@ bool CPlayerAnimation2D::Init()
 	AddAnimation("PlayerDodgeU", "PlayerDodgeU", false, 0.4f);*/
 
 	SetEndFunction<CPlayerAnimation2D>("PlayerDodgeD", this, &CPlayerAnimation2D::DefaultAnimation);
+	Play();
 
 	return true;
 }

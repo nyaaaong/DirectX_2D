@@ -7,6 +7,7 @@ class CGraphicShader :
 
 protected:
     CGraphicShader();
+    CGraphicShader(const CGraphicShader& shader);
     virtual ~CGraphicShader() = 0;
 
 private:
@@ -40,6 +41,7 @@ public:
 public:
     virtual bool Init() = 0;
     virtual void SetShader();
+    virtual CGraphicShader* Clone();
 
 public:
     bool LoadVertexShader(const char* EntryName, const TCHAR* FileName,

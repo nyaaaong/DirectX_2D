@@ -46,6 +46,19 @@ void CGameObject::SetScene(CScene* Scene)
 	m_Scene = Scene;
 }
 
+void CGameObject::Destroy()
+{
+	CRef::Destroy();
+
+	m_RootComponent->Destroy();
+
+	size_t	Size = m_vecObjectComponent.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		m_vecObjectComponent[i]->Destroy();
+	}
+}
 CComponent* CGameObject::FindComponent(const std::string& Name)
 {
 	{
@@ -251,19 +264,5 @@ void CGameObject::Load(FILE* File)
 		Component->Load(File);
 
 		m_vecObjectComponent.push_back((CObjectComponent*)Component);
-	}
-}
-
-void CGameObject::Destroy()
-{
-	CRef::Destroy();
-
-	m_RootComponent->Destroy();
-
-	size_t	Size = m_vecObjectComponent.size();
-
-	for (size_t i = 0; i < Size; ++i)
-	{
-		m_vecObjectComponent[i]->Destroy();
 	}
 }

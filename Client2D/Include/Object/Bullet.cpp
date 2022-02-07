@@ -1,17 +1,24 @@
 
 #include "Bullet.h"
 #include "Monster.h"
+#include "SparkParticle.h"
 #include "Component/SpriteComponent.h"
 #include "Component/ColliderCircle.h"
 
 CBullet::CBullet() :
-	m_Distance(600.f)
+	m_Distance(600.f),
+	m_SparkParticleObject(nullptr),
+	m_SparkParticle(nullptr),
+	m_SparkMaterial(nullptr)
 {
 	SetTypeID<CBullet>();
 }
 
 CBullet::CBullet(const CBullet& obj) :
-	CGameObject(obj)
+	CGameObject(obj),
+	m_SparkParticleObject(nullptr),
+	m_SparkParticle(nullptr),
+	m_SparkMaterial(nullptr)
 {
 	m_Sprite = (CSpriteComponent*)FindComponent("BulletSprite");
 	m_Distance = obj.m_Distance;
@@ -74,6 +81,11 @@ bool CBullet::Init()
 	m_Body->AddCollisionCallback(Collision_State::Begin, this, &CBullet::OnCollisionBegin);
 	m_Body->AddCollisionCallback(Collision_State::End, this, &CBullet::OnCollisionEnd);
 
+	CreateMaterial();
+	/*CreateParticle();
+
+	CSparkParticle* SparkParticle = m_Scene->CreateGameObject<CSparkParticle>("SparkParticle");*/
+
 	return true;
 }
 
@@ -106,8 +118,52 @@ CBullet* CBullet::Clone()
 void CBullet::OnCollisionBegin(const CollisionResult& result)
 {
 	Destroy();
+
+	CreateParticle();
+
+	m_SparkParticleObject = m_Scene->CreateGameObject<CSparkParticle>("SparkParticle");
+
+	m_SparkParticleObject->SetRelativePos(GetRelativePos());
+
+	m_SparkParticle->SetMoveDir(Vector3(0.f, 1.f, 0.f));
+	//m_SparkParticleObject->SetRelativeRotationZ(GetWorldRot().z);
 }
 
 void CBullet::OnCollisionEnd(const CollisionResult& result)
 {
+}
+
+void CBullet::CreateMaterial()
+{
+	m_Scene->GetResource()->CreateMaterial<CMaterial>("Spark");
+	m_SparkMaterial = m_Scene->GetResource()->FindMaterial("Spark");
+
+	m_SparkMaterial->AddTexture(0, (int)Buffer_Shader_Type::Pixel, "Spark", TEXT("Particle/Spark.png"));
+
+	m_SparkMaterial->SetShader("ParticleRenderShader");
+	m_SparkMaterial->SetRenderState("AlphaBlend");
+}
+
+void CBullet::CreateParticle()
+{
+	m_Scene->GetResource()->CreateParticle("Spark");
+	m_SparkParticle = m_Scene->GetResource()->FindParticle("Spark");
+
+	//CMaterial* Material = m_Scene->GetResource()->FindMaterial("Spark");
+
+	m_SparkParticle->SetMaterial(m_SparkMaterial);
+	m_SparkParticle->SetSpawnCountMax(100);
+	m_SparkParticle->SetLifeTimeMax(3.f);
+	m_SparkParticle->SetScaleMin(Vector3(50.f, 50.f, 1.f));
+	m_SparkParticle->SetScaleMax(Vector3(50.f, 50.f, 1.f));
+	m_SparkParticle->SetSpeedMin(50.f);
+	m_SparkParticle->SetSpeedMax(50.f);
+	//m_SparkParticle->SetMoveDir(Vector3(0.f, -1.f, 0.f));
+	//m_SparkParticle->SetStartMin(Vector3(-30.f, -30.f, 0.f));
+	//m_SparkParticle->SetStartMax(Vector3(30.f, 30.f, 0.f));
+	//m_SparkParticle->SetColorMin(Vector4(0.2f, 0.1f, 0.8f, 1.f));
+	//m_SparkParticle->SetColorMax(Vector4(0.2f, 0.1f, 0.8f, 1.f));
+	m_SparkParticle->SetMoveAngle(Vector3(0.f, 0.f, 180.f));
+	m_SparkParticle->SetGravity(true);
+	m_SparkParticle->SetMove(true);
 }

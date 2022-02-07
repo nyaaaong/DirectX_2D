@@ -158,8 +158,7 @@ bool CMainWidget::Init()
 	m_FPSText->SetPos(900.f, 650.f);
 	m_FPSText->SetSize(300.f, 40.f);
 	m_FPSText->SetZOrder(1);
-	m_FPSText->SetColor(1.f, 0.f, 0.f);
-	//m_Button1Text->SetOpacity(0.5f);
+	m_FPSText->SetColor(1.f, 1.f, 1.f);
 	m_FPSText->SetAlignH(TEXT_ALIGN_H::Center);
 	m_FPSText->SetShadowEnable(true);
 	m_FPSText->SetShadowOffset(2.f, 2.f);
@@ -177,22 +176,6 @@ bool CMainWidget::Init()
 
 	m_Image = CreateWidget<CImage>("Image");
 	m_Image->SetTexture("Image", TEXT("Teemo.jpg"));
-	/*
-		m_AnimInstance->Load(File);
-
-		fclose(File);
-
-		CAnimationSequence2DData* Anim = m_AnimInstance->GetCurrentAnimation();
-
-		if (!Anim)
-			return;
-
-		AddFrameListBoxData(Anim->GetName());
-
-		m_SpriteFrame->SetTexture(m_SpriteObject->GetSpriteComponent()->GetMaterial()->GetTexture());
-
-		RefreshInput();
-	*/
 
 	return true;
 }

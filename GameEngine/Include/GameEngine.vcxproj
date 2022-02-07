@@ -221,6 +221,7 @@
     <ClInclude Include="Component\ColliderPixel.h" />
     <ClInclude Include="Component\Component.h" />
     <ClInclude Include="Component\ObjectComponent.h" />
+    <ClInclude Include="Component\PaperBurnComponent.h" />
     <ClInclude Include="Component\ParticleComponent.h" />
     <ClInclude Include="Component\SceneComponent.h" />
     <ClInclude Include="Component\SpriteComponent.h" />
@@ -312,6 +313,7 @@
     <ClInclude Include="Resource\Shader\MaterialConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\Mesh2DShader.h" />
     <ClInclude Include="Resource\Shader\NumberShader.h" />
+    <ClInclude Include="Resource\Shader\PaperBurnConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\ParticleConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\ParticleRenderShader.h" />
     <ClInclude Include="Resource\Shader\ParticleUpdateShader.h" />
@@ -367,6 +369,7 @@
     <ClCompile Include="Component\ColliderPixel.cpp" />
     <ClCompile Include="Component\Component.cpp" />
     <ClCompile Include="Component\ObjectComponent.cpp" />
+    <ClCompile Include="Component\PaperBurnComponent.cpp" />
     <ClCompile Include="Component\ParticleComponent.cpp" />
     <ClCompile Include="Component\SceneComponent.cpp" />
     <ClCompile Include="Component\SpriteComponent.cpp" />
@@ -435,6 +438,7 @@
     <ClCompile Include="Resource\Shader\MaterialConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\Mesh2DShader.cpp" />
     <ClCompile Include="Resource\Shader\NumberShader.cpp" />
+    <ClCompile Include="Resource\Shader\PaperBurnConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\ParticleConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\ParticleRenderShader.cpp" />
     <ClCompile Include="Resource\Shader\ParticleUpdateShader.cpp" />

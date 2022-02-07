@@ -44,6 +44,11 @@ public:
 	{
 		m_SceneComponentList.push_back(Component);
 	}
+	
+	void SetLifeSpan(float LifeSpan)
+	{
+		m_LifeSpan = LifeSpan;
+	}
 
 public:
 	CSceneComponent* GetRootComponent()	const
@@ -582,9 +587,6 @@ public:
 	template <typename T>
 	T* FindComponentFromType()
 	{
-		if (m_SceneComponentList.empty())
-			return nullptr;
-
 		auto	iter = m_SceneComponentList.begin();
 		auto	iterEnd = m_SceneComponentList.end();
 
@@ -601,17 +603,17 @@ public:
 	template <typename T>
 	T* CreateComponent(const std::string& Name)
 	{
-		T* Component = DBG_NEW T;
+        T* Component = DBG_NEW T;
 
-		Component->SetName(Name);
-		Component->SetScene(m_Scene);
-		Component->SetGameObject(this);
+        Component->SetName(Name);
+        Component->SetScene(m_Scene);
+        Component->SetGameObject(this);
 
-		if (!Component->Init())
-		{
-			SAFE_RELEASE(Component);
-			return nullptr;
-		}
+        if (!Component->Init())
+        {
+            SAFE_RELEASE(Component);
+            return nullptr;
+        }
 
 		if (Component->GetComponentType() == Component_Type::ObjectComponent)
 			m_vecObjectComponent.push_back((class CObjectComponent*)Component);
@@ -624,7 +626,7 @@ public:
 				m_RootComponent = Component;
 		}
 
-		return Component;
+        return Component;
 	}
 
 public:

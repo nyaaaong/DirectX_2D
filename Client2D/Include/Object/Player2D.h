@@ -42,6 +42,10 @@ private:
 	bool	m_EnableInput;
 	bool	m_Dodge;
 
+	bool	m_AttackCoolDown;
+	float	m_AttackTimer;
+	float	m_AttackTimerMax;
+
 public:
 	void SetEnableInput(bool Enable)
 	{
