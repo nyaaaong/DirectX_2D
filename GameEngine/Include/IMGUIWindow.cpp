@@ -91,7 +91,6 @@ void CIMGUIWindow::Update(float DeltaTime)
 	if (!ImGui::Begin(m_Name.c_str(), &m_Open, m_WindowFlag))
 		m_Open = false;
 
-
 	CIMGUIManager::GetInst()->SetCurrentFont();
 
 	size_t	Size = m_vecWidget.size();

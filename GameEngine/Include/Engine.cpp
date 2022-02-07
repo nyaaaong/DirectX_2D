@@ -214,7 +214,7 @@ void CEngine::Logic()
 		m_Start = true;
 
 		CSceneManager::GetInst()->Start();
-		//CIMGUIManager::GetInst()->Start();
+		CIMGUIManager::GetInst()->Start();
 	}
 
 	m_Timer->Update();

@@ -40,6 +40,7 @@ public:
 		Window = DBG_NEW T;
 
 		Window->SetName(Name);
+
 		if (!Window->Init())
 		{
 			SAFE_DELETE(Window);

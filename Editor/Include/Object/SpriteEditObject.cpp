@@ -3,16 +3,15 @@
 #include "Component/SpriteComponent.h"
 #include "Animation/AnimationSequence2DInstance.h"
 
-CSpriteEditObject::CSpriteEditObject() :
-	m_Distance(600.f)
+CSpriteEditObject::CSpriteEditObject()
 {
+	int a = 0;
 }
 
 CSpriteEditObject::CSpriteEditObject(const CSpriteEditObject& obj) :
 	CGameObject(obj)
 {
-	m_Sprite = (CSpriteComponent*)FindComponent("BulletSprite");
-	m_Distance = obj.m_Distance;
+	m_Sprite = (CSpriteComponent*)FindComponent("SpriteEdit");
 }
 
 CSpriteEditObject::~CSpriteEditObject()

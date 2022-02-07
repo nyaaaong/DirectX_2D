@@ -14,7 +14,6 @@ protected:
 
 private:
     CSharedPtr<class CSpriteComponent>    m_Sprite;
-    float   m_Distance;
 
 public:
     class CSpriteComponent* GetSpriteComponent()    const
