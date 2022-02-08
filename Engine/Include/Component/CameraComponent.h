@@ -24,7 +24,7 @@ protected:
 
 public:
 
-	Vector2 GetLeftBottom()	const
+	const Vector2& GetLeftBottom()	const
 	{
 		Vector2	LB;
 

@@ -16,7 +16,7 @@ CMonster::CMonster()	:
 CMonster::CMonster(const CMonster& obj) :
 	CGameObject(obj)
 {
-	m_Sprite = (CSpriteComponent*)FindComponent("PlayerSprite");
+	m_Sprite = (CSpriteComponent*)FindComponent("MonsterSprite");
 	m_Body = (CColliderCircle*)FindComponent("Body");
 	m_SimpleHUDWidget = (CWidgetComponent*)FindComponent("SimpleHUD");
 
@@ -45,7 +45,7 @@ void CMonster::Start()
 
 bool CMonster::Init()
 {
-	m_Sprite = CreateComponent<CSpriteComponent>("PlayerSprite");
+	m_Sprite = CreateComponent<CSpriteComponent>("MonsterSprite");
 	m_Body = CreateComponent<CColliderCircle>("Body");
 	m_PaperBurn = CreateComponent<CPaperBurnComponent>("PaperBurn");
 

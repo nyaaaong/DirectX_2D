@@ -70,17 +70,17 @@ public:
 		return m_RButtonClick;
 	}
 
-	Vector2 GetMousePos()	const
+	const Vector2& GetMousePos()	const
 	{
 		return m_MousePos;
 	}
 
-	Vector2 GetMouseWorld2DPos()	const
+	const Vector2& GetMouseWorld2DPos()	const
 	{
 		return m_MouseWorldPos;
 	}
 
-	Vector2 GetMouseMove()	const
+	const Vector2& GetMouseMove()	const
 	{
 		return m_MouseMove;
 	}

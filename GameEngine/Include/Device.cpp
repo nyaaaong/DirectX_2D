@@ -34,7 +34,7 @@ CDevice::~CDevice()
 	SAFE_RELEASE(m_Device);
 }
 
-Vector2 CDevice::GetViewportAspectRatio()
+const Vector2& CDevice::GetViewportAspectRatio()	const
 {
 	RECT	ClientRC = {};
 

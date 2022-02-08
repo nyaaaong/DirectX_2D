@@ -35,17 +35,17 @@ public:
 	}
 
 public:
-	Vector3 GetFirstWorldPos()	const
+	const Vector3& GetFirstWorldPos()	const
 	{
 		return m_FirstWorldPos;
 	}
 
-	Vector2 GetStartPos()	const
+	const Vector2& GetStartPos()	const
 	{
 		return m_StartPos;
 	}
 
-	Vector2 GetEndPos()	const
+	const Vector2& GetEndPos()	const
 	{
 		return m_EndPos;
 	}

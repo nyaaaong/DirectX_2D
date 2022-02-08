@@ -171,7 +171,7 @@ public:
 	}
 
 public:
-	Vector3 GetRelativeScale()	const
+	const Vector3& GetRelativeScale()	const
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -179,7 +179,7 @@ public:
 		return m_RootComponent->GetRelativeScale();
 	}
 
-	Vector3 GetRelativeRot()	const
+	const Vector3& GetRelativeRot()	const
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -187,7 +187,7 @@ public:
 		return m_RootComponent->GetRelativeRot();
 	}
 
-	Vector3 GetRelativePos()	const
+	const Vector3& GetRelativePos()	const
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -195,7 +195,7 @@ public:
 		return m_RootComponent->GetRelativePos();
 	}
 
-	Vector3 GetRelativeAxis(AXIS Axis)
+	const Vector3& GetRelativeAxis(AXIS Axis)
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -349,7 +349,7 @@ public:
 	}
 
 public:
-	Vector3 GetWorldScale()	const
+	const Vector3& GetWorldScale()	const
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -357,7 +357,7 @@ public:
 		return m_RootComponent->GetWorldScale();
 	}
 
-	Vector3 GetWorldRot()	const
+	const Vector3& GetWorldRot()	const
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -365,7 +365,7 @@ public:
 		return m_RootComponent->GetWorldRot();
 	}
 
-	Vector3 GetWorldPos()	const
+	const Vector3& GetWorldPos()	const
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -373,7 +373,7 @@ public:
 		return m_RootComponent->GetWorldPos();
 	}
 
-	Vector3 GetPivot()	const
+	const Vector3& GetPivot()	const
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -381,7 +381,7 @@ public:
 		return m_RootComponent->GetPivot();
 	}
 
-	Vector3 GetMeshSize()	const
+	const Vector3& GetMeshSize()	const
 	{
 		if (!m_RootComponent)
 			return Vector3();
@@ -397,7 +397,7 @@ public:
 		return m_RootComponent->GetWorldMatrix();
 	}
 
-	Vector3 GetWorldAxis(AXIS Axis)
+	const Vector3& GetWorldAxis(AXIS Axis)
 	{
 		if (!m_RootComponent)
 			return Vector3();

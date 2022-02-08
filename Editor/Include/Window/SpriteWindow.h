@@ -42,7 +42,7 @@ public:
 	}
 
 public:
-	Vector3 GetSpriteSize()	const;
+	const Vector3& GetSpriteSize()	const;
 
 public:
 	virtual bool Init();

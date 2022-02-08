@@ -127,22 +127,22 @@ public:
 	}
 
 public:
-	Vector3 GetRelativeScale()	const
+	const Vector3& GetRelativeScale()	const
 	{
 		return m_Transform->GetRelativeScale();
 	}
 
-	Vector3 GetRelativeRot()	const
+	const Vector3& GetRelativeRot()	const
 	{
 		return m_Transform->GetRelativeRot();
 	}
 
-	Vector3 GetRelativePos()	const
+	const Vector3& GetRelativePos()	const
 	{
 		return m_Transform->GetRelativePos();
 	}
 
-	Vector3 GetRelativeAxis(AXIS Axis)
+	const Vector3& GetRelativeAxis(AXIS Axis)
 	{
 		return m_Transform->GetRelativeAxis(Axis);
 	}
@@ -239,27 +239,27 @@ public:
 	}
 
 public:
-	Vector3 GetWorldScale()	const
+	const Vector3& GetWorldScale()	const
 	{
 		return m_Transform->GetWorldScale();
 	}
 
-	Vector3 GetWorldRot()	const
+	const Vector3& GetWorldRot()	const
 	{
 		return m_Transform->GetWorldRot();
 	}
 
-	Vector3 GetWorldPos()	const
+	const Vector3& GetWorldPos()	const
 	{
 		return m_Transform->GetWorldPos();
 	}
 
-	Vector3 GetPivot()	const
+	const Vector3& GetPivot()	const
 	{
 		return m_Transform->GetPivot();
 	}
 
-	Vector3 GetMeshSize()	const
+	const Vector3& GetMeshSize()	const
 	{
 		return m_Transform->GetMeshSize();
 	}
@@ -269,7 +269,7 @@ public:
 		return m_Transform->GetWorldMatrix();
 	}
 
-	Vector3 GetWorldAxis(AXIS Axis)
+	const Vector3& GetWorldAxis(AXIS Axis)
 	{
 		return m_Transform->GetWorldAxis(Axis);
 	}

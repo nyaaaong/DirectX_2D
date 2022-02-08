@@ -63,12 +63,12 @@ public:
 		return m_Owner;
 	}
 
-	Vector2 GetWindowPos()	const
+	const Vector2& GetWindowPos()	const
 	{
 		return m_Pos;
 	}
 
-	Vector2 GetWindowSize()	const
+	const Vector2& GetWindowSize()	const
 	{
 		return m_Size;
 	}

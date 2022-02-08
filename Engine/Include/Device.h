@@ -62,7 +62,7 @@ public:
 	}
 
 public:
-	Vector2 GetViewportAspectRatio();
+	const Vector2& GetViewportAspectRatio()	const;
 
 public:
 	bool Init(HWND hWnd, unsigned int Width, unsigned int Height,

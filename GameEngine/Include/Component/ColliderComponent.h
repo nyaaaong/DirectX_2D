@@ -48,12 +48,12 @@ public:
 		m_Offset = Vector3(x, y, z);
 	}
 
-	Vector3 GetMin()    const
+	const Vector3& GetMin()    const
 	{
 		return m_Min;
 	}
 
-	Vector3 GetMax()    const
+	const Vector3& GetMax()    const
 	{
 		return m_Max;
 	}
