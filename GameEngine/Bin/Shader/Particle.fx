@@ -316,12 +316,10 @@ PSOutput_Single ParticlePS(GeometryParticleOutput input)
 
 	float4	Color = g_BaseTexture.Sample(g_BaseSmp, input.UV);
 
-	output.Color.rgb = Color.rgb * input.Color.rgb;
-
 	if (Color.a == 0.f || input.Color.a == 0.f)
 		clip(-1);
 
-	output.Color.a = Color.a * input.Color.a;
+	Color = PaperBurn2D(Color * input.Color, input.UV);
 
 	return output;
 }

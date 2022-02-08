@@ -49,9 +49,14 @@ public:
 		m_BufferData.CenterLineColor = Vector4(r, g, b, a);
 	}
 
-	void SetPaperBurn(float Burn)
+	void SetFilter(float Filter)
 	{
-		m_BufferData.PaperBurn = Burn;
+		m_BufferData.Filter = Filter;
+	}
+
+	void AddFilter(float Filter)
+	{
+		m_BufferData.Filter += Filter;
 	}
 
 	void SetInverse(bool Inverse)

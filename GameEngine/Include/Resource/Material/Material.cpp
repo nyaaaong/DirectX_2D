@@ -24,10 +24,19 @@ CMaterial::CMaterial(const CMaterial& Material)
 	m_RefCount = 0;
 	
 	m_Scene = nullptr;
+
+	m_RenderCallback.clear();
 }
 
 CMaterial::~CMaterial()
 {
+	auto    iter = m_RenderCallback.begin();
+	auto    iterEnd = m_RenderCallback.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		SAFE_DELETE((*iter));
+	}
 }
 
 void CMaterial::SetRenderState(CRenderState* State)
@@ -206,6 +215,11 @@ void CMaterial::SetTexture(int Index, int Register, int ShaderType, const std::s
 	m_TextureInfo[Index].ShaderType = ShaderType;*/
 }
 
+void CMaterial::SetPaperBurn(bool Enable)
+{
+	m_CBuffer->SetPaperBurn(Enable);
+}
+
 void CMaterial::SetShader(const std::string& Name)
 {
 	m_Shader = (CGraphicShader*)CResourceManager::GetInst()->FindShader(Name);
@@ -235,6 +249,14 @@ void CMaterial::Render()
 	for (size_t i = 0; i < Size; ++i)
 	{
 		m_TextureInfo[i].Texture->SetShader(m_TextureInfo[i].Register, m_TextureInfo[i].ShaderType, 0);
+	}
+
+	auto    iter = m_RenderCallback.begin();
+	auto    iterEnd = m_RenderCallback.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		(*iter)->Func();
 	}
 }
 

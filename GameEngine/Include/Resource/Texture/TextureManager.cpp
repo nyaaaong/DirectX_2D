@@ -21,6 +21,7 @@ CTextureManager::~CTextureManager()
 bool CTextureManager::Init()
 {
 	LoadTexture("EngineTexture", TEXT("teemo.png"));
+	LoadTexture("DefaultBurnTexture", TEXT("DefaultPaperBurn.png"));
 
 	float	BorderColor[4] = {};
 

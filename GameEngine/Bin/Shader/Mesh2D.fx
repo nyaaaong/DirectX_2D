@@ -15,6 +15,7 @@ struct VertexUVOutput
 	// 가져다 사용하면 안된다.
 	float4	Pos : SV_POSITION;
 	float2	UV	: TEXCOORD;
+	float2	OriginUV : TEXCOORD1;
 };
 
 cbuffer Animation2D	: register(b10)
@@ -62,6 +63,8 @@ VertexUVOutput Mesh2DVS(VertexUV input)
 	else
 		output.UV = ComputeAnimation2DUV(input.UV);
 
+	output.OriginUV = input.UV;
+
 	return output;
 }
 
@@ -71,12 +74,14 @@ PSOutput_Single Mesh2DPS(VertexUVOutput input)
 
 	float4	BaseTextureColor = g_BaseTexture.Sample(g_BaseSmp, input.UV);
 
-	output.Color.rgb = BaseTextureColor.rgb * g_MtrlBaseColor.rgb;
-
 	if (BaseTextureColor.a == 0.f || g_MtrlOpacity == 0.f)
 		clip(-1);
 
-	output.Color.a = BaseTextureColor.a * g_MtrlOpacity;
+	float4	Color = PaperBurn2D(float4(BaseTextureColor.rgb * g_MtrlBaseColor.rgb, BaseTextureColor.a), input.OriginUV);
+
+	output.Color = Color;
+
+	output.Color.a = Color.a * g_MtrlOpacity;
 
 	return output;
 }
