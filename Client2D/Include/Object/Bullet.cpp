@@ -35,29 +35,6 @@ void CBullet::SetCollisionProfile(const std::string& Name)
 	m_Body->SetCollisionProfile(Name);
 }
 
-void CBullet::SetDamage(const CollisionResult& result)
-{
-	CColliderComponent* Src = result.Src;
-	CColliderComponent* Dest = result.Dest;
-
-	CGameObject* SrcObj = Src->GetGameObject();
-	CGameObject* DestObj = Dest->GetGameObject();
-
-	std::string SrcName = SrcObj->GetName();
-	std::string DestName = DestObj->GetName();
-
-	if (SrcName == "Bullet" &&
-		DestName == "Monster")
-	{
-		CMonster* Monster = dynamic_cast<CMonster*>(DestObj);
-
-		if (!Monster)
-			ASSERT("if (!Monster)");
-
-		Monster->SetDamage(1);
-	}
-}
-
 void CBullet::Start()
 {
 	CGameObject::Start();

@@ -22,7 +22,8 @@ cbuffer Material : register(b1)
 {
 	float4	g_MtrlBaseColor;
 	float	g_MtrlOpacity;
-	float3	g_MtrlEmpty;
+	int		g_MtrlPaperBurnEnable;
+	float2	g_MtrlEmpty;
 };
 
 cbuffer Standard2D : register(b2)
@@ -40,6 +41,21 @@ cbuffer	GlobalCBuffer : register(b3)
 	float2	g_GlobalEmpty;
 };
 
+cbuffer PaperBurnCBuffer : register(b4)
+{
+	float4	g_PaperBurnInLineColor;
+	float4	g_PaperBurnOutLineColor;
+	float4	g_PaperBurnCenterLineColor;
+	float	g_PaperBurnFilter;
+	int		g_PaperBurnInverse;
+	float	g_PaperBurnInFilter;
+	float	g_PaperBurnOutFilter;
+	float	g_PaperBurnCenterFilter;
+	float3	g_PaperBurnEmpty;
+};
+
+
+
 SamplerState	g_PointSmp : register(s0);
 SamplerState	g_LinearSmp : register(s1);
 SamplerState	g_AnisotropicSmp : register(s2);
@@ -49,6 +65,7 @@ SamplerState	g_BaseSmp : register(s3);
 Texture2D		g_BaseTexture	: register(t0);
 
 Texture2D<float4>		g_NoiseTexture	: register(t100);
+Texture2D				g_PaperBurnTexture	: register(t101);
 
 StructuredBuffer<float>	g_RandBuffer	: register(t90);
 
@@ -103,4 +120,62 @@ float DegreeToRadian(float Angle)
 {
 	return Angle / 180.f * 3.14159f;
 }
+
+float4 PaperBurn2D(float4 Color, float2 UV)
+{
+	if (g_MtrlPaperBurnEnable == 0)
+		return Color;
+
+	float	BurnColor = g_PaperBurnTexture.Sample(g_LinearSmp, UV);
+
+	float4	result = Color;
+
+	if (g_PaperBurnInverse == 0)
+	{
+		if (g_PaperBurnFilter >= BurnColor.r)
+			result.a = 0.f;
+
+		else
+		{
+			if (g_PaperBurnFilter - g_PaperBurnOutFilter <= BurnColor.r &&
+				BurnColor.r <= g_PaperBurnFilter + g_PaperBurnOutFilter)
+				result = g_PaperBurnOutLineColor;
+
+			if (g_PaperBurnFilter - g_PaperBurnCenterFilter <= BurnColor.r &&
+				BurnColor.r <= g_PaperBurnFilter + g_PaperBurnCenterFilter)
+				result = g_PaperBurnCenterLineColor;
+
+			if (g_PaperBurnFilter - g_PaperBurnInFilter <= BurnColor.r &&
+				BurnColor.r <= g_PaperBurnFilter + g_PaperBurnInFilter)
+				result = g_PaperBurnInLineColor;
+		}
+	}
+
+	else
+	{
+		if (g_PaperBurnFilter < BurnColor.r)
+			result.a = 0.f;
+
+		else
+		{
+			if (g_PaperBurnFilter - g_PaperBurnOutFilter <= BurnColor.r &&
+				BurnColor.r <= g_PaperBurnFilter + g_PaperBurnOutFilter)
+				result = g_PaperBurnOutLineColor;
+
+			if (g_PaperBurnFilter - g_PaperBurnCenterFilter <= BurnColor.r &&
+				BurnColor.r <= g_PaperBurnFilter + g_PaperBurnCenterFilter)
+				result = g_PaperBurnCenterLineColor;
+
+			if (g_PaperBurnFilter - g_PaperBurnInFilter <= BurnColor.r &&
+				BurnColor.r <= g_PaperBurnFilter + g_PaperBurnInFilter)
+				result = g_PaperBurnInLineColor;
+		}
+	}
+
+	result.a *= Color.a;
+
+	return result;
+}
+
+
 

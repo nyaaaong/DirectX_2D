@@ -25,9 +25,6 @@ public:
 	void SetCollisionProfile(const std::string& Name);
 
 public:
-	void SetDamage(const CollisionResult& result);
-
-public:
 	virtual void Start();
     virtual bool Init();
     virtual void Update(float DeltaTime);

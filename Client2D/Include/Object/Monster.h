@@ -2,6 +2,7 @@
 
 #include "GameObject/GameObject.h"
 #include "Component/SpriteComponent.h"
+#include "Component/PaperBurnComponent.h"
 #include "Component/ColliderCircle.h"
 #include "Component/WidgetComponent.h"
 
@@ -19,7 +20,7 @@ private:
     CSharedPtr<CSpriteComponent>    m_Sprite;
     CSharedPtr<CColliderCircle>       m_Body;
 	int		m_HP;
-	int		m_HPMax;
+    CSharedPtr<CPaperBurnComponent>   m_PaperBurn;
 
 	CSharedPtr<CWidgetComponent>     m_SimpleHUDWidget;
 	class CSimpleHUD* m_SimpleHUD;
@@ -35,6 +36,7 @@ public:
 
 public:
 	virtual void Destroy();
+    virtual void Start();
     virtual bool Init();
     virtual void Update(float DeltaTime);
     virtual void PostUpdate(float DeltaTime);
@@ -43,5 +45,11 @@ public:
 public:
 	void OnMouseBegin(const CollisionResult& result);
 	void OnMouseEnd(const CollisionResult& result);
+public:
+    void OnCollisionBegin(const CollisionResult& result);
+    void OnCollisionEnd(const CollisionResult& result);
+
+private:
+    void PaperBurnEnd();
 };
 

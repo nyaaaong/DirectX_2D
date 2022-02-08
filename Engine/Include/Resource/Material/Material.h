@@ -19,6 +19,12 @@ struct MaterialTextureInfo
     }
 };
 
+struct RenderCallback
+{
+    std::function<void()>   Func;
+    void* Obj;
+};
+
 
 class CMaterial :
     public CRef
@@ -46,6 +52,8 @@ protected:
     float       m_Opacity;
     class CMaterialConstantBuffer* m_CBuffer;
     CSharedPtr<class CRenderState>  m_RenderStateArray[(int)RenderState_Type::Max];
+    std::list<RenderCallback*>    m_RenderCallback;
+
 
 public:
 	CTexture* GetTexture(int TextureIndex = 0)  const
@@ -93,11 +101,40 @@ public:
     void SetTexture(int Index, int Register, int ShaderType, const std::string& Name, const std::vector<TCHAR*>& vecFileName, const std::string& PathName = TEXTURE_PATH);
 
 public:
+    void SetPaperBurn(bool Enable);
+
+public:
     void SetShader(const std::string& Name);
     void Render();
     void Reset();
     CMaterial* Clone();
 	void Save(FILE* File);
 	void Load(FILE* File);
+
+public:
+    template <typename T>
+    void AddRenderCallback(T* Obj, void(T::* Func)())
+    {
+        RenderCallback* Callback = DBG_NEW RenderCallback;
+        Callback->Obj = Obj;
+        Callback->Func = std::bind(Func, Obj);
+        m_RenderCallback.push_back(Callback);
+    }
+
+    void DeleteRenderCallback(void* Obj)
+    {
+        auto    iter = m_RenderCallback.begin();
+        auto    iterEnd = m_RenderCallback.end();
+
+        for (; iter != iterEnd; ++iter)
+        {
+            if ((*iter)->Obj == Obj)
+            {
+                SAFE_DELETE((*iter));
+                m_RenderCallback.erase(iter);
+                break;
+}
+        }
+    }
 };
 

@@ -15,6 +15,7 @@ struct VertexColorOutput
 	// 가져다 사용하면 안된다.
 	float4	Pos : SV_POSITION;
 	float4	Color : COLOR;
+	float2	OriginUV : TEXCOORD1;
 };
 
 VertexColorOutput ColorMeshVS(VertexColor input)
@@ -26,19 +27,28 @@ VertexColorOutput ColorMeshVS(VertexColor input)
 	output.Pos = mul(float4(Pos, 1.f), g_matWVP);
 	output.Color = input.Color;
 
+	if (input.Pos.x > 0.f)
+		output.OriginUV.x = 1.f;
+
+	else
+		output.OriginUV.x = 0.f;
+
+	if (input.Pos.y > 0.f)
+		output.OriginUV.y = 1.f;
+
+	else
+		output.OriginUV.y = 0.f;
+
 	return output;
 }
 
-struct VertexColorPSOutput
+PSOutput_Single ColorMeshPS(VertexColorOutput input)
 {
-	float4	Color : SV_TARGET;
-};
+	PSOutput_Single	output = (PSOutput_Single)0;
 
-VertexColorPSOutput ColorMeshPS(VertexColorOutput input)
-{
-	VertexColorPSOutput	output = (VertexColorPSOutput)0;
+	float4	Color = PaperBurn2D(input.Color, input.OriginUV);
 
-	output.Color = input.Color;
+	output.Color = Color;
 
 	return output;
 }

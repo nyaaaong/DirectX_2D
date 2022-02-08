@@ -43,7 +43,7 @@ bool CMainScene::Init()
 
 	CPixelTest* PixelTest = m_Scene->CreateGameObject<CPixelTest>("PixelTest");
 
-	m_BubbleParticle = m_Scene->CreateGameObject<CBubbleParticle>("BubbleParticle");
+	//m_BubbleParticle = m_Scene->CreateGameObject<CBubbleParticle>("BubbleParticle");
 
 	/*BubbleParticle = m_Scene->CreateGameObject<CBubbleParticle>("BubbleParticle");
 
@@ -55,15 +55,15 @@ bool CMainScene::Init()
 
 void CMainScene::Update(float DeltaTime)
 {
-	if (!m_BubbleParticle)
-		return;
+	//if (!m_BubbleParticle)
+	//	return;
 
-	Resolution	RS = CDevice::GetInst()->GetResolution();
+	//Resolution	RS = CDevice::GetInst()->GetResolution();
 
-	float	Rand = float(rand() % RS.Width - 500.f);
-	//rand() % (置企 - 置社 + 1) + 置社
-		
-	m_BubbleParticle->SetWorldPos(Rand, (float)RS.Height, 0.f);
+	//float	Rand = float(rand() % RS.Width - 500.f);
+	////rand() % (置企 - 置社 + 1) + 置社
+	//
+	//m_BubbleParticle->SetWorldPos(Rand, (float)RS.Height, 0.f);
 }
 
 void CMainScene::CreateMaterial()
