@@ -19,12 +19,12 @@ protected:
 	ImVec4		m_BorderColor;
 
 public:
-	const Vector2& GetImageStart()	const
+	Vector2 GetImageStart()	const
 	{
 		return Vector2(m_ImageStart.x, m_ImageStart.y);
 	}
 
-	const Vector2& GetImageEnd()	const
+	Vector2 GetImageEnd()	const
 	{
 		return Vector2(m_ImageEnd.x, m_ImageEnd.y);
 	}

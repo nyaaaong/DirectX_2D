@@ -28,14 +28,6 @@ CMonster::~CMonster()
 {
 }
 
-void CMonster::Destroy()
-{
-	CGameObject::Destroy();
-
-	m_Sprite->Destroy();
-	m_Body->Destroy();
-}
-
 void CMonster::Start()
 {
 	CGameObject::Start();
@@ -117,6 +109,8 @@ void CMonster::OnCollisionBegin(const CollisionResult& result)
 
 	if (m_HP <= 0)
 	{
+		// 죽는 모션을 실행하고 죽는 모션이 끝났을때 끝 프레임에 고정시켜놓은 후에
+		// PaperBurn을 진행한다.
 		m_PaperBurn->StartPaperBurn();
 		m_Body->Enable(false);
 	}

@@ -34,10 +34,10 @@ VertexColorOutput ColorMeshVS(VertexColor input)
 		output.OriginUV.x = 0.f;
 
 	if (input.Pos.y > 0.f)
-		output.OriginUV.y = 1.f;
+		output.OriginUV.y = 0.f;
 
 	else
-		output.OriginUV.y = 0.f;
+		output.OriginUV.y = 1.f;
 
 	return output;
 }

@@ -19,23 +19,14 @@ protected:
 private:
     CSharedPtr<CSpriteComponent>    m_Sprite;
     CSharedPtr<CColliderCircle>       m_Body;
-	int		m_HP;
     CSharedPtr<CPaperBurnComponent>   m_PaperBurn;
 
 	CSharedPtr<CWidgetComponent>     m_SimpleHUDWidget;
 	class CSimpleHUD* m_SimpleHUD;
 
-public:
-	void SetDamage(int Value)
-	{
-		m_HP -= Value;
-
-		if (m_HP <= 0)
-			Destroy();
-	}
+    int                 m_HP;
 
 public:
-	virtual void Destroy();
     virtual void Start();
     virtual bool Init();
     virtual void Update(float DeltaTime);

@@ -126,7 +126,10 @@ float4 PaperBurn2D(float4 Color, float2 UV)
 	if (g_MtrlPaperBurnEnable == 0)
 		return Color;
 
-	float	BurnColor = g_PaperBurnTexture.Sample(g_LinearSmp, UV);
+    else if (Color.a == 0.f)
+        return Color;
+
+    float4 BurnColor = g_PaperBurnTexture.Sample(g_LinearSmp, UV);
 
 	float4	result = Color;
 

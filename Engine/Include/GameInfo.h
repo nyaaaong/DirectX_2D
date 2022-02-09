@@ -219,7 +219,8 @@ struct MaterialCBuffer
 	Vector2	Empty;
 
 	MaterialCBuffer()	:
-		Opacity(1.f)
+		Opacity(1.f),
+		PaperBurnEnable(0)
 	{}
 };
 
