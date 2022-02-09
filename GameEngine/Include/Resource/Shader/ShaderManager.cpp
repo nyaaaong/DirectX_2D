@@ -25,54 +25,77 @@ bool CShaderManager::Init()
 	if (!CreateShader<CColorMeshShader>("ColorMeshShader"))
 		return false;
 
+
 	if (!CreateShader<CPosMeshShader>("PosMeshShader"))
 		return false;
+
 
 	if (!CreateShader<CMesh2DShader>("Mesh2DShader"))
 		return false;
 
+
 	if (!CreateShader<CColliderShader>("ColliderShader"))
 		return false;
+
 
 	if (!CreateShader<CColliderPixelShader>("ColliderPixelShader"))
 		return false;
 
+
 	if (!CreateShader<CWidgetShader>("WidgetShader"))
 		return false;
+
 
 	if (!CreateShader<CProgressBarShader>("ProgressBarShader"))
 		return false;
 
+
 	if (!CreateShader<CNumberShader>("NumberShader"))
 		return false;
+
 
 	if (!CreateShader<CParticleUpdateShader>("ParticleUpdateShader"))
 		return false;
 
+
 	if (!CreateShader<CParticleRenderShader>("ParticleRenderShader"))
 		return false;
 
+
+
+
 	// =================== 상수버퍼 ===================
-	CreateConstantBuffer("TransformCBuffer", sizeof(TransformCBuffer), 0, (int)Buffer_Shader_Type::Graphic);
+	CreateConstantBuffer("TransformCBuffer", sizeof(TransformCBuffer), 0,
+		(int)Buffer_Shader_Type::Graphic);
 
-	CreateConstantBuffer("MaterialCBuffer", sizeof(MaterialCBuffer), 1, (int)Buffer_Shader_Type::Graphic);
+	CreateConstantBuffer("MaterialCBuffer", sizeof(MaterialCBuffer), 1,
+		(int)Buffer_Shader_Type::Graphic);
 
-	CreateConstantBuffer("Standard2DCBuffer", sizeof(Standard2DCBuffer), 2, (int)Buffer_Shader_Type::Graphic);
+	CreateConstantBuffer("Standard2DCBuffer", sizeof(Standard2DCBuffer), 2,
+		(int)Buffer_Shader_Type::Graphic);
 
-	CreateConstantBuffer("GlobalCBuffer", sizeof(GlobalCBuffer), 3, (int)Buffer_Shader_Type::All);
-	
+	CreateConstantBuffer("GlobalCBuffer", sizeof(GlobalCBuffer), 3,
+		(int)Buffer_Shader_Type::All);
+
 	CreateConstantBuffer("PaperBurnCBuffer", sizeof(PaperBurnCBuffer), 4,
 		(int)Buffer_Shader_Type::Pixel);
 
-	CreateConstantBuffer("Animation2DCBuffer", sizeof(Animation2DCBuffer), 10, (int)Buffer_Shader_Type::Graphic);
 
-	CreateConstantBuffer("ColliderCBuffer", sizeof(ColliderCBuffer), 11, (int)Buffer_Shader_Type::Graphic);
 
-	CreateConstantBuffer("WidgetCBuffer", sizeof(WidgetCBuffer), 11, (int)Buffer_Shader_Type::Graphic);
+	CreateConstantBuffer("Animation2DCBuffer", sizeof(Animation2DCBuffer), 10,
+		(int)Buffer_Shader_Type::Graphic);
 
-	CreateConstantBuffer("ProgressBarCBuffer", sizeof(ProgressBarCBuffer), 12, (int)Buffer_Shader_Type::Graphic);
+	CreateConstantBuffer("ColliderCBuffer", sizeof(ColliderCBuffer), 11,
+		(int)Buffer_Shader_Type::Graphic);
 
-	CreateConstantBuffer("ParticleCBuffer", sizeof(ParticleCBuffer), 11, (int)Buffer_Shader_Type::Compute);
+	CreateConstantBuffer("WidgetCBuffer", sizeof(WidgetCBuffer), 11,
+		(int)Buffer_Shader_Type::Graphic);
+
+	CreateConstantBuffer("ProgressBarCBuffer", sizeof(ProgressBarCBuffer), 12,
+		(int)Buffer_Shader_Type::Graphic);
+
+	CreateConstantBuffer("ParticleCBuffer", sizeof(ParticleCBuffer), 11,
+		(int)Buffer_Shader_Type::Compute);
 
 	return true;
 }

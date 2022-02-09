@@ -36,6 +36,7 @@ CGraphicShader::CGraphicShader(const CGraphicShader& shader)    :
     m_DSBlob = nullptr;
     m_GSBlob = nullptr;
 }
+
 CGraphicShader::~CGraphicShader()
 {
 	SAFE_RELEASE(m_InputLayout);

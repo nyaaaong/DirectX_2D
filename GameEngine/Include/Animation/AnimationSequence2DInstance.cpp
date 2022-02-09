@@ -100,7 +100,7 @@ void CAnimationSequence2DInstance::AddAnimation(const std::string& SequenceName,
 	m_mapAnimation.insert(std::make_pair(Name, Anim));
 }
 
-void CAnimationSequence2DInstance::AddAnimation(const TCHAR* FileName, const std::string& Name, const std::string& PathName)
+void CAnimationSequence2DInstance::AddAnimation(const TCHAR* FileName, const std::string& Name, const std::string& PathName, bool Loop, float PlayTime, float PlayScale, bool Reverse)
 {
 	CAnimationSequence2DData* Anim = FindAnimation(Name);
 
@@ -132,7 +132,7 @@ void CAnimationSequence2DInstance::AddAnimation(const TCHAR* FileName, const std
 
 	if (!Sequence)
 		return;
-	
+
 	const PathInfo* Path = CPathManager::GetInst()->FindPath(PathName);
 
 	char	FullPath[MAX_PATH] = {};
@@ -142,7 +142,28 @@ void CAnimationSequence2DInstance::AddAnimation(const TCHAR* FileName, const std
 
 	strcat_s(FullPath, FileNameMultibyte);
 
-	Load(FullPath);
+	Load(FullPath); 
+	
+	Anim = FindAnimation(Name);
+
+	bool	Find = false;
+
+	if (!Anim)
+		Anim = DBG_NEW CAnimationSequence2DData;
+
+	else
+		Find = true;
+
+	Anim->m_Sequence = Sequence;
+	Anim->m_Name = Name;
+	Anim->m_Loop = Loop;
+	Anim->m_PlayTime = PlayTime;
+	Anim->m_PlayScale = PlayScale;
+	Anim->m_Reverse = Reverse;
+	Anim->m_FrameTime = PlayTime / Sequence->GetFrameCount();
+
+	if (!Find)
+		m_mapAnimation.insert(std::make_pair(Name, Anim));
 }
 
 void CAnimationSequence2DInstance::DeleteAnimation(const std::string& Name)
@@ -474,6 +495,14 @@ void CAnimationSequence2DInstance::Load(FILE* File)
 
 		else
 			Data->m_Sequence = CResourceManager::GetInst()->FindAnimationSequence2D(Data->m_SequenceName);
+
+		if (m_mapAnimation.empty())
+		{
+			m_CurrentAnimation = Data;
+
+			if (m_Owner)
+				m_Owner->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, Data->m_Sequence->GetTexture()->GetName(), Data->m_Sequence->GetTexture());
+		}
 
 		m_mapAnimation.insert(std::make_pair(AnimName, Data));
 	}

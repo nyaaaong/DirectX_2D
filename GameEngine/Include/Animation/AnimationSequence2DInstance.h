@@ -67,7 +67,7 @@ public:
 
 public:
 	void AddAnimation(const std::string& SequenceName, const std::string& Name, bool Loop = true, float PlayTime = 1.f, float PlayScale = 1.f, bool Reverse = false);
-	void AddAnimation(const TCHAR* FileName, const std::string& Name, const std::string& PathName);
+	void AddAnimation(const TCHAR* FileName, const std::string& Name, const std::string& PathName = ANIMATION_PATH, bool Loop = true, float PlayTime = 1.f, float PlayScale = 1.f, bool Reverse = false);
 	void DeleteAnimation(const std::string& Name);
 	void ClearAnimation();
 	void SetPlayTime(const std::string& Name, float PlayTime);

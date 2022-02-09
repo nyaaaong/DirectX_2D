@@ -23,8 +23,7 @@ protected:
 	Vector2		m_Ratio;
 
 public:
-
-	const Vector2& GetLeftBottom()	const
+	Vector2 GetLeftBottom()	const
 	{
 		Vector2	LB;
 
@@ -44,12 +43,12 @@ public:
 		return m_CameraType;
 	}
 
-	Matrix GetViewMatrix()	const
+	const Matrix& GetViewMatrix()	const
 	{
 		return m_matView;
 	}
 
-	Matrix GetProjMatrix()	const
+	const Matrix& GetProjMatrix()	const
 	{
 		return m_matProj;
 	}

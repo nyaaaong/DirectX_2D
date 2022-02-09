@@ -242,6 +242,9 @@
     <Filter Include="01. Resource\01. Shader\02. ConstantBuffer\08. PaperBurn">
       <UniqueIdentifier>{a091ce5e-3f80-4013-9aeb-4abc50807d41}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Component\00. SceneComponent\05. TileMap">
+      <UniqueIdentifier>{7e3396f8-af6f-4f93-88eb-3fae7db6db30}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -685,6 +688,12 @@
     <ClInclude Include="Resource\Shader\PaperBurnConstantBuffer.h">
       <Filter>01. Resource\01. Shader\02. ConstantBuffer\08. PaperBurn</Filter>
     </ClInclude>
+    <ClInclude Include="Component\TileMapComponent.h">
+      <Filter>04. Component\00. SceneComponent\05. TileMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Tile.h">
+      <Filter>04. Component\00. SceneComponent\05. TileMap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -1046,6 +1055,12 @@
     </ClCompile>
     <ClCompile Include="Resource\Shader\PaperBurnConstantBuffer.cpp">
       <Filter>01. Resource\01. Shader\02. ConstantBuffer\08. PaperBurn</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\TileMapComponent.cpp">
+      <Filter>04. Component\00. SceneComponent\05. TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Tile.cpp">
+      <Filter>04. Component\00. SceneComponent\05. TileMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

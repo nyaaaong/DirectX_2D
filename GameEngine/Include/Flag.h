@@ -207,3 +207,15 @@ enum class Mouse_State
 	State10,
 	Max
 };
+
+enum class Tile_Shape
+{
+	Rect,
+	Rhombus
+};
+
+enum class Tile_Type
+{
+	Normal,
+	Wall
+};

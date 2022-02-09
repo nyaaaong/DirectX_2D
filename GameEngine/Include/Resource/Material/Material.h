@@ -2,6 +2,7 @@
 
 #include "../Shader/GraphicShader.h"
 #include "../Texture/Texture.h"
+#include "../Shader/MaterialConstantBuffer.h"
 
 struct MaterialTextureInfo
 {
@@ -29,7 +30,7 @@ struct RenderCallback
 class CMaterial :
     public CRef
 {
-    friend class CMaterialManager;
+friend class CMaterialManager;
 
 protected:
     CMaterial();
@@ -50,31 +51,30 @@ protected:
     std::vector<MaterialTextureInfo>    m_TextureInfo;
     Vector4     m_BaseColor;
     float       m_Opacity;
-    class CMaterialConstantBuffer* m_CBuffer;
+    CMaterialConstantBuffer* m_CBuffer;
     CSharedPtr<class CRenderState>  m_RenderStateArray[(int)RenderState_Type::Max];
     std::list<RenderCallback*>    m_RenderCallback;
-
-
-public:
-	CTexture* GetTexture(int TextureIndex = 0)  const
-	{
-		return m_TextureInfo[TextureIndex].Texture;
-	}
-
-	unsigned int GetTextureWidth(int TextureIndex = 0)  const
-	{
-		return m_TextureInfo[TextureIndex].Texture->GetWidth();
-	}
-
-	unsigned int GetTextureHeight(int TextureIndex = 0)  const
-	{
-		return m_TextureInfo[TextureIndex].Texture->GetHeight();
-	}
 
 private:
     void SetConstantBuffer(class CMaterialConstantBuffer* Buffer)
     {
-        m_CBuffer = Buffer;
+        m_CBuffer = Buffer->Clone();
+    }
+
+public:
+    CTexture* GetTexture(int TextureIndex = 0)  const
+    {
+        return m_TextureInfo[TextureIndex].Texture;
+    }
+
+    unsigned int GetTextureWidth(int TextureIndex = 0)  const
+    {
+        return m_TextureInfo[TextureIndex].Texture->GetWidth();
+    }
+
+    unsigned int GetTextureHeight(int TextureIndex = 0)  const
+    {
+        return m_TextureInfo[TextureIndex].Texture->GetHeight();
     }
 
 public:
@@ -108,8 +108,8 @@ public:
     void Render();
     void Reset();
     CMaterial* Clone();
-	void Save(FILE* File);
-	void Load(FILE* File);
+    void Save(FILE* File);
+    void Load(FILE* File);
 
 public:
     template <typename T>
@@ -133,7 +133,7 @@ public:
                 SAFE_DELETE((*iter));
                 m_RenderCallback.erase(iter);
                 break;
-}
+            }
         }
     }
 };

@@ -3,7 +3,6 @@
 #include "../ResourceManager.h"
 #include "../../Scene/Scene.h"
 #include "../../Scene/SceneResource.h"
-#include "../Shader/MaterialConstantBuffer.h"
 #include "../../Render/RenderManager.h"
 #include "../../Render/RenderState.h"
 
@@ -22,6 +21,8 @@ CMaterial::CMaterial(const CMaterial& Material)
 	*this = Material;
 
 	m_RefCount = 0;
+
+	m_CBuffer = Material.m_CBuffer->Clone();
 	
 	m_Scene = nullptr;
 
@@ -37,6 +38,8 @@ CMaterial::~CMaterial()
 	{
 		SAFE_DELETE((*iter));
 	}
+
+	SAFE_DELETE(m_CBuffer);
 }
 
 void CMaterial::SetRenderState(CRenderState* State)
@@ -193,7 +196,8 @@ void CMaterial::SetTexture(int Index, int Register, int ShaderType, const std::s
 	m_TextureInfo[Index].ShaderType = ShaderType;
 }
 
-void CMaterial::SetTextureFullPath(int Index, int Register, int ShaderType, const std::string& Name, const TCHAR* FullPath)
+void CMaterial::SetTextureFullPath(int Index, int Register, int ShaderType, 
+	const std::string& Name, const TCHAR* FullPath)
 {
 	if (!CResourceManager::GetInst()->LoadTextureFullPath(Name, FullPath))
 		return;
