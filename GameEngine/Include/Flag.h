@@ -217,5 +217,6 @@ enum class Tile_Shape
 enum class Tile_Type
 {
 	Normal,
-	Wall
+	Wall,
+	End
 };

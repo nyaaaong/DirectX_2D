@@ -321,5 +321,7 @@ PSOutput_Single ParticlePS(GeometryParticleOutput input)
 
 	Color = PaperBurn2D(Color * input.Color, input.UV);
 
+    output.Color = Color;
+
 	return output;
 }

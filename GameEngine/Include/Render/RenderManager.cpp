@@ -104,6 +104,11 @@ bool CRenderManager::Init()
 
 	// 기본 레이어 생성
 	RenderLayer* Layer = DBG_NEW RenderLayer;
+	Layer->Name = "Back";
+
+	m_RenderLayerList.push_back(Layer);
+
+	Layer = DBG_NEW RenderLayer;
 	Layer->Name = "Default";
 	Layer->LayerPriority = 0;
 
@@ -117,7 +122,7 @@ bool CRenderManager::Init()
 
 	Layer = DBG_NEW RenderLayer;
 	Layer->Name = "ScreenWidgetComponent";
-	Layer->LayerPriority = 2;
+	Layer->LayerPriority = 3;
 
 	m_RenderLayerList.push_back(Layer);
 	m_DepthDisable = m_RenderStateManager->FindRenderState("DepthDisable");

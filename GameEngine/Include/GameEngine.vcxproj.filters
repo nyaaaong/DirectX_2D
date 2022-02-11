@@ -245,6 +245,12 @@
     <Filter Include="04. Component\00. SceneComponent\05. TileMap">
       <UniqueIdentifier>{7e3396f8-af6f-4f93-88eb-3fae7db6db30}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Resource\01. Shader\01. ShaderClass\05. TileMap">
+      <UniqueIdentifier>{d8533703-8579-44e0-a21b-b7a3b9f8ccdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Resource\01. Shader\02. ConstantBuffer\09. TileMap">
+      <UniqueIdentifier>{3b3462a6-1089-4d58-b2d5-455b5c6d60bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -694,6 +700,12 @@
     <ClInclude Include="Component\Tile.h">
       <Filter>04. Component\00. SceneComponent\05. TileMap</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Shader\TileMapShader.h">
+      <Filter>01. Resource\01. Shader\01. ShaderClass\05. TileMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\TileMapConstantBuffer.h">
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\09. TileMap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -1062,6 +1074,12 @@
     <ClCompile Include="Component\Tile.cpp">
       <Filter>04. Component\00. SceneComponent\05. TileMap</Filter>
     </ClCompile>
+    <ClCompile Include="Resource\Shader\TileMapShader.cpp">
+      <Filter>01. Resource\01. Shader\01. ShaderClass\05. TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\TileMapConstantBuffer.cpp">
+      <Filter>01. Resource\01. Shader\02. ConstantBuffer\09. TileMap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Shader\ShaderInfo.fx">
@@ -1080,6 +1098,9 @@
       <Filter>01. Resource\01. Shader\00. HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\Particle.fx">
+      <Filter>01. Resource\01. Shader\00. HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\TileMap.fx">
       <Filter>01. Resource\01. Shader\00. HLSL</Filter>
     </FxCompile>
   </ItemGroup>

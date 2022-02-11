@@ -452,3 +452,22 @@ struct PaperBurnCBuffer
 	float	CenterFilter;
 	Vector3	Empty;
 };
+
+struct TileMapCBuffer
+{
+	Vector2 ImageSize;
+	Vector2 Size;
+	Vector2 Start;
+	Vector2 End;
+	Matrix  matWVP;
+};
+
+struct TileInfo
+{
+	Matrix matWVP;
+	Vector2 TileStart;
+	Vector2 TileEnd;
+	Vector4 TileColor;
+	float Opacity;
+	Vector3 Empty;
+};
