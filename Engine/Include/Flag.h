@@ -98,11 +98,6 @@ enum class SceneComponent_Type
 {
 	Sprite,
 	StaticMesh,
-	ColliderBox2D,
-	ColliderCircle2D,
-	ColliderPixel2D,
-	Camera,
-	Widget,
 	Max
 }; 
 
@@ -222,5 +217,6 @@ enum class Tile_Shape
 enum class Tile_Type
 {
 	Normal,
-	Wall
+	Wall,
+	End
 };

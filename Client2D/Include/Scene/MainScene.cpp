@@ -41,6 +41,8 @@ bool CMainScene::Init()
 	if (m_LoadingFunction)
 		m_LoadingFunction(false, 0.8f);
 
+	CTileMap* TileMap = m_Scene->CreateGameObject<CTileMap>("TileMap");
+
 	CPixelTest* PixelTest = m_Scene->CreateGameObject<CPixelTest>("PixelTest");
 
 	//m_BubbleParticle = m_Scene->CreateGameObject<CBubbleParticle>("BubbleParticle");
@@ -74,6 +76,15 @@ void CMainScene::CreateMaterial()
 	Material->AddTexture(0, (int)Buffer_Shader_Type::Pixel, "Bubble", TEXT("Particle/Bubbles99px.png"));
 
 	Material->SetShader("ParticleRenderShader");
+	Material->SetRenderState("AlphaBlend");
+	//Material->SetTransparency(true);
+
+	m_Scene->GetResource()->CreateMaterial<CMaterial>("TileMap");
+	Material = m_Scene->GetResource()->FindMaterial("TileMap");
+
+	Material->AddTexture(0, (int)Buffer_Shader_Type::Pixel, "Tile", TEXT("Floors.png"));
+
+	Material->SetShader("TileMapShader");
 	Material->SetRenderState("AlphaBlend");
 }
 

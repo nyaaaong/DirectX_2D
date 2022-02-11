@@ -36,6 +36,9 @@
     <Filter Include="01. Object\04. Particle">
       <UniqueIdentifier>{a0767c51-912b-4a7f-abb0-b6e29fd4af97}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Object\05. TileMap">
+      <UniqueIdentifier>{74c3e0e8-8fc4-49aa-8aa8-349efca73f8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -103,6 +106,9 @@
     </ClCompile>
     <ClCompile Include="Object\SparkParticle.cpp">
       <Filter>01. Object\04. Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TileMap.cpp">
+      <Filter>01. Object\05. TileMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +180,9 @@
     </ClInclude>
     <ClInclude Include="Object\SparkParticle.h">
       <Filter>01. Object\04. Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\TileMap.h">
+      <Filter>01. Object\05. TileMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
