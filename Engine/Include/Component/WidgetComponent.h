@@ -88,9 +88,6 @@ public:
             return nullptr;
         }
 
-		if (m_WidgetWindow)
-			m_WidgetWindow->m_OwnerComponent = nullptr;
-
         m_WidgetWindow = Window;
 
         return Window;

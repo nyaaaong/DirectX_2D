@@ -31,5 +31,5 @@ void CTileMapConstantBuffer::UpdateCBuffer()
 
 CTileMapConstantBuffer* CTileMapConstantBuffer::Clone()
 {
-	return new CTileMapConstantBuffer(*this);
+	return DBG_NEW CTileMapConstantBuffer(*this);
 }

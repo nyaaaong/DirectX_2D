@@ -86,6 +86,24 @@ void CMainScene::CreateMaterial()
 
 	Material->SetShader("TileMapShader");
 	Material->SetRenderState("AlphaBlend");
+
+	m_Scene->GetResource()->CreateMaterial<CMaterial>("DiabloTileMap");
+	Material = m_Scene->GetResource()->FindMaterial("DiabloTileMap");
+
+	Material->AddTexture(0, (int)Buffer_Shader_Type::Pixel, "DiabloTile", TEXT("Diablos_Lair_Floor_TRS/Diablos_Lair_Floor.png"));
+
+	Material->SetShader("TileMapShader");
+	Material->SetRenderState("AlphaBlend");
+}
+
+void CMainScene::CreateAnimationSequence()
+{
+	m_Scene->GetResource()->CreateAnimationSequence2D("PlayerIdle", "Player", TEXT("Player.png"));
+
+	for (int i = 0; i < 7; ++i)
+	{
+		m_Scene->GetResource()->AddAnimationSequence2DFrame("PlayerIdle", Vector2(i * 50.f, 148.f), Vector2(50.f, 37.f));
+	}
 }
 
 void CMainScene::CreateParticle()

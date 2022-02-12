@@ -357,6 +357,186 @@ void CTileMapComponent::SetTileColor(Tile_Type Type, const Vector4& Color)
 	m_TileColor[(int)Type] = Color;
 }
 
+int CTileMapComponent::GetTileIndexX(const Vector3& Pos)
+{
+	if (m_TileShape == Tile_Shape::Rect)
+	{
+		float	ConvertX = Pos.x - GetWorldPos().x;
+
+		int	IndexX = (int)(ConvertX / m_TileSize.x);
+
+		if (IndexX < 0 || IndexX >= m_CountX)
+			return -1;
+
+		return IndexX;
+	}
+
+	int	IndexY = GetTileIndexY(Pos);
+
+	if (IndexY < 0 || IndexY >= m_CountY)
+		return -1;
+
+	int	IndexX = -1;
+
+	float	ConvertX = Pos.x - GetWorldPos().x;
+
+	if (IndexY % 2 == 0)
+		IndexX = (int)(ConvertX / m_TileSize.x);
+
+	else
+		IndexX = (int)((ConvertX - m_TileSize.x * 0.5f) / m_TileSize.x);
+
+	if (IndexX < 0 || IndexX >= m_CountX)
+		return -1;
+
+	return IndexX;
+}
+
+int CTileMapComponent::GetTileIndexY(const Vector3& Pos)
+{
+	if (m_TileShape == Tile_Shape::Rect)
+	{
+		float	ConvertY = Pos.y - GetWorldPos().y;
+
+		int	IndexY = (int)(ConvertY / m_TileSize.y);
+
+		if (IndexY < 0 || IndexY >= m_CountY)
+			return -1;
+
+		return IndexY;
+	}
+
+	Vector3	ConvertPos = Pos - GetWorldPos();
+
+	float	RatioX = ConvertPos.x / m_TileSize.x;
+	float	RatioY = ConvertPos.y / m_TileSize.y;
+
+	int	IndexX = (int)RatioX;
+	int	IndexY = (int)RatioY;
+
+	if (IndexX < 0 || IndexX >= m_CountX)
+		return -1;
+
+	// 정수 부분을 제거하여 소수점 부분만을 남겨준다.
+	RatioX -= (int)RatioX;
+	RatioY -= (int)RatioY;
+
+	// 사각형의 아래쪽 부분일 경우
+	if (RatioY < 0.5f)
+	{
+		// RatioX 가 0.5보다 크면 오른쪽 하단 사각형이 되는데 이경우 0.5에서 빼게 됰면 음수가 나오므로
+		// RatioY는 절대로 이 값보다 작을 수 없다. 즉 이 식은 좌 하단 사각형일 경우에만 성립이 가능하다.
+		// 좌 하단 사각형에서 좌 하단 삼각형이라는 의미이다.
+		if (RatioY < 0.5f - RatioX)
+		{
+			// 좌측 사각형들은 좌 하단 사각형의 좌 하단 삼각형은 비어있는 공간이다.
+			if (IndexX == 0)
+				return -1;
+
+			// 가장 아래 사각형들은 좌 하단 사각형의 좌 하단 삼각형은 비어있는 공간이다.
+			else if (IndexY == 0)
+				return -1;
+
+			else if (IndexY == 1)
+				return 1;
+
+			else
+				return IndexY * 2 - 1;
+		}
+
+		// 우 하단 사각형의 우 하단 삼각형일 경우
+		else if (RatioY < RatioX - 0.5f)
+		{
+			if (IndexY == 0)
+				return -1;
+
+			else if (IndexY == 1)
+				return 1;
+
+			else
+				return IndexY * 2 - 1;
+		}
+
+		else
+			return IndexY * 2;
+	}
+
+	// 사각형의 위쪽 부분일 경우
+	else if (RatioY > 0.5f)
+	{
+		// 좌 상단 사각형의 좌 상단 삼각형일 경우
+		if (RatioY - 0.5f > RatioX)
+		{
+			if (IndexX == 0)
+				return -1;
+
+			if (IndexY * 2 + 1 >= m_CountY)
+				return -1;
+
+			return IndexY * 2 + 1;
+		}
+
+		// 우 상단 사각형의 우 상단 삼각형일 경우
+		else if (RatioY - 0.5f > 1.f - RatioX)
+		{
+			if (IndexX >= m_CountX)
+				return -1;
+
+			if (IndexY * 2 + 1 >= m_CountY)
+				return -1;
+
+			return IndexY * 2 + 1;
+		}
+
+		else
+			return IndexY * 2;
+	}
+
+	// 가운데일 경우
+	else
+		return IndexY * 2;
+
+
+	return -1;
+}
+
+int CTileMapComponent::GetTileIndex(const Vector3& Pos)
+{
+	int	IndexX = GetTileIndexX(Pos);
+	int	IndexY = GetTileIndexY(Pos);
+
+	if (IndexX == -1 || IndexY == -1)
+		return -1;
+
+	return IndexY * m_CountX + IndexX;
+}
+
+CTile* CTileMapComponent::GetTile(const Vector3& Pos)
+{
+	int	Index = GetTileIndex(Pos);
+
+	if (Index == -1)
+		return nullptr;
+
+	return m_vecTile[Index];
+}
+
+CTile* CTileMapComponent::GetTile(int x, int y)
+{
+	if (x < 0 || x >= m_CountX || y < 0 || y >= m_CountY)
+		return nullptr;
+
+	return m_vecTile[y * m_CountX + x];
+}
+
+CTile* CTileMapComponent::GetTile(int Index)
+{
+	if (Index < 0 || Index >= m_CountX * m_CountY)
+		return nullptr;
+
+	return m_vecTile[Index];
+}
+
 int CTileMapComponent::GetTileRenderIndexX(const Vector3& Pos)
 {
 	if (m_TileShape == Tile_Shape::Rect)
@@ -374,7 +554,31 @@ int CTileMapComponent::GetTileRenderIndexX(const Vector3& Pos)
 		return IndexX;
 	}
 
+	int	IndexY = GetTileRenderIndexY(Pos);
+
+	if (IndexY < 0)
+		IndexY = 0;
+
+	else if (IndexY >= m_CountY)
+		IndexY = m_CountY - 1;
+
+	int	IndexX = -1;
+
+	float	ConvertX = Pos.x - GetWorldPos().x;
+
+	if (IndexY % 2 == 0)
+		IndexX = (int)(ConvertX / m_TileSize.x);
+
+	else
+		IndexX = (int)((ConvertX - m_TileSize.x * 0.5f) / m_TileSize.x);
+
+	if (IndexX < 0)
 	return 0;
+
+	else if (IndexX >= m_CountX)
+		return m_CountX - 1;
+
+	return IndexX;
 }
 
 int CTileMapComponent::GetTileRenderIndexY(const Vector3& Pos)
@@ -394,7 +598,122 @@ int CTileMapComponent::GetTileRenderIndexY(const Vector3& Pos)
 		return IndexY;
 	}
 
+	Vector3	ConvertPos = Pos - GetWorldPos();
+
+	float	RatioX = ConvertPos.x / m_TileSize.x;
+	float	RatioY = ConvertPos.y / m_TileSize.y;
+
+	int	IndexX = (int)RatioX;
+	int	IndexY = (int)RatioY;
+
+	if (IndexX < 0)
+		IndexX = 0;
+
+	else if (IndexX >= m_CountX)
+		IndexX = m_CountX - 1;
+
+	// 정수 부분을 제거하여 소수점 부분만을 남겨준다.
+	RatioX -= (int)RatioX;
+	RatioY -= (int)RatioY;
+
+	// 사각형의 아래쪽 부분일 경우
+	if (RatioY < 0.5f)
+	{
+		// RatioX 가 0.5보다 크면 오른쪽 하단 사각형이 되는데 이경우 0.5에서 빼게 됰면 음수가 나오므로
+		// RatioY는 절대로 이 값보다 작을 수 없다. 즉 이 식은 좌 하단 사각형일 경우에만 성립이 가능하다.
+		// 좌 하단 사각형에서 좌 하단 삼각형이라는 의미이다.
+		if (RatioY < 0.5f - RatioX)
+		{
+			// 좌측 사각형들은 좌 하단 사각형의 좌 하단 삼각형은 비어있는 공간이다.
+			if (IndexX == 0)
+			{
+				if (IndexY < 0)
+					return 0;
+
+				else if (IndexY >= m_CountY)
+					return m_CountY - 1;
+
+				else
+					return IndexY * 2 + 1;
+			}
+
+			// 가장 아래 사각형들은 좌 하단 사각형의 좌 하단 삼각형은 비어있는 공간이다.
+			else if (IndexY == 0)
+				return 0;
+
+			else if (IndexY == 1)
+				return 1;
+
+			else
+				return IndexY * 2 - 1;
+		}
+
+		// 우 하단 사각형의 우 하단 삼각형일 경우
+		else if (RatioY < RatioX - 0.5f)
+		{
+			if (IndexY == 0)
 	return 0;
+
+			else if (IndexY == 1)
+				return 1;
+
+			else
+				return IndexY * 2 - 1;
+		}
+
+		else
+			return IndexY * 2;
+	}
+
+	// 사각형의 위쪽 부분일 경우
+	else if (RatioY > 0.5f)
+	{
+		// 좌 상단 사각형의 좌 상단 삼각형일 경우
+		if (RatioY - 0.5f > RatioX)
+		{
+			if (IndexX == 0)
+			{
+				if (IndexY < 0)
+					return 0;
+
+				else if (IndexY >= m_CountY)
+					return m_CountY - 1;
+			}
+
+			if (IndexY * 2 + 1 >= m_CountY)
+				return m_CountY - 1;
+
+			return IndexY * 2 + 1;
+		}
+
+		// 우 상단 사각형의 우 상단 삼각형일 경우
+		else if (RatioY - 0.5f > 1.f - RatioX)
+		{
+			if (IndexX >= m_CountX)
+			{
+				if (IndexY < 0)
+					return IndexY;
+
+				else if (IndexY >= m_CountY)
+					return m_CountY - 1;
+			}
+
+			if (IndexY * 2 + 1 >= m_CountY)
+				return m_CountY - 1;
+
+			return IndexY * 2 + 1;
+		}
+
+		else
+			return IndexY * 2;
+	}
+
+	// 가운데일 경우
+	else
+		return IndexY * 2;
+
+
+	return -1;
 }
 
 void CTileMapComponent::Start()
@@ -441,6 +760,21 @@ void CTileMapComponent::PostUpdate(float DeltaTime)
 
 	EndX = GetTileRenderIndexX(RT);
 	EndY = GetTileRenderIndexY(RT);
+
+	if (m_TileShape == Tile_Shape::Rhombus)
+	{
+		--StartX;
+		--StartY;
+
+		++EndX;
+		++EndY;
+
+		StartX = StartX < 0 ? 0 : StartX;
+		StartY = StartY < 0 ? 0 : StartY;
+
+		EndX = EndX >= m_CountX ? m_CountX - 1 : EndX;
+		EndY = EndY >= m_CountY ? m_CountY - 1 : EndY;
+	}
 
 	Matrix	matView, matProj;
 	matView = Camera->GetViewMatrix();

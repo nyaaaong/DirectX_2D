@@ -45,9 +45,10 @@ CEngine::~CEngine()
 	CSceneManager::DestroyInst();
 
 	m_RandomBuffer->ResetShader(90, (int)Buffer_Shader_Type::Compute);
+
 	SAFE_DELETE(m_GlobalCBuffer);
 	SAFE_DELETE(m_RandomBuffer);
-
+	
 	CInput::DestroyInst();
 
 	CRenderManager::DestroyInst();
@@ -162,6 +163,8 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 
 
 	m_RandomBuffer->SetShader(90, (int)Buffer_Shader_Type::Compute);
+
+
 	// NoiseTexture
 	CResourceManager::GetInst()->LoadTexture("GlobalNoiseTexture", TEXT("noise_01.png"));
 

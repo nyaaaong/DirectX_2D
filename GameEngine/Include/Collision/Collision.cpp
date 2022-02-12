@@ -26,12 +26,6 @@ bool CCollision::CollisionBox2DToBox2D(CColliderBox2D* Src, CColliderBox2D* Dest
 
 bool CCollision::CollisionCircleToCircle(CColliderCircle* Src, CColliderCircle* Dest)
 {
-	Collision_Channel SrcChannel = Src->GetCollisionProfile()->Channel;
-	Collision_Channel DestChannel = Dest->GetCollisionProfile()->Channel;
-
-	if (SrcChannel == DestChannel)
-		int a = 0;
-
 	CollisionResult	srcResult, destResult;
 
 	if (CollisionCircleToCircle(srcResult, destResult, Src->GetInfo(), Dest->GetInfo()))

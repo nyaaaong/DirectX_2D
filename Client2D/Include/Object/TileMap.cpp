@@ -30,13 +30,13 @@ bool CTileMap::Init()
 
 	SetRootComponent(m_TileMap);
 
-	m_TileMap->CreateTile(Tile_Shape::Rect, 100, 100, Vector3(64.f, 64.f, 0.f));
+	m_TileMap->CreateTile(Tile_Shape::Rhombus, 100, 100, Vector3(160.f, 80.f, 0.f));
 
-	CMaterial* Material = m_Scene->GetResource()->FindMaterial("TileMap");
+	CMaterial* Material = m_Scene->GetResource()->FindMaterial("DiabloTileMap");
 
 	m_TileMap->SetTileMaterial(Material);
 
-	m_TileMap->SetTileDefaultFrame(0.f, 64.f, 64.f, 128.f);
+	m_TileMap->SetTileDefaultFrame(160.f, 80.f, 320.f, 160.f);
 
 	return true;
 }
@@ -53,5 +53,5 @@ void CTileMap::PostUpdate(float DeltaTime)
 
 CTileMap* CTileMap::Clone()
 {
-	return new CTileMap(*this);
+	return DBG_NEW CTileMap(*this);
 }

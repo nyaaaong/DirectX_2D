@@ -105,18 +105,19 @@ bool CRenderManager::Init()
 	// 기본 레이어 생성
 	RenderLayer* Layer = DBG_NEW RenderLayer;
 	Layer->Name = "Back";
-
-	m_RenderLayerList.push_back(Layer);
-
-	Layer = DBG_NEW RenderLayer;
-	Layer->Name = "Default";
 	Layer->LayerPriority = 0;
 
 	m_RenderLayerList.push_back(Layer);
 
 	Layer = DBG_NEW RenderLayer;
-	Layer->Name = "Particle";
+	Layer->Name = "Default";
 	Layer->LayerPriority = 1;
+
+	m_RenderLayerList.push_back(Layer);
+
+	Layer = DBG_NEW RenderLayer;
+	Layer->Name = "Particle";
+	Layer->LayerPriority = 2;
 
 	m_RenderLayerList.push_back(Layer);
 

@@ -103,6 +103,15 @@ public:
     void SetTileColor(Tile_Type Type, const Vector4& Color);
 
 
+public:
+    int GetTileIndexX(const Vector3& Pos);
+    int GetTileIndexY(const Vector3& Pos);
+    int GetTileIndex(const Vector3& Pos);
+    CTile* GetTile(const Vector3& Pos);
+    CTile* GetTile(int x, int y);
+    CTile* GetTile(int Index);
+
+
 private:
     int GetTileRenderIndexX(const Vector3& Pos);
     int GetTileRenderIndexY(const Vector3& Pos);

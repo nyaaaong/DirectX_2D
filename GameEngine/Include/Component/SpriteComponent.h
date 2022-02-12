@@ -85,5 +85,19 @@ public:
 
 		m_Animation = Anim;
 	}
+
+
+    template <typename T>
+    void LoadAnimationInstance()
+    {
+        T* Anim = DBG_NEW T;
+
+        Anim->SetScene(m_Scene);
+        Anim->SetOwner(this);
+
+        SAFE_DELETE(m_Animation);
+
+        m_Animation = Anim;
+    }
 };
 
