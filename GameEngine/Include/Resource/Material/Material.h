@@ -77,6 +77,11 @@ public:
         return m_TextureInfo[TextureIndex].Texture->GetHeight();
     }
 
+	bool EmptyTexture() const
+	{
+		return m_TextureInfo.empty();
+	}
+
 public:
     void SetRenderState(class CRenderState* State);
     void SetRenderState(const std::string& Name);

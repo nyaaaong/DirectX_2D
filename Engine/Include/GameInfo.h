@@ -107,18 +107,14 @@ private:\
 
 struct Resolution
 {
-	unsigned int	Width;
-	unsigned int	Height;
+	unsigned int	Width = 1280;
+	unsigned int	Height = 720;
 };
 
 struct VertexColor
 {
 	Vector3	Pos;
 	Vector4	Color;
-
-	VertexColor()
-	{
-	}
 
 	VertexColor(const Vector3& _Pos, const Vector4& _Color)	:
 		Pos(_Pos),
@@ -130,16 +126,9 @@ struct VertexColor
 
 struct VertexBuffer
 {
-	ID3D11Buffer* Buffer;
-	int		Size;
-	int		Count;
-
-	VertexBuffer() :
-		Buffer(nullptr),
-		Size(0),
-		Count(0)
-	{
-	}
+	ID3D11Buffer* Buffer = nullptr;
+	int		Size = 0;
+	int		Count = 0;
 
 	~VertexBuffer()
 	{
@@ -149,18 +138,10 @@ struct VertexBuffer
 
 struct IndexBuffer
 {
-	ID3D11Buffer* Buffer;
-	int		Size;
-	int		Count;
-	DXGI_FORMAT	Fmt;
-
-	IndexBuffer() :
-		Buffer(nullptr),
-		Size(0),
-		Count(0),
-		Fmt(DXGI_FORMAT_UNKNOWN)
-	{
-	}
+	ID3D11Buffer* Buffer = nullptr;
+	int		Size = 0;
+	int		Count = 0;
+	DXGI_FORMAT	Fmt = DXGI_FORMAT_UNKNOWN;
 
 	~IndexBuffer()
 	{
@@ -175,10 +156,6 @@ struct MeshContainer
 	VertexBuffer	VB;
 	std::vector<IndexBuffer>	vecIB;
 	D3D11_PRIMITIVE_TOPOLOGY	Primitive;
-
-	MeshContainer()	:
-		Primitive()
-	{}
 };
 
 struct TransformCBuffer
@@ -200,10 +177,6 @@ struct VertexUV
 	Vector3	Pos;
 	Vector2 UV;
 
-	VertexUV()
-	{
-	}
-
 	VertexUV(const Vector3& _Pos, const Vector2& _UV) :
 		Pos(_Pos),
 		UV(_UV)
@@ -214,14 +187,9 @@ struct VertexUV
 struct MaterialCBuffer
 {
 	Vector4	BaseColor;
-	float	Opacity;
-	int		PaperBurnEnable;
+	float	Opacity = 1.f;
+	int		PaperBurnEnable = 0;
 	Vector2	Empty;
-
-	MaterialCBuffer()	:
-		Opacity(1.f),
-		PaperBurnEnable(0)
-	{}
 };
 
 struct AnimationFrameData
@@ -234,22 +202,14 @@ struct Animation2DCBuffer
 {
 	Vector2	Animation2DStartUV;
 	Vector2	Animation2DEndUV;
-	int		Animation2DType;
+	int		Animation2DType = -1;
 	Vector3	Animation2DEmpty;
-
-	Animation2DCBuffer()	:
-		Animation2DType(-1)
-	{}
 };
 
 struct Standard2DCBuffer
 {
-	int		AnimationEnable;
+	int		AnimationEnable = -1;
 	Vector3	Empty;
-
-	Standard2DCBuffer()	:
-		AnimationEnable(-1)
-	{}
 };
 
 struct FindComponentName
@@ -261,28 +221,17 @@ struct FindComponentName
 struct CollisionProfile
 {
 	std::string			Name;
-	Collision_Channel	Channel;
-	bool				CollisionEnable;
+	Collision_Channel	Channel = Collision_Channel::Max;
+	bool				CollisionEnable = true;
 
 	std::vector<Collision_Interaction>	vecInteraction;
-
-	CollisionProfile()	:
-		Channel(Collision_Channel::Max),
-		CollisionEnable(true)
-	{}
 };
 
 struct CollisionResult
 {
-	class CColliderComponent* Src;
-	class CColliderComponent* Dest;
+	class CColliderComponent* Src = nullptr;
+	class CColliderComponent* Dest = nullptr;
 	Vector3	HitPoint;
-
-	CollisionResult() :
-		Src(nullptr),
-		Dest(nullptr)
-	{
-	}
 };
 
 struct Box2DInfo
@@ -297,39 +246,23 @@ struct Box2DInfo
 struct CircleInfo
 {
 	Vector2	Center;
-	float	Radius;
+	float	Radius = 1.f;
 	Vector2	Min;
 	Vector2	Max;
-
-	CircleInfo()	:
-		Radius(1.f)
-	{}
 };
 
 struct PixelInfo
 {
-	unsigned char* Pixel;
-	unsigned int	Width;
-	unsigned int	Height;
-	PixelCollision_Type	Type;
-	unsigned char	Color[4];
-	Box2DInfo		Box;
+	unsigned char* Pixel = nullptr;
+	unsigned int	Width = 0;
+	unsigned int	Height = 0;
+	PixelCollision_Type	Type = PixelCollision_Type::Color_Confirm;
+	unsigned char	Color[4] = {};
+	Box2DInfo		Box = {};
 	Vector2	Min;
 	Vector2	Max;
-	ID3D11ShaderResourceView* SRV;
-	int		RefCount;
-
-	PixelInfo() :
-		RefCount(1),
-		Pixel(nullptr),
-		SRV(nullptr),
-		Width(0),
-		Height(0),
-		Box{},
-		Color{},
-		Type(PixelCollision_Type::Color_Confirm)
-	{
-	}
+	ID3D11ShaderResourceView* SRV = nullptr;
+	int		RefCount = 1;
 };
 
 struct ColliderCBuffer
@@ -342,19 +275,12 @@ struct WidgetCBuffer
 {
 	Vector4	Tint;
 	Matrix	matWP;
-	int		UseTexture;
-	int		WidgetAnimType;
+	int		UseTexture = 0;
+	int		WidgetAnimType = 0;
 	Vector2	WidgetAnimStartUV;
 	Vector2	WidgetAnimEndUV;
-	int		WidgetAnimEnable;
-	float	Opacity;
-
-	WidgetCBuffer()	:
-		UseTexture(0),
-		WidgetAnimType(0),
-		WidgetAnimEnable(0),
-		Opacity(0.f)
-	{}
+	int		WidgetAnimEnable = 0;
+	float	Opacity = 0.f;
 };
 
 struct ProgressBarCBuffer
@@ -371,37 +297,24 @@ struct ProgressBarCBuffer
 
 struct	ParticleCBuffer
 {
-	unsigned int	SpawnEnable;	// 현재 파티클 생성 여부
+	unsigned int	SpawnEnable = 0;	// 현재 파티클 생성 여부
 	Vector3	StartMin;		// 파티클이 생성될 영역의 Min
 	Vector3	StartMax;		// 파티클이 생성될 영역의 Max
-	unsigned int	SpawnCountMax;	// 생성될 파티클의 최대
+	unsigned int	SpawnCountMax = 0;	// 생성될 파티클의 최대
 	Vector3	ScaleMin;		// 생성될 파티클 크기의 Min
-	float	LifeTimeMin;	// 생성될 파티클이 살아있을 최소시간
+	float	LifeTimeMin = 0.f;	// 생성될 파티클이 살아있을 최소시간
 	Vector3	ScaleMax;		// 새성될 파티클 크기의 Max
-	float	LifeTimeMax;	// 생성될 파티클이 살아있을 최대시간
+	float	LifeTimeMax = 0.f;	// 생성될 파티클이 살아있을 최대시간
 	Vector4	ColorMin;		// 생성될 파티클의 색상 Min
 	Vector4	ColorMax;		// 생성될 파티클의 색상 Max
-	float	SpeedMin;		// 파티클의 최소 이동속도
-	float	SpeedMax;		// 파티클의 최대 이동속도
-	int		Move;			// 이동을 하는지 안하는지
-	int		Gravity;		// 중력 적용을 받는지 안받는지
+	float	SpeedMin = 0.f;		// 파티클의 최소 이동속도
+	float	SpeedMax = 0.f;		// 파티클의 최대 이동속도
+	int		Move = 0;			// 이동을 하는지 안하는지
+	int		Gravity = 0;		// 중력 적용을 받는지 안받는지
 	Vector3	MoveDir;		// 이동을 한다면 기준이 될 이동 방향
-	int		Is2D;			// 2D용 파티클인지
+	int		Is2D = 1;			// 2D용 파티클인지
 	Vector3	MoveAngle;	// 이동을 한다면 기준이 될 방향으로부터 x, y, z 에 저장된 각도만큼 틀어진 랜덤한 방향을 구한다.
-	float	Empty;
-
-	ParticleCBuffer()	:
-		SpawnEnable(0),
-		SpawnCountMax(0),
-		Move(0),
-		Gravity(0),
-		Is2D(1),
-		LifeTimeMin(0.f),
-		LifeTimeMax(0.f),
-		SpeedMin(0.f),
-		SpeedMax(0.f),
-		Empty(0.f)
-	{}
+	float	Empty = 0.f;
 };
 
 struct ParticleInfo
@@ -428,16 +341,11 @@ struct ParticleInfoShared
 
 struct GlobalCBuffer
 {
-	float	DeltaTime;
-	float	AccTime;
+	float	DeltaTime = 0.f;
+	float	AccTime = 0.f;
 	Vector2	Resolution;
 	Vector2	NoiseResolution;
 	Vector2	Empty;
-
-	GlobalCBuffer()	:
-		DeltaTime(0.f),
-		AccTime(0.f)
-	{}
 };
 
 struct PaperBurnCBuffer
@@ -468,6 +376,6 @@ struct TileInfo
 	Vector2 TileStart;
 	Vector2 TileEnd;
 	Vector4 TileColor;
-	float Opacity;
+	float Opacity = 0.f;;
 	Vector3 Empty;
 };

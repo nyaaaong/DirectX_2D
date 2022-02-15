@@ -8,18 +8,20 @@
 #include "IMGUIListBox.h"
 #include "IMGUIComboBox.h"
 #include "IMGUIImage.h"
+#include "IMGUIManager.h"
 #include "Engine.h"
 #include "PathManager.h"
-#include "../EditorManager.h"
-#include "../Object/SpriteEditObject.h"
+#include "TileMapWindow.h"
 #include "Scene/SceneManager.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneResource.h"
 #include "Component/SpriteComponent.h"
 #include "Resource/Animation/AnimationSequence2D.h"
-#include "../Object/DragObject.h"
 #include "Animation/AnimationSequence2DInstance.h"
 #include "Animation/AnimationSequence2DData.h"
+#include "../EditorManager.h"
+#include "../Object/SpriteEditObject.h"
+#include "../Object/DragObject.h"
 
 CObjectHierarchy::CObjectHierarchy()	:
 	m_ObjectListWidget(nullptr),
@@ -52,7 +54,7 @@ bool CObjectHierarchy::Init()
 
 	m_ComponentListWidget->SetHideName(true);
 	m_ComponentListWidget->SetPageItemCount(15);
-	m_ComponentListWidget->SetSelectCallback(this, &CObjectHierarchy::SelectObject);
+	m_ComponentListWidget->SetSelectCallback(this, &CObjectHierarchy::SelectComponent);
 
 	return true;
 }
@@ -68,6 +70,8 @@ void CObjectHierarchy::SelectObject(int Index, const char* Item)
 
 	if (!Object)
 		return;
+
+	m_SelectObject = Object;
 
 	std::vector<FindComponentName>	vecNames;
 
@@ -85,4 +89,16 @@ void CObjectHierarchy::SelectObject(int Index, const char* Item)
 
 void CObjectHierarchy::SelectComponent(int Index, const char* Item)
 {
+	if (!m_SelectObject)
+		return;
+
+	// 선택된 컴포넌트를 저장해둔다.
+	m_SelectComponent = (CSceneComponent*)m_SelectObject->FindComponent(Item);
+
+	CTileMapWindow* TileMapWindow = (CTileMapWindow*)CIMGUIManager::GetInst()->FindIMGUIWindow("TileMapWindow");
+
+	if (TileMapWindow)
+	{
+		TileMapWindow->SetTileMap((CTileMapComponent*)m_SelectComponent.Get());
+	}
 }

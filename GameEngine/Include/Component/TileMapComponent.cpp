@@ -86,6 +86,7 @@ void CTileMapComponent::SetTileMaterial(CMaterial* Material)
 
 	m_TileMaterial->SetScene(m_Scene);
 
+	if (!m_TileMaterial->EmptyTexture())
 	m_CBuffer->SetImageSize(Vector2((float)m_TileMaterial->GetTextureWidth(), (float)m_TileMaterial->GetTextureHeight()));
 }
 
@@ -740,74 +741,83 @@ bool CTileMapComponent::Init()
 void CTileMapComponent::Update(float DeltaTime)
 {
 	CSceneComponent::Update(DeltaTime);
+
+	if (m_TileMaterial)
+	{
+		if (!m_TileMaterial->EmptyTexture())
+			m_CBuffer->SetImageSize(Vector2((float)m_TileMaterial->GetTextureWidth(), (float)m_TileMaterial->GetTextureHeight()));
+	}
 }
 
 void CTileMapComponent::PostUpdate(float DeltaTime)
 {
 	CSceneComponent::PostUpdate(DeltaTime);
 
-	CCameraComponent* Camera = m_Scene->GetCameraManager()->GetCurrentCamera();
-
-	Resolution	RS = Camera->GetResolution();
-
-	Vector3	LB = Camera->GetWorldPos();
-	Vector3	RT = LB + Vector3((float)RS.Width, (float)RS.Height, 0.f);
-
-	int	StartX, StartY, EndX, EndY;
-
-	StartX = GetTileRenderIndexX(LB);
-	StartY = GetTileRenderIndexY(LB);
-
-	EndX = GetTileRenderIndexX(RT);
-	EndY = GetTileRenderIndexY(RT);
-
-	if (m_TileShape == Tile_Shape::Rhombus)
+	if (!m_vecTile.empty())
 	{
-		--StartX;
-		--StartY;
+		CCameraComponent* Camera = m_Scene->GetCameraManager()->GetCurrentCamera();
 
-		++EndX;
-		++EndY;
+		Resolution	RS = Camera->GetResolution();
 
-		StartX = StartX < 0 ? 0 : StartX;
-		StartY = StartY < 0 ? 0 : StartY;
+		Vector3	LB = Camera->GetWorldPos();
+		Vector3	RT = LB + Vector3((float)RS.Width, (float)RS.Height, 0.f);
 
-		EndX = EndX >= m_CountX ? m_CountX - 1 : EndX;
-		EndY = EndY >= m_CountY ? m_CountY - 1 : EndY;
-	}
+		int	StartX, StartY, EndX, EndY;
 
-	Matrix	matView, matProj;
-	matView = Camera->GetViewMatrix();
-	matProj = Camera->GetProjMatrix();
+		StartX = GetTileRenderIndexX(LB);
+		StartY = GetTileRenderIndexY(LB);
 
-	m_RenderCount = 0;
+		EndX = GetTileRenderIndexX(RT);
+		EndY = GetTileRenderIndexY(RT);
 
-	for (int i = StartY; i <= EndY; ++i)
-	{
-		for (int j = StartX; j <= EndX; ++j)
+		if (m_TileShape == Tile_Shape::Rhombus)
 		{
-			int	Index = i * m_CountX + j;
+			--StartX;
+			--StartY;
 
-			m_vecTile[Index]->Update(DeltaTime);
+			++EndX;
+			++EndY;
 
-			if (m_vecTile[Index]->GetRender())
+			StartX = StartX < 0 ? 0 : StartX;
+			StartY = StartY < 0 ? 0 : StartY;
+
+			EndX = EndX >= m_CountX ? m_CountX - 1 : EndX;
+			EndY = EndY >= m_CountY ? m_CountY - 1 : EndY;
+		}
+
+		Matrix	matView, matProj;
+		matView = Camera->GetViewMatrix();
+		matProj = Camera->GetProjMatrix();
+
+		m_RenderCount = 0;
+
+		for (int i = StartY; i <= EndY; ++i)
+		{
+			for (int j = StartX; j <= EndX; ++j)
 			{
-				if (m_EditMode)
-				{
-					m_vecTileInfo[m_RenderCount].TileColor = m_TileColor[(int)m_vecTile[Index]->GetTileType()];
-				}
+				int	Index = i * m_CountX + j;
 
-				m_vecTileInfo[m_RenderCount].TileStart = m_vecTile[Index]->GetFrameStart();
-				m_vecTileInfo[m_RenderCount].TileEnd = m_vecTile[Index]->GetFrameEnd();
-				m_vecTileInfo[m_RenderCount].Opacity = m_vecTile[Index]->GetOpacity();
-				m_vecTileInfo[m_RenderCount].matWVP = m_vecTile[Index]->GetWorldMatrix() * matView * matProj;
-				m_vecTileInfo[m_RenderCount].matWVP.Transpose();
-				++m_RenderCount;
+				m_vecTile[Index]->Update(DeltaTime);
+
+				if (m_vecTile[Index]->GetRender())
+				{
+					if (m_EditMode)
+					{
+						m_vecTileInfo[m_RenderCount].TileColor = m_TileColor[(int)m_vecTile[Index]->GetTileType()];
+					}
+
+					m_vecTileInfo[m_RenderCount].TileStart = m_vecTile[Index]->GetFrameStart();
+					m_vecTileInfo[m_RenderCount].TileEnd = m_vecTile[Index]->GetFrameEnd();
+					m_vecTileInfo[m_RenderCount].Opacity = m_vecTile[Index]->GetOpacity();
+					m_vecTileInfo[m_RenderCount].matWVP = m_vecTile[Index]->GetWorldMatrix() * matView * matProj;
+					m_vecTileInfo[m_RenderCount].matWVP.Transpose();
+					++m_RenderCount;
+				}
 			}
 		}
-	}
 
-	m_TileInfoBuffer->UpdateBuffer(&m_vecTileInfo[0], m_RenderCount);
+		m_TileInfoBuffer->UpdateBuffer(&m_vecTileInfo[0], m_RenderCount);
+	}
 }
 
 void CTileMapComponent::PrevRender()
@@ -828,7 +838,7 @@ void CTileMapComponent::Render()
 		m_BackMaterial->Reset();
 	}
 
-	if (m_TileMaterial)
+	if (m_TileMaterial && !m_vecTile.empty())
 	{
 		m_TileInfoBuffer->SetShader();
 

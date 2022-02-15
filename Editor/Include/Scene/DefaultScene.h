@@ -6,5 +6,11 @@ class CDefaultScene :
 public:
     CDefaultScene();
     ~CDefaultScene();
+
+public:
+	virtual bool Init();
+
+private:
+	bool CreateMaterial();
 };
 

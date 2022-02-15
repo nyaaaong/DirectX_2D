@@ -1,5 +1,8 @@
 #pragma once
 #include "IMGUIWindow.h"
+#include "GameObject/GameObject.h"
+#include "Component/SceneComponent.h"
+
 class CObjectHierarchy :
     public CIMGUIWindow
 {
@@ -10,6 +13,8 @@ public:
 private:
 	class CIMGUIListBox* m_ObjectListWidget;
 	class CIMGUIListBox* m_ComponentListWidget;
+	CSharedPtr<CGameObject>		m_SelectObject;
+	CSharedPtr<CSceneComponent>	m_SelectComponent;
 
 public:
 	class CIMGUIListBox* GetObjectList()	const
@@ -20,6 +25,16 @@ public:
 	class CIMGUIListBox* GetComponentList()	const
 	{
 		return m_ComponentListWidget;
+	}
+
+	CGameObject* GetSelectObject()	const
+	{
+		return m_SelectObject;
+	}
+
+	CSceneComponent* GetSelectComponent()	const
+	{
+		return m_SelectComponent;
 	}
 
 public:

@@ -22,6 +22,8 @@
 #include "Component/ColliderPixel.h"
 #include "Component/CameraComponent.h"
 #include "Component/WidgetComponent.h"
+#include "Component/ParticleComponent.h"
+#include "Component/TileMapComponent.h"
 #include "Resource/Animation/AnimationSequence2D.h"
 #include "Animation/AnimationSequence2DInstance.h"
 #include "Animation/AnimationSequence2DData.h"
@@ -72,11 +74,13 @@ bool CEditorMenu::Init()
 	m_ComponentCombo->SetHideName(true);
 	m_ComponentCombo->AddItem("SpriteComponent");
 	m_ComponentCombo->AddItem("StaticMeshComponent");
-	m_ComponentCombo->AddItem("ColliderBox2D");
-	m_ComponentCombo->AddItem("ColliderCircle2D");
-	m_ComponentCombo->AddItem("ColliderPixel2D");
+	m_ComponentCombo->AddItem("Box2DComponent");
+	m_ComponentCombo->AddItem("CircleComponent");
+	m_ComponentCombo->AddItem("PixelComponent");
 	m_ComponentCombo->AddItem("CameraComponent");
 	m_ComponentCombo->AddItem("WidgetComponent");
+	m_ComponentCombo->AddItem("ParticleComponent");
+	m_ComponentCombo->AddItem("TileMapComponent");
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 
@@ -160,7 +164,44 @@ void CEditorMenu::ComponentCreateButton()
 
 	CSceneComponent* Root = Obj->GetRootComponent();
 
-	if (Root)
+	switch ((SceneComponent_Type)SelectIndex)
+	{
+	case SceneComponent_Type::Sprite:
+		Obj->CreateComponent<CSpriteComponent>(m_ComponentNameInput->GetTextMultibyte());
+		break;
+	case SceneComponent_Type::StaticMesh:
+		Obj->CreateComponent<CStaticMeshComponent>(m_ComponentNameInput->GetTextMultibyte());
+		break;
+	case SceneComponent_Type::Box2D:
+		Obj->CreateComponent<CColliderBox2D>(m_ComponentNameInput->GetTextMultibyte());
+		break;
+	case SceneComponent_Type::Circle:
+		Obj->CreateComponent<CColliderCircle>(m_ComponentNameInput->GetTextMultibyte());
+		break;
+	case SceneComponent_Type::Pixel:
+		Obj->CreateComponent<CColliderPixel>(m_ComponentNameInput->GetTextMultibyte());
+		break;
+	case SceneComponent_Type::Camera:
+		Obj->CreateComponent<CCameraComponent>(m_ComponentNameInput->GetTextMultibyte());
+		break;
+	case SceneComponent_Type::Widget:
+		Obj->CreateComponent<CWidgetComponent>(m_ComponentNameInput->GetTextMultibyte());
+		break;
+	case SceneComponent_Type::Particle:
+		Obj->CreateComponent<CParticleComponent>(m_ComponentNameInput->GetTextMultibyte());
+		break;
+	case SceneComponent_Type::TileMap:
+	{
+		CTileMapComponent* TileMap = Obj->CreateComponent<CTileMapComponent>(m_ComponentNameInput->GetTextMultibyte());
+
+		CMaterial* Material = CSceneManager::GetInst()->GetScene()->GetResource()->FindMaterial("TileMap");
+
+		TileMap->SetTileMaterial(Material);
+	}
+	break;
+	}
+
+	/*if (Root)
 	{
 		switch ((SceneComponent_Type)SelectIndex)
 		{
@@ -170,13 +211,13 @@ void CEditorMenu::ComponentCreateButton()
 		case SceneComponent_Type::StaticMesh:
 			Root->AddChild(Obj->CreateComponent<CStaticMeshComponent>(m_ComponentNameInput->GetTextMultibyte()));
 			break;
-		case SceneComponent_Type::ColliderBox2D:
+		case SceneComponent_Type::Box2D:
 			Root->AddChild(Obj->CreateComponent<CColliderBox2D>(m_ComponentNameInput->GetTextMultibyte()));
 			break;
-		case SceneComponent_Type::ColliderCircle2D:
+		case SceneComponent_Type::Circle:
 			Root->AddChild(Obj->CreateComponent<CColliderCircle>(m_ComponentNameInput->GetTextMultibyte()));
 			break;
-		case SceneComponent_Type::ColliderPixel2D:
+		case SceneComponent_Type::Pixel:
 			Root->AddChild(Obj->CreateComponent<CColliderPixel>(m_ComponentNameInput->GetTextMultibyte()));
 			break;
 		case SceneComponent_Type::Camera:
@@ -185,8 +226,20 @@ void CEditorMenu::ComponentCreateButton()
 		case SceneComponent_Type::Widget:
 			Root->AddChild(Obj->CreateComponent<CWidgetComponent>(m_ComponentNameInput->GetTextMultibyte()));
 			break;
+		case SceneComponent_Type::Particle:
+			Root->AddChild(Obj->CreateComponent<CParticleComponent>(m_ComponentNameInput->GetTextMultibyte()));
+			break;
+		case SceneComponent_Type::TileMap:
+		{
+			CTileMapComponent* TileMap = Root->AddChild(Obj->CreateComponent<CTileMapComponent>(m_ComponentNameInput->GetTextMultibyte()));
+
+			CMaterial* Material = CSceneManager::GetInst()->GetScene()->GetResource()->FindMaterial("TileMap");
+
+			TileMap->SetTileMaterial(Material);
 		}
-	}
+		break;
+		}
+	}*/
 
 	if (Hierarchy)
 	{

@@ -39,10 +39,15 @@ public:
     }
 
 public:
-    CMaterial* GetMaterial()    const
-    {
-        return m_BackMaterial;
-    }
+	CMaterial* GetBackMaterial()    const
+	{
+		return m_BackMaterial;
+	}
+
+	CMaterial* GetTileMaterial()    const
+	{
+		return m_TileMaterial;
+	}
 
     Tile_Shape GetTileShape()   const
     {

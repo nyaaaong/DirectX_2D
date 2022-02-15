@@ -98,6 +98,13 @@ enum class SceneComponent_Type
 {
 	Sprite,
 	StaticMesh,
+	Box2D,
+	Circle,
+	Pixel,
+	Camera,
+	Widget,
+	Particle,
+	TileMap,
 	Max
 }; 
 
@@ -211,7 +218,8 @@ enum class Mouse_State
 enum class Tile_Shape
 {
 	Rect,
-	Rhombus
+	Rhombus,
+	End
 };
 
 enum class Tile_Type
