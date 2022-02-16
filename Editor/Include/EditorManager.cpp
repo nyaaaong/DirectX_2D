@@ -20,6 +20,11 @@
 #include "Component/SpriteComponent.h"
 #include "Component/CameraComponent.h"
 #include "Component/StaticMeshComponent.h"
+#include "Component/ColliderBox2D.h"
+#include "Component/ColliderCircle.h"
+#include "Component/ColliderPixel.h"
+#include "Component/WidgetComponent.h"
+#include "Component/ParticleComponent.h"
 #include "Animation/AnimationSequence2DInstance.h"
 
 DEFINITION_SINGLE(CEditorManager)
@@ -556,7 +561,51 @@ CComponent* CEditorManager::CreateComponent(CGameObject* Obj, size_t Type)
 
 	else if (Type == typeid(CTileMapComponent).hash_code())
 	{
-		CComponent* Component = Obj->LoadComponent<CTileMapComponent>();
+		CTileMapComponent* Component = Obj->LoadComponent<CTileMapComponent>();
+
+		Component->EnableEditMode(true);
+
+		return Component;
+	}
+
+	else if (Type == typeid(CColliderBox2D).hash_code())
+	{
+		CComponent* Component = Obj->LoadComponent<CColliderBox2D>();
+
+		return Component;
+	}
+
+	else if (Type == typeid(CColliderCircle).hash_code())
+	{
+		CComponent* Component = Obj->LoadComponent<CColliderCircle>();
+
+		return Component;
+	}
+
+	else if (Type == typeid(CColliderPixel).hash_code())
+	{
+		CComponent* Component = Obj->LoadComponent<CColliderPixel>();
+
+		return Component;
+	}
+
+	else if (Type == typeid(CCameraComponent).hash_code())
+	{
+		CComponent* Component = Obj->LoadComponent<CCameraComponent>();
+
+		return Component;
+	}
+
+	else if (Type == typeid(CWidgetComponent).hash_code())
+	{
+		CComponent* Component = Obj->LoadComponent<CWidgetComponent>();
+
+		return Component;
+	}
+
+	else if (Type == typeid(CParticleComponent).hash_code())
+	{
+		CComponent* Component = Obj->LoadComponent<CParticleComponent>();
 
 		return Component;
 	}

@@ -371,6 +371,9 @@ int CTileMapComponent::GetTileIndexX(const Vector3& Pos)
 	{
 		float	ConvertX = Pos.x - GetWorldPos().x;
 
+		if (ConvertX < 0.f)
+			return -1;
+
 		int	IndexX = (int)(ConvertX / m_TileSize.x);
 
 		if (IndexX < 0 || IndexX >= m_CountX)
@@ -405,6 +408,9 @@ int CTileMapComponent::GetTileIndexY(const Vector3& Pos)
 	if (m_TileShape == Tile_Shape::Rect)
 	{
 		float	ConvertY = Pos.y - GetWorldPos().y;
+
+		if (ConvertY < 0.f)
+			return -1;
 
 		int	IndexY = (int)(ConvertY / m_TileSize.y);
 
@@ -978,6 +984,13 @@ void CTileMapComponent::Load(FILE* File)
 		m_vecTile[i] = Tile;
 	}
 
+	SAFE_DELETE(m_CBuffer);
+
+	m_CBuffer = new CTileMapConstantBuffer;
+
+	m_CBuffer->Init();
+
+	SetWorldInfo();
 
 	CSceneComponent::Load(File);
 }
