@@ -197,49 +197,11 @@ void CEditorMenu::ComponentCreateButton()
 		CMaterial* Material = CSceneManager::GetInst()->GetScene()->GetResource()->FindMaterial("TileMap");
 
 		TileMap->SetTileMaterial(Material);
+
+		CEditorManager::GetInst()->SetEditMode(EditMode::TileMap);
 	}
 	break;
 	}
-
-	/*if (Root)
-	{
-		switch ((SceneComponent_Type)SelectIndex)
-		{
-		case SceneComponent_Type::Sprite:
-			Root->AddChild(Obj->CreateComponent<CSpriteComponent>(m_ComponentNameInput->GetTextMultibyte()));
-			break;
-		case SceneComponent_Type::StaticMesh:
-			Root->AddChild(Obj->CreateComponent<CStaticMeshComponent>(m_ComponentNameInput->GetTextMultibyte()));
-			break;
-		case SceneComponent_Type::Box2D:
-			Root->AddChild(Obj->CreateComponent<CColliderBox2D>(m_ComponentNameInput->GetTextMultibyte()));
-			break;
-		case SceneComponent_Type::Circle:
-			Root->AddChild(Obj->CreateComponent<CColliderCircle>(m_ComponentNameInput->GetTextMultibyte()));
-			break;
-		case SceneComponent_Type::Pixel:
-			Root->AddChild(Obj->CreateComponent<CColliderPixel>(m_ComponentNameInput->GetTextMultibyte()));
-			break;
-		case SceneComponent_Type::Camera:
-			Root->AddChild(Obj->CreateComponent<CCameraComponent>(m_ComponentNameInput->GetTextMultibyte()));
-			break;
-		case SceneComponent_Type::Widget:
-			Root->AddChild(Obj->CreateComponent<CWidgetComponent>(m_ComponentNameInput->GetTextMultibyte()));
-			break;
-		case SceneComponent_Type::Particle:
-			Root->AddChild(Obj->CreateComponent<CParticleComponent>(m_ComponentNameInput->GetTextMultibyte()));
-			break;
-		case SceneComponent_Type::TileMap:
-		{
-			CTileMapComponent* TileMap = Root->AddChild(Obj->CreateComponent<CTileMapComponent>(m_ComponentNameInput->GetTextMultibyte()));
-
-			CMaterial* Material = CSceneManager::GetInst()->GetScene()->GetResource()->FindMaterial("TileMap");
-
-			TileMap->SetTileMaterial(Material);
-		}
-		break;
-		}
-	}*/
 
 	if (Hierarchy)
 	{

@@ -99,6 +99,10 @@ void CObjectHierarchy::SelectComponent(int Index, const char* Item)
 
 	if (TileMapWindow)
 	{
-		TileMapWindow->SetTileMap((CTileMapComponent*)m_SelectComponent.Get());
+		if (m_SelectComponent->CheckType<CTileMapComponent>())
+			TileMapWindow->SetTileMap((CTileMapComponent*)m_SelectComponent.Get());
+
+		else
+			TileMapWindow->SetTileMap(nullptr);
 	}
 }

@@ -5,7 +5,8 @@
 enum class EditMode
 {
 	Scene,
-	Sprite
+	Sprite,
+	TileMap
 };
 
 class CEditorManager
@@ -20,8 +21,15 @@ private:
 	class CTileMapWindow* m_TileMapWindow;
 	Vector3		m_PrevMousePos;
 	Vector3		m_CurMousePos;
+	bool				m_MousePush;
+	float				m_CameraMoveSpeed;
 
 public:
+	bool GetLButtonPush()	const
+	{
+		return m_MousePush;
+	}
+
 	class CDragObject* GetDragObj()	const
 	{
 		return m_DragObj;
@@ -51,6 +59,11 @@ public:
 	void KeyboardDown(float DeltaTime);
 	void KeyboardLeft(float DeltaTime);
 	void KeyboardRight(float DeltaTime);
+
+	void MoveCameraUp(float DeltaTime);
+	void MoveCameraDown(float DeltaTime);
+	void MoveCameraLeft(float DeltaTime);
+	void MoveCameraRight(float DeltaTime);
 
 	void MoveTabUp(float DeltaTime);
 	void MoveTabDown(float DeltaTime);

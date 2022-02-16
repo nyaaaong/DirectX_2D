@@ -89,6 +89,8 @@ void CScene::Update(float DeltaTime)
 		++iter;
 	}
 
+	m_CameraManager->Update(DeltaTime);
+
 	m_Viewport->Update(DeltaTime);
 }
 
@@ -117,6 +119,8 @@ void CScene::PostUpdate(float DeltaTime)
 		(*iter)->PostUpdate(DeltaTime);
 		++iter;
 	}
+
+	m_CameraManager->PostUpdate(DeltaTime);
 
 	m_Viewport->PostUpdate(DeltaTime);
 

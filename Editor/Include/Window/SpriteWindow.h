@@ -31,6 +31,11 @@ private:
 	bool				m_PlayAnim;
 
 public:
+	bool HasSprite()	const
+	{
+		return m_Sprite != nullptr;
+	}
+
 	int GetCaptureMode()	const
 	{
 		return m_Mode;

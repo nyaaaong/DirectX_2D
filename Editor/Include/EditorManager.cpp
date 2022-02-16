@@ -7,6 +7,7 @@
 #include "Scene/SceneManager.h"
 #include "Scene/Scene.h"
 #include "Scene/DefaultScene.h"
+#include "Scene/CameraManager.h"
 #include "Window/SpriteWindow.h"
 #include "Window/DetailWindow.h"
 #include "Window/EditorMenu.h"
@@ -17,6 +18,7 @@
 #include "Object/DragObject.h"
 #include "Object/Player2D.h"
 #include "Component/SpriteComponent.h"
+#include "Component/CameraComponent.h"
 #include "Component/StaticMeshComponent.h"
 #include "Animation/AnimationSequence2DInstance.h"
 
@@ -28,7 +30,9 @@ CEditorManager::CEditorManager()	:
 	m_SpriteWindow(nullptr),
 	m_DetailWindow(nullptr),
 	m_EditorMenu(nullptr),
-	m_ObjectHierarchy(nullptr)
+	m_ObjectHierarchy(nullptr),
+	m_CameraMoveSpeed(1000.f),
+	m_MousePush(false)
 {
 }
 
@@ -41,13 +45,27 @@ void CEditorManager::SetEditMode(EditMode Mode)
 {
 	m_EditMode = Mode;
 
-	if (m_EditMode == EditMode::Sprite)
+	switch (m_EditMode)
 	{
+	case EditMode::Scene:
+		break;
+	case EditMode::Sprite:
 		if (m_DragObj)
 			m_DragObj->Destroy();
-		
 		m_DragObj = CSceneManager::GetInst()->GetScene()->CreateGameObject<CDragObject>("DragObject");
 		m_DragObj->SetWorldScale(0.f, 0.f, 1.f);
+		break;
+	case EditMode::TileMap:
+		if (m_DragObj)
+		{
+			m_DragObj->Destroy();
+			m_DragObj = nullptr;
+		}
+		break;
+	}
+
+	if (m_EditMode == EditMode::Sprite)
+	{
 	}
 }
 
@@ -97,8 +115,13 @@ bool CEditorManager::Init(HINSTANCE hInst)
 
 	CInput::GetInst()->CreateKey("MoveUp", 'W');
 	CInput::GetInst()->CreateKey("MoveDown", 'S');
-	CInput::GetInst()->CreateKey("RotationZInv", 'A');
-	CInput::GetInst()->CreateKey("RotationZ", 'D');
+	CInput::GetInst()->CreateKey("MoveLeft", 'A');
+	CInput::GetInst()->CreateKey("MoveRight", 'D');
+
+	CInput::GetInst()->SetKeyCallback("MoveUp", KeyState_Push, this, &CEditorManager::MoveCameraUp);
+	CInput::GetInst()->SetKeyCallback("MoveDown", KeyState_Push, this, &CEditorManager::MoveCameraDown);
+	CInput::GetInst()->SetKeyCallback("MoveLeft", KeyState_Push, this, &CEditorManager::MoveCameraLeft);
+	CInput::GetInst()->SetKeyCallback("MoveRight", KeyState_Push, this, &CEditorManager::MoveCameraRight);
 
 	CInput::GetInst()->CreateKey("TabUp", VK_NUMPAD8);
 	CInput::GetInst()->CreateKey("TabDown", VK_NUMPAD2);
@@ -135,9 +158,6 @@ void CEditorManager::MouseLButtonDown(float DeltaTime)
 {
 	if (!m_DragObj)
 		return;
-
-	else if (!m_SpriteWindow)
-		return;
 	
 	Vector2		MousePos = CInput::GetInst()->GetMousePos();
 	Vector3		ImgSize = m_SpriteWindow->GetSpriteSize();
@@ -172,19 +192,20 @@ void CEditorManager::MouseLButtonDown(float DeltaTime)
 
 void CEditorManager::MouseLButtonPush(float DeltaTime)
 {
+	m_MousePush = true;
+
 	if (!m_DragObj)
 		return;
 
-	else if (!m_SpriteWindow)
-		return;
-
-	Vector2		MousePos = CInput::GetInst()->GetMousePos();
-	Vector2		StartPos = m_DragObj->GetStartPos();
-	Vector2		EndPos = m_DragObj->GetEndPos();
-	Vector3		ImgSize = m_SpriteWindow->GetSpriteSize();
-	
-	switch (m_SpriteWindow->GetCaptureMode())
+	if (m_SpriteWindow->HasSprite())
 	{
+		Vector2		MousePos = CInput::GetInst()->GetMousePos();
+		Vector2		StartPos = m_DragObj->GetStartPos();
+		Vector2		EndPos = m_DragObj->GetEndPos();
+		Vector3		ImgSize = m_SpriteWindow->GetSpriteSize();
+
+		switch (m_SpriteWindow->GetCaptureMode())
+		{
 		case EM_CAPTURE:
 		{
 			if (MousePos.x < 0.f)
@@ -208,7 +229,7 @@ void CEditorManager::MouseLButtonPush(float DeltaTime)
 			break;
 		}
 		case EM_DRAG:
-		{			
+		{
 			m_CurMousePos = Vector3(MousePos.x, MousePos.y, 0.f);
 
 			Vector3	Result3D = m_CurMousePos - m_PrevMousePos;
@@ -240,11 +261,13 @@ void CEditorManager::MouseLButtonPush(float DeltaTime)
 			m_SpriteWindow->RefreshInput();
 			break;
 		}
+		}
 	}
 }
 
 void CEditorManager::MouseLButtonUp(float DeltaTime)
 {
+	m_MousePush = false;
 }
 
 void CEditorManager::KeyboardUp(float DeltaTime)
@@ -338,6 +361,34 @@ void CEditorManager::KeyboardRight(float DeltaTime)
 
 		m_SpriteWindow->RefreshInput();
 	}
+}
+
+void CEditorManager::MoveCameraUp(float DeltaTime)
+{
+	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
+
+	Camera->AddWorldPos(Vector3(0.f, m_CameraMoveSpeed * DeltaTime, 0.f));
+}
+
+void CEditorManager::MoveCameraDown(float DeltaTime)
+{
+	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
+
+	Camera->AddWorldPos(Vector3(0.f, -m_CameraMoveSpeed * DeltaTime, 0.f));
+}
+
+void CEditorManager::MoveCameraLeft(float DeltaTime)
+{
+	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
+
+	Camera->AddWorldPos(Vector3(-m_CameraMoveSpeed * DeltaTime, 0.f, 0.f));
+}
+
+void CEditorManager::MoveCameraRight(float DeltaTime)
+{
+	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
+
+	Camera->AddWorldPos(Vector3(m_CameraMoveSpeed * DeltaTime, 0.f, 0.f));
 }
 
 void CEditorManager::MoveTabUp(float DeltaTime)
@@ -499,6 +550,13 @@ CComponent* CEditorManager::CreateComponent(CGameObject* Obj, size_t Type)
 	else if (Type == typeid(CStaticMeshComponent).hash_code())
 	{
 		CComponent* Component = Obj->LoadComponent<CStaticMeshComponent>();
+
+		return Component;
+	}
+
+	else if (Type == typeid(CTileMapComponent).hash_code())
+	{
+		CComponent* Component = Obj->LoadComponent<CTileMapComponent>();
 
 		return Component;
 	}

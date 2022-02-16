@@ -229,13 +229,6 @@ bool CSpriteWindow::Init()
 	Button = AddWidget<CIMGUIButton>("Clear", 59.f, 95.f);
 	Button->SetClickCallback<CSpriteWindow>(this, &CSpriteWindow::ClearFrameButton);
 
-	m_Sprite = AddWidget<CIMGUIImage>("Sprite", 200.f, 200.f);
-	m_Sprite->SetTexture("Teemo", TEXT("teemo.png"));
-
-	Line = AddWidget<CIMGUISameLine>("Line");
-
-	m_SpriteFrame = AddWidget<CIMGUIImage>("SpriteFrame", 200.f, 200.f);
-
 	m_AnimInstance->Init();
 
 	return true;
@@ -247,7 +240,7 @@ void CSpriteWindow::Update(float DeltaTime)
 
 	m_AnimInstance->Update(DeltaTime);
 
-	if (m_AnimInstance->IsPlay())
+	if (m_AnimInstance->IsPlay() && m_SpriteFrame)
 	{
 		CAnimationSequence2DData* AnimData = m_AnimInstance->GetCurrentAnimation();
 
@@ -289,6 +282,15 @@ void CSpriteWindow::LoadTextureButton()
 
 		int Length = WideCharToMultiByte(CP_ACP, 0, FileName, -1, 0, 0, 0, 0);
 		WideCharToMultiByte(CP_ACP, 0, FileName, -1, ConvertFileName, Length, 0, 0);
+
+		if (!m_Sprite)
+		{
+			m_Sprite = AddWidget<CIMGUIImage>("Sprite", 200.f, 200.f);
+
+			CIMGUISameLine* Line = AddWidget<CIMGUISameLine>("Line");
+
+			m_SpriteFrame = AddWidget<CIMGUIImage>("SpriteFrame", 200.f, 200.f);
+		}
 
 		m_Sprite->SetTextureFullPath(ConvertFileName, FilePath);
 
@@ -815,7 +817,6 @@ void CSpriteWindow::SaveSequence()
 
 void CSpriteWindow::LoadSequence()
 {
-
 	TCHAR   SQCPath[MAX_PATH] = {};
 	TCHAR	ANMPath[MAX_PATH] = {};
 
@@ -884,6 +885,15 @@ void CSpriteWindow::LoadSequence()
 		TCHAR SpritePath[MAX_PATH] = {};
 
 		Resource->LoadSequence2DFullPath(SequenceName, SpritePath, SQCFullPath);
+
+		if (!m_Sprite)
+		{
+			m_Sprite = AddWidget<CIMGUIImage>("Sprite", 200.f, 200.f);
+
+			CIMGUISameLine* Line = AddWidget<CIMGUISameLine>("Line");
+
+			m_SpriteFrame = AddWidget<CIMGUIImage>("SpriteFrame", 200.f, 200.f);
+		}
 
 		m_Sprite->SetTextureFullPath(SequenceName, SpritePath);
 
