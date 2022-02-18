@@ -1,15 +1,16 @@
 
 #include "TileMapComponent.h"
+#include "CameraComponent.h"
 #include "../Scene/Scene.h"
 #include "../Scene/SceneResource.h"
+#include "../Scene/SceneManager.h"
+#include "../Scene/CameraManager.h"
 #include "../Animation/AnimationSequence2DInstance.h"
 #include "../Render/RenderManager.h"
 #include "../Resource/Shader/Standard2DConstantBuffer.h"
-#include "../Scene/SceneManager.h"
-#include "CameraComponent.h"
-#include "../Scene/CameraManager.h"
 #include "../Resource/Shader/TileMapConstantBuffer.h"
 #include "../Resource/Shader/StructuredBuffer.h"
+#include "../Scene/NavigationManager.h"
 
 CTileMapComponent::CTileMapComponent()
 {
@@ -305,6 +306,7 @@ void CTileMapComponent::CreateTile(Tile_Shape Shape, int CountX, int CountY, con
 
 	SetWorldInfo();
 
+	m_Scene->GetNavigationManager()->SetNavData(this);
 }
 
 void CTileMapComponent::SetTileDefaultFrame(const Vector2& Start, const Vector2& End)
@@ -986,11 +988,13 @@ void CTileMapComponent::Load(FILE* File)
 
 	SAFE_DELETE(m_CBuffer);
 
-	m_CBuffer = new CTileMapConstantBuffer;
+	m_CBuffer = DBG_NEW CTileMapConstantBuffer;
 
 	m_CBuffer->Init();
 
 	SetWorldInfo();
+	
+	m_Scene->GetNavigationManager()->SetNavData(this);
 
 	CSceneComponent::Load(File);
 }
