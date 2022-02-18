@@ -252,6 +252,8 @@ bool CEngine::Update(float DeltaTime)
 	if (CSceneManager::GetInst()->Update(DeltaTime))
 		return true;
 
+	CResourceManager::GetInst()->Update();
+
 	if (m_MouseWidget[(int)m_MouseState])
 	{
 		// 마우스 위치를 얻어온다.
