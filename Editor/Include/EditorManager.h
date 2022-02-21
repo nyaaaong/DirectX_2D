@@ -19,6 +19,7 @@ private:
 	class CEditorMenu* m_EditorMenu;
 	class CObjectHierarchy* m_ObjectHierarchy;
 	class CTileMapWindow* m_TileMapWindow;
+	class CTileWindow* m_TileWindow;
 	class CSceneWindow* m_SceneWindow;
 	Vector3		m_PrevMousePos;
 	Vector3		m_CurMousePos;

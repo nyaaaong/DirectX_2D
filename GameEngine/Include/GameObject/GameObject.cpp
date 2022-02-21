@@ -1,6 +1,7 @@
 
 #include "GameObject.h"
 #include "../Scene/SceneManager.h"
+#include "../PathManager.h"
 
 CGameObject::CGameObject()	:
 	m_Scene(nullptr),
@@ -265,4 +266,60 @@ void CGameObject::Load(FILE* File)
 
 		m_vecObjectComponent.push_back((CObjectComponent*)Component);
 	}
+}
+
+void CGameObject::Save(const char* FullPath)
+{
+	FILE* File = nullptr;
+
+	fopen_s(&File, FullPath, "wb");
+
+	if (!File)
+		return;
+
+	Save(File);
+
+	fclose(File);
+}
+
+void CGameObject::Load(const char* FullPath)
+{
+	FILE* File = nullptr;
+
+	fopen_s(&File, FullPath, "rb");
+
+	if (!File)
+		return;
+
+	Load(File);
+
+	fclose(File);
+}
+
+void CGameObject::Save(const char* FileName, const std::string& PathName)
+{
+	char	FullPath[MAX_PATH] = {};
+
+	const PathInfo* Info = CPathManager::GetInst()->FindPath(PathName);
+
+	if (Info)
+		strcpy_s(FullPath, Info->PathMultibyte);
+
+	strcat_s(FullPath, FileName);
+
+	Save(FullPath);
+}
+
+void CGameObject::Load(const char* FileName, const std::string& PathName)
+{
+	char	FullPath[MAX_PATH] = {};
+
+	const PathInfo* Info = CPathManager::GetInst()->FindPath(PathName);
+
+	if (Info)
+		strcpy_s(FullPath, Info->PathMultibyte);
+
+	strcat_s(FullPath, FileName);
+
+	Load(FullPath);
 }

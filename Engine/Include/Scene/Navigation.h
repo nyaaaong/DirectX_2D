@@ -64,31 +64,31 @@ private:
 
 public:
 	void CreateNavigationNode(class CTileMapComponent* TileMap);
-	bool FindPath(const Vector3& Start, const Vector3& End, std::vector<Vector3>& vecPath);
+	bool FindPath(const Vector3& Start, const Vector3& End, std::list<Vector3>& vecPath);
 
 private:
-	void FindNode(NavNode* Node, NavNode* EndNode, const Vector3& End, std::vector<Vector3>& vecPath);
-	NavNode* GetCorner(Node_Dir Dir, NavNode* Node, NavNode* EndNode, const Vector3& End, std::vector<Vector3>& vecPath);
+	bool FindNode(NavNode* Node, NavNode* EndNode, const Vector3& End, std::list<Vector3>& vecPath);
+	NavNode* GetCorner(Node_Dir Dir, NavNode* Node, NavNode* EndNode, const Vector3& End);
 
-	NavNode* GetRectNodeTop(NavNode* Node, NavNode* EndNode, const Vector3& End, std::vector<Vector3>& vecPath, bool Digonal = true);
-	NavNode* GetRectNodeRightTop(NavNode* Node, NavNode* EndNode, const Vector3& End, std::vector<Vector3>& vecPath);
-	NavNode* GetRectNodeRight(NavNode* Node, NavNode* EndNode, const Vector3& End, std::vector<Vector3>& vecPath, bool Digonal = true);
-	NavNode* GetRectNodeRightBottom(NavNode* Node, NavNode* EndNode, const Vector3& End, std::vector<Vector3>& vecPath);
-	NavNode* GetRectNodeBottom(NavNode* Node, NavNode* EndNode, const Vector3& End, std::vector<Vector3>& vecPath, bool Digonal = true);
-	NavNode* GetRectNodeLeftBottom(NavNode* Node, NavNode* EndNode, const Vector3& End, std::vector<Vector3>& vecPath);
-	NavNode* GetRectNodeLeft(NavNode* Node, NavNode* EndNode, const Vector3& End, std::vector<Vector3>& vecPath, bool Digonal = true);
-	NavNode* GetRectNodeLeftTop(NavNode* Node, NavNode* EndNode, const Vector3& End, std::vector<Vector3>& vecPath);
+	NavNode* GetRectNodeTop(NavNode* Node, NavNode* EndNode, const Vector3& End, bool Digonal = true);
+	NavNode* GetRectNodeRightTop(NavNode* Node, NavNode* EndNode, const Vector3& End);
+	NavNode* GetRectNodeRight(NavNode* Node, NavNode* EndNode, const Vector3& End, bool Digonal = true);
+	NavNode* GetRectNodeRightBottom(NavNode* Node, NavNode* EndNode, const Vector3& End);
+	NavNode* GetRectNodeBottom(NavNode* Node, NavNode* EndNode, const Vector3& End, bool Digonal = true);
+	NavNode* GetRectNodeLeftBottom(NavNode* Node, NavNode* EndNode, const Vector3& End);
+	NavNode* GetRectNodeLeft(NavNode* Node, NavNode* EndNode, const Vector3& End, bool Digonal = true);
+	NavNode* GetRectNodeLeftTop(NavNode* Node, NavNode* EndNode, const Vector3& End);
 
-	NavNode* GetRhombusNodeTop(NavNode* Node, NavNode* EndNode, const Vector3& End, std::vector<Vector3>& vecPath);
-	NavNode* GetRhombusNodeRightTop(NavNode* Node, NavNode* EndNode, const Vector3& End, std::vector<Vector3>& vecPath);
-	NavNode* GetRhombusNodeRight(NavNode* Node, NavNode* EndNode, const Vector3& End, std::vector<Vector3>& vecPath);
-	NavNode* GetRhombusNodeRightBottom(NavNode* Node, NavNode* EndNode, const Vector3& End, std::vector<Vector3>& vecPath);
-	NavNode* GetRhombusNodeBottom(NavNode* Node, NavNode* EndNode, const Vector3& End, std::vector<Vector3>& vecPath);
-	NavNode* GetRhombusNodeLeftBottom(NavNode* Node, NavNode* EndNode, const Vector3& End, std::vector<Vector3>& vecPath);
-	NavNode* GetRhombusNodeLeft(NavNode* Node, NavNode* EndNode, const Vector3& End, std::vector<Vector3>& vecPath);
-	NavNode* GetRhombusNodeLeftTop(NavNode* Node, NavNode* EndNode, const Vector3& End, std::vector<Vector3>& vecPath);
+	NavNode* GetRhombusNodeTop(NavNode* Node, NavNode* EndNode, const Vector3& End);
+	NavNode* GetRhombusNodeRightTop(NavNode* Node, NavNode* EndNode, const Vector3& End);
+	NavNode* GetRhombusNodeRight(NavNode* Node, NavNode* EndNode, const Vector3& End);
+	NavNode* GetRhombusNodeRightBottom(NavNode* Node, NavNode* EndNode, const Vector3& End);
+	NavNode* GetRhombusNodeBottom(NavNode* Node, NavNode* EndNode, const Vector3& End);
+	NavNode* GetRhombusNodeLeftBottom(NavNode* Node, NavNode* EndNode, const Vector3& End);
+	NavNode* GetRhombusNodeLeft(NavNode* Node, NavNode* EndNode, const Vector3& End);
+	NavNode* GetRhombusNodeLeftTop(NavNode* Node, NavNode* EndNode, const Vector3& End);
 
 private:
-	static bool SortNode(NavNode* Src, NavNode* Dest);
+	static int SortNode(const void* Src, const void* Dest);
 };
 

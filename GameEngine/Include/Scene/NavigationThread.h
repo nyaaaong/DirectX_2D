@@ -17,6 +17,7 @@ private:
 	class CNavigationManager* m_NavManager;
 	CThreadQueue<NavWorkData>			m_WorkQueue;
 	class CNavigation* m_Navigation;
+	HANDLE				m_ExitEvent;
 
 public:
 	int GetWorkCount()
@@ -31,7 +32,7 @@ public:
 
 public:
 	template <typename T>
-	void AddWork(T* Obj, void(T::* Func)(const std::vector<Vector3>&), const Vector3& Start, const Vector3& End)
+	void AddWork(T* Obj, void(T::* Func)(const std::list<Vector3>&), const Vector3& Start, const Vector3& End)
 	{
 		NavWorkData	Data;
 		Data.Callback = std::bind(Func, Obj, std::placeholders::_1);

@@ -8,6 +8,7 @@
 #include "../Object/Monster.h"
 #include "../Object/PixelTest.h"
 #include "../Object/BubbleParticle.h"
+#include "../Object/TileMap.h"
 #include "Resource/Particle/Particle.h"
 
 CMainScene::CMainScene()	:
@@ -41,7 +42,10 @@ bool CMainScene::Init()
 	if (m_LoadingFunction)
 		m_LoadingFunction(false, 0.8f);
 
-	CTileMap* TileMap = m_Scene->CreateGameObject<CTileMap>("TileMap");
+	//CTileMap* TileMap = m_Scene->CreateGameObject<CTileMap>("TileMap");
+	CTileMap* TileMap = m_Scene->LoadGameObject<CTileMap>();
+
+	TileMap->Load("TileMap.dat", SCENE_PATH);
 
 	CPixelTest* PixelTest = m_Scene->CreateGameObject<CPixelTest>("PixelTest");
 

@@ -382,13 +382,13 @@ struct TileInfo
 
 struct NavWorkData
 {
-	std::function<void(const std::vector<Vector3>&)>	Callback;
+	std::function<void(const std::list<Vector3>&)>	Callback;
 	Vector3		Start;
 	Vector3		End;
 };
 
 struct NavResultData
 {
-	std::function<void(const std::vector<Vector3>&)>	Callback;
-	std::vector<Vector3>	vecPath;
+	std::function<void(const std::list<Vector3>&)>	Callback;
+	std::list<Vector3>	vecPath;
 };

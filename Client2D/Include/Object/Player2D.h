@@ -74,5 +74,7 @@ private:
 private:
 	void Action(float DeltaTime);
 	void Skill1(float DeltaTime);
+	void MovePointDown(float DeltaTime);
+	void PathResult(const std::list<Vector3>& PathList);
 };
 

@@ -12,7 +12,8 @@
 #include "../Resource/Shader/StructuredBuffer.h"
 #include "../Scene/NavigationManager.h"
 
-CTileMapComponent::CTileMapComponent()
+CTileMapComponent::CTileMapComponent()	:
+	m_CBuffer(nullptr)
 {
 	SetTypeID<CTileMapComponent>();
 	m_Render = true;

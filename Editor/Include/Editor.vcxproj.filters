@@ -59,6 +59,12 @@
     <ClCompile Include="Window\SceneWindow.cpp">
       <Filter>01. Editor</Filter>
     </ClCompile>
+    <ClCompile Include="Window\TileWindow.cpp">
+      <Filter>01. Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TileMapSprite.cpp">
+      <Filter>02. Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene\DefaultScene.h">
@@ -99,6 +105,12 @@
     </ClInclude>
     <ClInclude Include="Window\SceneWindow.h">
       <Filter>01. Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\TileWindow.h">
+      <Filter>01. Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\TileMapSprite.h">
+      <Filter>02. Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

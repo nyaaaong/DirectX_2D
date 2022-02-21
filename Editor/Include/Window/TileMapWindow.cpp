@@ -1,6 +1,7 @@
 
 #include "TileMapWindow.h"
 #include "Input.h"
+#include "PathManager.h"
 #include "IMGUIButton.h"
 #include "IMGUISameLine.h"
 #include "IMGUILabel.h"
@@ -8,14 +9,31 @@
 #include "IMGUITextInput.h"
 #include "IMGUIListBox.h"
 #include "IMGUIComboBox.h"
+#include "IMGUIImage.h"
 #include "Scene/SceneManager.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneResource.h"
 #include "Resource/Texture/Texture.h"
 #include "Component/Tile.h"
+#include "Component/SpriteComponent.h"
 #include "../EditorManager.h"
 
-CTileMapWindow::CTileMapWindow()
+CTileMapWindow::CTileMapWindow()	:
+	m_CountX(nullptr),
+	m_CountY(nullptr),
+	m_SizeX(nullptr),
+	m_SizeY(nullptr),
+	m_FrameStartX(nullptr),
+	m_FrameStartY(nullptr),
+	m_FrameEndX(nullptr),
+	m_FrameEndY(nullptr),
+	m_ShapeCombo(nullptr),
+	m_TypeCombo(nullptr),
+	m_TileEditCombo(nullptr),
+	m_TileMapCreateButton(nullptr),
+	m_DefaultFrameButton(nullptr),
+	m_LoadTileMapButton(nullptr),
+	m_TileMapSpriteView(nullptr)
 {
 }
 
@@ -23,9 +41,24 @@ CTileMapWindow::~CTileMapWindow()
 {
 }
 
+bool CTileMapWindow::Start()
+{
+	if (!CIMGUIWindow::Start())
+		return false;
+
+	if (!m_TileMapSprite)
+		m_TileMapSprite = CSceneManager::GetInst()->GetScene()->CreateGameObject<CTileMapSprite>("TileMapInfo");
+
+	return true;
+}
+
 bool CTileMapWindow::Init()
 {
-	CIMGUIWindow::Init();
+	if (!CIMGUIWindow::Init())
+		return false;
+
+	m_LoadTileMapButton = AddWidget<CIMGUIButton>("LoadTileMapButton", 324.f, 20.f);
+	m_LoadTileMapButton->SetClickCallback(this, &CTileMapWindow::LoadTileMapButton);
 
 	CIMGUILabel* Label = AddWidget<CIMGUILabel>("TileMapInfo", 324.f, 20.f);
 	Label->SetAlign(0.5f, 0.f);
@@ -100,15 +133,21 @@ bool CTileMapWindow::Init()
 	CreateTileEditControl();
 
 
+	m_TileMapSaveButton = AddWidget<CIMGUIButton>("TileMapSaveButton", 150.f, 20.f);
+	m_TileMapSaveButton->SetClickCallback(this, &CTileMapWindow::TileMapSaveButton);
+
+	m_TileMapLoadButton = AddWidget<CIMGUIButton>("TileMapLoadButton", 150.f, 20.f);
+	m_TileMapLoadButton->SetClickCallback(this, &CTileMapWindow::TileMapLoadButton);
+
 	m_CountX->SetInt(100);
 	m_CountY->SetInt(100);
-	m_SizeX->SetFloat(160.f);
-	m_SizeY->SetFloat(80.f);
+	m_SizeX->SetFloat(54.f);
+	m_SizeY->SetFloat(54.f);
 
-	m_FrameStartX->SetFloat(160.f);
-	m_FrameStartY->SetFloat(80.f);
-	m_FrameEndX->SetFloat(320.f);
-	m_FrameEndY->SetFloat(160.f);
+	m_FrameStartX->SetFloat(0.f);
+	m_FrameStartY->SetFloat(0.f);
+	m_FrameEndX->SetFloat(54.f);
+	m_FrameEndY->SetFloat(54.f);
 
 	return true;
 }
@@ -289,7 +328,8 @@ void CTileMapWindow::TileMapCreateButton()
 	if ((Tile_Shape)ShapeIndex == Tile_Shape::Rect)
 	{
 		CSceneManager::GetInst()->GetScene()->GetResource()->LoadTexture("DefaultRectTile",
-			TEXT("Map/TileMap.png"));
+			TEXT("Floors.png"));
+			//TEXT("Map/TileMap.png"));
 
 		Texture = CSceneManager::GetInst()->GetScene()->GetResource()->FindTexture("DefaultRectTile");
 	}
@@ -309,6 +349,47 @@ void CTileMapWindow::TileMapCreateButton()
 		Material->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "TileTexture", Texture);
 }
 
+void CTileMapWindow::LoadTileMapButton()
+{
+	TCHAR   FilePath[MAX_PATH] = {};
+
+	OPENFILENAME    OpenFile = {};
+
+	OpenFile.lStructSize = sizeof(OPENFILENAME);
+	OpenFile.hwndOwner = CEngine::GetInst()->GetWindowHandle();
+	OpenFile.lpstrFilter = TEXT("그림파일 (*.dds, *.tga, *.png, *.jpg, *.jpeg, *.bmp)\0*.dds;*.tga;*.png;*.jpg;*.jpeg;*.bmp\0DDS (*.dds)\0*.dds\0TGA (*.tga)\0*.tga\0PNG (*.png)\0*.png\0JPG (*.jpg)\0*.jpg\0JPEG (*.jpeg)\0*.jpeg\0BMP (*.bmp)\0*.bmp");
+	OpenFile.lpstrFile = FilePath;
+	OpenFile.nMaxFile = MAX_PATH;
+	OpenFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(TEXTURE_PATH)->Path;
+
+	if (GetOpenFileName(&OpenFile) != 0)
+	{
+		TCHAR   FileName[MAX_PATH] = {};
+
+		_wsplitpath_s(FilePath, 0, 0, 0, 0, FileName, MAX_PATH, 0, 0);
+
+		char    ConvertFileName[MAX_PATH] = {};
+
+		int Length = WideCharToMultiByte(CP_ACP, 0, FileName, -1, 0, 0, 0, 0);
+		WideCharToMultiByte(CP_ACP, 0, FileName, -1, ConvertFileName, Length, 0, 0);
+
+		if (!m_TileMapSpriteView)
+		{
+			m_TileMapSpriteView = AddWidget<CIMGUIImage>("TileMapSpriteView", 200.f, 200.f);
+
+			CIMGUISameLine* Line = AddWidget<CIMGUISameLine>("Line");
+
+			//m_TileSprite = AddWidget<CIMGUIImage>("TileSprite", 108.f, 108.f);
+		}
+
+		m_TileMapSpriteView->SetTextureFullPath(ConvertFileName, FilePath);
+
+		m_TileMapSprite->GetSpriteComponent()->SetTextureFullPath(0, 0, (int)Buffer_Shader_Type::Pixel, ConvertFileName, FilePath);
+
+		//m_TileMapSprite->GetSpriteComponent()->SetWorldScale((float)m_TileMapSprite->GetSpriteComponent()->GetMaterial()->GetTextureWidth(), (float)m_TileMapSprite->GetSpriteComponent()->GetMaterial()->GetTextureHeight(), 1.f);
+	}
+}
+
 void CTileMapWindow::DefaultFrameButton()
 {
 	if (!m_TileMap)
@@ -322,4 +403,102 @@ void CTileMapWindow::DefaultFrameButton()
 	EndY = m_FrameEndY->GetValueFloat();
 
 	m_TileMap->SetTileDefaultFrame(StartX, StartY, EndX, EndY);
+}
+
+void CTileMapWindow::TileMapSaveButton()
+{
+	if (!m_TileMap)
+		return;
+
+
+	TCHAR   FilePath[MAX_PATH] = {};
+
+	OPENFILENAME    OpenFile = {};
+
+	OpenFile.lStructSize = sizeof(OPENFILENAME);
+	OpenFile.hwndOwner = CEngine::GetInst()->GetWindowHandle();
+	OpenFile.lpstrFilter = TEXT("GameObject Data (*.dat)\0*.dat");
+	OpenFile.lpstrFile = FilePath;
+	OpenFile.nMaxFile = MAX_PATH;
+	OpenFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(SCENE_PATH)->Path;
+
+	if (GetSaveFileName(&OpenFile) != 0)
+	{
+		// .dat이 붙었는지 확인
+		int	iPathLength = static_cast<int>(lstrlen(FilePath));
+
+		TCHAR	dat[5] = TEXT("tad.");
+		bool	Find = true;
+
+		for (int i = 1; i < 5; ++i)
+		{
+			if (FilePath[iPathLength - i] != dat[i - 1])
+			{
+				Find = false;
+				break;
+			}
+		}
+
+		if (!Find) // dat 확장자가 붙지 않았을 경우 붙여준다.
+			lstrcat(FilePath, TEXT(".dat"));
+
+		char    ConvertFullPath[MAX_PATH] = {};
+
+		int Length = WideCharToMultiByte(CP_ACP, 0, FilePath, -1, 0, 0, 0, 0);
+		WideCharToMultiByte(CP_ACP, 0, FilePath, -1, ConvertFullPath, Length, 0, 0);
+
+		CGameObject* TileMapObj = m_TileMap->GetGameObject();
+
+		TileMapObj->Save(ConvertFullPath);
+		//CSceneManager::GetInst()->GetScene()->SaveFullPath(ConvertFullPath);
+	}
+}
+
+void CTileMapWindow::TileMapLoadButton()
+{
+	if (!m_TileMap)
+		return;
+
+
+	TCHAR   FilePath[MAX_PATH] = {};
+
+	OPENFILENAME    OpenFile = {};
+
+	OpenFile.lStructSize = sizeof(OPENFILENAME);
+	OpenFile.hwndOwner = CEngine::GetInst()->GetWindowHandle();
+	OpenFile.lpstrFilter = TEXT("GameObject Data (*.dat)\0*.dat");
+	OpenFile.lpstrFile = FilePath;
+	OpenFile.nMaxFile = MAX_PATH;
+	OpenFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(SCENE_PATH)->Path;
+
+	if (GetOpenFileName(&OpenFile) != 0)
+	{
+		// .dat이 붙었는지 확인
+		int	iPathLength = static_cast<int>(lstrlen(FilePath));
+
+		TCHAR	dat[5] = TEXT("tad.");
+		bool	Find = true;
+
+		for (int i = 1; i < 5; ++i)
+		{
+			if (FilePath[iPathLength - i] != dat[i - 1])
+			{
+				Find = false;
+				break;
+			}
+		}
+
+		if (!Find) // dat 확장자가 붙지 않았을 경우 붙여준다.
+			lstrcat(FilePath, TEXT(".dat"));
+
+		char    ConvertFullPath[MAX_PATH] = {};
+
+		int Length = WideCharToMultiByte(CP_ACP, 0, FilePath, -1, 0, 0, 0, 0);
+		WideCharToMultiByte(CP_ACP, 0, FilePath, -1, ConvertFullPath, Length, 0, 0);
+
+		CGameObject* TileMapObj = m_TileMap->GetGameObject();
+
+		TileMapObj->Load(ConvertFullPath);
+		//CSceneManager::GetInst()->GetScene()->LoadFullPath(ConvertFullPath);
+	}
 }

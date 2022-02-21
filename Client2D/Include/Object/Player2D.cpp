@@ -7,6 +7,7 @@
 #include "PlayerAnimation2D.h"
 #include "BulletCamera.h"
 #include "Scene/Scene.h"
+#include "Scene/NavigationManager.h"
 #include "Resource/Material/Material.h"
 #include "../Widget/SimpleHUD.h"
 
@@ -177,6 +178,7 @@ bool CPlayer2D::Init()
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Attack1", KeyState_Push, this, &CPlayer2D::Attack1);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("test", KeyState_Push, this, &CPlayer2D::test);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Skill1", KeyState_Down, this, &CPlayer2D::Skill1);
+	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MovePoint", KeyState_Down, this, &CPlayer2D::MovePointDown);
 
 	return true;
 }
@@ -401,4 +403,23 @@ void CPlayer2D::Skill1(float DeltaTime)
 	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot());
 	Bullet->SetCollisionProfile("PlayerAttack");
+}
+
+void CPlayer2D::MovePointDown(float DeltaTime)
+{
+	Vector2 MousePos = CInput::GetInst()->GetMouseWorld2DPos();
+
+	m_Scene->GetNavigationManager()->FindPath<CPlayer2D>(this, &CPlayer2D::PathResult, GetWorldPos(),
+														 Vector3(MousePos.x, MousePos.y, 0.f));
+}
+
+void CPlayer2D::PathResult(const std::list<Vector3>& PathList)
+{
+	if (PathList.empty())
+	{
+	}
+
+	else
+	{
+	}
 }

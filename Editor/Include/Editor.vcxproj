@@ -168,6 +168,7 @@
     <ClCompile Include="Object\DragObject.cpp" />
     <ClCompile Include="Object\Player2D.cpp" />
     <ClCompile Include="Object\SpriteEditObject.cpp" />
+    <ClCompile Include="Object\TileMapSprite.cpp" />
     <ClCompile Include="Scene\DefaultScene.cpp" />
     <ClCompile Include="Window\DetailWindow.cpp" />
     <ClCompile Include="Window\EditorMenu.cpp" />
@@ -175,6 +176,7 @@
     <ClCompile Include="Window\SceneWindow.cpp" />
     <ClCompile Include="Window\SpriteWindow.cpp" />
     <ClCompile Include="Window\TileMapWindow.cpp" />
+    <ClCompile Include="Window\TileWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EditorInfo.h" />
@@ -182,6 +184,7 @@
     <ClInclude Include="Object\DragObject.h" />
     <ClInclude Include="Object\Player2D.h" />
     <ClInclude Include="Object\SpriteEditObject.h" />
+    <ClInclude Include="Object\TileMapSprite.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene\DefaultScene.h" />
     <ClInclude Include="Window\DetailWindow.h" />
@@ -190,6 +193,7 @@
     <ClInclude Include="Window\SceneWindow.h" />
     <ClInclude Include="Window\SpriteWindow.h" />
     <ClInclude Include="Window\TileMapWindow.h" />
+    <ClInclude Include="Window\TileWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Editor.rc" />

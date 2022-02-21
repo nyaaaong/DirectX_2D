@@ -5,7 +5,6 @@
 
 CSpriteEditObject::CSpriteEditObject()
 {
-	int a = 0;
 }
 
 CSpriteEditObject::CSpriteEditObject(const CSpriteEditObject& obj) :

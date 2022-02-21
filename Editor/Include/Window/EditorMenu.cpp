@@ -250,8 +250,6 @@ void CEditorMenu::SaveScene()
 		WideCharToMultiByte(CP_ACP, 0, FilePath, -1, ConvertFullPath, Length, 0, 0);
 
 		CSceneManager::GetInst()->GetScene()->SaveFullPath(ConvertFullPath);
-
-		int a = 0;
 	}
 }
 

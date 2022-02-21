@@ -72,6 +72,10 @@ public:
 	virtual CGameObject* Clone();
 	virtual void Save(FILE* File);
 	virtual void Load(FILE* File);
+	virtual void Save(const char* FullPath);
+	virtual void Load(const char* FullPath);
+	virtual void Save(const char* FileName, const std::string& PathName);
+	virtual void Load(const char* FileName, const std::string& PathName);
 
 public:
 	void SetInheritScale(bool Inherit)
