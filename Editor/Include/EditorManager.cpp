@@ -13,6 +13,7 @@
 #include "Window/EditorMenu.h"
 #include "Window/ObjectHierarchy.h"
 #include "Window/TileMapWindow.h"
+#include "Window/SceneWindow.h"
 #include "Render/RenderManager.h"
 #include "Object/SpriteEditObject.h"
 #include "Object/DragObject.h"
@@ -36,6 +37,7 @@ CEditorManager::CEditorManager()	:
 	m_DetailWindow(nullptr),
 	m_EditorMenu(nullptr),
 	m_ObjectHierarchy(nullptr),
+	m_SceneWindow(nullptr),
 	m_CameraMoveSpeed(1000.f),
 	m_MousePush(false)
 {
@@ -95,6 +97,7 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	m_EditorMenu = CIMGUIManager::GetInst()->AddWindow<CEditorMenu>("EditorMenu");
 	m_ObjectHierarchy = CIMGUIManager::GetInst()->AddWindow<CObjectHierarchy>("ObjectHierarchy");
 	m_TileMapWindow = CIMGUIManager::GetInst()->AddWindow<CTileMapWindow>("TileMapWindow");
+	m_SceneWindow = CIMGUIManager::GetInst()->AddWindow<CSceneWindow>("SceneWindow");
 
 	CInput::GetInst()->CreateKey("MouseClick", VK_LBUTTON);
 

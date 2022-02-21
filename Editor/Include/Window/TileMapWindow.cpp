@@ -218,7 +218,7 @@ void CTileMapWindow::TileMapCreateButton()
 	if ((Tile_Shape)ShapeIndex == Tile_Shape::Rect)
 	{
 		CSceneManager::GetInst()->GetScene()->GetResource()->LoadTexture("DefaultRectTile",
-			TEXT("Floors.png"));
+			TEXT("Map/TileMap.png"));
 
 		Texture = CSceneManager::GetInst()->GetScene()->GetResource()->FindTexture("DefaultRectTile");
 	}

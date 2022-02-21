@@ -172,6 +172,7 @@
     <ClCompile Include="Window\DetailWindow.cpp" />
     <ClCompile Include="Window\EditorMenu.cpp" />
     <ClCompile Include="Window\ObjectHierarchy.cpp" />
+    <ClCompile Include="Window\SceneWindow.cpp" />
     <ClCompile Include="Window\SpriteWindow.cpp" />
     <ClCompile Include="Window\TileMapWindow.cpp" />
   </ItemGroup>
@@ -186,6 +187,7 @@
     <ClInclude Include="Window\DetailWindow.h" />
     <ClInclude Include="Window\EditorMenu.h" />
     <ClInclude Include="Window\ObjectHierarchy.h" />
+    <ClInclude Include="Window\SceneWindow.h" />
     <ClInclude Include="Window\SpriteWindow.h" />
     <ClInclude Include="Window\TileMapWindow.h" />
   </ItemGroup>
