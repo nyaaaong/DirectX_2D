@@ -2,7 +2,9 @@
 #include "Navigation.h"
 #include "../Component/Tile.h"
 
-CNavigation::CNavigation()
+CNavigation::CNavigation()	:
+	m_CountX(0),
+	m_CountY(0)
 {
 }
 
@@ -22,7 +24,6 @@ void CNavigation::CreateNavigationNode(CTileMapComponent* TileMap)
 {
 	m_TileMap = TileMap;
 
-	m_NodeShape = TileMap->GetTileShape();
 	m_CountX = TileMap->GetTileCountX();
 	m_CountY = TileMap->GetTileCountY();
 	m_TileSize = TileMap->GetTileSize();
@@ -142,46 +143,22 @@ bool CNavigation::FindNode(NavNode* Node, NavNode* EndNode, const Vector3& End, 
 		// 이동 비용을 구해준다.
 		float	Cost = 0.f;
 
-		if (m_NodeShape == Tile_Shape::Rect)
+		switch ((Node_Dir)i)
 		{
-			switch ((Node_Dir)i)
-			{
-			case Node_Dir::T:
-			case Node_Dir::B:
-				Cost = Node->Cost + abs(Node->Center.y - Corner->Center.y);
-				break;
-			case Node_Dir::R:
-			case Node_Dir::L:
-				Cost = Node->Cost + abs(Node->Center.x - Corner->Center.x);
-				break;
-			case Node_Dir::LT:
-			case Node_Dir::RT:
-			case Node_Dir::LB:
-			case Node_Dir::RB:
-				Cost = Node->Cost + Node->Center.Distance(Corner->Center);
-				break;
-			}
-		}
-
-		else
-		{
-			switch ((Node_Dir)i)
-			{
-			case Node_Dir::T:
-			case Node_Dir::B:
-				Cost = Node->Cost + abs(Node->Center.y - Corner->Center.y);
-				break;
-			case Node_Dir::R:
-			case Node_Dir::L:
-				Cost = Node->Cost + abs(Node->Center.x - Corner->Center.x);
-				break;
-			case Node_Dir::LT:
-			case Node_Dir::RT:
-			case Node_Dir::LB:
-			case Node_Dir::RB:
-				Cost = Node->Cost + Node->Center.Distance(Corner->Center);
-				break;
-			}
+		case Node_Dir::T:
+		case Node_Dir::B:
+			Cost = Node->Cost + abs(Node->Center.y - Corner->Center.y);
+			break;
+		case Node_Dir::R:
+		case Node_Dir::L:
+			Cost = Node->Cost + abs(Node->Center.x - Corner->Center.x);
+			break;
+		case Node_Dir::LT:
+		case Node_Dir::RT:
+		case Node_Dir::LB:
+		case Node_Dir::RB:
+			Cost = Node->Cost + Node->Center.Distance(Corner->Center);
+			break;
 		}
 
 		// 찾아준 노드가 이미 열린목록에 들어가 있을 경우 비용을 비교하여 좀 더 작은 비용의 경로로 교체한다.
@@ -214,50 +191,24 @@ bool CNavigation::FindNode(NavNode* Node, NavNode* EndNode, const Vector3& End, 
 
 NavNode* CNavigation::GetCorner(Node_Dir Dir, NavNode* Node, NavNode* EndNode, const Vector3& End)
 {
-	switch (m_NodeShape)
+	switch (Dir)
 	{
-	case Tile_Shape::Rect:
-		switch (Dir)
-		{
-		case Node_Dir::T:
-			return GetRectNodeTop(Node, EndNode, End, false);
-		case Node_Dir::RT:
-			return GetRectNodeRightTop(Node, EndNode, End);
-		case Node_Dir::R:
-			return GetRectNodeRight(Node, EndNode, End, false);
-		case Node_Dir::RB:
-			return GetRectNodeRightBottom(Node, EndNode, End);
-		case Node_Dir::B:
-			return GetRectNodeBottom(Node, EndNode, End, false);
-		case Node_Dir::LB:
-			return GetRectNodeLeftBottom(Node, EndNode, End);
-		case Node_Dir::L:
-			return GetRectNodeLeft(Node, EndNode, End, false);
-		case Node_Dir::LT:
-			return GetRectNodeLeftTop(Node, EndNode, End);
-		}
-		break;
-	case Tile_Shape::Rhombus:
-		switch (Dir)
-		{
-		case Node_Dir::T:
-			return GetRhombusNodeTop(Node, EndNode, End);
-		case Node_Dir::RT:
-			return GetRhombusNodeRightTop(Node, EndNode, End);
-		case Node_Dir::R:
-			return GetRhombusNodeRight(Node, EndNode, End);
-		case Node_Dir::RB:
-			return GetRhombusNodeRightBottom(Node, EndNode, End);
-		case Node_Dir::B:
-			return GetRhombusNodeBottom(Node, EndNode, End);
-		case Node_Dir::LB:
-			return GetRhombusNodeLeftBottom(Node, EndNode, End);
-		case Node_Dir::L:
-			return GetRhombusNodeLeft(Node, EndNode, End);
-		case Node_Dir::LT:
-			return GetRhombusNodeLeftTop(Node, EndNode, End);
-		}
-		break;
+	case Node_Dir::T:
+		return GetRectNodeTop(Node, EndNode, End, false);
+	case Node_Dir::RT:
+		return GetRectNodeRightTop(Node, EndNode, End);
+	case Node_Dir::R:
+		return GetRectNodeRight(Node, EndNode, End, false);
+	case Node_Dir::RB:
+		return GetRectNodeRightBottom(Node, EndNode, End);
+	case Node_Dir::B:
+		return GetRectNodeBottom(Node, EndNode, End, false);
+	case Node_Dir::LB:
+		return GetRectNodeLeftBottom(Node, EndNode, End);
+	case Node_Dir::L:
+		return GetRectNodeLeft(Node, EndNode, End, false);
+	case Node_Dir::LT:
+		return GetRectNodeLeftTop(Node, EndNode, End);
 	}
 
 	return nullptr;
@@ -739,45 +690,6 @@ NavNode* CNavigation::GetRectNodeLeftTop(NavNode* Node, NavNode* EndNode, const 
 	return nullptr;
 }
 
-NavNode* CNavigation::GetRhombusNodeTop(NavNode* Node, NavNode* EndNode, const Vector3& End)
-{
-	return nullptr;
-}
-
-NavNode* CNavigation::GetRhombusNodeRightTop(NavNode* Node, NavNode* EndNode, const Vector3& End)
-{
-	return nullptr;
-}
-
-NavNode* CNavigation::GetRhombusNodeRight(NavNode* Node, NavNode* EndNode, const Vector3& End)
-{
-	return nullptr;
-}
-
-NavNode* CNavigation::GetRhombusNodeRightBottom(NavNode* Node, NavNode* EndNode, const Vector3& End)
-{
-	return nullptr;
-}
-
-NavNode* CNavigation::GetRhombusNodeBottom(NavNode* Node, NavNode* EndNode, const Vector3& End)
-{
-	return nullptr;
-}
-
-NavNode* CNavigation::GetRhombusNodeLeftBottom(NavNode* Node, NavNode* EndNode, const Vector3& End)
-{
-	return nullptr;
-}
-
-NavNode* CNavigation::GetRhombusNodeLeft(NavNode* Node, NavNode* EndNode, const Vector3& End)
-{
-	return nullptr;
-}
-
-NavNode* CNavigation::GetRhombusNodeLeftTop(NavNode* Node, NavNode* EndNode, const Vector3& End)
-{
-	return nullptr;
-}
 
 int CNavigation::SortNode(const void* Src, const void* Dest)
 {

@@ -14,13 +14,11 @@ private:
 
 private:
 	class CTileMapComponent* m_Owner;
-	Tile_Shape	m_Shape;
 	Tile_Type	m_TileType;
 	Vector3		m_Pos;			// ¡¬ «œ¥‹ ±‚¡ÿ.
 	Vector3		m_Size;
 	Vector3		m_Center;
 	Matrix		m_matWorld;
-	CAnimationSequence2DInstance* m_AnimInstance;
 	int			m_IndexX;
 	int			m_IndexY;
 	int			m_Index;
@@ -32,11 +30,6 @@ public:
 	float GetOpacity()	const
 	{
 		return m_Opacity;
-	}
-
-	Tile_Shape GetShape()	const
-	{
-		return m_Shape;
 	}
 
 	Tile_Type GetTileType()	const
@@ -127,11 +120,6 @@ public:
 		m_Index = Index;
 	}
 
-	void SetShape(Tile_Shape Shape)
-	{
-		m_Shape = Shape;
-	}
-
 	void SetTileType(Tile_Type Type)
 	{
 		m_TileType = Type;
@@ -156,18 +144,6 @@ public:
 	{
 		m_Size = Vector3(x, y, z);
 	}
-
-	void AddAnimation(const std::string& SequenceName, const std::string& Name, bool Loop = true, float PlayTime = 1.f,
-		float PlayScale = 1.f, bool Reverse = false);
-	void AddAnimation(const TCHAR* FileName, const std::string& PathName, const std::string& Name, bool Loop = true, float PlayTime = 1.f,
-		float PlayScale = 1.f, bool Reverse = false);
-	void SetPlayTime(const std::string& Name, float PlayTime);
-	void SetPlayScale(const std::string& Name, float PlayScale);
-	void SetReverse(const std::string& Name, bool Reverse);
-	void SetLoop(const std::string& Name, bool Loop);
-	void SetCurrentAnimation(const std::string& Name);
-	void ChangeAnimation(const std::string& Name);
-	bool CheckCurrentAnimation(const std::string& Name);
 
 public:
 	void Start();

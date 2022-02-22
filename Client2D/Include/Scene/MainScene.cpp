@@ -86,15 +86,7 @@ void CMainScene::CreateMaterial()
 	m_Scene->GetResource()->CreateMaterial<CMaterial>("TileMap");
 	Material = m_Scene->GetResource()->FindMaterial("TileMap");
 
-	Material->AddTexture(0, (int)Buffer_Shader_Type::Pixel, "Tile", TEXT("Floors.png"));
-
-	Material->SetShader("TileMapShader");
-	Material->SetRenderState("AlphaBlend");
-
-	m_Scene->GetResource()->CreateMaterial<CMaterial>("DiabloTileMap");
-	Material = m_Scene->GetResource()->FindMaterial("DiabloTileMap");
-
-	Material->AddTexture(0, (int)Buffer_Shader_Type::Pixel, "DiabloTile", TEXT("Diablos_Lair_Floor_TRS/Diablos_Lair_Floor.png"));
+	Material->AddTexture(0, (int)Buffer_Shader_Type::Pixel, "Tile", TEXT("Map/Tile.png"));
 
 	Material->SetShader("TileMapShader");
 	Material->SetRenderState("AlphaBlend");

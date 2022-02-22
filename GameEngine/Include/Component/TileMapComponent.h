@@ -23,7 +23,6 @@ protected:
     std::vector<TileInfo>   m_vecTileInfo;
     class CTileMapConstantBuffer* m_CBuffer;
     class CStructuredBuffer* m_TileInfoBuffer;
-    Tile_Shape  m_TileShape;
     int     m_CountX;
     int     m_CountY;
     int     m_Count;
@@ -48,11 +47,6 @@ public:
 	{
 		return m_TileMaterial;
 	}
-
-    Tile_Shape GetTileShape()   const
-    {
-        return m_TileShape;
-    }
 
     int GetTileCountX() const
     {
@@ -95,7 +89,7 @@ public:
     void SetBackTexture(int Index, int Register, int ShaderType, const std::string& Name, const std::vector<TCHAR*>& vecFileName, const std::string& PathName = TEXTURE_PATH);
 
 public:
-    void CreateTile(Tile_Shape Shape, int CountX, int CountY, const Vector3& Size);
+    void CreateTile(int CountX, int CountY, const Vector3& Size);
     void SetTileDefaultFrame(const Vector2& Start, const Vector2& End);
     void SetTileDefaultFrame(float StartX, float StartY, float EndX, float EndY);
     void SetTileFrame(int IndexX, int IndexY, float StartX, float StartY, float EndX, float EndY);

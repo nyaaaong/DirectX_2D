@@ -21,7 +21,6 @@ private:
 	class CIMGUITextInput* m_FrameStartY;
 	class CIMGUITextInput* m_FrameEndX;
 	class CIMGUITextInput* m_FrameEndY;
-	class CIMGUIComboBox* m_ShapeCombo;
 	class CIMGUIComboBox* m_TypeCombo;
 	class CIMGUIComboBox* m_TileEditCombo;
 	class CIMGUIButton* m_TileMapCreateButton;
@@ -32,6 +31,7 @@ private:
 	CSharedPtr<CTileMapComponent>		m_TileMap;
 	CSharedPtr<CTileMapSprite>	m_TileMapSprite;
 	class CIMGUIImage* m_TileMapSpriteView;
+	TCHAR	m_TileMapFullPath[MAX_PATH];
 
 public:
 	CSharedPtr<CTileMapSprite> GetTileMapSprite()	const

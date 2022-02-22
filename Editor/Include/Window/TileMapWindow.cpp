@@ -27,13 +27,15 @@ CTileMapWindow::CTileMapWindow()	:
 	m_FrameStartY(nullptr),
 	m_FrameEndX(nullptr),
 	m_FrameEndY(nullptr),
-	m_ShapeCombo(nullptr),
 	m_TypeCombo(nullptr),
 	m_TileEditCombo(nullptr),
 	m_TileMapCreateButton(nullptr),
 	m_DefaultFrameButton(nullptr),
 	m_LoadTileMapButton(nullptr),
-	m_TileMapSpriteView(nullptr)
+	m_TileMapSaveButton(nullptr),
+	m_TileMapLoadButton(nullptr),
+	m_TileMapSpriteView(nullptr),
+	m_TileMapFullPath{}
 {
 }
 
@@ -57,35 +59,18 @@ bool CTileMapWindow::Init()
 	if (!CIMGUIWindow::Init())
 		return false;
 
-	m_LoadTileMapButton = AddWidget<CIMGUIButton>("LoadTileMapButton", 324.f, 20.f);
+	m_LoadTileMapButton = AddWidget<CIMGUIButton>("LoadTileMapButton", 324.f, 40.f);
 	m_LoadTileMapButton->SetClickCallback(this, &CTileMapWindow::LoadTileMapButton);
 
 	CIMGUILabel* Label = AddWidget<CIMGUILabel>("TileMapInfo", 324.f, 20.f);
 	Label->SetAlign(0.5f, 0.f);
 	Label->SetColor(31, 81, 183);
 
-	Label = AddWidget<CIMGUILabel>("TileShape", 70.f, 20.f);
-	Label->SetAlign(0.5f, 0.f);
-	Label->SetColor(15, 15, 15);
-
-	CIMGUISameLine* Line = AddWidget<CIMGUISameLine>("Line");
-
-	m_ShapeCombo = AddWidget<CIMGUIComboBox>("Shape", 80.f, 20.f);
-
-	m_ShapeCombo->SetHideName(true);
-	m_ShapeCombo->AddItem("Rect");
-	m_ShapeCombo->AddItem("Rhombus");
-
-	Line = AddWidget<CIMGUISameLine>("Line");
-
-	m_TileMapCreateButton = AddWidget<CIMGUIButton>("TileMapCreateButton", 158.f, 20.f);
-	m_TileMapCreateButton->SetClickCallback(this, &CTileMapWindow::TileMapCreateButton);
-
 	Label = AddWidget<CIMGUILabel>("CountX", 70.f, 20.f);
 	Label->SetAlign(0.5f, 0.f);
 	Label->SetColor(15, 15, 15);
 
-	Line = AddWidget<CIMGUISameLine>("Line");
+	CIMGUISameLine* Line = AddWidget<CIMGUISameLine>("Line");
 
 	m_CountX = AddWidget<CIMGUITextInput>("CountX", 80.f, 20.f);
 	m_CountX->SetHideName(true);
@@ -129,14 +114,18 @@ bool CTileMapWindow::Init()
 	m_SizeY->SetTextType(ImGuiText_Type::Float);
 	m_SizeY->SetCallback(this, &CTileMapWindow::SizeYCallback);
 
+	m_TileMapCreateButton = AddWidget<CIMGUIButton>("TileMapCreateButton", 324.f, 20.f);
+	m_TileMapCreateButton->SetClickCallback(this, &CTileMapWindow::TileMapCreateButton);
 
 	CreateTileEditControl();
 
 
-	m_TileMapSaveButton = AddWidget<CIMGUIButton>("TileMapSaveButton", 150.f, 20.f);
+	m_TileMapSaveButton = AddWidget<CIMGUIButton>("TileMapSaveButton", 160.f, 20.f);
 	m_TileMapSaveButton->SetClickCallback(this, &CTileMapWindow::TileMapSaveButton);
 
-	m_TileMapLoadButton = AddWidget<CIMGUIButton>("TileMapLoadButton", 150.f, 20.f);
+	Line = AddWidget<CIMGUISameLine>("Line");
+
+	m_TileMapLoadButton = AddWidget<CIMGUIButton>("TileMapLoadButton", 156.f, 20.f);
 	m_TileMapLoadButton->SetClickCallback(this, &CTileMapWindow::TileMapLoadButton);
 
 	m_CountX->SetInt(100);
@@ -303,12 +292,7 @@ void CTileMapWindow::SizeYCallback()
 
 void CTileMapWindow::TileMapCreateButton()
 {
-	if (!m_TileMap)
-		return;
-
-	int	ShapeIndex = m_ShapeCombo->GetSelectIndex();
-
-	if (ShapeIndex >= (int)Tile_Shape::End || ShapeIndex < 0)
+	if (!m_TileMap || !m_TileMapFullPath)
 		return;
 
 	int	CountX, CountY;
@@ -320,27 +304,14 @@ void CTileMapWindow::TileMapCreateButton()
 	Size.x = m_SizeX->GetValueFloat();
 	Size.y = m_SizeY->GetValueFloat();
 
-	m_TileMap->CreateTile((Tile_Shape)ShapeIndex, CountX, CountY, Size);
+	m_TileMap->CreateTile(CountX, CountY, Size);
 
 	CMaterial* Material = m_TileMap->GetTileMaterial();
 	CTexture* Texture = nullptr;
 
-	if ((Tile_Shape)ShapeIndex == Tile_Shape::Rect)
-	{
-		CSceneManager::GetInst()->GetScene()->GetResource()->LoadTexture("DefaultRectTile",
-			TEXT("Floors.png"));
-			//TEXT("Map/TileMap.png"));
+	CSceneManager::GetInst()->GetScene()->GetResource()->LoadTextureFullPath("DefaultTile", m_TileMapFullPath);
 
-		Texture = CSceneManager::GetInst()->GetScene()->GetResource()->FindTexture("DefaultRectTile");
-	}
-
-	else
-	{
-		CSceneManager::GetInst()->GetScene()->GetResource()->LoadTexture("DefaultRhombusTile",
-			TEXT("Diablos_Lair_Floor_TRS/Diablos_Lair_Floor.png"));
-
-		Texture = CSceneManager::GetInst()->GetScene()->GetResource()->FindTexture("DefaultRhombusTile");
-	}
+	Texture = CSceneManager::GetInst()->GetScene()->GetResource()->FindTexture("DefaultTile");
 
 	if (Material->EmptyTexture())
 		Material->AddTexture(0, (int)Buffer_Shader_Type::Pixel, "TileTexture", Texture);
@@ -351,14 +322,15 @@ void CTileMapWindow::TileMapCreateButton()
 
 void CTileMapWindow::LoadTileMapButton()
 {
-	TCHAR   FilePath[MAX_PATH] = {};
+	if (!m_TileMap)
+		return;
 
 	OPENFILENAME    OpenFile = {};
 
 	OpenFile.lStructSize = sizeof(OPENFILENAME);
 	OpenFile.hwndOwner = CEngine::GetInst()->GetWindowHandle();
 	OpenFile.lpstrFilter = TEXT("그림파일 (*.dds, *.tga, *.png, *.jpg, *.jpeg, *.bmp)\0*.dds;*.tga;*.png;*.jpg;*.jpeg;*.bmp\0DDS (*.dds)\0*.dds\0TGA (*.tga)\0*.tga\0PNG (*.png)\0*.png\0JPG (*.jpg)\0*.jpg\0JPEG (*.jpeg)\0*.jpeg\0BMP (*.bmp)\0*.bmp");
-	OpenFile.lpstrFile = FilePath;
+	OpenFile.lpstrFile = m_TileMapFullPath;
 	OpenFile.nMaxFile = MAX_PATH;
 	OpenFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(TEXTURE_PATH)->Path;
 
@@ -366,7 +338,7 @@ void CTileMapWindow::LoadTileMapButton()
 	{
 		TCHAR   FileName[MAX_PATH] = {};
 
-		_wsplitpath_s(FilePath, 0, 0, 0, 0, FileName, MAX_PATH, 0, 0);
+		_wsplitpath_s(m_TileMapFullPath, 0, 0, 0, 0, FileName, MAX_PATH, 0, 0);
 
 		char    ConvertFileName[MAX_PATH] = {};
 
@@ -378,21 +350,17 @@ void CTileMapWindow::LoadTileMapButton()
 			m_TileMapSpriteView = AddWidget<CIMGUIImage>("TileMapSpriteView", 200.f, 200.f);
 
 			CIMGUISameLine* Line = AddWidget<CIMGUISameLine>("Line");
-
-			//m_TileSprite = AddWidget<CIMGUIImage>("TileSprite", 108.f, 108.f);
 		}
 
-		m_TileMapSpriteView->SetTextureFullPath(ConvertFileName, FilePath);
+		m_TileMapSpriteView->SetTextureFullPath(ConvertFileName, m_TileMapFullPath);
 
-		m_TileMapSprite->GetSpriteComponent()->SetTextureFullPath(0, 0, (int)Buffer_Shader_Type::Pixel, ConvertFileName, FilePath);
-
-		//m_TileMapSprite->GetSpriteComponent()->SetWorldScale((float)m_TileMapSprite->GetSpriteComponent()->GetMaterial()->GetTextureWidth(), (float)m_TileMapSprite->GetSpriteComponent()->GetMaterial()->GetTextureHeight(), 1.f);
+		m_TileMapSprite->GetSpriteComponent()->SetTextureFullPath(0, 0, (int)Buffer_Shader_Type::Pixel, ConvertFileName, m_TileMapFullPath);
 	}
 }
 
 void CTileMapWindow::DefaultFrameButton()
 {
-	if (!m_TileMap)
+	if (!m_TileMap || !m_TileMapFullPath)
 		return;
 
 	float	StartX, StartY, EndX, EndY;
@@ -409,7 +377,6 @@ void CTileMapWindow::TileMapSaveButton()
 {
 	if (!m_TileMap)
 		return;
-
 
 	TCHAR   FilePath[MAX_PATH] = {};
 
@@ -450,7 +417,6 @@ void CTileMapWindow::TileMapSaveButton()
 		CGameObject* TileMapObj = m_TileMap->GetGameObject();
 
 		TileMapObj->Save(ConvertFullPath);
-		//CSceneManager::GetInst()->GetScene()->SaveFullPath(ConvertFullPath);
 	}
 }
 
@@ -499,6 +465,5 @@ void CTileMapWindow::TileMapLoadButton()
 		CGameObject* TileMapObj = m_TileMap->GetGameObject();
 
 		TileMapObj->Load(ConvertFullPath);
-		//CSceneManager::GetInst()->GetScene()->LoadFullPath(ConvertFullPath);
 	}
 }
