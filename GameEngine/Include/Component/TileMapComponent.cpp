@@ -24,6 +24,8 @@ CTileMapComponent::CTileMapComponent()	:
 	m_LayerName = "Back";
 	m_TileInfoBuffer = nullptr;
 
+	m_DeltaTime = 0.f;
+
 	for (int i = 0; i < (int)Tile_Type::End; ++i)
 	{
 		m_TileColor[i] = Vector4(1.f, 1.f, 1.f, 1.f);
@@ -39,6 +41,8 @@ CTileMapComponent::CTileMapComponent(const CTileMapComponent& com) :
 {
 	m_CountX = com.m_CountX;
 	m_CountY = com.m_CountY;
+
+	m_DeltaTime = 0.f;
 
 	m_BackMesh = com.m_BackMesh;
 
@@ -468,6 +472,13 @@ void CTileMapComponent::PostUpdate(float DeltaTime)
 {
 	CSceneComponent::PostUpdate(DeltaTime);
 
+	m_DeltaTime = DeltaTime;
+}
+
+void CTileMapComponent::PrevRender()
+{
+	CSceneComponent::PrevRender();
+
 	if (!m_vecTile.empty())
 	{
 		CCameraComponent* Camera = m_Scene->GetCameraManager()->GetCurrentCamera();
@@ -497,7 +508,7 @@ void CTileMapComponent::PostUpdate(float DeltaTime)
 			{
 				int	Index = i * m_CountX + j;
 
-				m_vecTile[Index]->Update(DeltaTime);
+				m_vecTile[Index]->Update(m_DeltaTime);
 
 				if (m_vecTile[Index]->GetRender())
 				{
@@ -518,11 +529,6 @@ void CTileMapComponent::PostUpdate(float DeltaTime)
 
 		m_TileInfoBuffer->UpdateBuffer(&m_vecTileInfo[0], m_RenderCount);
 	}
-}
-
-void CTileMapComponent::PrevRender()
-{
-	CSceneComponent::PrevRender();
 }
 
 void CTileMapComponent::Render()

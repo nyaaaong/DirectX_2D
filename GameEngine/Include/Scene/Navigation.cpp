@@ -16,8 +16,6 @@ CNavigation::~CNavigation()
 	{
 		SAFE_DELETE(m_vecNode[i]);
 	}
-
-	m_vecNode.clear();
 }
 
 void CNavigation::CreateNavigationNode(CTileMapComponent* TileMap)
@@ -71,7 +69,10 @@ bool CNavigation::FindPath(const Vector3& Start, const Vector3& End, std::list<V
 		m_vecUseNode[i]->Dist = FLT_MAX;
 		m_vecUseNode[i]->Total = FLT_MAX;
 		m_vecUseNode[i]->Parent = nullptr;
+		m_vecUseNode[i]->SearchDirList.clear();
 	}
+
+	m_vecUseNode.clear();
 
 	NavNode* StartNode = m_vecNode[StartIndex];
 	NavNode* EndNode = m_vecNode[EndIndex];
@@ -89,6 +90,11 @@ bool CNavigation::FindPath(const Vector3& Start, const Vector3& End, std::list<V
 	StartNode->Cost = 0.f;
 	StartNode->Dist = StartNode->Center.Distance(End);
 	StartNode->Total = StartNode->Dist;
+
+	for (int i = 0; i < (int)Node_Dir::End; ++i)
+	{
+		StartNode->SearchDirList.push_back((Node_Dir)i);
+	}
 
 	m_vecOpen.push_back(StartNode);
 
@@ -108,24 +114,29 @@ bool CNavigation::FindPath(const Vector3& Start, const Vector3& End, std::list<V
 		// 열린목록을 정렬한다. 비용이 작은 노드가 가장 마지막 노드가 되도록 내림차순으로
 		// 정렬한다.
 		if (!m_vecOpen.empty())
-			qsort(&m_vecOpen[0], m_vecOpen.size(), sizeof(NavNode*), CNavigation::SortNode);
+			std::sort(m_vecOpen.begin(), m_vecOpen.end(), CNavigation::SortNode);
 	}
+
+	m_vecOpen.clear();
 
 	return !vecPath.empty();
 }
 
 bool CNavigation::FindNode(NavNode* Node, NavNode* EndNode, const Vector3& End, std::list<Vector3>& vecPath)
 {
-	for (int i = 0; i < (int)Node_Dir::End; ++i)
-	{
-		NavNode* Corner = GetCorner((Node_Dir)i, Node, EndNode, End);
+	auto	iter = Node->SearchDirList.begin();
+	auto	iterEnd = Node->SearchDirList.end();
 
+	for (; iter != iterEnd; ++iter)
+	{
+		NavNode* Corner = GetCorner(*iter, Node, EndNode, End);
 		if (!Corner)
 			continue;
 
 		// 찾아준 노드가 도착 노드라면 경로를 만들어준다.
 		if (Corner == EndNode)
 		{
+			m_vecUseNode.push_back(Corner);
 			vecPath.push_front(End);
 
 			NavNode* PathNode = Node;
@@ -143,7 +154,7 @@ bool CNavigation::FindNode(NavNode* Node, NavNode* EndNode, const Vector3& End, 
 		// 이동 비용을 구해준다.
 		float	Cost = 0.f;
 
-		switch ((Node_Dir)i)
+		switch (*iter)
 		{
 		case Node_Dir::T:
 		case Node_Dir::B:
@@ -169,6 +180,8 @@ bool CNavigation::FindNode(NavNode* Node, NavNode* EndNode, const Vector3& End, 
 				Corner->Cost = Cost;
 				Corner->Total = Corner->Cost + Corner->Dist;
 				Corner->Parent = Node;
+
+				AddDir(*iter, Corner);
 			}
 		}
 
@@ -177,12 +190,14 @@ bool CNavigation::FindNode(NavNode* Node, NavNode* EndNode, const Vector3& End, 
 			Corner->NodeType = Nav_Node_Type::Open;
 			Corner->Parent = Node;
 			Corner->Cost = Cost;
+			Corner->Dist = Corner->Center.Distance(End);
 			Corner->Total = Corner->Cost + Corner->Dist;
 			Corner->Parent = Node;
 
 			m_vecOpen.push_back(Corner);
-
 			m_vecUseNode.push_back(Corner);
+
+			AddDir(*iter, Corner);
 		}
 	}
 
@@ -690,17 +705,64 @@ NavNode* CNavigation::GetRectNodeLeftTop(NavNode* Node, NavNode* EndNode, const 
 	return nullptr;
 }
 
-
-int CNavigation::SortNode(const void* Src, const void* Dest)
+void CNavigation::AddDir(Node_Dir Dir, NavNode* Node)
 {
-	NavNode* SrcNode = (NavNode*)Src;
-	NavNode* DestNode = (NavNode*)Dest;
+	Node->SearchDirList.clear();
 
-	if (SrcNode->Total < DestNode->Total)
-		return 1;
+	switch (Dir)
+	{
+	case Node_Dir::T:
+		Node->SearchDirList.push_back(Node_Dir::T);
+		Node->SearchDirList.push_back(Node_Dir::LT);
+		Node->SearchDirList.push_back(Node_Dir::RT);
+		break;
+	case Node_Dir::RT:
+		Node->SearchDirList.push_back(Node_Dir::RT);
+		Node->SearchDirList.push_back(Node_Dir::T);
+		Node->SearchDirList.push_back(Node_Dir::R);
+		Node->SearchDirList.push_back(Node_Dir::LT);
+		Node->SearchDirList.push_back(Node_Dir::RB);
+		break;
+	case Node_Dir::R:
+		Node->SearchDirList.push_back(Node_Dir::R);
+		Node->SearchDirList.push_back(Node_Dir::RB);
+		Node->SearchDirList.push_back(Node_Dir::RT);
+		break;
+	case Node_Dir::RB:
+		Node->SearchDirList.push_back(Node_Dir::RB);
+		Node->SearchDirList.push_back(Node_Dir::R);
+		Node->SearchDirList.push_back(Node_Dir::RT);
+		Node->SearchDirList.push_back(Node_Dir::B);
+		Node->SearchDirList.push_back(Node_Dir::LB);
+		break;
+	case Node_Dir::B:
+		Node->SearchDirList.push_back(Node_Dir::B);
+		Node->SearchDirList.push_back(Node_Dir::LB);
+		Node->SearchDirList.push_back(Node_Dir::RB);
+		break;
+	case Node_Dir::LB:
+		Node->SearchDirList.push_back(Node_Dir::LB);
+		Node->SearchDirList.push_back(Node_Dir::B);
+		Node->SearchDirList.push_back(Node_Dir::RB);
+		Node->SearchDirList.push_back(Node_Dir::L);
+		Node->SearchDirList.push_back(Node_Dir::LT);
+		break;
+	case Node_Dir::L:
+		Node->SearchDirList.push_back(Node_Dir::L);
+		Node->SearchDirList.push_back(Node_Dir::LT);
+		Node->SearchDirList.push_back(Node_Dir::LB);
+		break;
+	case Node_Dir::LT:
+		Node->SearchDirList.push_back(Node_Dir::LT);
+		Node->SearchDirList.push_back(Node_Dir::T);
+		Node->SearchDirList.push_back(Node_Dir::RT);
+		Node->SearchDirList.push_back(Node_Dir::L);
+		Node->SearchDirList.push_back(Node_Dir::LB);
+		break;
+	}
+}
 
-	else if (SrcNode->Total > DestNode->Total)
-		return -1;
-
-	return 0;
+bool CNavigation::SortNode(NavNode* Src, NavNode* Dest)
+{
+	return Src->Total > Dest->Total;
 }

@@ -78,6 +78,10 @@ public:
 	virtual void Load(const char* FileName, const std::string& PathName);
 
 public:
+	// NavAgent가 있을 경우에 동작한다.
+	void Move(const Vector3& EndPos);
+
+public:
 	void SetInheritScale(bool Inherit)
 	{
 		if (!m_RootComponent)

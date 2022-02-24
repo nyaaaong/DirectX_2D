@@ -51,8 +51,8 @@ bool CIMGUIListBox::Render()
 				m_SelectIndex = (int)i;
 			}
 
-			if (m_Select)
-				ImGui::SetItemDefaultFocus();
+			//if (m_Select)
+			//	ImGui::SetItemDefaultFocus();
 		}
 
 		ImGui::EndListBox();

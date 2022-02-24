@@ -6,6 +6,8 @@
 
 CPaperBurnComponent::CPaperBurnComponent()
 {
+	SetTypeID<CPaperBurnComponent>();
+
 	m_CBuffer = DBG_NEW CPaperBurnConstantBuffer;
 
 	m_CBuffer->Init();
@@ -20,6 +22,8 @@ CPaperBurnComponent::CPaperBurnComponent()
 CPaperBurnComponent::CPaperBurnComponent(const CPaperBurnComponent& com)	:
 	CObjectComponent(com)
 {
+	SetTypeID<CPaperBurnComponent>();
+
 	m_CBuffer = com.m_CBuffer->Clone();
 
 	m_FinishTime = com.m_FinishTime;

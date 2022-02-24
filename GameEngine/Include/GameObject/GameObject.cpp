@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "../Scene/SceneManager.h"
 #include "../PathManager.h"
+#include "../Component/NavAgent.h"
 
 CGameObject::CGameObject()	:
 	m_Scene(nullptr),
@@ -322,4 +323,18 @@ void CGameObject::Load(const char* FileName, const std::string& PathName)
 	strcat_s(FullPath, FileName);
 
 	Load(FullPath);
+}
+
+void CGameObject::Move(const Vector3& EndPos)
+{
+	size_t	Size = m_vecObjectComponent.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		if (m_vecObjectComponent[i]->CheckType<CNavAgent>())
+		{
+			((CNavAgent*)m_vecObjectComponent[i].Get())->Move(EndPos);
+			break;
+		}
+	}
 }
