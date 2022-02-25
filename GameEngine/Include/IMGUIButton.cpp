@@ -11,6 +11,9 @@ CIMGUIButton::~CIMGUIButton()
 
 bool CIMGUIButton::Init()
 {
+	if (!CIMGUIWidget::Init())
+		return false;
+
     return true;
 }
 

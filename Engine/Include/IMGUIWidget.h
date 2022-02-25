@@ -17,8 +17,26 @@ protected:
 	ImColor			m_Color;
 	ImFont*			m_Font;
 	bool			m_Enable;
+	bool		m_MouseCheck;
+	bool		m_IsHovered;
+	bool		m_IsClicked;
 
 public:
+	bool IsClicked()	const
+	{
+		return m_IsClicked;
+	}
+
+	bool IsHovered()	const
+	{
+		return m_IsHovered;
+	}
+
+	bool IsMouseCheck()	const
+	{
+		return m_MouseCheck;
+	}
+
 	bool IsEnable()	const
 	{
 		return m_Enable;
@@ -35,6 +53,11 @@ public:
 	}
 
 public:
+	void MouseCheck(bool MouseCheck)
+	{
+		m_MouseCheck = MouseCheck;
+	}
+
 	void Enable()
 	{
 		m_Enable = true;
@@ -90,5 +113,10 @@ public:
 public:
 	virtual bool Init();
 	virtual bool Render();
+
+protected:
+	// 사용법 : IMGUI의 Render 함수에서 ImGui 객체를 생성한 코드 바로 밑에 사용한다.
+	void CheckItemHovered();
+	void CheckItemClicked();
 };
 

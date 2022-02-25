@@ -70,6 +70,8 @@ bool CIMGUIImage::Render()
 		ImVec2	EndUV = ImVec2(m_ImageEnd.x / Width, m_ImageEnd.y / Height);
 
 		ImGui::Image(m_Texture->GetResource(), m_Size, StartUV, EndUV, m_Tint, m_BorderColor);
+		CheckItemHovered();
+		CheckItemClicked();
 	}
 
 	return true;

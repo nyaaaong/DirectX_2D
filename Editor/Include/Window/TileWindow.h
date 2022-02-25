@@ -11,7 +11,7 @@ public:
 
 private:
 	std::vector<class CIMGUIImage*> m_vecTile;
-	CSharedPtr<CTileMapSprite>	m_TileMapSprite;
+	CSharedPtr<class CTileMapSprite>	m_TileMapSprite;
 
 public:
 	virtual bool Init();

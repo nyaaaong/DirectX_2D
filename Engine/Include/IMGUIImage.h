@@ -29,6 +29,7 @@ public:
 		return Vector2(m_ImageEnd.x, m_ImageEnd.y);
 	}
 
+public:
 	void SetImageStart(float x, float y)
 	{
 		m_ImageStart = ImVec2(x, y);
