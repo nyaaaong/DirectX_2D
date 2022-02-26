@@ -67,6 +67,16 @@ public:
 	}
 
 public:
+	void SetValueInt(int Value)
+	{
+		m_ValueInt = Value;
+	}
+
+	void SetValueFloat(float Value)
+	{
+		m_ValueFloat = Value;
+	}
+
 	void SetText(const char* Text)
 	{
 		memset(m_wText, 0, sizeof(wchar_t) * 1024);

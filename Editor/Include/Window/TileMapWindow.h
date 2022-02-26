@@ -50,6 +50,12 @@ public:
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
 
+public:
+	void SetTileStart(float StartX, float StartY);
+	void SetTileStart(const Vector2& Start);
+	void SetTileEnd(float EndX, float EndY);
+	void SetTileEnd(const Vector2& End);
+
 private:
 	void CountXCallback();
 	void CountYCallback();

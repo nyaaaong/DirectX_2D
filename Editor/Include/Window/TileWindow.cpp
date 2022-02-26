@@ -1,9 +1,11 @@
 
 #include "TileWindow.h"
+#include "TileMapWindow.h"
 #include "IMGUISameLine.h"
 #include "IMGUIImage.h"
 #include "../Object/TileMapSprite.h"
 #include "Component/SpriteComponent.h"
+#include "../EditorManager.h"
 
 CTileWindow::CTileWindow()	:
 	m_Start(false),
@@ -83,6 +85,8 @@ void CTileWindow::TileMapSpriteUpdater()
 	{
 		TileRegister();
 
+		CTileMapWindow* TileMapWindow = CEditorManager::GetInst()->GetTileMapWindow();
+
 		size_t	Size = m_vecTile.size();
 
 		for (size_t i = 0; i < Size; ++i)
@@ -99,6 +103,9 @@ void CTileWindow::TileMapSpriteUpdater()
 
 					m_SelectTile = m_vecTile[i];
 					m_SelectTile->SetBorderColor(0, 255, 0);
+
+					TileMapWindow->SetTileStart(m_SelectTile->GetImageStart());
+					TileMapWindow->SetTileEnd(m_SelectTile->GetImageEnd());
 				}
 
 				else if (m_vecTile[i]->IsHovered())

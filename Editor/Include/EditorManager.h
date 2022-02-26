@@ -27,6 +27,11 @@ private:
 	float				m_CameraMoveSpeed;
 
 public:
+	class CTileMapWindow* GetTileMapWindow()	const
+	{
+		return m_TileMapWindow;
+	}
+
 	class CTileWindow* GetTileWindow()	const
 	{
 		return m_TileWindow;

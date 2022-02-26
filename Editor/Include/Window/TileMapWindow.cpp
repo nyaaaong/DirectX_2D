@@ -275,6 +275,42 @@ void CTileMapWindow::Update(float DeltaTime)
 	}
 }
 
+void CTileMapWindow::SetTileStart(float StartX, float StartY)
+{
+	m_FrameStartX->SetValueFloat(StartX);
+	m_FrameStartY->SetValueFloat(StartY);
+
+	m_FrameStartX->SetText(StartX);
+	m_FrameStartY->SetText(StartY);
+}
+
+void CTileMapWindow::SetTileStart(const Vector2& Start)
+{
+	m_FrameStartX->SetValueFloat(Start.x);
+	m_FrameStartY->SetValueFloat(Start.y);
+
+	m_FrameStartX->SetText(Start.x);
+	m_FrameStartY->SetText(Start.y);
+}
+
+void CTileMapWindow::SetTileEnd(float EndX, float EndY)
+{
+	m_FrameEndX->SetValueFloat(EndX);
+	m_FrameEndY->SetValueFloat(EndY);
+
+	m_FrameEndX->SetText(EndX);
+	m_FrameEndY->SetText(EndY);
+}
+
+void CTileMapWindow::SetTileEnd(const Vector2& End)
+{
+	m_FrameEndX->SetValueFloat(End.x);
+	m_FrameEndY->SetValueFloat(End.y);
+
+	m_FrameEndX->SetText(End.x);
+	m_FrameEndY->SetText(End.y);
+}
+
 void CTileMapWindow::CountXCallback()
 {
 }
