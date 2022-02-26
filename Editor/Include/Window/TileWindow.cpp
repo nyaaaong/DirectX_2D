@@ -64,7 +64,6 @@ void CTileWindow::TileRegister()
 				sprintf_s(TileIndex, "TileX%d TileY%d", j, i);
 
 				CIMGUIImage* TileImage = AddWidget<CIMGUIImage>(TileIndex, m_TileSize.x, m_TileSize.y);
-				//m_SpriteFrame->SetTexture(m_AnimInstance->GetCurrentAnimation()->GetAnimationSequence()->GetTexture());
 				TileImage->SetTexture(m_TileMapSprite->GetSpriteComponent()->GetMaterial()->GetTexture());
 				TileImage->MouseCheck(true);
 				TileImage->SetImageStart(j * m_TileSize.x, i * m_TileSize.y);
@@ -73,7 +72,10 @@ void CTileWindow::TileRegister()
 				m_vecTile[i * Width + j] = TileImage;
 
 				if (j != Width - 1)
+				{
 					CIMGUISameLine* Line = AddWidget<CIMGUISameLine>("Line");
+					Line->SetSpacing(0.f);
+				}
 			}
 		}
 	}
