@@ -30,7 +30,6 @@ private:
 	class CIMGUIButton* m_TileMapLoadButton;
 	CSharedPtr<CTileMapComponent>		m_TileMap;
 	CSharedPtr<CTileMapSprite>	m_TileMapSprite;
-	class CIMGUIImage* m_TileMapSpriteView;
 	TCHAR	m_TileMapFullPath[MAX_PATH];
 
 public:

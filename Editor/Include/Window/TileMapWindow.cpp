@@ -35,7 +35,6 @@ CTileMapWindow::CTileMapWindow()	:
 	m_LoadTileMapButton(nullptr),
 	m_TileMapSaveButton(nullptr),
 	m_TileMapLoadButton(nullptr),
-	m_TileMapSpriteView(nullptr),
 	m_TileMapFullPath{}
 {
 }
@@ -381,15 +380,6 @@ void CTileMapWindow::LoadTileMapButton()
 
 		int Length = WideCharToMultiByte(CP_ACP, 0, FileName, -1, 0, 0, 0, 0);
 		WideCharToMultiByte(CP_ACP, 0, FileName, -1, ConvertFileName, Length, 0, 0);
-
-		if (!m_TileMapSpriteView)
-		{
-			m_TileMapSpriteView = AddWidget<CIMGUIImage>("TileMapSpriteView", 200.f, 200.f);
-
-			CIMGUISameLine* Line = AddWidget<CIMGUISameLine>("Line");
-		}
-
-		m_TileMapSpriteView->SetTextureFullPath(ConvertFileName, m_TileMapFullPath);
 
 		m_TileMapSprite->GetSpriteComponent()->SetTextureFullPath(0, 0, (int)Buffer_Shader_Type::Pixel, ConvertFileName, m_TileMapFullPath);
 
