@@ -27,6 +27,11 @@ private:
 	float				m_CameraMoveSpeed;
 
 public:
+	class CTileWindow* GetTileWindow()	const
+	{
+		return m_TileWindow;
+	}
+
 	bool GetLButtonPush()	const
 	{
 		return m_MousePush;

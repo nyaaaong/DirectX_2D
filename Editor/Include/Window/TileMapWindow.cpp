@@ -1,5 +1,6 @@
 
 #include "TileMapWindow.h"
+#include "TileWindow.h"
 #include "Input.h"
 #include "PathManager.h"
 #include "IMGUIButton.h"
@@ -355,6 +356,10 @@ void CTileMapWindow::LoadTileMapButton()
 		m_TileMapSpriteView->SetTextureFullPath(ConvertFileName, m_TileMapFullPath);
 
 		m_TileMapSprite->GetSpriteComponent()->SetTextureFullPath(0, 0, (int)Buffer_Shader_Type::Pixel, ConvertFileName, m_TileMapFullPath);
+
+		CTileWindow* TileWindow = CEditorManager::GetInst()->GetTileWindow();
+		TileWindow->SetTileMapSprite(m_TileMapSprite);
+		TileWindow->SetTileSize(m_SizeX->GetValueFloat(), m_SizeY->GetValueFloat());
 	}
 }
 
