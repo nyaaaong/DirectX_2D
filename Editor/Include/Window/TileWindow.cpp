@@ -6,7 +6,9 @@
 #include "Component/SpriteComponent.h"
 
 CTileWindow::CTileWindow()	:
-	m_Start(false)
+	m_Start(false),
+	m_HoveredTile(nullptr),
+	m_SelectTile(nullptr)
 {
 }
 
@@ -88,10 +90,28 @@ void CTileWindow::TileMapSpriteUpdater()
 			if (m_vecTile[i])
 			{
 				if (m_vecTile[i]->IsClicked())
-					int a = 0;
+				{
+					if (m_SelectTile && (m_vecTile[i] != m_SelectTile))
+						m_SelectTile->DefaultBorderColor();
+
+					if (m_vecTile[i] != m_HoveredTile)
+						m_HoveredTile->DefaultBorderColor();
+
+					m_SelectTile = m_vecTile[i];
+					m_SelectTile->SetBorderColor(0, 255, 0);
+				}
 
 				else if (m_vecTile[i]->IsHovered())
-					int a = 0;
+				{
+					if (m_HoveredTile && (m_vecTile[i] != m_HoveredTile))
+						m_HoveredTile->DefaultBorderColor();
+
+					m_HoveredTile = m_vecTile[i];
+					m_HoveredTile->SetBorderColor(0, 162, 232);
+				}
+
+				else if (m_SelectTile)
+					m_SelectTile->SetBorderColor(0, 255, 0);
 			}
 		}
 	}

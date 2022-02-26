@@ -14,6 +14,8 @@ private:
 	CSharedPtr<class CTileMapSprite>	m_TileMapSprite;
 	bool	m_Start;
 	Vector2	m_TileSize;
+	class CIMGUIImage* m_HoveredTile;
+	class CIMGUIImage* m_SelectTile;
 
 public:
 	virtual bool Init();

@@ -60,6 +60,11 @@ public:
 		m_BorderColor = ImVec4(r / 255.f, g / 255.f, b / 255.f, 1.f);
 	}
 
+	void DefaultBorderColor()
+	{
+		m_BorderColor = {};
+	}
+
 public:
 	void SetTexture(const std::string& Name, const TCHAR* FileName, const std::string& PathName = TEXTURE_PATH);
 	void SetTexture(const std::string& Name);
