@@ -22,6 +22,8 @@ CWidgetComponent::CWidgetComponent()
 CWidgetComponent::CWidgetComponent(const CWidgetComponent& com) :
 	CSceneComponent(com)
 {
+	SetTypeID<CWidgetComponent>();
+
 	m_Space = com.m_Space;
 
 	if (m_Space == WidgetComponent_Space::Screen)

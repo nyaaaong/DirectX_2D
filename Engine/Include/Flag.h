@@ -228,3 +228,16 @@ enum class Nav_Node_Type
 	Open,
 	Close
 };
+
+enum class Component_Flag
+{
+	Sprite = 0x1,
+	StaticMesh = 0x2,
+	Box2D = 0x4,
+	Circle = 0x8,
+	Pixel = 0x10,
+	Camera = 0x20,
+	Widget = 0x40,
+	Particle = 0x80,
+	TileMap = 0x100
+};

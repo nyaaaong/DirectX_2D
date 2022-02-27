@@ -12,7 +12,9 @@ public:
 
 private:
 	class CIMGUIListBox* m_ObjectListWidget;
-	class CIMGUIListBox* m_ComponentListWidget;
+	std::vector<class CIMGUITree*>	m_vecComponentTree;
+	std::vector<class CIMGUIListBox*>	m_vecComponentListBox;
+	class CIMGUITree* m_ComponentTree;
 	CSharedPtr<CGameObject>		m_SelectObject;
 	CSharedPtr<CSceneComponent>	m_SelectComponent;
 
@@ -22,9 +24,12 @@ public:
 		return m_ObjectListWidget;
 	}
 
-	class CIMGUIListBox* GetComponentList()	const
+	class CIMGUIListBox* GetComponentList(int Index)	const
 	{
-		return m_ComponentListWidget;
+		if (m_vecComponentListBox.size() <= Index)
+			return nullptr;
+
+		return m_vecComponentListBox[Index];
 	}
 
 	CGameObject* GetSelectObject()	const
@@ -47,5 +52,11 @@ public:
 private:
 	void SelectObject(int Index, const char* Item);
 	void SelectComponent(int Index, const char* Item);
+
+private:
+	void ComponentTreeOpen();
+	void ComponentTreeClose();
+	void ComponentListBoxTreeOpen();
+	void ComponentListBoxTreeClose();
 };
 

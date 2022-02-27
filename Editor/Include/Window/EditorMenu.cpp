@@ -50,7 +50,7 @@ bool CEditorMenu::Init()
 {
 	CIMGUIWindow::Init();
 
-	m_ObjectCombo = AddWidget<CIMGUIComboBox>("ObjectList", 200.f, 20.f);
+	m_ObjectCombo = AddWidget<CIMGUIComboBox>("Object", 200.f, 20.f);
 
 	m_ObjectCombo->SetHideName(true);
 	m_ObjectCombo->AddItem("GameObject");
@@ -67,9 +67,8 @@ bool CEditorMenu::Init()
 
 	m_ObjectCreateButton->SetClickCallback(this, &CEditorMenu::ObjectCreateButton);
 
-
 	// Component
-	m_ComponentCombo = AddWidget<CIMGUIComboBox>("ComponentList", 200.f, 20.f);
+	m_ComponentCombo = AddWidget<CIMGUIComboBox>("Component", 200.f, 20.f);
 
 	m_ComponentCombo->SetHideName(true);
 	m_ComponentCombo->AddItem("SpriteComponent");
@@ -159,55 +158,157 @@ void CEditorMenu::ComponentCreateButton()
 
 	// 오브젝트 생성.
 	int	SelectIndex = m_ComponentCombo->GetSelectIndex();
+
 	if (SelectIndex == -1)
 		return;
 
 	CSceneComponent* Root = Obj->GetRootComponent();
 
+	const char*	Text = m_ComponentNameInput->GetTextMultibyte();
+
 	switch ((SceneComponent_Type)SelectIndex)
 	{
 	case SceneComponent_Type::Sprite:
-		Obj->CreateComponent<CSpriteComponent>(m_ComponentNameInput->GetTextMultibyte());
+	{
+		CSpriteComponent* Component = Obj->CreateComponent<CSpriteComponent>(Text);
+
+		if (Root)
+			Root->AddChild(Component);
+
+		if (Hierarchy)
+		{
+			CIMGUIListBox* ComponentList = Hierarchy->GetComponentList((int)SceneComponent_Type::Sprite);
+
+			ComponentList->AddItem(m_ComponentNameInput->GetTextMultibyte());
+		}
+	}
 		break;
 	case SceneComponent_Type::StaticMesh:
-		Obj->CreateComponent<CStaticMeshComponent>(m_ComponentNameInput->GetTextMultibyte());
+	{
+		CStaticMeshComponent* Component = Obj->CreateComponent<CStaticMeshComponent>(Text);
+
+		if (Root)
+			Root->AddChild(Component);
+
+		if (Hierarchy)
+		{
+			CIMGUIListBox* ComponentList = Hierarchy->GetComponentList((int)SceneComponent_Type::StaticMesh);
+
+			ComponentList->AddItem(m_ComponentNameInput->GetTextMultibyte());
+		}
+	}
 		break;
 	case SceneComponent_Type::Box2D:
-		Obj->CreateComponent<CColliderBox2D>(m_ComponentNameInput->GetTextMultibyte());
+	{
+		CColliderBox2D* Component = Obj->CreateComponent<CColliderBox2D>(Text);
+
+		if (Root)
+			Root->AddChild(Component);
+
+		if (Hierarchy)
+		{
+			CIMGUIListBox* ComponentList = Hierarchy->GetComponentList((int)SceneComponent_Type::Box2D);
+
+			ComponentList->AddItem(m_ComponentNameInput->GetTextMultibyte());
+		}
+	}
 		break;
 	case SceneComponent_Type::Circle:
-		Obj->CreateComponent<CColliderCircle>(m_ComponentNameInput->GetTextMultibyte());
+	{
+		CColliderCircle* Component = Obj->CreateComponent<CColliderCircle>(Text);
+
+		if (Root)
+			Root->AddChild(Component);
+
+		if (Hierarchy)
+		{
+			CIMGUIListBox* ComponentList = Hierarchy->GetComponentList((int)SceneComponent_Type::Circle);
+
+			ComponentList->AddItem(m_ComponentNameInput->GetTextMultibyte());
+		}
+	}
 		break;
 	case SceneComponent_Type::Pixel:
-		Obj->CreateComponent<CColliderPixel>(m_ComponentNameInput->GetTextMultibyte());
+	{
+		CColliderPixel* Component = Obj->CreateComponent<CColliderPixel>(Text);
+
+		if (Root)
+			Root->AddChild(Component);
+
+		if (Hierarchy)
+		{
+			CIMGUIListBox* ComponentList = Hierarchy->GetComponentList((int)SceneComponent_Type::Pixel);
+
+			ComponentList->AddItem(m_ComponentNameInput->GetTextMultibyte());
+		}
+	}
 		break;
 	case SceneComponent_Type::Camera:
-		Obj->CreateComponent<CCameraComponent>(m_ComponentNameInput->GetTextMultibyte());
+	{
+		CCameraComponent* Component = Obj->CreateComponent<CCameraComponent>(Text);
+
+		if (Root)
+			Root->AddChild(Component);
+
+		if (Hierarchy)
+		{
+			CIMGUIListBox* ComponentList = Hierarchy->GetComponentList((int)SceneComponent_Type::Camera);
+
+			ComponentList->AddItem(m_ComponentNameInput->GetTextMultibyte());
+		}
+	}
 		break;
 	case SceneComponent_Type::Widget:
-		Obj->CreateComponent<CWidgetComponent>(m_ComponentNameInput->GetTextMultibyte());
+	{
+		CWidgetComponent* Component = Obj->CreateComponent<CWidgetComponent>(Text);
+
+		if (Root)
+			Root->AddChild(Component);
+
+		if (Hierarchy)
+		{
+			CIMGUIListBox* ComponentList = Hierarchy->GetComponentList((int)SceneComponent_Type::Widget);
+
+			ComponentList->AddItem(m_ComponentNameInput->GetTextMultibyte());
+		}
+	}
 		break;
 	case SceneComponent_Type::Particle:
-		Obj->CreateComponent<CParticleComponent>(m_ComponentNameInput->GetTextMultibyte());
+	{
+		CParticleComponent* Component = Obj->CreateComponent<CParticleComponent>(Text);
+
+		if (Root)
+			Root->AddChild(Component);
+
+		if (Hierarchy)
+		{
+			CIMGUIListBox* ComponentList = Hierarchy->GetComponentList((int)SceneComponent_Type::Particle);
+
+			ComponentList->AddItem(m_ComponentNameInput->GetTextMultibyte());
+		}
+	}
 		break;
 	case SceneComponent_Type::TileMap:
 	{
-		CTileMapComponent* TileMap = Obj->CreateComponent<CTileMapComponent>(m_ComponentNameInput->GetTextMultibyte());
+		CTileMapComponent* Component = Obj->CreateComponent<CTileMapComponent>(Text);
+
+		if (Root)
+			Root->AddChild(Component);
+
+		if (Hierarchy)
+		{
+			CIMGUIListBox* ComponentList = Hierarchy->GetComponentList((int)SceneComponent_Type::TileMap);
+
+			ComponentList->AddItem(m_ComponentNameInput->GetTextMultibyte());
+		}
 
 		CMaterial* Material = CSceneManager::GetInst()->GetScene()->GetResource()->FindMaterial("TileMap");
 
-		TileMap->SetTileMaterial(Material);
+		Component->SetTileMaterial(Material);
 
 		CEditorManager::GetInst()->SetEditMode(EditMode::TileMap);
 	}
 	break;
-	}
-
-	if (Hierarchy)
-	{
-		CIMGUIListBox* ComponentList = Hierarchy->GetComponentList();
-
-		ComponentList->AddItem(m_ComponentNameInput->GetTextMultibyte());
 	}
 }
 

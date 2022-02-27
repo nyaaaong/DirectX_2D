@@ -14,6 +14,8 @@ CStaticMeshComponent::CStaticMeshComponent()
 CStaticMeshComponent::CStaticMeshComponent(const CStaticMeshComponent& com) :
 	CSceneComponent(com)
 {
+	SetTypeID<CStaticMeshComponent>();
+
 	m_Mesh = com.m_Mesh;
 
 	if (com.m_Material)

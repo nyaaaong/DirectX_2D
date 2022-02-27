@@ -59,6 +59,7 @@ public:
 public:
 	class CComponent* FindComponent(const std::string& Name);
 	void GetAllSceneComponentsName(std::vector<FindComponentName>& vecNames);
+	int GetAllComponentFlag();
 
 public:
 	virtual void Start();
@@ -600,7 +601,7 @@ public:
 
 		for (; iter != iterEnd; ++iter)
 		{
-			if ((*iter)->CheckType<T>())
+			if ((*iter)->CheckTypeID<T>())
 				return (T*)*iter;
 		}
 

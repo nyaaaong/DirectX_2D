@@ -86,8 +86,8 @@ bool CIMGUITestWindow::Init()
 	TextInput->SetHideName(true);
 
 	m_Tree = AddWidget<CIMGUITree>("Tree1");
-	m_Tree->RegisterFunc<CIMGUITestWindow>(true, this, &CIMGUITestWindow::OpenTree);
-	m_Tree->RegisterFunc<CIMGUITestWindow>(false, this, &CIMGUITestWindow::CloseTree);
+	m_Tree->SetOpenCallback<CIMGUITestWindow>(this, &CIMGUITestWindow::OpenTree);
+	m_Tree->SetCloseCallback<CIMGUITestWindow>(this, &CIMGUITestWindow::CloseTree);
 
 	//
 

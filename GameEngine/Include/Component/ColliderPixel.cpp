@@ -24,6 +24,8 @@ CColliderPixel::CColliderPixel()
 CColliderPixel::CColliderPixel(const CColliderPixel& com) :
 	CColliderComponent(com)
 {
+	SetTypeID<CColliderPixel>();
+
 	m_Info = com.m_Info;
 
 	++m_Info.RefCount;

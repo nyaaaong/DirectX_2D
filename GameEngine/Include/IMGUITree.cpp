@@ -2,8 +2,7 @@
 
 CIMGUITree::CIMGUITree()	:
 	m_OpenFunc(nullptr),
-	m_CloseFunc(nullptr),
-	m_Open(false)
+	m_CloseFunc(nullptr)
 {
 }
 

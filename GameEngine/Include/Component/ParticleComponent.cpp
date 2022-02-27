@@ -19,6 +19,8 @@ CParticleComponent::CParticleComponent() :
 CParticleComponent::CParticleComponent(const CParticleComponent& com) :
 	CSceneComponent(com)
 {
+	SetTypeID<CParticleComponent>();
+
 	m_SpawnTime = 0.f;
 	m_SpawnTimeMax = com.m_SpawnTimeMax;
 

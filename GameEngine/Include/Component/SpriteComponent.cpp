@@ -17,6 +17,8 @@ CSpriteComponent::CSpriteComponent() :
 CSpriteComponent::CSpriteComponent(const CSpriteComponent& com)	:
 	CSceneComponent(com)
 {
+	SetTypeID<CSpriteComponent>();
+
 	m_Mesh = com.m_Mesh;
 
 	if (com.m_Animation)

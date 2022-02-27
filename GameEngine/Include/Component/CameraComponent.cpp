@@ -16,6 +16,8 @@ CCameraComponent::CCameraComponent()	:
 CCameraComponent::CCameraComponent(const CCameraComponent& com) :
 	CSceneComponent(com)
 {
+	SetTypeID<CCameraComponent>();
+
 	m_CameraType = com.m_CameraType;
 	m_matView = com.m_matView;
 	m_matProj = com.m_matProj;

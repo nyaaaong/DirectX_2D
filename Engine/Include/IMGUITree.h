@@ -12,7 +12,6 @@ protected:
 private:
 	std::function<void()>	m_OpenFunc;
 	std::function<void()>	m_CloseFunc;
-	bool					m_Open;
 
 public:
 	bool IsOpened()	const
@@ -26,13 +25,15 @@ public:
 
 public:
 	template <typename T>
-	void RegisterFunc(bool UseOpen, T* Obj, void(T::*Func)())
+	void SetOpenCallback(T* Obj, void(T::* Func)())
 	{
-		if (UseOpen)
-			m_OpenFunc = std::bind(Func, Obj);
+		m_OpenFunc = std::bind(Func, Obj);
+	}
 
-		else
-			m_CloseFunc = std::bind(Func, Obj);
+	template <typename T>
+	void SetCloseCallback(T* Obj, void(T::* Func)())
+	{
+		m_CloseFunc = std::bind(Func, Obj);
 	}
 };
 

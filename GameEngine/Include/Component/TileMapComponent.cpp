@@ -39,6 +39,8 @@ CTileMapComponent::CTileMapComponent()	:
 CTileMapComponent::CTileMapComponent(const CTileMapComponent& com) :
 	CSceneComponent(com)
 {
+	SetTypeID<CTileMapComponent>();
+
 	m_CountX = com.m_CountX;
 	m_CountY = com.m_CountY;
 

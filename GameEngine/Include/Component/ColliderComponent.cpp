@@ -22,6 +22,8 @@ CColliderComponent::CColliderComponent(const CColliderComponent& com) :
 	CSceneComponent(com),
 	m_ColliderType(Collider_Type::Box2D)
 {
+	SetTypeID<CColliderComponent>();
+
 	m_MouseCollision = false;
 	m_CurrentSectionCheck = false;
 	m_Render = com.m_Render;

@@ -1,5 +1,14 @@
 
 #include "SceneComponent.h"
+#include "ColliderBox2D.h"
+#include "ColliderCircle.h"
+#include "ColliderPixel.h"
+#include "SpriteComponent.h"
+#include "StaticMeshComponent.h"
+#include "TileMapComponent.h"
+#include "WidgetComponent.h"
+#include "CameraComponent.h"
+#include "ParticleComponent.h"
 #include "../Render/RenderManager.h"
 #include "../GameObject/GameObject.h"
 #include "../Resource/Shader/Standard2DConstantBuffer.h"
@@ -77,6 +86,33 @@ void CSceneComponent::GetAllSceneComponentsName(std::vector<FindComponentName>& 
 
 	if (m_Parent)
 		Name.ParentName = m_Parent->GetName();
+
+	if (CheckTypeID<CSpriteComponent>())
+		Name.ComponentFlag = Component_Flag::Sprite;
+
+	else if (CheckTypeID<CStaticMeshComponent>())
+		Name.ComponentFlag = Component_Flag::StaticMesh;
+
+	else if (CheckTypeID<CColliderBox2D>())
+		Name.ComponentFlag = Component_Flag::Box2D;
+
+	else if (CheckTypeID<CColliderCircle>())
+		Name.ComponentFlag = Component_Flag::Circle;
+
+	else if (CheckTypeID<CColliderPixel>())
+		Name.ComponentFlag = Component_Flag::Pixel;
+
+	else if (CheckTypeID<CCameraComponent>())
+		Name.ComponentFlag = Component_Flag::Camera;
+
+	else if (CheckTypeID<CWidgetComponent>())
+		Name.ComponentFlag = Component_Flag::Widget;
+
+	else if (CheckTypeID<CParticleComponent>())
+		Name.ComponentFlag = Component_Flag::Particle;
+
+	else if (CheckTypeID<CTileMapComponent>())
+		Name.ComponentFlag = Component_Flag::TileMap;
 
 	vecNames.push_back(Name);
 

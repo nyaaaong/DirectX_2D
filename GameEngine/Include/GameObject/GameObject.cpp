@@ -3,6 +3,14 @@
 #include "../Scene/SceneManager.h"
 #include "../PathManager.h"
 #include "../Component/NavAgent.h"
+#include "../Component/SpriteComponent.h"
+#include "../Component/StaticMeshComponent.h"
+#include "../Component/ColliderBox2D.h"
+#include "../Component/ColliderCircle.h"
+#include "../Component/ColliderPixel.h"
+#include "../Component/CameraComponent.h"
+#include "../Component/WidgetComponent.h"
+#include "../Component/ParticleComponent.h"
 
 CGameObject::CGameObject()	:
 	m_Scene(nullptr),
@@ -94,6 +102,48 @@ void CGameObject::GetAllSceneComponentsName(std::vector<FindComponentName>& vecN
 		return;
 
 	m_RootComponent->GetAllSceneComponentsName(vecNames);
+}
+
+int CGameObject::GetAllComponentFlag()
+{
+	int Ret = 0;
+
+	auto	iter = m_SceneComponentList.begin();
+	auto	iterEnd = m_SceneComponentList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		size_t TypeID = (*iter)->GetTypeID();
+
+		if (TypeID == GetTypeID<CSpriteComponent>())
+			Ret |= (int)Component_Flag::Sprite;
+
+		else if (TypeID == GetTypeID<CStaticMeshComponent>())
+			Ret |= (int)Component_Flag::StaticMesh;
+
+		else if (TypeID == GetTypeID<CColliderBox2D>())
+			Ret |= (int)Component_Flag::Box2D;
+
+		else if (TypeID == GetTypeID<CColliderCircle>())
+			Ret |= (int)Component_Flag::Circle;
+
+		else if (TypeID == GetTypeID<CColliderPixel>())
+			Ret |= (int)Component_Flag::Pixel;
+
+		else if (TypeID == GetTypeID<CCameraComponent>())
+			Ret |= (int)Component_Flag::Camera;
+
+		else if (TypeID == GetTypeID<CWidgetComponent>())
+			Ret |= (int)Component_Flag::Widget;
+
+		else if (TypeID == GetTypeID<CParticleComponent>())
+			Ret |= (int)Component_Flag::Particle;
+
+		else if (TypeID == GetTypeID<CTileMapComponent>())
+			Ret |= (int)Component_Flag::TileMap;
+	}
+
+    return Ret;
 }
 
 void CGameObject::Start()
@@ -331,7 +381,7 @@ void CGameObject::Move(const Vector3& EndPos)
 
 	for (size_t i = 0; i < Size; ++i)
 	{
-		if (m_vecObjectComponent[i]->CheckType<CNavAgent>())
+		if (m_vecObjectComponent[i]->CheckTypeID<CNavAgent>())
 		{
 			((CNavAgent*)m_vecObjectComponent[i].Get())->Move(EndPos);
 			break;

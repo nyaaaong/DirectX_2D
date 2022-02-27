@@ -80,6 +80,12 @@ public:
 
 public:
 	template <typename T>
+	size_t GetTypeID()
+	{
+		return typeid(T).hash_code();
+	}
+
+	template <typename T>
 	void SetTypeID()
 	{
 		m_TypeID = typeid(T).hash_code();
@@ -87,7 +93,7 @@ public:
 
 public:
 	template <typename T>
-	bool CheckType()
+	bool CheckTypeID()
 	{
 		return m_TypeID == typeid(T).hash_code();
 	}

@@ -22,6 +22,8 @@ CColliderBox2D::CColliderBox2D()
 CColliderBox2D::CColliderBox2D(const CColliderBox2D& com) :
 	CColliderComponent(com)
 {
+	SetTypeID<CColliderBox2D>();
+
 	m_Info = com.m_Info;
 }
 

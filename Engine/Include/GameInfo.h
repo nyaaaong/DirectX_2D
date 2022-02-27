@@ -216,6 +216,7 @@ struct FindComponentName
 {
 	std::string	Name;
 	std::string	ParentName;
+	Component_Flag	ComponentFlag;
 };
 
 struct CollisionProfile

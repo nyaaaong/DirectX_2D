@@ -22,6 +22,8 @@ CColliderCircle::CColliderCircle()
 CColliderCircle::CColliderCircle(const CColliderCircle& com) :
 	CColliderComponent(com)
 {
+	SetTypeID<CColliderCircle>();
+
 	m_Info = com.m_Info;
 }
 
