@@ -111,16 +111,19 @@ void CParticleComponent::Update(float DeltaTime)
 {
 	CSceneComponent::Update(DeltaTime);
 
-	m_SpawnTime += DeltaTime;
-
-	if (m_SpawnTime >= m_SpawnTimeMax)
+	if (m_CBuffer)
 	{
-		m_SpawnTime -= m_SpawnTimeMax;
-		m_CBuffer->SetSpawnEnable(1);
-	}
+		m_SpawnTime += DeltaTime;
 
-	else
-		m_CBuffer->SetSpawnEnable(0);
+		if (m_SpawnTime >= m_SpawnTimeMax)
+		{
+			m_SpawnTime -= m_SpawnTimeMax;
+			m_CBuffer->SetSpawnEnable(1);
+		}
+
+		else
+			m_CBuffer->SetSpawnEnable(0);
+	}
 }
 
 void CParticleComponent::PostUpdate(float DeltaTime)
@@ -128,6 +131,9 @@ void CParticleComponent::PostUpdate(float DeltaTime)
 	CSceneComponent::PostUpdate(DeltaTime);
 
 	CParticleConstantBuffer* CBuffer = m_Particle->GetCBuffer();
+
+	if (!m_CBuffer)
+		return;
 
 	// Update Shader를 동작시킨다.
 	Vector3	StartMin, StartMax;
@@ -172,6 +178,9 @@ void CParticleComponent::PrevRender()
 void CParticleComponent::Render()
 {
 	CSceneComponent::Render();
+
+	if (!m_CBuffer)
+		return;
 
 	size_t	BufferCount = m_vecStructuredBuffer.size();
 

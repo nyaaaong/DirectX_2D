@@ -133,7 +133,8 @@ void CWidgetComponent::Render()
 {
 	CSceneComponent::Render();
 
-	m_WidgetWindow->Render();
+	if (m_WidgetWindow)
+		m_WidgetWindow->Render();
 }
 
 void CWidgetComponent::PostRender()

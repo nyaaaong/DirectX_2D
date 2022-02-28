@@ -14,7 +14,10 @@
 #include "../Resource/Shader/Standard2DConstantBuffer.h"
 #include "../Scene/SceneManager.h"
 
-CSceneComponent::CSceneComponent()
+CSceneComponent::CSceneComponent()	:
+	m_Transform(nullptr),
+	m_Parent(nullptr),
+	m_Render(false)
 {
 	SetTypeID<CSceneComponent>();
 	m_ComponentType = Component_Type::SceneComponent;
@@ -31,7 +34,10 @@ CSceneComponent::CSceneComponent()
 }
 
 CSceneComponent::CSceneComponent(const CSceneComponent& com) :
-	CComponent(com)
+	CComponent(com),
+	m_Transform(nullptr),
+	m_Parent(nullptr),
+	m_Render(false)
 {
 	SetTypeID<CSceneComponent>();
 

@@ -92,6 +92,16 @@ void CObjectHierarchy::SelectObject(int Index, const char* Item)
 	m_SelectObject = Object;
 
 	m_ComponentTree->Enable();
+
+	int Size = (int)SceneComponent_Type::Max;
+
+	for (int i = 0; i < Size; ++i)
+	{
+		m_vecComponentTree[i]->Disable();
+
+		m_vecComponentListBox[i]->Clear();
+		m_vecComponentListBox[i]->Disable();
+	}
 }
 
 void CObjectHierarchy::SelectComponent(int Index, const char* Item)

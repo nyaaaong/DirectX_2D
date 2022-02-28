@@ -456,7 +456,6 @@ void CTileMapWindow::TileMapLoadButton()
 	if (!m_TileMap)
 		return;
 
-
 	TCHAR   FilePath[MAX_PATH] = {};
 
 	OPENFILENAME    OpenFile = {};
