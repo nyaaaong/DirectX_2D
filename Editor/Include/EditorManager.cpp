@@ -41,7 +41,7 @@ CEditorManager::CEditorManager()	:
 	m_TileMapWindow(nullptr),
 	m_TileWindow(nullptr),
 	m_SceneWindow(nullptr),
-	m_CameraMoveSpeed(1000.f),
+	m_CameraMoveSpeed(3000.f),
 	m_MousePush(false)
 {
 }
@@ -379,28 +379,29 @@ void CEditorManager::MoveCameraUp(float DeltaTime)
 {
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
 
-	Camera->AddWorldPos(Vector3(0.f, m_CameraMoveSpeed * DeltaTime, 0.f));
+	// round : 소숫점을 반올림해서 타일간의 빈틈이 보이지 않게 한다.
+	Camera->AddWorldPos(Vector3(0.f, round(m_CameraMoveSpeed * DeltaTime), 0.f));
 }
 
 void CEditorManager::MoveCameraDown(float DeltaTime)
 {
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
 
-	Camera->AddWorldPos(Vector3(0.f, -m_CameraMoveSpeed * DeltaTime, 0.f));
+	Camera->AddWorldPos(Vector3(0.f, round(-m_CameraMoveSpeed * DeltaTime), 0.f));
 }
 
 void CEditorManager::MoveCameraLeft(float DeltaTime)
 {
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
 
-	Camera->AddWorldPos(Vector3(-m_CameraMoveSpeed * DeltaTime, 0.f, 0.f));
+	Camera->AddWorldPos(Vector3(round(-m_CameraMoveSpeed * DeltaTime), 0.f, 0.f));
 }
 
 void CEditorManager::MoveCameraRight(float DeltaTime)
 {
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
 
-	Camera->AddWorldPos(Vector3(m_CameraMoveSpeed * DeltaTime, 0.f, 0.f));
+	Camera->AddWorldPos(Vector3(round(m_CameraMoveSpeed * DeltaTime), 0.f, 0.f));
 }
 
 void CEditorManager::MoveTabUp(float DeltaTime)

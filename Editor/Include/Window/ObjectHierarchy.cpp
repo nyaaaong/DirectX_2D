@@ -65,7 +65,7 @@ bool CObjectHierarchy::Init()
 
 		sprintf_s(Name, "Component ListBox Index : %d", i);
 
-		CIMGUIListBox* NewListBox = AddWidget<CIMGUIListBox>(Name);
+		CIMGUIListBox* NewListBox = AddWidget<CIMGUIListBox>(Name, 300.f);
 		NewListBox->Disable();
 		NewListBox->SetHideName(true);
 		NewListBox->SetPageItemCount(3);

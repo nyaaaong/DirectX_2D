@@ -13,21 +13,24 @@ CPlayer2D::CPlayer2D()
 CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	CGameObject(obj)
 {
+	SetTypeID<CPlayer2D>();
+
 	m_Sprite = (CSpriteComponent*)FindComponent("PlayerSprite");
 }
 
 CPlayer2D::~CPlayer2D()
 {
+	SAFE_DELETE(m_AnimInstance);
 }
 
 void CPlayer2D::Start()
 {
 	CGameObject::Start();
 
-	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveUp", KeyState_Push, this, &CPlayer2D::MoveUp);
-	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveDown", KeyState_Push, this, &CPlayer2D::MoveDown);
-	CInput::GetInst()->SetKeyCallback<CPlayer2D>("RotationZInv", KeyState_Push, this, &CPlayer2D::RotationZInv);
-	CInput::GetInst()->SetKeyCallback<CPlayer2D>("RotationZ", KeyState_Push, this, &CPlayer2D::RotationZ);
+	//CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveUp", KeyState_Push, this, &CPlayer2D::MoveUp);
+	//CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveDown", KeyState_Push, this, &CPlayer2D::MoveDown);
+	//CInput::GetInst()->SetKeyCallback<CPlayer2D>("RotationZInv", KeyState_Push, this, &CPlayer2D::RotationZInv);
+	//CInput::GetInst()->SetKeyCallback<CPlayer2D>("RotationZ", KeyState_Push, this, &CPlayer2D::RotationZ);
 }
 
 bool CPlayer2D::Init()
@@ -41,9 +44,9 @@ bool CPlayer2D::Init()
 
 	m_Sprite->CreateAnimationInstance<CAnimationSequence2DInstance>();
 
-	CAnimationSequence2DInstance* Anim = m_Sprite->GetAnimationInstance();
+	m_AnimInstance = m_Sprite->GetAnimationInstance();
 	
-	Anim->AddAnimation(TEXT("Player/Idle/Player_Idle_D.sqc"), ANIMATION_PATH, "PlayerIdleD");
+	m_AnimInstance->AddAnimation(TEXT("Player/Idle/Player_Idle_D.sqc"), "Player_Idle_D", ANIMATION_PATH);
 
 	m_Sprite->SetRelativeScale(100.f, 100.f, 1.f);
 	m_Sprite->SetRelativePos(100.f, 50.f, 0.f);

@@ -328,7 +328,7 @@ void CTileMapWindow::SizeYCallback()
 
 void CTileMapWindow::TileMapCreateButton()
 {
-	if (!m_TileMap || !m_TileMapFullPath)
+	if (!m_TileMap || !lstrlen(m_TileMapFullPath))
 		return;
 
 	int	CountX, CountY;
@@ -391,7 +391,7 @@ void CTileMapWindow::LoadTileMapButton()
 
 void CTileMapWindow::DefaultFrameButton()
 {
-	if (!m_TileMap || !m_TileMapFullPath)
+	if (!m_TileMap || !lstrlen(m_TileMapFullPath))
 		return;
 
 	float	StartX, StartY, EndX, EndY;

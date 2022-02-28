@@ -15,6 +15,7 @@ protected:
 
 private:
     CSharedPtr<CSpriteComponent>    m_Sprite;
+	CAnimationSequence2DInstance* m_AnimInstance;
 
 public:
     virtual void Start();

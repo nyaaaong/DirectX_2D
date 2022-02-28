@@ -132,9 +132,7 @@ void CEditorMenu::ObjectCreateButton()
 	CObjectHierarchy* Hierarchy = (CObjectHierarchy*)CIMGUIManager::GetInst()->FindIMGUIWindow("ObjectHierarchy");
 
 	if (Hierarchy)
-	{
 		Hierarchy->AddObjectList(m_ObjectNameInput->GetTextMultibyte());
-	}
 }
 
 void CEditorMenu::ComponentCreateButton()

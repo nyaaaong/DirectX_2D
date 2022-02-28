@@ -33,6 +33,8 @@ CSceneComponent::CSceneComponent()
 CSceneComponent::CSceneComponent(const CSceneComponent& com) :
 	CComponent(com)
 {
+	SetTypeID<CSceneComponent>();
+
 	*this = com;
 	m_Transform = com.m_Transform->Clone();
 
