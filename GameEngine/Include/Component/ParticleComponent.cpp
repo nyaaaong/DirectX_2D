@@ -130,10 +130,10 @@ void CParticleComponent::PostUpdate(float DeltaTime)
 {
 	CSceneComponent::PostUpdate(DeltaTime);
 
-	CParticleConstantBuffer* CBuffer = m_Particle->GetCBuffer();
-
-	if (!m_CBuffer)
+	if (!m_Particle || !m_CBuffer)
 		return;
+
+	CParticleConstantBuffer* CBuffer = m_Particle->GetCBuffer();
 
 	// Update Shader를 동작시킨다.
 	Vector3	StartMin, StartMax;

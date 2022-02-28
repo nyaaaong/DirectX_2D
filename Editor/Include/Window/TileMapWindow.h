@@ -56,12 +56,6 @@ public:
 	void SetTileEnd(const Vector2& End);
 
 private:
-	void CountXCallback();
-	void CountYCallback();
-	void SizeXCallback();
-	void SizeYCallback();
-
-private:
 	void DefaultFrameButton();
 	void TileMapCreateButton();
 	void LoadTileMapButton();

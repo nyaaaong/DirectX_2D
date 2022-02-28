@@ -13,6 +13,12 @@
 #include "Component/TileMapComponent.h"
 #include "Component/StaticMeshComponent.h"
 #include "Component/SpriteComponent.h"
+#include "Component/CameraComponent.h"
+#include "Component/ColliderBox2D.h"
+#include "Component/ColliderCircle.h"
+#include "Component/ColliderPixel.h"
+#include "Component/WidgetComponent.h"
+#include "Component/ParticleComponent.h"
 
 DEFINITION_SINGLE(CClientManager)
 
@@ -102,9 +108,14 @@ CGameObject* CClientManager::CreateObject(CScene* Scene, size_t Type)
 
 CComponent* CClientManager::CreateComponent(CGameObject * Obj, size_t Type)
 {
+	CSceneComponent* Root = Obj->GetRootComponent();
+
 	if (Type == typeid(CSceneComponent).hash_code())
 	{
 		CComponent* Component = Obj->LoadComponent<CSceneComponent>();
+
+		if (Root)
+			Root->AddChild((CSceneComponent*)Component);
 
 		return Component;
 	}
@@ -113,12 +124,18 @@ CComponent* CClientManager::CreateComponent(CGameObject * Obj, size_t Type)
 	{
 		CComponent* Component = Obj->LoadComponent<CSpriteComponent>();
 
+		if (Root)
+			Root->AddChild((CSpriteComponent*)Component);
+
 		return Component;
 	}
 
 	else if (Type == typeid(CStaticMeshComponent).hash_code())
 	{
 		CComponent* Component = Obj->LoadComponent<CStaticMeshComponent>();
+
+		if (Root)
+			Root->AddChild((CStaticMeshComponent*)Component);
 
 		return Component;
 	}
@@ -127,7 +144,70 @@ CComponent* CClientManager::CreateComponent(CGameObject * Obj, size_t Type)
 	{
 		CTileMapComponent* Component = Obj->LoadComponent<CTileMapComponent>();
 
+		if (Root)
+			Root->AddChild((CTileMapComponent*)Component);
+
 		Component->EnableEditMode(true);
+
+		return Component;
+	}
+
+	else if (Type == typeid(CColliderBox2D).hash_code())
+	{
+		CComponent* Component = Obj->LoadComponent<CColliderBox2D>();
+
+		if (Root)
+			Root->AddChild((CColliderBox2D*)Component);
+
+		return Component;
+	}
+
+	else if (Type == typeid(CColliderCircle).hash_code())
+	{
+		CComponent* Component = Obj->LoadComponent<CColliderCircle>();
+
+		if (Root)
+			Root->AddChild((CColliderCircle*)Component);
+
+		return Component;
+	}
+
+	else if (Type == typeid(CColliderPixel).hash_code())
+	{
+		CComponent* Component = Obj->LoadComponent<CColliderPixel>();
+
+		if (Root)
+			Root->AddChild((CColliderPixel*)Component);
+
+		return Component;
+	}
+
+	else if (Type == typeid(CCameraComponent).hash_code())
+	{
+		CComponent* Component = Obj->LoadComponent<CCameraComponent>();
+
+		if (Root)
+			Root->AddChild((CCameraComponent*)Component);
+
+		return Component;
+	}
+
+	else if (Type == typeid(CWidgetComponent).hash_code())
+	{
+		CComponent* Component = Obj->LoadComponent<CWidgetComponent>();
+
+		if (Root)
+			Root->AddChild((CWidgetComponent*)Component);
+
+		return Component;
+	}
+
+	else if (Type == typeid(CParticleComponent).hash_code())
+	{
+		CComponent* Component = Obj->LoadComponent<CParticleComponent>();
+
+		if (Root)
+			Root->AddChild((CParticleComponent*)Component);
 
 		return Component;
 	}

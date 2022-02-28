@@ -75,7 +75,6 @@ bool CTileMapWindow::Init()
 	m_CountX = AddWidget<CIMGUITextInput>("CountX", 80.f, 20.f);
 	m_CountX->SetHideName(true);
 	m_CountX->SetTextType(ImGuiText_Type::Int);
-	m_CountX->SetCallback(this, &CTileMapWindow::CountXCallback);
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 
@@ -88,7 +87,6 @@ bool CTileMapWindow::Init()
 	m_CountY = AddWidget<CIMGUITextInput>("CountY", 80.f, 20.f);
 	m_CountY->SetHideName(true);
 	m_CountY->SetTextType(ImGuiText_Type::Int);
-	m_CountY->SetCallback(this, &CTileMapWindow::CountYCallback);
 
 	Label = AddWidget<CIMGUILabel>("SizeX", 70.f, 20.f);
 	Label->SetAlign(0.5f, 0.f);
@@ -99,7 +97,6 @@ bool CTileMapWindow::Init()
 	m_SizeX = AddWidget<CIMGUITextInput>("SizeX", 80.f, 20.f);
 	m_SizeX->SetHideName(true);
 	m_SizeX->SetTextType(ImGuiText_Type::Float);
-	m_SizeX->SetCallback(this, &CTileMapWindow::SizeXCallback);
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 
@@ -112,7 +109,6 @@ bool CTileMapWindow::Init()
 	m_SizeY = AddWidget<CIMGUITextInput>("SizeY", 80.f, 20.f);
 	m_SizeY->SetHideName(true);
 	m_SizeY->SetTextType(ImGuiText_Type::Float);
-	m_SizeY->SetCallback(this, &CTileMapWindow::SizeYCallback);
 
 	m_TileMapCreateButton = AddWidget<CIMGUIButton>("TileMapCreateButton", 324.f, 20.f);
 	m_TileMapCreateButton->SetClickCallback(this, &CTileMapWindow::TileMapCreateButton);
@@ -308,22 +304,6 @@ void CTileMapWindow::SetTileEnd(const Vector2& End)
 
 	m_FrameEndX->SetText(End.x);
 	m_FrameEndY->SetText(End.y);
-}
-
-void CTileMapWindow::CountXCallback()
-{
-}
-
-void CTileMapWindow::CountYCallback()
-{
-}
-
-void CTileMapWindow::SizeXCallback()
-{
-}
-
-void CTileMapWindow::SizeYCallback()
-{
 }
 
 void CTileMapWindow::TileMapCreateButton()
