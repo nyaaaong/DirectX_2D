@@ -283,6 +283,9 @@ void CSpriteWindow::LoadTextureButton()
 		int Length = WideCharToMultiByte(CP_ACP, 0, FileName, -1, 0, 0, 0, 0);
 		WideCharToMultiByte(CP_ACP, 0, FileName, -1, ConvertFileName, Length, 0, 0);
 
+		if (!m_SpriteObject)
+			m_SpriteObject = CSceneManager::GetInst()->GetScene()->CreateGameObject<CSpriteEditObject>("SpriteEditObject");
+
 		if (!m_Sprite)
 		{
 			m_Sprite = AddWidget<CIMGUIImage>("Sprite", 200.f, 200.f);
@@ -308,9 +311,6 @@ bool CSpriteWindow::Start()
 		return false;
 
 	CEditorManager::GetInst()->SetEditMode(EditMode::Sprite);
-
-	if (!m_SpriteObject)
-		m_SpriteObject = CSceneManager::GetInst()->GetScene()->CreateGameObject<CSpriteEditObject>("SpriteEditObject");
 
 	return true;
 }
@@ -877,6 +877,9 @@ void CSpriteWindow::LoadSequence()
 
 		m_AnimationList->Clear();
 		m_AnimationFrameList->Clear();
+
+		if (!m_SpriteObject)
+			m_SpriteObject = CSceneManager::GetInst()->GetScene()->CreateGameObject<CSpriteEditObject>("SpriteEditObject");
 
 		CSceneResource* Resource = CSceneManager::GetInst()->GetScene()->GetResource();
 

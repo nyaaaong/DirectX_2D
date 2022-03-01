@@ -3,6 +3,8 @@
 #include "Engine.h"
 #include "PathManager.h"
 #include "ObjectHierarchy.h"
+#include "SpriteWindow.h"
+#include "TileMapWindow.h"
 #include "IMGUIButton.h"
 #include "IMGUISameLine.h"
 #include "IMGUILabel.h"
@@ -391,6 +393,8 @@ void CEditorMenu::LoadScene()
 		WideCharToMultiByte(CP_ACP, 0, FilePath, -1, ConvertFullPath, Length, 0, 0);
 
 		CSceneManager::GetInst()->GetScene()->LoadFullPath(ConvertFullPath);
+
+		LoadSceneObject();
 	}
 }
 
@@ -401,4 +405,26 @@ void CEditorMenu::GamePlay()
 
 	else
 		CEngine::GetInst()->SetPlay(false);
+}
+
+void CEditorMenu::LoadSceneObject()
+{
+	CObjectHierarchy* Hierarchy = (CObjectHierarchy*)CIMGUIManager::GetInst()->FindIMGUIWindow("ObjectHierarchy");
+
+	if (Hierarchy)
+	{
+		std::vector<std::string>	vecObjectName;
+
+		CSceneManager::GetInst()->GetScene()->GetObjectName(vecObjectName);
+
+		size_t Size = vecObjectName.size();
+
+		for (size_t i = 0; i < Size; ++i)
+		{
+			if (vecObjectName[i] == "SpriteEditObject" || vecObjectName[i] == "TileMapInfo")
+				continue;
+
+			Hierarchy->AddObjectList(vecObjectName[i].c_str());
+		}
+	}
 }

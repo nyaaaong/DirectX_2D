@@ -48,7 +48,7 @@ bool CPlayer2D::Init()
 	
 	m_AnimInstance->AddAnimation(TEXT("Player/Idle/Player_Idle_D.sqc"), "Player_Idle_D", ANIMATION_PATH);
 
-	m_Sprite->SetRelativeScale(100.f, 100.f, 1.f);
+	//m_Sprite->SetRelativeScale(100.f, 100.f, 1.f);
 	m_Sprite->SetRelativePos(100.f, 50.f, 0.f);
 	m_Sprite->SetPivot(0.5f, 0.5f, 0.f);
 

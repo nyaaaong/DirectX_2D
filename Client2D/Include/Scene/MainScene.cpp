@@ -37,7 +37,7 @@ bool CMainScene::Init()
 	if (m_LoadingFunction)
 		m_LoadingFunction(false, 0.6f);
 
-	CMonster* Monster = m_Scene->CreateGameObject<CMonster>("Monster");
+	//CMonster* Monster = m_Scene->CreateGameObject<CMonster>("Monster");
 
 	if (m_LoadingFunction)
 		m_LoadingFunction(false, 0.8f);

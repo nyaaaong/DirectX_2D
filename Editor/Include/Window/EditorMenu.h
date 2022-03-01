@@ -27,5 +27,8 @@ public:
 	void SaveScene();
 	void LoadScene();
 	void GamePlay();
+
+private:
+	void LoadSceneObject();
 };
 

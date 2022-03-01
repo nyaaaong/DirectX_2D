@@ -168,7 +168,7 @@ void CEditorManager::Esc(float DeltaTime)
 
 void CEditorManager::MouseLButtonDown(float DeltaTime)
 {
-	if (!m_DragObj)
+	if (!m_DragObj || !m_SpriteWindow->HasSprite())
 		return;
 	
 	Vector2		MousePos = CInput::GetInst()->GetMousePos();
@@ -206,7 +206,7 @@ void CEditorManager::MouseLButtonPush(float DeltaTime)
 {
 	m_MousePush = true;
 
-	if (!m_DragObj)
+	if (!m_DragObj || !m_SpriteWindow->HasSprite())
 		return;
 
 	if (m_SpriteWindow->HasSprite())
@@ -284,7 +284,7 @@ void CEditorManager::MouseLButtonUp(float DeltaTime)
 
 void CEditorManager::KeyboardUp(float DeltaTime)
 {
-	if (m_DragObj)
+	if (m_DragObj && m_SpriteWindow->HasSprite())
 	{
 		Vector3		RectPos = m_DragObj->GetWorldPos();
 		Vector3		ResultPos = RectPos + Vector3(0.f, 1.f, 0.f);
@@ -306,7 +306,7 @@ void CEditorManager::KeyboardUp(float DeltaTime)
 
 void CEditorManager::KeyboardDown(float DeltaTime)
 {
-	if (m_DragObj)
+	if (m_DragObj && m_SpriteWindow->HasSprite())
 	{
 		Vector3		RectPos = m_DragObj->GetWorldPos();
 		Vector3		ResultPos = RectPos + Vector3(0.f, -1.f, 0.f);
@@ -330,7 +330,7 @@ void CEditorManager::KeyboardDown(float DeltaTime)
 
 void CEditorManager::KeyboardLeft(float DeltaTime)
 {
-	if (m_DragObj)
+	if (m_DragObj && m_SpriteWindow->HasSprite())
 	{
 		Vector3		RectPos = m_DragObj->GetWorldPos();
 		Vector3		ResultPos = RectPos + Vector3(-1.f, 0.f, 0.f);
@@ -353,7 +353,7 @@ void CEditorManager::KeyboardLeft(float DeltaTime)
 
 void CEditorManager::KeyboardRight(float DeltaTime)
 {
-	if (m_DragObj)
+	if (m_DragObj && m_SpriteWindow->HasSprite())
 	{
 		Vector3		RectPos = m_DragObj->GetWorldPos();
 		Vector3		ResultPos = RectPos + Vector3(1.f, 0.f, 0.f);
@@ -406,7 +406,7 @@ void CEditorManager::MoveCameraRight(float DeltaTime)
 
 void CEditorManager::MoveTabUp(float DeltaTime)
 {
-	if (m_DragObj)
+	if (m_DragObj && m_SpriteWindow->HasSprite())
 	{
 		float		RectSizeY = m_DragObj->GetEndPos().y - m_DragObj->GetStartPos().y;
 		float		MoveScale = abs(RectSizeY);
@@ -431,7 +431,7 @@ void CEditorManager::MoveTabUp(float DeltaTime)
 
 void CEditorManager::MoveTabDown(float DeltaTime)
 {
-	if (m_DragObj)
+	if (m_DragObj && m_SpriteWindow->HasSprite())
 	{
 		float		RectSizeY = m_DragObj->GetEndPos().y - m_DragObj->GetStartPos().y;
 		float		MoveScale = abs(RectSizeY);
@@ -456,7 +456,7 @@ void CEditorManager::MoveTabDown(float DeltaTime)
 
 void CEditorManager::MoveTabLeft(float DeltaTime)
 {
-	if (m_DragObj)
+	if (m_DragObj && m_SpriteWindow->HasSprite())
 	{
 		float		RectSizeX = m_DragObj->GetEndPos().x - m_DragObj->GetStartPos().x;
 		float		MoveScale = abs(RectSizeX);
@@ -481,7 +481,7 @@ void CEditorManager::MoveTabLeft(float DeltaTime)
 
 void CEditorManager::MoveTabRight(float DeltaTime)
 {
-	if (m_DragObj)
+	if (m_DragObj && m_SpriteWindow->HasSprite())
 	{
 		float		RectSizeX = m_DragObj->GetEndPos().x - m_DragObj->GetStartPos().x;
 		float		MoveScale = abs(RectSizeX);
