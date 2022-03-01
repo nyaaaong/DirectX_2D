@@ -240,3 +240,36 @@ void CScene::LoadFullPath(const char* FullPath)
 
 	fclose(File);
 }
+
+void CScene::GetObjectName(std::vector<std::string>& vecName)
+{
+	size_t Size = m_ObjList.size();
+
+	vecName.resize(Size);
+
+	int Index = 0;
+
+	auto	iter = m_ObjList.begin();
+	auto	iterEnd = m_ObjList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		vecName[Index] = (*iter)->GetName();
+
+		++Index;
+	}
+}
+
+void CScene::GetSceneComponentName(const std::string& ObjectName, std::vector<std::string>& vecComponentName)
+{
+	size_t Size = m_ObjList.size();
+
+	vecComponentName.resize(Size);
+
+	CGameObject*	Obj = FindObject(ObjectName);
+
+	if (!Obj)
+		return;
+
+	Obj->GetSceneComponentName(vecComponentName);
+}

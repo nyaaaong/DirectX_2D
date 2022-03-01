@@ -70,11 +70,6 @@ CEngine::~CEngine()
 
 void CEngine::SetMouseState(Mouse_State State)
 {
-	if (m_MouseWidget[(int)m_MouseState])
-	{
-		// 초기화?
-	}
-
 	m_MouseState = State;
 }
 
@@ -304,13 +299,6 @@ bool CEngine::Render(float DeltaTime)
 	CDevice::GetInst()->RenderStart();
 	CDevice::GetInst()->ClearRenderTarget(m_ClearColor);
 	CDevice::GetInst()->ClearDepthStencil(1.f, 0);
-
-	/*CMesh* Mesh = CResourceManager::GetInst()->FindMesh("SpriteMesh");
-	CShader* Shader = CResourceManager::GetInst()->FindShader("ColorMeshShader");
-
-	Shader->SetShader();
-
-	Mesh->Render();*/
 	CRenderManager::GetInst()->Render();
 
 	CIMGUIManager::GetInst()->Render();
@@ -359,9 +347,7 @@ BOOL CEngine::Create(const TCHAR* Name)
 	m_hWnd = CreateWindowW(Name, Name, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU, 0, 0, m_RS.Width, m_RS.Height, nullptr, nullptr, m_hInst, nullptr);
 
 	if (!m_hWnd)
-	{
 		return FALSE;
-	}
 	
 	// 클라이언트 영역을 1280, 720으로 만들어준다.
 	// RECT : 사각형을 표현하는 구조체이다.
@@ -374,9 +360,7 @@ BOOL CEngine::Create(const TCHAR* Name)
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
 	// 위에서 얻어온 Rect를 이용해서 윈도우 크기를 지정한다.
-	SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, rc.right - rc.left,
-		rc.bottom - rc.top,
-		SWP_NOZORDER);
+	SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER);
 
 	// SW_SHOW : 윈도우창을 화면에 보여준다.
 	// SW_HIDE : 창을 만들긴 하지만 화면에 보여주는건 아니다.

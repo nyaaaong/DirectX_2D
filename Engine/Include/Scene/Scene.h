@@ -88,6 +88,10 @@ public:
 	void LoadFullPath(const char* FullPath);
 
 public:
+	void GetObjectName(std::vector<std::string>& vecName);
+	void GetSceneComponentName(const std::string& ObjectName, std::vector<std::string>& vecComponentName);
+
+public:
 	template <typename T>
 	bool CreateSceneMode()
 	{

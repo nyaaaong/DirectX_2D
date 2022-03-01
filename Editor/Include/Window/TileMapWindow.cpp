@@ -48,9 +48,6 @@ bool CTileMapWindow::Start()
 	if (!CIMGUIWindow::Start())
 		return false;
 
-	if (!m_TileMapSprite)
-		m_TileMapSprite = CSceneManager::GetInst()->GetScene()->CreateGameObject<CTileMapSprite>("TileMapInfo");
-
 	return true;
 }
 
@@ -361,6 +358,9 @@ void CTileMapWindow::LoadTileMapButton()
 		int Length = WideCharToMultiByte(CP_ACP, 0, FileName, -1, 0, 0, 0, 0);
 		WideCharToMultiByte(CP_ACP, 0, FileName, -1, ConvertFileName, Length, 0, 0);
 
+		if (!m_TileMapSprite)
+			m_TileMapSprite = CSceneManager::GetInst()->GetScene()->CreateGameObject<CTileMapSprite>("TileMapInfo");
+
 		m_TileMapSprite->GetSpriteComponent()->SetTextureFullPath(0, 0, (int)Buffer_Shader_Type::Pixel, ConvertFileName, m_TileMapFullPath);
 
 		CTileWindow* TileWindow = CEditorManager::GetInst()->GetTileWindow();
@@ -472,7 +472,12 @@ void CTileMapWindow::TileMapLoadButton()
 		int Length = WideCharToMultiByte(CP_ACP, 0, FilePath, -1, 0, 0, 0, 0);
 		WideCharToMultiByte(CP_ACP, 0, FilePath, -1, ConvertFullPath, Length, 0, 0);
 
+		if (!m_TileMapSprite)
+			m_TileMapSprite = CSceneManager::GetInst()->GetScene()->CreateGameObject<CTileMapSprite>("TileMapInfo");
+
 		CGameObject* TileMapObj = m_TileMap->GetGameObject();
+
+		TileMapObj->ClearSceneComponent<CTileMapComponent>();
 
 		TileMapObj->Load(ConvertFullPath);
 	}

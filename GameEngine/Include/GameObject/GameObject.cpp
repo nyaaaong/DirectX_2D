@@ -146,6 +146,25 @@ int CGameObject::GetAllComponentFlag()
     return Ret;
 }
 
+void CGameObject::GetSceneComponentName(std::vector<std::string>& vecName)
+{
+	size_t Size = m_SceneComponentList.size();
+
+	vecName.resize(Size);
+
+	int Index = 0;
+
+	auto	iter = m_SceneComponentList.begin();
+	auto	iterEnd = m_SceneComponentList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		vecName[Index] = (*iter)->GetName();
+
+		++Index;
+	}
+}
+
 void CGameObject::Start()
 {
 	if (m_RootComponent)
