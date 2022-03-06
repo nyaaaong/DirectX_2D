@@ -17,34 +17,38 @@ protected:
 	virtual ~CPlayer2D();
 
 private:
-	CSharedPtr<CSpriteComponent>    m_Sprite;
-	CSharedPtr<CSpriteComponent>    m_ChildLeftSprite;
-	CSharedPtr<CSpriteComponent>    m_ChildRightSprite;
-	CSharedPtr<CSceneComponent>     m_ChildLeftMuzzle;
-	CSharedPtr<CSceneComponent>     m_ChildRightMuzzle;
-	CSharedPtr<CSceneComponent>     m_ChildRoot;
-	CSharedPtr<CSceneComponent>     m_Muzzle;
-
-	CSharedPtr<CSpriteComponent>    m_Child1Sprite;
-	CSharedPtr<CSpriteComponent>    m_Child2Sprite;
-	CSharedPtr<CSpriteComponent>    m_Child3Sprite;
-	CSharedPtr<CSpriteComponent>    m_Child4Sprite;
-
 	CSharedPtr<CColliderBox2D>       m_Body;
 	CSharedPtr<CCameraComponent>     m_Camera;
-
 	CSharedPtr<CWidgetComponent>     m_SimpleHUDWidget;
-
 	bool        m_SolW;
-	float       m_WDistance;
-	float       m_Opacity;
-
 	bool	m_EnableInput;
 	bool	m_Dodge;
-
+	bool	m_Move;
 	bool	m_AttackCoolDown;
+	float       m_WDistance;
+	float       m_Opacity;
 	float	m_AttackTimer;
 	float	m_AttackTimerMax;
+	float	m_MoveSpeed;	
+	Vector3	m_PrevPos;
+	int		m_Dir;
+	bool	m_SetCameraInfo;
+
+public:
+	CSharedPtr<CCameraComponent> GetCameraComponent()	const
+	{
+		return m_Camera;
+	}
+
+	bool IsDir(Character_Direction Dir)
+	{
+		return m_Dir & (int)Dir;
+	}
+
+	bool IsMove()	const
+	{
+		return m_Move;
+	}
 
 public:
 	void SetEnableInput(bool Enable)
@@ -53,6 +57,7 @@ public:
 	}
 
 public:
+	virtual void Start();
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
@@ -71,10 +76,20 @@ private:
 	void Attack1(float DeltaTime);
 	void test(float DeltatTime);
 
+public:
+	void SetDir(Character_Direction Dir);
+	void ClearDir(Character_Direction Dir);
+
+private:
+	void UpdateAnimDir();
+
 private:
 	void Action(float DeltaTime);
-	void Skill1(float DeltaTime);
 	void MovePointDown(float DeltaTime);
 	void PathResult(const std::list<Vector3>& PathList);
+
+private:
+	void ChangeAnimIdle();
+	void ChangeAnimWalk();
 };
 

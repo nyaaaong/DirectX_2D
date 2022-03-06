@@ -2,27 +2,29 @@
 
 #include "Scene/SceneMode.h"
 #include "../Widget/MainWidget.h"
+#include "../Object/TileMap.h"
 
 class CMainScene :
-    public CSceneMode
+	public CSceneMode
 {
 public:
-    CMainScene();
-    ~CMainScene();
+	CMainScene();
+	~CMainScene();
 
 private:
 	CSharedPtr<CMainWidget> m_MainWidget;
 	std::function<void(bool, float)> m_LoadingFunction;
-	class CBubbleParticle* m_BubbleParticle;
+	CSharedPtr<CTileMap> m_TileMap;
 
 public:
-    virtual bool Init();
-    virtual void Update(float DeltaTime);
+	CSharedPtr<CTileMap> GetTileMap()	const
+	{
+		return m_TileMap;
+	}
 
-private:
-	void CreateMaterial();
-    void CreateAnimationSequence();
-	void CreateParticle();
+public:
+	virtual bool Init();
+	virtual void Update(float DeltaTime);
 
 public:
 	template <typename T>

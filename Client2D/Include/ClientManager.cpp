@@ -6,8 +6,7 @@
 #include "Scene/MainScene.h"
 #include "Scene/StartScene.h"
 #include "Resource/ResourceManager.h"
-#include "Widget/MouseNormal.h"
-#include "Widget/MouseAttack.h"
+#include "Widget/MouseCursor.h"
 #include "Object/Player2D.h"
 #include "Object/TileMap.h"
 #include "Component/TileMapComponent.h"
@@ -60,8 +59,7 @@ bool CClientManager::Init(HINSTANCE hInst)
 	CResourceManager::GetInst()->SetVolume(10);
 
 	// 마우스 위젯 설정
-	CMouseNormal* MouseNormal = CEngine::GetInst()->CreateMouse<CMouseNormal>(Mouse_State::Normal, "MouseNormal");
-	CMouseAttack* MouseAttack = CEngine::GetInst()->CreateMouse<CMouseAttack>(Mouse_State::State1, "MouseAttack");
+	CMouseCursor* MouseCursor = CEngine::GetInst()->CreateMouse<CMouseCursor>(Mouse_State::Normal, "MouseCursor");
 
 	return true;
 }

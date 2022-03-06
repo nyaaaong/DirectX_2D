@@ -18,6 +18,8 @@ CStartScene::~CStartScene()
 
 bool CStartScene::Init()
 {
+	UseCamera(false);
+
 	m_StartWidget = m_Scene->GetViewport()->CreateWidgetWindow<CStartWidget>("StartWidget");
 
 	return true;

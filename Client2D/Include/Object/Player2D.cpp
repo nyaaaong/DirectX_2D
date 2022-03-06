@@ -1,21 +1,24 @@
 
 #include "Player2D.h"
 #include "Bullet.h"
-#include "BulletTornaido.h"
 #include "BubbleParticle.h"
 #include "Input.h"
 #include "PlayerAnimation2D.h"
-#include "BulletCamera.h"
 #include "Scene/Scene.h"
 #include "Scene/NavigationManager.h"
 #include "Resource/Material/Material.h"
 #include "../Widget/SimpleHUD.h"
+#include "../Scene/MainScene.h"
 
-CPlayer2D::CPlayer2D()	:
+CPlayer2D::CPlayer2D() :
 	m_EnableInput(true),
 	m_Dodge(false),
 	m_AttackTimer(0.f),
-	m_AttackCoolDown(false)
+	m_AttackCoolDown(false),
+	m_Move(false),
+	m_SetCameraInfo(false),
+	m_MoveSpeed(200.f),
+	m_Dir(0)
 {
 	SetTypeID<CPlayer2D>();
 	m_SolW = false;
@@ -29,17 +32,6 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	CGameObject(obj)
 {
 	m_Sprite = (CSpriteComponent*)FindComponent("PlayerSprite");
-	m_ChildLeftSprite = (CSpriteComponent*)FindComponent("PlayerChildLeftSprite");
-	m_ChildRightSprite = (CSpriteComponent*)FindComponent("PlayerChildRightSprite");
-	m_ChildLeftMuzzle = (CSceneComponent*)FindComponent("LeftMuzzle");
-	m_ChildRightMuzzle = (CSceneComponent*)FindComponent("RightMuzzle");
-	m_ChildRoot = (CSceneComponent*)FindComponent("PlayerChildRoot");
-	m_Muzzle = (CSceneComponent*)FindComponent("Muzzle");
-
-	m_Child1Sprite = (CSpriteComponent*)FindComponent("PlayerChild1Sprite");
-	m_Child2Sprite = (CSpriteComponent*)FindComponent("PlayerChild2Sprite");
-	m_Child3Sprite = (CSpriteComponent*)FindComponent("PlayerChild3Sprite");
-	m_Child4Sprite = (CSpriteComponent*)FindComponent("PlayerChild4Sprite");
 
 	m_Body = (CColliderBox2D*)FindComponent("Body");
 	m_Camera = (CCameraComponent*)FindComponent("Camera");
@@ -47,34 +39,66 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 
 	m_Opacity = obj.m_Opacity;
 	m_Dodge = false;
+	m_Move = false;
 
 
 	m_AttackTimer = 0.f;
 	m_AttackTimerMax = obj.m_AttackTimerMax;
 	m_AttackCoolDown = false;
+
+	m_MoveSpeed = obj.m_MoveSpeed;
+
+	m_Dir = 0;
+
+	m_SetCameraInfo = false;
 }
 
 CPlayer2D::~CPlayer2D()
 {
 }
 
+void CPlayer2D::SetDir(Character_Direction Dir)
+{
+	switch (Dir)
+	{
+	case Character_Direction::Down:
+		m_Dir &= ~(int)Character_Direction::Up;
+		break;
+	case Character_Direction::Left:
+		m_Dir &= ~(int)Character_Direction::Right;
+		break;
+	case Character_Direction::Right:
+		m_Dir &= ~(int)Character_Direction::Left;
+		break;
+	case Character_Direction::Up:
+		m_Dir &= ~(int)Character_Direction::Down;
+		break;
+	}
+
+	m_Dir |= (int)Dir;
+}
+
+void CPlayer2D::ClearDir(Character_Direction Dir)
+{
+	m_Dir &= ~(int)Dir;
+}
+
+void CPlayer2D::Start()
+{
+	CGameObject::Start();
+
+	Vector2	Size = GetAnimationSize2D();
+	m_Body->SetExtent(Size);
+}
+
 bool CPlayer2D::Init()
 {
+	if (!CGameObject::Init())
+		return false;
+
 	m_Sprite = CreateComponent<CSpriteComponent>("PlayerSprite");
-	m_ChildLeftSprite = CreateComponent<CSpriteComponent>("PlayerChildLeftSprite");
-	m_ChildRightSprite = CreateComponent<CSpriteComponent>("PlayerChildRightSprite");
-	m_ChildRoot = CreateComponent<CSceneComponent>("PlayerChildRoot");
-	m_Muzzle = CreateComponent<CSceneComponent>("Muzzle");
 
 	m_Body = CreateComponent<CColliderBox2D>("Body");
-
-	m_ChildLeftMuzzle = CreateComponent<CSceneComponent>("LeftMuzzle");
-	m_ChildRightMuzzle = CreateComponent<CSceneComponent>("RightMuzzle");
-
-	m_Child1Sprite = CreateComponent<CSpriteComponent>("PlayerChild1Sprite");
-	m_Child2Sprite = CreateComponent<CSpriteComponent>("PlayerChild2Sprite");
-	m_Child3Sprite = CreateComponent<CSpriteComponent>("PlayerChild3Sprite");
-	m_Child4Sprite = CreateComponent<CSpriteComponent>("PlayerChild4Sprite");
 
 	m_Camera = CreateComponent<CCameraComponent>("Camera");
 
@@ -91,10 +115,6 @@ bool CPlayer2D::Init()
 
 	m_Sprite->AddChild(m_Body);
 	m_Sprite->AddChild(m_Camera);
-	m_Sprite->AddChild(m_ChildLeftSprite);
-	m_Sprite->AddChild(m_ChildRightSprite);
-	m_Sprite->AddChild(m_Muzzle);
-	m_Sprite->AddChild(m_ChildRoot);
 	m_Sprite->AddChild(m_SimpleHUDWidget);
 
 	m_SimpleHUDWidget->SetRelativePos(-50.f, 50.f, 0.f);
@@ -103,68 +123,7 @@ bool CPlayer2D::Init()
 
 	m_Sprite->CreateAnimationInstance<CPlayerAnimation2D>();
 
-	m_ChildLeftSprite->AddChild(m_ChildLeftMuzzle);
-	m_ChildRightSprite->AddChild(m_ChildRightMuzzle);
-
-
-	m_ChildLeftSprite->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "Teemo", TEXT("Teemo.jpg"));
-	m_ChildRightSprite->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "Teemo", TEXT("Teemo.jpg"));
-
-	m_ChildLeftSprite->SetBaseColor(1.f, 0.f, 0.f, 1.f);
-	m_ChildRightSprite->SetBaseColor(1.f, 0.f, 0.f, 1.f);
-
-	m_ChildRoot->AddChild(m_Child1Sprite);
-	m_ChildRoot->AddChild(m_Child2Sprite);
-	m_ChildRoot->AddChild(m_Child3Sprite);
-	m_ChildRoot->AddChild(m_Child4Sprite);
-
-	m_Muzzle->SetRelativePos(0.f, 150.f, 0.f);
-	m_Muzzle->SetInheritRotZ(true);
-
-	m_ChildLeftMuzzle->SetRelativePos(0.f, 100.f, 0.f);
-	m_ChildLeftMuzzle->SetInheritRotZ(true);
-
-	m_ChildRightMuzzle->SetRelativePos(0.f, 100.f, 0.f);
-	m_ChildRightMuzzle->SetInheritRotZ(true);
-
-	m_ChildRightSprite->SetRelativeScale(50.f, 50.f, 1.f);
-	m_ChildRightSprite->SetInheritScale(false);
-	m_ChildRightSprite->SetRelativePos(100.f, 0.f, 0.f);
-	m_ChildRightSprite->SetPivot(0.5f, 0.5f, 0.f);
-	m_ChildRightSprite->SetInheritRotZ(true);
-
-	m_ChildLeftSprite->SetRelativeScale(50.f, 50.f, 1.f);
-	m_ChildLeftSprite->SetInheritScale(false);
-	m_ChildLeftSprite->SetRelativePos(-100.f, 0.f, 0.f);
-	m_ChildLeftSprite->SetPivot(0.5f, 0.5f, 0.f);
-	m_ChildLeftSprite->SetInheritRotZ(true);
-
-	m_Child1Sprite->SetRelativeScale(25.f, 25.f, 1.f);
-	m_Child1Sprite->SetInheritScale(false);
-	m_Child1Sprite->SetRelativePos(200.f, 0.f, 0.f);
-	m_Child1Sprite->SetPivot(0.5f, 0.5f, 0.f);
-	m_Child1Sprite->SetInheritRotZ(true);
-
-	m_Child2Sprite->SetRelativeScale(25.f, 25.f, 1.f);
-	m_Child2Sprite->SetInheritScale(false);
-	m_Child2Sprite->SetRelativePos(-200.f, 0.f, 0.f);
-	m_Child2Sprite->SetPivot(0.5f, 0.5f, 0.f);
-	m_Child2Sprite->SetInheritRotZ(true);
-
-	m_Child3Sprite->SetRelativeScale(25.f, 25.f, 1.f);
-	m_Child3Sprite->SetInheritScale(false);
-	m_Child3Sprite->SetRelativePos(0.f, 200.f, 0.f);
-	m_Child3Sprite->SetPivot(0.5f, 0.5f, 0.f);
-	m_Child3Sprite->SetInheritRotZ(true);
-
-	m_Child4Sprite->SetRelativeScale(25.f, 25.f, 1.f);
-	m_Child4Sprite->SetInheritScale(false);
-	m_Child4Sprite->SetRelativePos(0.f, -200.f, 0.f);
-	m_Child4Sprite->SetPivot(0.5f, 0.5f, 0.f);
-	m_Child4Sprite->SetInheritRotZ(true);
-
-	m_Sprite->SetRelativeScale(100.f, 100.f, 1.f);
-	m_Sprite->SetRelativePos(100.f, 50.f, 0.f);
+	m_Sprite->SetRelativePos(650.f, 600.f, 0.f);
 	m_Sprite->SetPivot(0.5f, 0.5f, 0.f);
 
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveUp", KeyState_Push, this, &CPlayer2D::MoveUp);
@@ -177,7 +136,6 @@ bool CPlayer2D::Init()
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Dodge", KeyState_Down, this, &CPlayer2D::Dodge);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Attack1", KeyState_Push, this, &CPlayer2D::Attack1);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("test", KeyState_Push, this, &CPlayer2D::test);
-	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Skill1", KeyState_Down, this, &CPlayer2D::Skill1);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MovePoint", KeyState_Down, this, &CPlayer2D::MovePointDown);
 
 	return true;
@@ -186,6 +144,38 @@ bool CPlayer2D::Init()
 void CPlayer2D::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
+
+	if (!m_SetCameraInfo)
+	{
+		CSceneMode* SceneMode = m_Scene->GetSceneMode();
+		CMainScene* Scene = dynamic_cast<CMainScene*>(SceneMode);
+
+		if (!Scene)
+			return;
+
+		CTileMap* TileMap = Scene->GetTileMap();
+
+		if (TileMap)
+		{
+			m_SetCameraInfo = true;
+
+			Vector3	StartPos, EndPos;
+
+			float	Count = static_cast<float>(TileMap->GetTileCountX() * TileMap->GetTileCountY());
+
+			EndPos.x = Count;
+			EndPos.y = Count;
+
+			m_Camera->SetCameraLimit(StartPos, EndPos);
+		}
+	}
+
+	if (m_Sprite && m_Move)
+	{
+		if (!CInput::GetInst()->IsKeyDown("MoveUp") && !CInput::GetInst()->IsKeyDown("MoveDown") &&
+			!CInput::GetInst()->IsKeyDown("MoveLeft") && !CInput::GetInst()->IsKeyDown("MoveRight"))
+			m_Move = false;
+	}
 
 	if (m_AttackCoolDown)
 	{
@@ -198,30 +188,7 @@ void CPlayer2D::Update(float DeltaTime)
 		}
 	}
 
-	static bool Fire2 = false;
-
 	static bool	Hide = false;
-
-	if (GetAsyncKeyState('2') & 0x8000)
-	{
-		Fire2 = true;
-	}
-
-	else if (Fire2)
-	{
-		Fire2 = false;
-
-		CBulletTornaido* Bullet = m_Scene->CreateGameObject<CBulletTornaido>("Bullet");
-
-		//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
-		Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
-		Bullet->SetWorldRotation(GetWorldRot());
-		Bullet->SetCollisionProfile("PlayerAttack");
-
-		Hide = true;
-	}
-
-	m_ChildRoot->AddRelativeRotation(0.f, 0.f, 180.f * DeltaTime);
 
 	if (Hide)
 	{
@@ -234,6 +201,7 @@ void CPlayer2D::Update(float DeltaTime)
 	}
 
 	Action(DeltaTime);
+	UpdateAnimDir();
 }
 
 void CPlayer2D::PostUpdate(float DeltaTime)
@@ -251,7 +219,13 @@ void CPlayer2D::MoveUp(float DeltaTime)
 	if (!m_EnableInput)
 		return;
 
-	m_Sprite->AddRelativePos(m_Sprite->GetWorldAxis(AXIS_Y) * 300.f * DeltaTime);
+	m_Move = true;
+
+	SetDir(Character_Direction::Up);
+
+	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_Y) * m_MoveSpeed * DeltaTime;
+
+	m_Sprite->AddRelativePos(Result);
 }
 
 void CPlayer2D::MoveDown(float DeltaTime)
@@ -259,7 +233,13 @@ void CPlayer2D::MoveDown(float DeltaTime)
 	if (!m_EnableInput)
 		return;
 
-	m_Sprite->AddRelativePos(m_Sprite->GetWorldAxis(AXIS_Y) * -300.f * DeltaTime);
+	m_Move = true;
+
+	SetDir(Character_Direction::Down);
+
+	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_Y) * -m_MoveSpeed * DeltaTime;
+
+	m_Sprite->AddRelativePos(Result);
 }
 
 void CPlayer2D::MoveLeft(float DeltaTime)
@@ -267,7 +247,13 @@ void CPlayer2D::MoveLeft(float DeltaTime)
 	if (!m_EnableInput)
 		return;
 
-	m_Sprite->AddRelativePos(m_Sprite->GetWorldAxis(AXIS_X) * -300.f * DeltaTime);
+	m_Move = true;
+
+	SetDir(Character_Direction::Left);
+
+	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_X) * -m_MoveSpeed * DeltaTime;
+
+	m_Sprite->AddRelativePos(Result);
 }
 
 void CPlayer2D::MoveRight(float DeltaTime)
@@ -275,7 +261,13 @@ void CPlayer2D::MoveRight(float DeltaTime)
 	if (!m_EnableInput)
 		return;
 
-	m_Sprite->AddRelativePos(m_Sprite->GetWorldAxis(AXIS_X) * 300.f * DeltaTime);
+	m_Move = true;
+
+	SetDir(Character_Direction::Right);
+
+	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_X) * m_MoveSpeed * DeltaTime;
+
+	m_Sprite->AddRelativePos(Result);
 }
 
 void CPlayer2D::RotationZInv(float DeltaTime)
@@ -299,6 +291,8 @@ void CPlayer2D::Dodge(float DeltaTime)
 	if (!m_EnableInput)
 		return;
 
+	m_Move = true;
+
 	m_EnableInput = false;
 	m_Dodge = true;
 
@@ -308,6 +302,8 @@ void CPlayer2D::Dodge(float DeltaTime)
 void CPlayer2D::DodgeEnd(float DeltaTime)
 {
 	m_EnableInput = true;
+
+	m_Move = false;
 
 	m_Sprite->GetAnimationInstance()->ChangeAnimation("PlayerIdleD");
 }
@@ -322,21 +318,18 @@ void CPlayer2D::Attack(float DeltaTime)
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
-	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot());
 	Bullet->SetCollisionProfile("PlayerAttack");
 
 	Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
-	Bullet->SetWorldPos(m_ChildLeftMuzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot());
 	Bullet->SetCollisionProfile("PlayerAttack");
 
 	Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
-	Bullet->SetWorldPos(m_ChildRightMuzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot());
 	Bullet->SetCollisionProfile("PlayerAttack");
 }
@@ -351,21 +344,18 @@ void CPlayer2D::Attack1(float DeltaTime)
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
-	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot());
 	Bullet->SetCollisionProfile("PlayerAttack");
 
 	Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
-	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot() + Vector3(0.f, 0.f, 45.f));
 	Bullet->SetCollisionProfile("PlayerAttack");
 
 	Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
 
 	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
-	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot() + Vector3(0.f, 0.f, -45.f));
 	Bullet->SetCollisionProfile("PlayerAttack");
 }
@@ -373,6 +363,30 @@ void CPlayer2D::Attack1(float DeltaTime)
 void CPlayer2D::test(float DeltatTime)
 {
 	int a = 0;
+}
+
+void CPlayer2D::UpdateAnimDir()
+{
+	if (CInput::GetInst()->IsKeyDown("MoveUp") || CInput::GetInst()->IsKeyDown("MoveDown"))
+	{
+		if (!CInput::GetInst()->IsKeyDown("MoveLeft") && IsDir(Character_Direction::Left))
+			ClearDir(Character_Direction::Left);
+
+		if (!CInput::GetInst()->IsKeyDown("MoveRight") && IsDir(Character_Direction::Right))
+			ClearDir(Character_Direction::Right);
+	}
+
+	else if (CInput::GetInst()->IsKeyDown("MoveLeft") || CInput::GetInst()->IsKeyDown("MoveRight"))
+	{
+		if (!CInput::GetInst()->IsKeyDown("MoveUp") && IsDir(Character_Direction::Up))
+			ClearDir(Character_Direction::Up);
+
+		if (!CInput::GetInst()->IsKeyDown("MoveDown") && IsDir(Character_Direction::Down))
+			ClearDir(Character_Direction::Down);
+	}
+
+	ChangeAnimIdle();
+	ChangeAnimWalk();
 }
 
 void CPlayer2D::Action(float DeltaTime)
@@ -388,21 +402,6 @@ void CPlayer2D::Action(float DeltaTime)
 		else
 			m_Sprite->AddRelativePos(m_Sprite->GetWorldAxis(AXIS_Y) * -600.f * DeltaTime);
 	}
-}
-
-void CPlayer2D::Skill1(float DeltaTime)
-{
-	if (!m_EnableInput || m_AttackCoolDown)
-		return;
-
-	m_AttackCoolDown = true;
-
-	CBulletCamera* Bullet = m_Scene->CreateGameObject<CBulletCamera>("Bullet");
-
-	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
-	Bullet->SetWorldPos(m_Muzzle->GetWorldPos());
-	Bullet->SetWorldRotation(GetWorldRot());
-	Bullet->SetCollisionProfile("PlayerAttack");
 }
 
 void CPlayer2D::MovePointDown(float DeltaTime)
@@ -421,5 +420,85 @@ void CPlayer2D::PathResult(const std::list<Vector3>& PathList)
 
 	else
 	{
+	}
+}
+
+void CPlayer2D::ChangeAnimIdle()
+{
+	if (!m_Move)
+	{
+		if (IsDir(Character_Direction::Down) && !IsDir(Character_Direction::Left) && !IsDir(Character_Direction::Right))
+		{
+			m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Idle_D");
+		}
+
+		else if (IsDir(Character_Direction::Up))
+		{
+			if (IsDir(Character_Direction::Left))
+			{
+				m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Idle_UL");
+				return;
+			}
+
+			else if (IsDir(Character_Direction::Right))
+			{
+				m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Idle_UR");
+				return;
+			}
+
+			m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Idle_U");
+		}
+
+		else if (IsDir(Character_Direction::Left))
+		{
+			m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Idle_DL");
+			return;
+		}
+
+		else if (IsDir(Character_Direction::Right))
+		{
+			m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Idle_DR");
+			return;
+		}
+	}
+}
+
+void CPlayer2D::ChangeAnimWalk()
+{
+	if (m_Move)
+	{
+		if (IsDir(Character_Direction::Down) && !IsDir(Character_Direction::Left) && !IsDir(Character_Direction::Right))
+		{
+			m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Walk_D");
+		}
+
+		else if (IsDir(Character_Direction::Up))
+		{
+			if (IsDir(Character_Direction::Left))
+			{
+				m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Walk_UL");
+				return;
+			}
+
+			else if (IsDir(Character_Direction::Right))
+			{
+				m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Walk_UR");
+				return;
+			}
+
+			m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Walk_U");
+		}
+
+		else if (IsDir(Character_Direction::Left))
+		{
+			m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Walk_DL");
+			return;
+		}
+
+		else if (IsDir(Character_Direction::Right))
+		{
+			m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Walk_DR");
+			return;
+		}
 	}
 }

@@ -22,10 +22,24 @@ CTileMap::~CTileMap()
 void CTileMap::Start()
 {
 	CGameObject::Start();
+
+	if (!m_TileMap)
+	{
+		CSceneComponent* Root = m_RootComponent;
+		CTileMapComponent* TileMap = dynamic_cast<CTileMapComponent*>(Root);
+
+		if (!TileMap)
+			ASSERT("if (!TileMap)");
+
+		m_TileMap = TileMap;
+	}
 }
 
 bool CTileMap::Init()
 {
+	if (!CGameObject::Init())
+		return false;
+
 	m_TileMap = CreateComponent<CTileMapComponent>("TileMap");
 
 	SetRootComponent(m_TileMap);
@@ -54,4 +68,52 @@ void CTileMap::PostUpdate(float DeltaTime)
 CTileMap* CTileMap::Clone()
 {
 	return DBG_NEW CTileMap(*this);
+}
+
+int CTileMap::GetTileCountX() const
+{
+	if (!m_TileMap)
+		return -1;
+
+	return m_TileMap->GetTileCountX();
+}
+
+int CTileMap::GetTileCountY() const
+{
+	if (!m_TileMap)
+		return -1;
+
+	return m_TileMap->GetTileCountY();
+}
+
+Vector3 CTileMap::GetTileSize() const
+{
+	if (!m_TileMap)
+		return Vector3();
+
+	return m_TileMap->GetTileSize();
+}
+
+CTile* CTileMap::GetTile(const Vector3& Pos) const
+{
+	if (!m_TileMap)
+		return nullptr;
+
+	return m_TileMap->GetTile(Pos);
+}
+
+CTile* CTileMap::GetTile(int x, int y) const
+{
+	if (!m_TileMap)
+		return nullptr;
+
+	return m_TileMap->GetTile(x, y);
+}
+
+CTile* CTileMap::GetTile(int Index) const
+{
+	if (!m_TileMap)
+		return nullptr;
+
+	return m_TileMap->GetTile(Index);
 }

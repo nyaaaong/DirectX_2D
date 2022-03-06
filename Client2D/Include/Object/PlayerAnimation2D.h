@@ -13,5 +13,14 @@ public:
 public:
 	virtual bool Init();
 	virtual CPlayerAnimation2D* Clone();
+
+private:
+	void Idle();
+	void Walk();
+	void Dodge();
+	void Death();
+	void Fall();
+	void GetItem();
+	void Respawn();
 };
 

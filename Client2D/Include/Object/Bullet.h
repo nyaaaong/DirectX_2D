@@ -17,9 +17,6 @@ private:
     CSharedPtr<class CSpriteComponent>    m_Sprite;
 	float   m_Distance;
 	CSharedPtr<class CColliderCircle>	m_Body;
-	class CSparkParticle* m_SparkParticleObject;
-	CParticle* m_SparkParticle;
-	CMaterial* m_SparkMaterial;
 
 public:
 	void SetCollisionProfile(const std::string& Name);
@@ -34,9 +31,5 @@ public:
 public:
 	void OnCollisionBegin(const CollisionResult& result);
 	void OnCollisionEnd(const CollisionResult& result);
-
-private:
-	void CreateMaterial();
-	void CreateParticle();
 };
 
