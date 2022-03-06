@@ -13,10 +13,22 @@ protected:
 
 protected:
 	class CScene* m_Scene;
-	CSharedPtr<class CGameObject>	m_PlayerObject;
+	CSharedPtr<class CGameObject> m_PlayerObject;
+	bool		m_UseCamera;
 
 public:
-	class CGameObject* GetPlayerObject()	const
+	void UseCamera(bool UseCamera = true)
+	{
+		m_UseCamera = UseCamera;
+	}
+
+public:
+	bool IsUseCamera()	const
+	{
+		return m_UseCamera;
+	}
+
+	CSharedPtr<class CGameObject> GetPlayerObject()	const
 	{
 		return m_PlayerObject;
 	}

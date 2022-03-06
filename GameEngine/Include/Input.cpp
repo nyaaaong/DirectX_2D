@@ -57,7 +57,20 @@ bool CInput::GetKeyState(const std::string& Name, Key_State state)
 	if (!Key)
 		ASSERT("if (!Key)");
 
-	return Key->State.State[state];
+	return m_vecKeyState[Key->State.Key].State[state];
+}
+
+bool CInput::IsKeyDown(const std::string& Name)
+{
+	const KeyInfo* Key = FindKeyInfo(Name);	
+
+	if (!Key)
+		ASSERT("if (!Key)");
+
+	if (m_vecKeyState[Key->State.Key].State[Key_State::KeyState_Down] || m_vecKeyState[Key->State.Key].State[Key_State::KeyState_Push])
+		return true;
+
+    return false;
 }
 
 bool CInput::CreateKey(const std::string& Name, unsigned char Key)

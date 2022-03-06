@@ -15,24 +15,15 @@ protected:
 
 protected:
 	class CScene* m_Scene;
-
-public:
-	class CScene* GetScene()    const
-	{
-		return m_Scene;
-	}
-
-public:
-	void SetScene(class CScene* Scene);
-	virtual void Destroy();
-
-protected:
+	CSharedPtr<class CSpriteComponent>    m_Sprite;
 	CSharedPtr<CSceneComponent> m_RootComponent;
 	std::list<CSceneComponent*>	m_SceneComponentList;
 	std::vector<CSharedPtr<CObjectComponent>>   m_vecObjectComponent;
 	CGameObject* m_Parent;
 	std::vector<CSharedPtr<CGameObject>>   m_vecChildObject;
 	float		m_LifeSpan;
+	Vector2		m_AnimationSize;
+	class CAnimationSequence2DInstance* m_AnimationInstance;
 
 public:
 	void SetRootComponent(CSceneComponent* Component)
@@ -51,16 +42,26 @@ public:
 	}
 
 public:
+	class CScene* GetScene()    const
+	{
+		return m_Scene;
+	}
+
 	CSceneComponent* GetRootComponent()	const
 	{
 		return m_RootComponent;
 	}
 
 public:
+	void SetScene(class CScene* Scene);
 	class CComponent* FindComponent(const std::string& Name);
 	void GetAllSceneComponentsName(std::vector<FindComponentName>& vecNames);
 	int GetAllComponentFlag();
 	void GetSceneComponentName(std::vector<std::string>& vecName);
+	// NavAgent가 있을 경우에 동작한다.
+	void Move(const Vector3& EndPos);
+	Vector2 GetAnimationSize2D()	const;
+	Vector3 GetAnimationSize()	const;
 
 public:
 	virtual void Start();
@@ -72,16 +73,13 @@ public:
 	virtual void Render();
 	virtual void PostRender();
 	virtual CGameObject* Clone();
+	virtual void Destroy();
 	virtual void Save(FILE* File);
 	virtual void Load(FILE* File);
 	virtual void Save(const char* FullPath);
 	virtual void Load(const char* FullPath);
 	virtual void Save(const char* FileName, const std::string& PathName);
 	virtual void Load(const char* FileName, const std::string& PathName);
-
-public:
-	// NavAgent가 있을 경우에 동작한다.
-	void Move(const Vector3& EndPos);
 
 public:
 	void SetInheritScale(bool Inherit)

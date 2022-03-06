@@ -26,9 +26,13 @@ public:
 		m_Info.Length.x = Width;
 		m_Info.Length.y = Height;
 
-		SetWorldScale(m_Info.Length.x * 2.f, m_Info.Length.y * 2.f, 1.f);
+		SetWorldScale(m_Info.Length.x, m_Info.Length.y, 1.f);
 	}
 
+	void SetExtent(const Vector2& Size)
+	{
+		SetExtent(Size.x, Size.y);
+	}
 
 public:
     virtual void Start();

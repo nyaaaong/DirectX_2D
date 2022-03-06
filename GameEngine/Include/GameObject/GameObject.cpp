@@ -15,7 +15,8 @@
 CGameObject::CGameObject()	:
 	m_Scene(nullptr),
 	m_Parent(nullptr),
-	m_LifeSpan(0.f)
+	m_LifeSpan(0.f),
+	m_AnimationInstance(nullptr)
 {
 	SetTypeID<CGameObject>();
 }
@@ -23,6 +24,8 @@ CGameObject::CGameObject()	:
 CGameObject::CGameObject(const CGameObject& obj)
 {
 	*this = obj;
+
+	m_AnimationInstance = nullptr;
 
 	m_RefCount = 0;
 
@@ -165,6 +168,26 @@ void CGameObject::GetSceneComponentName(std::vector<std::string>& vecName)
 	}
 }
 
+Vector2 CGameObject::GetAnimationSize2D() const
+{
+	if (m_Sprite)
+	{
+		CAnimationSequence2DInstance* AnimInstance = m_Sprite->GetAnimationInstance();
+
+		if (AnimInstance)
+			return AnimInstance->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(0).Size;
+	}
+
+    return Vector2();
+}
+
+Vector3 CGameObject::GetAnimationSize() const
+{
+	Vector2	Size2D = GetAnimationSize2D();
+
+	return Vector3(Size2D.x, Size2D.y, 0.f);
+}
+
 void CGameObject::Start()
 {
 	if (m_RootComponent)
@@ -205,6 +228,19 @@ void CGameObject::Update(float DeltaTime)
 
 	if (m_RootComponent)
 		m_RootComponent->Update(DeltaTime);
+
+	//m_AnimationSize
+	if (m_Sprite)
+	{
+		m_AnimationInstance = m_Sprite->GetAnimationInstance();
+
+		if (m_AnimationInstance)
+		{
+			m_AnimationSize = m_AnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(0).Size;
+
+			m_Sprite->SetRelativeScale(m_AnimationSize.x, m_AnimationSize.y, 1.f);
+		}
+	}
 }
 
 void CGameObject::PostUpdate(float DeltaTime)

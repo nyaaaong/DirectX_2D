@@ -22,8 +22,14 @@ private:
 	float			m_GlobalAccTime;
 	CSharedPtr<class CTexture>	m_GlobalNoiseTexture;
 	class CStructuredBuffer* m_RandomBuffer;
+	bool		m_MouseWindowOut;
 
 public:
+	bool IsMouseWindowOut()	const
+	{
+		return m_MouseWindowOut;
+	}
+
 	class CWidgetWindow* GetMouseWidget()	const
 	{
 		return m_MouseWidget[(int)m_MouseState];
@@ -34,19 +40,9 @@ public:
 		return m_Space;
 	}
 
-	void SetEngineSpace(Engine_Space Space)
-	{
-		m_Space = Space;
-	}
-
 	bool IsPlay()	const
 	{
 		return m_Play;
-	}
-
-	void SetPlay(bool Play)
-	{
-		m_Play = Play;
 	}
 
 	HWND GetWindowHandle()	const
@@ -59,11 +55,6 @@ public:
 		return m_hInst;
 	}
 
-	void Exit()
-	{
-		DestroyWindow(m_hWnd);
-	}
-
 	float GetFPS()	const
 	{
 		return m_Timer->GetFPS();
@@ -72,6 +63,22 @@ public:
 	float GetDeltaTime()	const
 	{
 		return m_Timer->GetDeltaTime();
+	}
+
+public:
+	void SetEngineSpace(Engine_Space Space)
+	{
+		m_Space = Space;
+	}
+
+	void SetPlay(bool Play)
+	{
+		m_Play = Play;
+	}
+
+	void Exit()
+	{
+		DestroyWindow(m_hWnd);
 	}
 
 public:

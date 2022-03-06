@@ -3,7 +3,8 @@
 #include "../Device.h"
 
 CCameraComponent::CCameraComponent()	:
-	m_RS{}
+	m_RS{},
+	m_UseLimit(false)
 {
 	SetTypeID<CCameraComponent>();
 	m_Render = false;
@@ -11,6 +12,8 @@ CCameraComponent::CCameraComponent()	:
 	m_CameraType = Camera_Type::Camera2D;
 	m_ViewAngle = 90.f;
 	m_Distance = 1000.f;
+
+	m_CameraSpeed = 300.f;
 }
 
 CCameraComponent::CCameraComponent(const CCameraComponent& com) :
@@ -24,10 +27,86 @@ CCameraComponent::CCameraComponent(const CCameraComponent& com) :
 	m_ViewAngle = com.m_ViewAngle;
 	m_Distance = com.m_Distance;
 	m_RS = com.m_RS;
+
+	m_CameraSpeed = com.m_CameraSpeed;
+
+	m_UseLimit = com.m_UseLimit;
+	m_LimitStartPos = com.m_LimitStartPos;
+	m_LimitEndPos = com.m_LimitEndPos;
 }
 
 CCameraComponent::~CCameraComponent()
 {
+}
+
+void CCameraComponent::SetRelativePos(const Vector3& Pos)
+{
+	CSceneComponent::SetRelativePos(Pos);
+
+	LimitCheck();
+}
+
+void CCameraComponent::SetRelativePos(float x, float y, float z)
+{
+	CSceneComponent::SetRelativePos(x, y, z);
+
+	LimitCheck();
+}
+
+void CCameraComponent::SetRelativePosX(float x)
+{
+	CSceneComponent::SetRelativePosX(x);
+
+	LimitCheck();
+}
+
+void CCameraComponent::SetRelativePosY(float y)
+{
+	CSceneComponent::SetRelativePosY(y);
+
+	LimitCheck();
+}
+
+void CCameraComponent::AddRelativePos(const Vector3& Pos)
+{
+	CSceneComponent::AddRelativePos(Pos);
+
+	LimitCheck();
+}
+
+void CCameraComponent::AddRelativePos(float x, float y, float z)
+{
+	CSceneComponent::AddRelativePos(x, y, z);
+
+	LimitCheck();
+}
+
+void CCameraComponent::SetWorldPos(const Vector3& Pos)
+{
+	CSceneComponent::SetWorldPos(Pos);
+
+	LimitCheck();
+}
+
+void CCameraComponent::SetWorldPos(float x, float y, float z)
+{
+	CSceneComponent::SetWorldPos(x, y, z);
+
+	LimitCheck();
+}
+
+void CCameraComponent::SetWorldPosX(float x)
+{
+	CSceneComponent::SetWorldPosX(x);
+
+	LimitCheck();
+}
+
+void CCameraComponent::SetWorldPosY(float y)
+{
+	CSceneComponent::SetRelativePosY(y);
+
+	LimitCheck();
 }
 
 void CCameraComponent::CreateProjectionMatrix()
@@ -46,6 +125,27 @@ void CCameraComponent::CreateProjectionMatrix()
 		break;
 	}
 
+}
+
+void CCameraComponent::LimitCheck()
+{
+	if (m_UseLimit)
+	{
+		Vector3	CamStartPos = GetWorldPos();
+		Vector3	CamEndPos = GetWorldPos() + Vector3((float)m_RS.Width, (float)m_RS.Height, 0.f);
+
+		if (m_LimitStartPos.x > CamStartPos.x)
+			SetWorldPosX(m_LimitStartPos.x);
+
+		else if (m_LimitEndPos.x < CamEndPos.x)
+			SetWorldPosX(m_LimitEndPos.x - (float)m_RS.Width);
+
+		if (m_LimitStartPos.y > CamStartPos.y)
+			SetWorldPosY(m_LimitStartPos.y);
+
+		else if (m_LimitEndPos.y < CamEndPos.y)
+			SetWorldPosY(m_LimitEndPos.y - (float)m_RS.Height);
+	}
 }
 
 void CCameraComponent::Start()

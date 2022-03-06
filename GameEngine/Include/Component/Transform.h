@@ -15,13 +15,9 @@ private:
 	class CScene* m_Scene;
 	class CGameObject* m_Object;
 	class CSceneComponent* m_Owner;
-
-private:
+	class CTransformConstantBuffer* m_CBuffer;
 	CTransform* m_Parent;
 	std::vector<CTransform*>	m_vecChild;
-	class CTransformConstantBuffer* m_CBuffer;
-
-private:
 	bool	m_InheritScale;
 	bool	m_InheritRotX;
 	bool	m_InheritRotY;
@@ -32,6 +28,20 @@ private:
 	bool	m_UpdateScale;
 	bool	m_UpdateRot;
 	bool	m_UpdatePos;
+	Vector3	m_RelativeScale;
+	Vector3	m_RelativeRot;
+	Vector3	m_RelativePos;
+	Vector3	m_RelativeAxis[AXIS_MAX];
+	Vector3	m_WorldScale;
+	Vector3	m_WorldRot;
+	Vector3	m_WorldPos;
+	Vector3	m_WorldAxis[AXIS_MAX];
+	Vector3	m_Pivot;
+	Vector3	m_MeshSize;
+	Matrix	m_matScale;
+	Matrix	m_matRot;
+	Matrix	m_matPos;
+	Matrix	m_matWorld;
 
 public:
 	void SetInheritScale(bool Inherit)
@@ -77,12 +87,6 @@ public:
 	void InheritWorldRotation(bool Current);
 	void InheritParentRotationWorldPos(bool Current);
 
-private:	// Relative
-	Vector3	m_RelativeScale;
-	Vector3	m_RelativeRot;
-	Vector3	m_RelativePos;
-	Vector3	m_RelativeAxis[AXIS_MAX];
-
 public:
 	const Vector3& GetRelativeScale()	const
 	{
@@ -92,6 +96,16 @@ public:
 	const Vector3& GetRelativeRot()	const
 	{
 		return m_RelativeRot;
+	}
+
+	float GetRelativePosX()	const
+	{
+		return m_RelativePos.x;
+	}
+
+	float GetRelativePosY()	const
+	{
+		return m_RelativePos.y;
 	}
 
 	const Vector3& GetRelativePos()	const
@@ -114,6 +128,8 @@ public:
 	void SetRelativeRotationZ(float z);
 	void SetRelativePos(const Vector3& Pos);
 	void SetRelativePos(float x, float y, float z);
+	void SetRelativePosX(float x);
+	void SetRelativePosY(float y);
 	void AddRelativeScale(const Vector3& Scale);
 	void AddRelativeScale(float x, float y, float z);
 	void AddRelativeRotation(const Vector3& Rot);
@@ -124,19 +140,6 @@ public:
 	void AddRelativePos(const Vector3& Pos);
 	void AddRelativePos(float x, float y, float z);
 
-private:
-	Vector3	m_WorldScale;
-	Vector3	m_WorldRot;
-	Vector3	m_WorldPos;
-	Vector3	m_WorldAxis[AXIS_MAX];
-	Vector3	m_Pivot;
-	Vector3	m_MeshSize;
-
-	Matrix	m_matScale;
-	Matrix	m_matRot;
-	Matrix	m_matPos;
-	Matrix	m_matWorld;
-
 public:
 	const Vector3& GetWorldScale()	const
 	{
@@ -146,6 +149,16 @@ public:
 	const Vector3& GetWorldRot()	const
 	{
 		return m_WorldRot;
+	}
+
+	float GetWorldPosX()	const
+	{
+		return m_WorldPos.x;
+	}
+
+	float GetWorldPosY()	const
+	{
+		return m_WorldPos.y;
 	}
 
 	const Vector3& GetWorldPos()	const
@@ -204,6 +217,8 @@ public:
 	void SetWorldRotationZ(float z);
 	void SetWorldPos(const Vector3& Pos);
 	void SetWorldPos(float x, float y, float z);
+	void SetWorldPosX(float x);
+	void SetWorldPosY(float y);
 	void AddWorldScale(const Vector3& Scale);
 	void AddWorldScale(float x, float y, float z);
 	void AddWorldRotation(const Vector3& Rot);
@@ -213,6 +228,8 @@ public:
 	void AddWorldRotationZ(float z);
 	void AddWorldPos(const Vector3& Pos);
 	void AddWorldPos(float x, float y, float z);
+	void AddWorldPosX(float x);
+	void AddWorldPosY(float y);
 
 public:
 	void Start();

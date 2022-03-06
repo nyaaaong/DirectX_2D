@@ -66,11 +66,11 @@ void CEditorManager::SetEditMode(EditMode Mode)
 		m_DragObj->SetWorldScale(0.f, 0.f, 1.f);
 		break;
 	case EditMode::TileMap:
-		if (m_DragObj)
+		/*if (m_DragObj)
 		{
 			m_DragObj->Destroy();
 			m_DragObj = nullptr;
-		}
+		}*/
 		break;
 	}
 
@@ -379,29 +379,29 @@ void CEditorManager::MoveCameraUp(float DeltaTime)
 {
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
 
-	// round : 소숫점을 반올림해서 타일간의 빈틈이 보이지 않게 한다.
-	Camera->AddWorldPos(Vector3(0.f, round(m_CameraMoveSpeed * DeltaTime), 0.f));
+	// ceil : 소숫점을 올림해서 타일간의 빈틈이 보이지 않게 한다.
+	Camera->AddWorldPos(Vector3(0.f, ceil(m_CameraMoveSpeed * DeltaTime), 0.f));
 }
 
 void CEditorManager::MoveCameraDown(float DeltaTime)
 {
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
 
-	Camera->AddWorldPos(Vector3(0.f, round(-m_CameraMoveSpeed * DeltaTime), 0.f));
+	Camera->AddWorldPos(Vector3(0.f, ceil(-m_CameraMoveSpeed * DeltaTime), 0.f));
 }
 
 void CEditorManager::MoveCameraLeft(float DeltaTime)
 {
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
 
-	Camera->AddWorldPos(Vector3(round(-m_CameraMoveSpeed * DeltaTime), 0.f, 0.f));
+	Camera->AddWorldPos(Vector3(ceil(-m_CameraMoveSpeed * DeltaTime), 0.f, 0.f));
 }
 
 void CEditorManager::MoveCameraRight(float DeltaTime)
 {
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
 
-	Camera->AddWorldPos(Vector3(round(m_CameraMoveSpeed * DeltaTime), 0.f, 0.f));
+	Camera->AddWorldPos(Vector3(ceil(m_CameraMoveSpeed * DeltaTime), 0.f, 0.f));
 }
 
 void CEditorManager::MoveTabUp(float DeltaTime)

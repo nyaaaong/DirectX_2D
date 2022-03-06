@@ -338,6 +338,24 @@ void CTransform::SetRelativePos(float x, float y, float z)
 	SetRelativePos(Pos);
 }
 
+void CTransform::SetRelativePosX(float x)
+{
+	m_RelativePos.x = x;
+
+	m_WorldPos.x = x;
+
+	InheritParentRotationPos(true);
+}
+
+void CTransform::SetRelativePosY(float y)
+{
+	m_RelativePos.y = y;
+
+	m_WorldPos.y = y;
+
+	InheritParentRotationPos(true);
+}
+
 void CTransform::AddRelativeScale(const Vector3& Scale)
 {
 	m_RelativeScale += Scale;
@@ -475,6 +493,22 @@ void CTransform::SetWorldPos(float x, float y, float z)
 	SetWorldPos(Pos);
 }
 
+void CTransform::SetWorldPosX(float x)
+{
+	m_WorldPos.x = x;
+	m_RelativePos.x = x;
+
+	InheritParentRotationWorldPos(true);
+}
+
+void CTransform::SetWorldPosY(float y)
+{
+	m_WorldPos.y = y;
+	m_RelativePos.y = y;
+
+	InheritParentRotationWorldPos(true);
+}
+
 void CTransform::AddWorldScale(const Vector3& Scale)
 {
 	m_WorldScale += Scale;
@@ -541,6 +575,22 @@ void CTransform::AddWorldPos(float x, float y, float z)
 	Vector3	Pos(x, y, z);
 
 	AddWorldPos(Pos);
+}
+
+void CTransform::AddWorldPosX(float x)
+{
+	m_WorldPos.x += x;
+	m_RelativePos.x = x;
+
+	InheritParentRotationWorldPos(true);
+}
+
+void CTransform::AddWorldPosY(float y)
+{
+	m_WorldPos.y += y;
+	m_RelativePos.y = y;
+
+	InheritParentRotationWorldPos(true);
 }
 
 void CTransform::Start()

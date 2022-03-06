@@ -87,6 +87,7 @@ public:
 
 public:
 	bool GetKeyState(const std::string& Name, Key_State state);
+	bool IsKeyDown(const std::string& Name);
 
 public:
 	bool CreateKey(const std::string& Name, unsigned char Key);

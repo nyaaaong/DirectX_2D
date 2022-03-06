@@ -34,6 +34,11 @@ public:
 	}
 
 public:
+	CSharedPtr<CSceneMode> GetSceneMode()	const
+	{
+		return m_Mode;
+	}
+
 	CNavigationManager* GetNavigationManager()	const
 	{
 		return m_NavManager;

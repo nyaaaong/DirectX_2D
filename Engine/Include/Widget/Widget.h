@@ -53,6 +53,11 @@ protected:
 	CSharedPtr<class CMesh>		m_Mesh;
 
 public:
+	const Vector2& GetRenderPos()	const
+	{
+		return m_RenderPos;
+	}
+
 	virtual void Enable(bool bEnable)
 	{
 		CRef::Enable(bEnable);

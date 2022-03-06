@@ -3,7 +3,8 @@
 #include "../GameObject/GameObject.h"
 
 CSceneMode::CSceneMode()	:
-	m_Scene(nullptr)
+	m_Scene(nullptr),
+	m_UseCamera(true)
 {
 	SetTypeID<CSceneMode>();
 }

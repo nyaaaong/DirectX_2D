@@ -395,6 +395,8 @@ void CEditorMenu::LoadScene()
 		CSceneManager::GetInst()->GetScene()->LoadFullPath(ConvertFullPath);
 
 		LoadSceneObject();
+
+		CEditorManager::GetInst()->SetEditMode(EditMode::TileMap);
 	}
 }
 

@@ -351,8 +351,6 @@ void CSpriteWindow::AddAnimationFrameButton()
 	float StartY = static_cast<float>(atoi(m_AnimStartFrameY->GetTextMultibyte()));
 	float EndX = static_cast<float>(atoi(m_AnimEndFrameX->GetTextMultibyte()));
 	float EndY = static_cast<float>(atoi(m_AnimEndFrameY->GetTextMultibyte()));
-	float SizeX = static_cast<float>(atoi(m_AnimSizeX->GetTextMultibyte()));
-	float SizeY = static_cast<float>(atoi(m_AnimSizeY->GetTextMultibyte()));
 
 	CDragObject* DragObj = CEditorManager::GetInst()->GetDragObj();
 
@@ -417,8 +415,6 @@ void CSpriteWindow::Modify()
 	float StartY = static_cast<float>(atoi(m_AnimStartFrameY->GetTextMultibyte()));
 	float EndX = static_cast<float>(atoi(m_AnimEndFrameX->GetTextMultibyte()));
 	float EndY = static_cast<float>(atoi(m_AnimEndFrameY->GetTextMultibyte()));
-	float SizeX = static_cast<float>(atoi(m_AnimSizeX->GetTextMultibyte()));
-	float SizeY = static_cast<float>(atoi(m_AnimSizeY->GetTextMultibyte()));
 
 	CDragObject* DragObj = CEditorManager::GetInst()->GetDragObj();
 

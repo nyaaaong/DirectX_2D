@@ -241,3 +241,11 @@ enum class Component_Flag
 	Particle = 0x80,
 	TileMap = 0x100
 };
+
+enum class Character_Direction
+{
+	Down = 0x1,
+	Left = 0x2,
+	Right = 0x4,
+	Up = 0x8
+};

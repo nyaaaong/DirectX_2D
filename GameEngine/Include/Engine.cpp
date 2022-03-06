@@ -29,7 +29,9 @@ CEngine::CEngine()	:
 	m_ShowCursorCount(0),
 	m_MouseState(Mouse_State::Normal),
 	m_GlobalCBuffer(nullptr),
-	m_GlobalAccTime(0.f)
+	m_RandomBuffer(nullptr),
+	m_GlobalAccTime(0.f),
+	m_MouseWindowOut(false)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(172854);
@@ -251,6 +253,9 @@ bool CEngine::Update(float DeltaTime)
 
 	if (m_MouseWidget[(int)m_MouseState])
 	{
+		// 마우스 커서의 중앙
+		Vector2	CursorCenter = m_MouseWidget[(int)m_MouseState]->m_Size * 0.5f;
+
 		// 마우스 위치를 얻어온다.
 		Vector2 Pos = CInput::GetInst()->GetMousePos();
 
@@ -259,6 +264,8 @@ bool CEngine::Update(float DeltaTime)
 		{
 			if (m_ShowCursorCount < 0)
 			{
+				m_MouseWindowOut = true;
+
 				ShowCursor(true);
 				m_ShowCursorCount = 0;
 			}
@@ -268,12 +275,17 @@ bool CEngine::Update(float DeltaTime)
 		{
 			if (m_ShowCursorCount == 0)
 			{
+				m_MouseWindowOut = false;
+
 				ShowCursor(false);
 				--m_ShowCursorCount;
 			}
 		}
 
 		Pos.y -= m_MouseWidget[(int)m_MouseState]->GetWindowSize().y;
+
+		Pos.x -= CursorCenter.x;
+		Pos.y += CursorCenter.y;
 
 		m_MouseWidget[(int)m_MouseState]->SetPos(Pos);
 

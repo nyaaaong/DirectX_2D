@@ -12,10 +12,11 @@ CCameraManager::~CCameraManager()
 
 void CCameraManager::Start()
 {
-	if (m_CurrentCamera->GetName() == "DefaultCamera")
+	if (m_CurrentCamera)
 		m_CurrentCamera->Start();
 
-	m_UICamera->Start();
+	if (m_UICamera)
+		m_UICamera->Start();
 }
 
 void CCameraManager::Init()
@@ -41,12 +42,12 @@ void CCameraManager::Init()
 
 void CCameraManager::Update(float DeltaTime)
 {
-	if (m_CurrentCamera->GetName() == "DefaultCamera")
+	if (m_CurrentCamera)
 		m_CurrentCamera->Update(DeltaTime);
 }
 
 void CCameraManager::PostUpdate(float DeltaTime)
 {
-	if (m_CurrentCamera->GetName() == "DefaultCamera")
+	if (m_CurrentCamera)
 		m_CurrentCamera->PostUpdate(DeltaTime);
 }

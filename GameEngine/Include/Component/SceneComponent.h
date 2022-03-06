@@ -137,6 +137,16 @@ public:
 		return m_Transform->GetRelativeRot();
 	}
 
+	float GetRelativePosX()	const
+	{
+		return m_Transform->GetRelativePosX();
+	}
+
+	float GetRelativePosY()	const
+	{
+		return m_Transform->GetRelativePosY();
+	}
+
 	const Vector3& GetRelativePos()	const
 	{
 		return m_Transform->GetRelativePos();
@@ -183,14 +193,24 @@ public:
 		m_Transform->SetRelativeRotationZ(z);
 	}
 
-	void SetRelativePos(const Vector3& Pos)
+	virtual void SetRelativePos(const Vector3& Pos)
 	{
 		m_Transform->SetRelativePos(Pos);
 	}
 
-	void SetRelativePos(float x, float y, float z)
+	virtual void SetRelativePos(float x, float y, float z)
 	{
 		m_Transform->SetRelativePos(x, y, z);
+	}
+
+	virtual void SetRelativePosX(float x)
+	{
+		m_Transform->SetRelativePosX(x);
+	}
+
+	virtual void SetRelativePosY(float y)
+	{
+		m_Transform->SetRelativePosY(y);
 	}
 
 	void AddRelativeScale(const Vector3& Scale)
@@ -228,12 +248,12 @@ public:
 		m_Transform->AddRelativeRotationZ(z);
 	}
 
-	void AddRelativePos(const Vector3& Pos)
+	virtual void AddRelativePos(const Vector3& Pos)
 	{
 		m_Transform->AddRelativePos(Pos);
 	}
 
-	void AddRelativePos(float x, float y, float z)
+	virtual void AddRelativePos(float x, float y, float z)
 	{
 		m_Transform->AddRelativePos(x, y, z);
 	}
@@ -247,6 +267,16 @@ public:
 	const Vector3& GetWorldRot()	const
 	{
 		return m_Transform->GetWorldRot();
+	}
+
+	float GetWorldPosX()	const
+	{
+		return m_Transform->GetWorldPosX();
+	}
+
+	float GetWorldPosY()	const
+	{
+		return m_Transform->GetWorldPosY();
 	}
 
 	const Vector3& GetWorldPos()	const
@@ -331,14 +361,24 @@ public:
 		m_Transform->SetWorldRotationZ(z);
 	}
 
-	void SetWorldPos(const Vector3& Pos)
+	virtual void SetWorldPos(const Vector3& Pos)
 	{
 		m_Transform->SetWorldPos(Pos);
 	}
 
-	void SetWorldPos(float x, float y, float z)
+	virtual void SetWorldPos(float x, float y, float z)
 	{
 		m_Transform->SetWorldPos(x, y, z);
+	}
+
+	virtual void SetWorldPosX(float x)
+	{
+		m_Transform->SetWorldPosX(x);
+	}
+
+	virtual void SetWorldPosY(float y)
+	{
+		m_Transform->SetWorldPosY(y);
 	}
 
 	void AddWorldScale(const Vector3& Scale)
@@ -376,14 +416,24 @@ public:
 		m_Transform->AddWorldRotationZ(z);
 	}
 
-	void AddWorldPos(const Vector3& Pos)
+	virtual void AddWorldPos(const Vector3& Pos)
 	{
 		m_Transform->AddWorldPos(Pos);
 	}
 
-	void AddWorldPos(float x, float y, float z)
+	virtual void AddWorldPos(float x, float y, float z)
 	{
 		m_Transform->AddWorldPos(x, y, z);
+	}
+
+	virtual void AddWorldPosX(float x)
+	{
+		m_Transform->AddWorldPosX(x);
+	}
+
+	virtual void AddWorldPosY(float y)
+	{
+		m_Transform->AddWorldPosY(y);
 	}
 };
 

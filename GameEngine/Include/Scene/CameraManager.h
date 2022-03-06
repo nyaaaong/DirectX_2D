@@ -20,16 +20,6 @@ private:
 	CSharedPtr<CCameraComponent>	m_UICamera;
 
 public:
-	CCameraComponent* GetCurrentCamera()	const
-	{
-		return m_CurrentCamera;
-	}
-
-	CCameraComponent* GetUICamera()	const
-	{
-		return m_UICamera;
-	}
-
 	void SetCurrentCamera(CCameraComponent* Camera)
 	{
 		m_CurrentCamera = Camera;
@@ -45,6 +35,17 @@ public:
 		m_CurrentCamera = m_KeepCamera;
 
 		m_KeepCamera = nullptr;
+	}
+
+public:
+	CCameraComponent* GetCurrentCamera()	const
+	{
+		return m_CurrentCamera;
+	}
+
+	CCameraComponent* GetUICamera()	const
+	{
+		return m_UICamera;
 	}
 
 public:
