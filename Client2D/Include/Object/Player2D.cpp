@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "PlayerAnimation2D.h"
 #include "Scene/Scene.h"
+#include "Scene/SceneManager.h"
 #include "Scene/NavigationManager.h"
 #include "Resource/Material/Material.h"
 #include "../Widget/SimpleHUD.h"
@@ -17,7 +18,7 @@ CPlayer2D::CPlayer2D() :
 	m_AttackCoolDown(false),
 	m_Move(false),
 	m_SetCameraInfo(false),
-	m_MoveSpeed(200.f),
+	m_MoveSpeed(400.f),
 	m_Dir(0)
 {
 	SetTypeID<CPlayer2D>();
@@ -40,7 +41,6 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_Opacity = obj.m_Opacity;
 	m_Dodge = false;
 	m_Move = false;
-
 
 	m_AttackTimer = 0.f;
 	m_AttackTimerMax = obj.m_AttackTimerMax;
@@ -87,8 +87,8 @@ void CPlayer2D::Start()
 {
 	CGameObject::Start();
 
-	Vector2	Size = GetAnimationSize2D();
-	m_Body->SetExtent(Size);
+	//Vector2	Size = GetAnimationSize2D();
+	//m_Body->SetExtent(Size);
 }
 
 bool CPlayer2D::Init()
@@ -99,6 +99,7 @@ bool CPlayer2D::Init()
 	m_Sprite = CreateComponent<CSpriteComponent>("PlayerSprite");
 
 	m_Body = CreateComponent<CColliderBox2D>("Body");
+	m_Body->SetExtent(30.f, 30.f);
 
 	m_Camera = CreateComponent<CCameraComponent>("Camera");
 
@@ -225,6 +226,9 @@ void CPlayer2D::MoveUp(float DeltaTime)
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_Y) * m_MoveSpeed * DeltaTime;
 
+	if (!IsNormalTile(Result))
+		return;
+
 	m_Sprite->AddRelativePos(Result);
 }
 
@@ -238,6 +242,9 @@ void CPlayer2D::MoveDown(float DeltaTime)
 	SetDir(Character_Direction::Down);
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_Y) * -m_MoveSpeed * DeltaTime;
+
+	if (!IsNormalTile(Result))
+		return;
 
 	m_Sprite->AddRelativePos(Result);
 }
@@ -253,6 +260,9 @@ void CPlayer2D::MoveLeft(float DeltaTime)
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_X) * -m_MoveSpeed * DeltaTime;
 
+	if (!IsNormalTile(Result))
+		return;
+
 	m_Sprite->AddRelativePos(Result);
 }
 
@@ -266,6 +276,9 @@ void CPlayer2D::MoveRight(float DeltaTime)
 	SetDir(Character_Direction::Right);
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_X) * m_MoveSpeed * DeltaTime;
+
+	if (!IsNormalTile(Result))
+		return;
 
 	m_Sprite->AddRelativePos(Result);
 }
@@ -501,4 +514,60 @@ void CPlayer2D::ChangeAnimWalk()
 			return;
 		}
 	}
+}
+
+bool CPlayer2D::IsNormalTile(const Vector3& NextWorldPos)
+{
+	CSceneMode* SceneMode = CSceneManager::GetInst()->GetSceneMode();
+	CMainScene* Scene = dynamic_cast<CMainScene*>(SceneMode);
+
+	if (!Scene)
+		return false;
+
+	CTileMap* TileMap = Scene->GetTileMap();
+
+	if (!TileMap)
+		return false;
+
+	// 8방향 체크
+
+	const Vector3	Center = GetWorldPos();
+	const Vector2	Size = m_Body->GetInfo().Length;
+
+	Vector3	MoveDir[(int)Move_Dir::End];
+
+	for (int i = 0; i < (int)Move_Dir::End; ++i)
+	{
+		MoveDir[i] = Center;
+	}
+
+	MoveDir[(int)Move_Dir::LB].x -= Size.x;
+	MoveDir[(int)Move_Dir::LB].y -= (Size.y * 1.4f);
+
+	MoveDir[(int)Move_Dir::B].y -= (Size.y * 1.4f);
+
+	MoveDir[(int)Move_Dir::RB].x += Size.x;
+	MoveDir[(int)Move_Dir::RB].y -= (Size.y * 1.4f);
+
+	MoveDir[(int)Move_Dir::L].x -= Size.x;
+	MoveDir[(int)Move_Dir::L].y -= (Size.y * 1.4f);
+
+	MoveDir[(int)Move_Dir::R].x += Size.x;
+	MoveDir[(int)Move_Dir::R].y -= (Size.y * 1.4f);
+
+	MoveDir[(int)Move_Dir::LT].x -= Size.x;
+	MoveDir[(int)Move_Dir::LT].y += (Size.y * 0.2f);
+
+	MoveDir[(int)Move_Dir::T].y += (Size.y * 0.2f);
+
+	MoveDir[(int)Move_Dir::RT].x += Size.x;
+	MoveDir[(int)Move_Dir::RT].y += (Size.y * 0.2f);
+
+	for (int i = 0; i < (int)Move_Dir::End; ++i)
+	{
+		if (TileMap->GetTileType(MoveDir[i] + NextWorldPos) != Tile_Type::Normal)
+			return false;
+	}
+
+	return true;
 }

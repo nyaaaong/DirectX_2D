@@ -53,6 +53,9 @@ public:
 	bool Update(float DeltaTime);
 	bool PostUpdate(float DeltaTime);
 
+public:
+	CSharedPtr<class CSceneMode> GetSceneMode()	const;
+
 private:
 	bool ChangeScene();
 

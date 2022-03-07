@@ -91,5 +91,8 @@ private:
 private:
 	void ChangeAnimIdle();
 	void ChangeAnimWalk();
+
+private:
+	bool IsNormalTile(const Vector3& NextWorldPos);
 };
 

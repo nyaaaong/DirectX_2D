@@ -249,3 +249,16 @@ enum class Character_Direction
 	Right = 0x4,
 	Up = 0x8
 };
+
+enum class Move_Dir
+{
+	LB,
+	B,
+	RB,
+	L,
+	R,
+	LT,
+	T,
+	RT,
+	End
+};

@@ -47,6 +47,14 @@ bool CSceneManager::PostUpdate(float DeltaTime)
 	return ChangeScene();
 }
 
+CSharedPtr<CSceneMode> CSceneManager::GetSceneMode() const
+{
+	if (!m_Scene)
+		return nullptr;
+
+	return m_Scene->GetSceneMode();
+}
+
 bool CSceneManager::ChangeScene()
 {
 	CSync	sync(&m_Crt);

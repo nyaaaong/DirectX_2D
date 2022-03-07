@@ -117,3 +117,42 @@ CTile* CTileMap::GetTile(int Index) const
 
 	return m_TileMap->GetTile(Index);
 }
+
+Tile_Type CTileMap::GetTileType(const Vector3& Pos) const
+{
+	if (!m_TileMap)
+		return Tile_Type::End;
+
+	CTile* Tile = m_TileMap->GetTile(Pos);
+
+	if (!Tile)
+		return Tile_Type::End;
+
+	return Tile->GetTileType();
+}
+
+Tile_Type CTileMap::GetTileType(int x, int y) const
+{
+	if (!m_TileMap)
+		return Tile_Type::End;
+
+	CTile* Tile = m_TileMap->GetTile(x, y);
+
+	if (!Tile)
+		return Tile_Type::End;
+
+	return Tile->GetTileType();
+}
+
+Tile_Type CTileMap::GetTileType(int Index) const
+{
+	if (!m_TileMap)
+		return Tile_Type::End;
+
+	CTile* Tile = m_TileMap->GetTile(Index);
+
+	if (!Tile)
+		return Tile_Type::End;
+
+	return Tile->GetTileType();
+}
