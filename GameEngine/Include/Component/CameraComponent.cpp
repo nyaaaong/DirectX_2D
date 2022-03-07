@@ -104,7 +104,7 @@ void CCameraComponent::SetWorldPosX(float x)
 
 void CCameraComponent::SetWorldPosY(float y)
 {
-	CSceneComponent::SetRelativePosY(y);
+	CSceneComponent::SetWorldPosY(y);
 
 	LimitCheck();
 }

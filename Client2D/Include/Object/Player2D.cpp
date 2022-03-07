@@ -13,12 +13,15 @@
 
 CPlayer2D::CPlayer2D() :
 	m_EnableInput(true),
-	m_Dodge(false),
 	m_AttackTimer(0.f),
+	m_DodgeTimer(0.f),
+	m_DodgeTimerMax(0.3f),
 	m_AttackCoolDown(false),
+	m_DodgeCoolDown(false),
 	m_Move(false),
 	m_SetCameraInfo(false),
 	m_MoveSpeed(400.f),
+	m_DodgeSpeed(500.f),
 	m_Dir(0)
 {
 	SetTypeID<CPlayer2D>();
@@ -39,7 +42,6 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_SimpleHUDWidget = (CWidgetComponent*)FindComponent("SimpleHUD");
 
 	m_Opacity = obj.m_Opacity;
-	m_Dodge = false;
 	m_Move = false;
 
 	m_AttackTimer = 0.f;
@@ -47,6 +49,11 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_AttackCoolDown = false;
 
 	m_MoveSpeed = obj.m_MoveSpeed;
+	m_DodgeSpeed = obj.m_DodgeSpeed;
+
+	m_DodgeTimer = 0.f;
+	m_DodgeTimerMax = obj.m_DodgeTimerMax;
+	m_DodgeCoolDown = false;
 
 	m_Dir = 0;
 
@@ -103,9 +110,9 @@ bool CPlayer2D::Init()
 
 	m_Camera = CreateComponent<CCameraComponent>("Camera");
 
-	m_SimpleHUDWidget = CreateComponent<CWidgetComponent>("SimpleHUD");
+	//m_SimpleHUDWidget = CreateComponent<CWidgetComponent>("SimpleHUD");
 
-	m_SimpleHUDWidget->CreateWidgetWindow<CSimpleHUD>("SimpleHUDWidget");
+	//m_SimpleHUDWidget->CreateWidgetWindow<CSimpleHUD>("SimpleHUDWidget");
 
 	SetRootComponent(m_Sprite);
 
@@ -116,9 +123,9 @@ bool CPlayer2D::Init()
 
 	m_Sprite->AddChild(m_Body);
 	m_Sprite->AddChild(m_Camera);
-	m_Sprite->AddChild(m_SimpleHUDWidget);
+	//m_Sprite->AddChild(m_SimpleHUDWidget);
 
-	m_SimpleHUDWidget->SetRelativePos(-50.f, 50.f, 0.f);
+	//m_SimpleHUDWidget->SetRelativePos(-50.f, 50.f, 0.f);
 
 	m_Sprite->SetTransparency(true);
 
@@ -131,13 +138,8 @@ bool CPlayer2D::Init()
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveDown", KeyState_Push, this, &CPlayer2D::MoveDown);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveLeft", KeyState_Push, this, &CPlayer2D::MoveLeft);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveRight", KeyState_Push, this, &CPlayer2D::MoveRight);
-	CInput::GetInst()->SetKeyCallback<CPlayer2D>("RotationZInv", KeyState_Push, this, &CPlayer2D::RotationZInv);
-	CInput::GetInst()->SetKeyCallback<CPlayer2D>("RotationZ", KeyState_Push, this, &CPlayer2D::RotationZ);
 	//CInput::GetInst()->SetKeyCallback<CPlayer2D>("Attack", KeyState_Down, this, &CPlayer2D::Attack);
-	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Dodge", KeyState_Down, this, &CPlayer2D::Dodge);
-	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Attack1", KeyState_Push, this, &CPlayer2D::Attack1);
-	CInput::GetInst()->SetKeyCallback<CPlayer2D>("test", KeyState_Push, this, &CPlayer2D::test);
-	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MovePoint", KeyState_Down, this, &CPlayer2D::MovePointDown);
+	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Dodge", KeyState_Down, this, &CPlayer2D::DodgeStart);
 
 	return true;
 }
@@ -189,6 +191,21 @@ void CPlayer2D::Update(float DeltaTime)
 		}
 	}
 
+	if (m_DodgeCoolDown)
+	{
+		m_DodgeTimer += DeltaTime;
+
+		if (m_DodgeTimer >= m_DodgeTimerMax)
+		{
+			m_DodgeTimer = 0.f;
+			m_DodgeCoolDown = false;
+
+			m_EnableInput = true;
+
+			m_Move = false;
+		}
+	}
+
 	static bool	Hide = false;
 
 	if (Hide)
@@ -201,8 +218,10 @@ void CPlayer2D::Update(float DeltaTime)
 		m_Sprite->SetOpacity(m_Opacity);
 	}
 
-	Action(DeltaTime);
 	UpdateAnimDir();
+
+	if (m_DodgeCoolDown)
+		Dodge(DeltaTime);
 }
 
 void CPlayer2D::PostUpdate(float DeltaTime)
@@ -283,23 +302,7 @@ void CPlayer2D::MoveRight(float DeltaTime)
 	m_Sprite->AddRelativePos(Result);
 }
 
-void CPlayer2D::RotationZInv(float DeltaTime)
-{
-	if (!m_EnableInput)
-		return;
-
-	m_Sprite->AddRelativeRotationZ(180.f * DeltaTime);
-}
-
-void CPlayer2D::RotationZ(float DeltaTime)
-{
-	if (!m_EnableInput)
-		return;
-
-	m_Sprite->AddRelativeRotationZ(-180.f * DeltaTime);
-}
-
-void CPlayer2D::Dodge(float DeltaTime)
+void CPlayer2D::DodgeStart(float DeltaTime)
 {
 	if (!m_EnableInput)
 		return;
@@ -307,18 +310,30 @@ void CPlayer2D::Dodge(float DeltaTime)
 	m_Move = true;
 
 	m_EnableInput = false;
-	m_Dodge = true;
 
-	m_Sprite->GetAnimationInstance()->ChangeAnimation("PlayerDodgeD");
+	m_DodgeCoolDown = true;
 }
 
-void CPlayer2D::DodgeEnd(float DeltaTime)
+void CPlayer2D::Dodge(float DeltaTime)
 {
-	m_EnableInput = true;
+	Vector3	Result;
 
-	m_Move = false;
+	if (IsDir(Character_Direction::Up))
+		Result = m_Sprite->GetWorldAxis(AXIS_Y) * m_DodgeSpeed * DeltaTime;
 
-	m_Sprite->GetAnimationInstance()->ChangeAnimation("PlayerIdleD");
+	else if (IsDir(Character_Direction::Down))
+		Result = m_Sprite->GetWorldAxis(AXIS_Y) * -m_DodgeSpeed * DeltaTime;
+
+	if (IsDir(Character_Direction::Left))
+		Result += (m_Sprite->GetWorldAxis(AXIS_X) * -m_DodgeSpeed * DeltaTime);
+
+	else if (IsDir(Character_Direction::Right))
+		Result += (m_Sprite->GetWorldAxis(AXIS_X) * m_DodgeSpeed * DeltaTime);
+
+	if (!IsNormalTile(Result))
+		return;
+
+	m_Sprite->AddRelativePos(Result);
 }
 
 void CPlayer2D::Attack(float DeltaTime)
@@ -347,37 +362,6 @@ void CPlayer2D::Attack(float DeltaTime)
 	Bullet->SetCollisionProfile("PlayerAttack");
 }
 
-void CPlayer2D::Attack1(float DeltaTime)
-{
-	if (!m_EnableInput || m_AttackCoolDown)
-		return;
-
-	m_AttackCoolDown = true;
-
-	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
-
-	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
-	Bullet->SetWorldRotation(GetWorldRot());
-	Bullet->SetCollisionProfile("PlayerAttack");
-
-	Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
-
-	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
-	Bullet->SetWorldRotation(GetWorldRot() + Vector3(0.f, 0.f, 45.f));
-	Bullet->SetCollisionProfile("PlayerAttack");
-
-	Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
-
-	//Bullet->SetWorldPos(GetWorldPos() + GetWorldAxis(AXIS_Y) * 75.f);
-	Bullet->SetWorldRotation(GetWorldRot() + Vector3(0.f, 0.f, -45.f));
-	Bullet->SetCollisionProfile("PlayerAttack");
-}
-
-void CPlayer2D::test(float DeltatTime)
-{
-	int a = 0;
-}
-
 void CPlayer2D::UpdateAnimDir()
 {
 	if (CInput::GetInst()->IsKeyDown("MoveUp") || CInput::GetInst()->IsKeyDown("MoveDown"))
@@ -400,45 +384,12 @@ void CPlayer2D::UpdateAnimDir()
 
 	ChangeAnimIdle();
 	ChangeAnimWalk();
-}
-
-void CPlayer2D::Action(float DeltaTime)
-{
-	if (m_Dodge)
-	{
-		if (!m_Sprite->GetAnimationInstance()->CheckCurrentAnimation("PlayerDodgeD"))
-		{
-			m_Dodge = false;
-			m_EnableInput = true;
-		}
-
-		else
-			m_Sprite->AddRelativePos(m_Sprite->GetWorldAxis(AXIS_Y) * -600.f * DeltaTime);
-	}
-}
-
-void CPlayer2D::MovePointDown(float DeltaTime)
-{
-	Vector2 MousePos = CInput::GetInst()->GetMouseWorld2DPos();
-
-	m_Scene->GetNavigationManager()->FindPath<CPlayer2D>(this, &CPlayer2D::PathResult, GetWorldPos(),
-														 Vector3(MousePos.x, MousePos.y, 0.f));
-}
-
-void CPlayer2D::PathResult(const std::list<Vector3>& PathList)
-{
-	if (PathList.empty())
-	{
-	}
-
-	else
-	{
-	}
+	ChangeAnimDodge();
 }
 
 void CPlayer2D::ChangeAnimIdle()
 {
-	if (!m_Move)
+	if (!m_Move && !m_DodgeCoolDown)
 	{
 		if (IsDir(Character_Direction::Down) && !IsDir(Character_Direction::Left) && !IsDir(Character_Direction::Right))
 		{
@@ -478,11 +429,12 @@ void CPlayer2D::ChangeAnimIdle()
 
 void CPlayer2D::ChangeAnimWalk()
 {
-	if (m_Move)
+	if (m_Move && !m_DodgeCoolDown)
 	{
 		if (IsDir(Character_Direction::Down) && !IsDir(Character_Direction::Left) && !IsDir(Character_Direction::Right))
 		{
 			m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Walk_D");
+			return;
 		}
 
 		else if (IsDir(Character_Direction::Up))
@@ -511,6 +463,47 @@ void CPlayer2D::ChangeAnimWalk()
 		else if (IsDir(Character_Direction::Right))
 		{
 			m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Walk_DR");
+			return;
+		}
+	}
+}
+
+void CPlayer2D::ChangeAnimDodge()
+{
+	if (m_DodgeCoolDown)
+	{
+		if (IsDir(Character_Direction::Down) && !IsDir(Character_Direction::Left) && !IsDir(Character_Direction::Right))
+		{
+			m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Dodge_D");
+			return;
+		}
+
+		else if (IsDir(Character_Direction::Up))
+		{
+			if (IsDir(Character_Direction::Left))
+			{
+				m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Dodge_UL");
+				return;
+			}
+
+			else if (IsDir(Character_Direction::Right))
+			{
+				m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Dodge_UR");
+				return;
+			}
+
+			m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Dodge_U");
+		}
+
+		else if (IsDir(Character_Direction::Left))
+		{
+			m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Dodge_DL");
+			return;
+		}
+
+		else if (IsDir(Character_Direction::Right))
+		{
+			m_Sprite->GetAnimationInstance()->ChangeAnimation("Player_Dodge_DR");
 			return;
 		}
 	}

@@ -64,31 +64,31 @@ void CPlayerAnimation2D::Walk()
 
 void CPlayerAnimation2D::Dodge()
 {
-	AddAnimation(TEXT("Player/Dodge/Player_Dodge_D.sqc"), "Player_Dodge_D", ANIMATION_PATH);
-	AddAnimation(TEXT("Player/Dodge/Player_Dodge_DL.sqc"), "Player_Dodge_DL", ANIMATION_PATH);
-	AddAnimation(TEXT("Player/Dodge/Player_Dodge_DR.sqc"), "Player_Dodge_DR", ANIMATION_PATH);
-	AddAnimation(TEXT("Player/Dodge/Player_Dodge_U.sqc"), "Player_Dodge_U", ANIMATION_PATH);
-	AddAnimation(TEXT("Player/Dodge/Player_Dodge_UL.sqc"), "Player_Dodge_UL", ANIMATION_PATH);
-	AddAnimation(TEXT("Player/Dodge/Player_Dodge_UR.sqc"), "Player_Dodge_UR", ANIMATION_PATH);
+	AddAnimation(TEXT("Player/Dodge/Player_Dodge_D.sqc"), "Player_Dodge_D", ANIMATION_PATH, false, 0.3f);
+	AddAnimation(TEXT("Player/Dodge/Player_Dodge_DL.sqc"), "Player_Dodge_DL", ANIMATION_PATH, false, 0.3f);
+	AddAnimation(TEXT("Player/Dodge/Player_Dodge_DR.sqc"), "Player_Dodge_DR", ANIMATION_PATH, false, 0.3f);
+	AddAnimation(TEXT("Player/Dodge/Player_Dodge_U.sqc"), "Player_Dodge_U", ANIMATION_PATH, false, 0.3f);
+	AddAnimation(TEXT("Player/Dodge/Player_Dodge_UL.sqc"), "Player_Dodge_UL", ANIMATION_PATH, false, 0.3f);
+	AddAnimation(TEXT("Player/Dodge/Player_Dodge_UR.sqc"), "Player_Dodge_UR", ANIMATION_PATH, false, 0.3f);
 }
 
 void CPlayerAnimation2D::Death()
 {
-	AddAnimation(TEXT("Player/Death/Player_Death.sqc"), "Player_Death", ANIMATION_PATH);
-	AddAnimation(TEXT("Player/Death/Player_Death_1.sqc"), "Player_Death_1", ANIMATION_PATH);
+	AddAnimation(TEXT("Player/Death/Player_Death.sqc"), "Player_Death", ANIMATION_PATH, false);
+	AddAnimation(TEXT("Player/Death/Player_Death_1.sqc"), "Player_Death_1", ANIMATION_PATH, false);
 }
 
 void CPlayerAnimation2D::Fall()
 {
-	AddAnimation(TEXT("Player/Fall/Player_Fall.sqc"), "Player_Fall", ANIMATION_PATH);
+	AddAnimation(TEXT("Player/Fall/Player_Fall.sqc"), "Player_Fall", ANIMATION_PATH, false);
 }
 
 void CPlayerAnimation2D::GetItem()
 {
-	AddAnimation(TEXT("Player/GetItem/Player_GetItem.sqc"), "Player_GetItem", ANIMATION_PATH);
+	AddAnimation(TEXT("Player/GetItem/Player_GetItem.sqc"), "Player_GetItem", ANIMATION_PATH, false);
 }
 
 void CPlayerAnimation2D::Respawn()
 {
-	AddAnimation(TEXT("Player/Respawn/Player_Respawn.sqc"), "Player_Respawn", ANIMATION_PATH);
+	AddAnimation(TEXT("Player/Respawn/Player_Respawn.sqc"), "Player_Respawn", ANIMATION_PATH, false);
 }
