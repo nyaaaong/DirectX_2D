@@ -377,6 +377,9 @@ void CEditorManager::KeyboardRight(float DeltaTime)
 
 void CEditorManager::MoveCameraUp(float DeltaTime)
 {
+	if (m_SpriteWindow->HasSprite())
+		return;
+
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
 
 	// ceil : 소숫점을 올림해서 타일간의 빈틈이 보이지 않게 한다.
@@ -385,6 +388,9 @@ void CEditorManager::MoveCameraUp(float DeltaTime)
 
 void CEditorManager::MoveCameraDown(float DeltaTime)
 {
+	if (m_SpriteWindow->HasSprite())
+		return;
+
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
 
 	Camera->AddWorldPos(Vector3(0.f, ceil(-m_CameraMoveSpeed * DeltaTime), 0.f));
@@ -392,6 +398,9 @@ void CEditorManager::MoveCameraDown(float DeltaTime)
 
 void CEditorManager::MoveCameraLeft(float DeltaTime)
 {
+	if (m_SpriteWindow->HasSprite())
+		return;
+
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
 
 	Camera->AddWorldPos(Vector3(ceil(-m_CameraMoveSpeed * DeltaTime), 0.f, 0.f));
@@ -399,6 +408,9 @@ void CEditorManager::MoveCameraLeft(float DeltaTime)
 
 void CEditorManager::MoveCameraRight(float DeltaTime)
 {
+	if (m_SpriteWindow->HasSprite())
+		return;
+
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
 
 	Camera->AddWorldPos(Vector3(ceil(m_CameraMoveSpeed * DeltaTime), 0.f, 0.f));

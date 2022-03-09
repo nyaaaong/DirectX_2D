@@ -23,6 +23,7 @@ private:
 
 	CSharedPtr<CWidgetComponent>     m_SimpleHUDWidget;
 	class CSimpleHUD* m_SimpleHUD;
+	CSharedPtr<class CWeapon>     m_WeaponObject;
 
     int                 m_HP;
 

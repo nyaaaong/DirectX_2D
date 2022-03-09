@@ -20,11 +20,10 @@ private:
 	CSharedPtr<CColliderBox2D>       m_Body;
 	CSharedPtr<CCameraComponent>     m_Camera;
 	CSharedPtr<CWidgetComponent>     m_SimpleHUDWidget;
-	bool        m_SolW;
+	CSharedPtr<class CWeapon>     m_WeaponObject;
 	bool	m_EnableInput;
 	bool	m_Move;
 	bool	m_AttackCoolDown;
-	float       m_WDistance;
 	float       m_Opacity;
 	float	m_AttackTimer;
 	float	m_AttackTimerMax;
@@ -36,8 +35,14 @@ private:
 	float	m_DodgeTimer;
 	float	m_DodgeTimerMax;
 	bool	m_DodgeCoolDown;
+	Vector3	m_MouseDir;
 
 public:
+	const Vector3& GetMouseDir()	const
+	{
+		return m_MouseDir;
+	}
+
 	CSharedPtr<CCameraComponent> GetCameraComponent()	const
 	{
 		return m_Camera;
@@ -74,12 +79,17 @@ private:
 	void Attack(float DeltaTime);
 	void DodgeStart(float DeltaTime);
 	void Dodge(float DeltaTime);
+	void NoWeapon(float DeltaTime);
+	void Weapon1(float DeltaTime);
+	void Weapon2(float DeltaTime);
+	void Weapon3(float DeltaTime);
 
 public:
 	void SetDir(Character_Direction Dir);
 	void ClearDir(Character_Direction Dir);
 
 private:
+	void UpdateMousePos();
 	void UpdateAnimDir();
 
 private:

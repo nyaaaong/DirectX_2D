@@ -32,6 +32,11 @@ public:
 	}
 
 public:
+	void SetRender(bool Render)
+	{
+		m_Render = Render;
+	}
+
 	void SetLayerName(const std::string& Name)
 	{
 		m_LayerName = Name;

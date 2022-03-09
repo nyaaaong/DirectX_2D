@@ -6,6 +6,7 @@
 #include "Scene/Viewport.h"
 #include "Resource/Particle/Particle.h"
 #include "../Object/Player2D.h"
+#include "../Object/Weapon.h"
 
 CMainScene::CMainScene()	:
 	m_TileMap(nullptr)
@@ -31,6 +32,8 @@ bool CMainScene::Init()
 
 	m_TileMap = m_Scene->LoadGameObject<CTileMap>();
 	m_TileMap->Load("TileMap.dat", SCENE_PATH);
+
+	m_MainWidget = m_Scene->GetViewport()->CreateWidgetWindow<CMainWidget>("MainWidget");
 
 	return true;
 }

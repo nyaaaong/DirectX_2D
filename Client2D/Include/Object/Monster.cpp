@@ -1,6 +1,7 @@
 
 #include "Monster.h"
 #include "Engine.h"
+#include "Weapon.h"
 #include "Scene/Scene.h"
 #include "Resource/Material/Material.h"
 #include "MonsterAnimation.h"
@@ -22,6 +23,9 @@ CMonster::CMonster(const CMonster& obj) :
 
 	m_HP = obj.m_HP;
 	m_PaperBurn = (CPaperBurnComponent*)FindComponent("PaperBurn");
+
+	m_WeaponObject = m_Scene->CreateGameObject<CWeapon>("MonsterWeapon");
+	m_WeaponObject->SetCharacterType(Character_Type::Monster);
 }
 
 CMonster::~CMonster()
@@ -44,6 +48,9 @@ bool CMonster::Init()
 	m_SimpleHUDWidget = CreateComponent<CWidgetComponent>("SimpleHUD");
 
 	m_SimpleHUD = m_SimpleHUDWidget->CreateWidgetWindow<CSimpleHUD>("SimpleHUDWidget");
+
+	m_WeaponObject = m_Scene->CreateGameObject<CWeapon>("MonsterWeapon");
+	m_WeaponObject->SetCharacterType(Character_Type::Monster);
 
 	SetRootComponent(m_Sprite);
 

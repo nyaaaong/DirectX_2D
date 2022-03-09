@@ -54,6 +54,7 @@ private:
 	bool	m_Shift;
 	Vector2		m_MousePos;
 	Vector2		m_MouseWorldPos;
+	Vector3		m_MouseWorldPos3D;
 	Vector2		m_MouseMove;
 	bool		m_LButtonClick;
 	bool		m_RButtonClick;
@@ -78,6 +79,11 @@ public:
 	const Vector2& GetMouseWorld2DPos()	const
 	{
 		return m_MouseWorldPos;
+	}
+
+	const Vector3& GetMouseWorldPos()	const
+	{
+		return m_MouseWorldPos3D;
 	}
 
 	const Vector2& GetMouseMove()	const

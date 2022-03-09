@@ -266,6 +266,8 @@ void CInput::UpdateMouse(float DeltaTime)
 
 	m_MousePos = MousePos;
 	m_MouseWorldPos = m_MousePos;
+	m_MouseWorldPos3D.x = m_MouseWorldPos.x;
+	m_MouseWorldPos3D.y = m_MouseWorldPos.y;
 
 	// 2D일때는 월드공간에서의 마우스 좌표를 구한다.
 	// 카메라를 얻어온다
@@ -274,6 +276,8 @@ void CInput::UpdateMouse(float DeltaTime)
 		CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
 
 		m_MouseWorldPos += Camera->GetLeftBottom();
+		m_MouseWorldPos3D.x = m_MouseWorldPos.x;
+		m_MouseWorldPos3D.y = m_MouseWorldPos.y;
 	}
 }
 

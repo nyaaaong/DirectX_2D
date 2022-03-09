@@ -47,13 +47,11 @@ bool CClientManager::Init(HINSTANCE hInst)
 	CInput::GetInst()->CreateKey("MoveDown", 'S');
 	CInput::GetInst()->CreateKey("MoveLeft", 'A');
 	CInput::GetInst()->CreateKey("MoveRight", 'D');
-	CInput::GetInst()->CreateKey("RotationZInv", VK_LEFT);
-	CInput::GetInst()->CreateKey("RotationZ", VK_RIGHT);
 	CInput::GetInst()->CreateKey("Dodge", VK_RBUTTON);
-	CInput::GetInst()->CreateKey("Attack1", VK_LBUTTON);
-	CInput::GetInst()->CreateKey("test", VK_RETURN);
-	CInput::GetInst()->CreateKey("Skill1", '1');
-	CInput::GetInst()->CreateKey("MovePoint", '0');
+	CInput::GetInst()->CreateKey("NoWeapon", '1');
+	CInput::GetInst()->CreateKey("Weapon1", '2');
+	CInput::GetInst()->CreateKey("Weapon2", '3');
+	CInput::GetInst()->CreateKey("Weapon3", '4');
 
 	CResourceManager::GetInst()->CreateSoundChannelGroup("UI");
 	CResourceManager::GetInst()->SetVolume(10);

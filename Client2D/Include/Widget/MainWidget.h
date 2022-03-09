@@ -19,19 +19,13 @@ protected:
 	virtual ~CMainWidget();
 
 private:
-	CSharedPtr<CButton>	m_Button;
-
-	CSharedPtr<CButton>	m_Button1;
-	CSharedPtr<CText>	m_Button1Text;
-	CSharedPtr<CNumber>	m_Hour;
-	CSharedPtr<CNumber>	m_Minute;
-	CSharedPtr<CNumber>	m_Second;
 	CSharedPtr<CText>	m_FPSText;
-
-	CSharedPtr<CSliderBar>	m_SliderBar;
-	CSharedPtr<CSlider>		m_Slider;
-
-	CSharedPtr<CImage>		m_Image;
+	CSharedPtr<CText>	m_MouseXText;
+	CSharedPtr<CText>	m_MouseYText;
+	CSharedPtr<CText>	m_WorldMouseXText;
+	CSharedPtr<CText>	m_WorldMouseYText;
+	CSharedPtr<CText>	m_MouseDirXText;
+	CSharedPtr<CText>	m_MouseDirYText;
 
 public:
 	virtual void Start();
@@ -40,12 +34,5 @@ public:
 	virtual void PostUpdate(float DeltaTime);
 	virtual void Render();
 	virtual CMainWidget* Clone();
-
-public:
-	void StartButtonClick();
-	void Button1Click();
-
-private:
-	void SetScale(float val);
 };
 

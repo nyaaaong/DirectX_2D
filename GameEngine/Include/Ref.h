@@ -16,9 +16,9 @@ protected:
 	size_t		m_TypeID;
 
 public:
-	virtual void Enable(bool bEnable)
+	virtual void Enable(bool Enable)
 	{
-		m_Enable = bEnable;
+		m_Enable = Enable;
 	}
 
 	virtual void Destroy()

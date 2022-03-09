@@ -5,8 +5,8 @@
 #include "Component/SpriteComponent.h"
 #include "Component/CameraComponent.h"
 #include "Component/Tile.h"
-#include "Scene/SceneManager.h"
 #include "../Scene/MainScene.h"
+#include "Scene/SceneManager.h"
 
 CMouseCursor::CMouseCursor()	:
 	m_CheckTileInfo(false)
@@ -82,11 +82,14 @@ void CMouseCursor::CameraUpdater(float DeltaTime)
 
 		// 마우스와 센터의 거리로 카메라 위치를 조절해야 한다.
 
-		CCameraComponent* Camera = ((CPlayer2D*)Scene->GetPlayerObject())->GetCameraComponent();
+		CPlayer2D* Player = dynamic_cast<CPlayer2D*>(Scene->GetPlayerObject());
+
+		CCameraComponent* Camera = Player->GetCameraComponent();
 
 		Resolution	RS = CDevice::GetInst()->GetResolution();
 		
 		Vector2		MouseUIPos = CInput::GetInst()->GetMousePos();
+
 		const Vector3	Center = Vector3(RS.Width * 0.5f, RS.Height * 0.5f, 0.f);
 		
 		Vector3	MousePos = Vector3(MouseUIPos.x, MouseUIPos.y, 0.f);

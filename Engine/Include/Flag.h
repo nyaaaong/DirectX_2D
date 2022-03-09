@@ -251,7 +251,8 @@ enum class Character_Direction
 	DownLeft = Down | Left,
 	DownRight = Down | Right,
 	UpLeft = Up | Left,
-	UpRight = Up | Right
+	UpRight = Up | Right,
+	All = Down | Left | Right | Up
 };
 
 enum class Move_Dir
@@ -265,4 +266,18 @@ enum class Move_Dir
 	T,
 	RT,
 	End
+};
+
+enum class Weapon_Slot
+{
+	None,
+	Weap1,
+	Weap2,
+	Weap3
+};
+
+enum class Character_Type
+{
+	Player,
+	Monster
 };
