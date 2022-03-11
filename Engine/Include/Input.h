@@ -53,6 +53,7 @@ private:
 	bool	m_Alt;
 	bool	m_Shift;
 	Vector2		m_MousePos;
+	Vector3		m_MousePos3D;
 	Vector2		m_MouseWorldPos;
 	Vector3		m_MouseWorldPos3D;
 	Vector2		m_MouseMove;
@@ -74,6 +75,11 @@ public:
 	const Vector2& GetMousePos()	const
 	{
 		return m_MousePos;
+	}
+
+	const Vector3& GetMousePos3D()	const
+	{
+		return m_MousePos3D;
 	}
 
 	const Vector2& GetMouseWorld2DPos()	const

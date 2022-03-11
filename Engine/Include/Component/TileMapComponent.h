@@ -31,11 +31,17 @@ protected:
 	Vector4 m_TileColor[(int)Tile_Type::End];
 	bool    m_EditMode;
 	float   m_DeltaTime;
+	bool    m_SortDisable;
 
 public:
 	void EnableEditMode(bool Mode)
 	{
 		m_EditMode = Mode;
+	}
+
+	void SetSortDisable(bool SortDisable)
+	{
+		m_SortDisable = SortDisable;
 	}
 
 public:

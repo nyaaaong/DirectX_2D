@@ -279,5 +279,14 @@ enum class Weapon_Slot
 enum class Character_Type
 {
 	Player,
-	Monster
+	Monster,
+	Max
+};
+
+enum class Bullet_Type
+{
+	Weap1,
+	Weap2,
+	Weap3,
+	Max
 };

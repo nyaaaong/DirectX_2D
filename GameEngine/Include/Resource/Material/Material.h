@@ -13,7 +13,7 @@ struct MaterialTextureInfo
     int             ShaderType;
 
     MaterialTextureInfo()   :
-        SamplerType(Sampler_Type::Linear),
+        SamplerType(Sampler_Type::Point),
         Register(0),
         ShaderType((int)Buffer_Shader_Type::Pixel)
     {
@@ -98,7 +98,6 @@ public:
     void AddTexture(int Register, int ShaderType, const std::string& Name, const TCHAR* FileName, const std::string& PathName = TEXTURE_PATH);
     void AddTextureFullPath(int Register, int ShaderType, const std::string& Name, const TCHAR* FullPath);
     void AddTexture(int Register, int ShaderType, const std::string& Name, const std::vector<TCHAR*>& vecFileName, const std::string& PathName = TEXTURE_PATH);
-
 
     void SetTexture(int Index, int Register, int ShaderType, const std::string& Name, class CTexture* Texture);
     void SetTexture(int Index, int Register, int ShaderType, const std::string& Name, const TCHAR* FileName, const std::string& PathName = TEXTURE_PATH);

@@ -176,8 +176,6 @@
     <ClCompile Include="Object\Player2D.cpp" />
     <ClCompile Include="Object\PlayerAnimation2D.cpp" />
     <ClCompile Include="Object\TileMap.cpp" />
-    <ClCompile Include="Object\Weapon.cpp" />
-    <ClCompile Include="Object\WeaponAnimation.cpp" />
     <ClCompile Include="Scene\LoadingScene.cpp" />
     <ClCompile Include="Scene\LoadingThread.cpp" />
     <ClCompile Include="Scene\MainScene.cpp" />
@@ -200,8 +198,6 @@
     <ClInclude Include="Object\Player2D.h" />
     <ClInclude Include="Object\PlayerAnimation2D.h" />
     <ClInclude Include="Object\TileMap.h" />
-    <ClInclude Include="Object\Weapon.h" />
-    <ClInclude Include="Object\WeaponAnimation.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene\LoadingScene.h" />
     <ClInclude Include="Scene\LoadingThread.h" />

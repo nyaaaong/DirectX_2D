@@ -265,6 +265,8 @@ void CInput::UpdateMouse(float DeltaTime)
 	m_MouseMove = MousePos - m_MousePos;
 
 	m_MousePos = MousePos;
+	m_MousePos3D.x = m_MousePos.x;
+	m_MousePos3D.y = m_MousePos.y;
 	m_MouseWorldPos = m_MousePos;
 	m_MouseWorldPos3D.x = m_MouseWorldPos.x;
 	m_MouseWorldPos3D.y = m_MouseWorldPos.y;

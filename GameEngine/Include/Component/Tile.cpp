@@ -27,16 +27,27 @@ void CTile::Start()
 	m_Center = m_Pos + m_Size / 2.f;
 }
 
-void CTile::Update(float DeltaTime)
+void CTile::Update(float DeltaTime, bool SortDiable)
 {
 	Vector3	OwnerPos = m_Owner->GetWorldPos();
 
 	Vector3	Pos = OwnerPos + m_Pos;
 
+	Vector3	WorldPos = Pos;
+
+	if (CEngine::GetInst()->GetEngineSpace() == Engine_Space::Space2D)
+	{
+		if (SortDiable)
+			WorldPos.z = 999.9999f;
+
+		else
+			WorldPos.z = WorldPos.y / 30000.f * 1000.f;;
+	}
+
 	Matrix	matScale, matTranslate;
 
 	matScale.Scaling(m_Size.x, m_Size.y, 1.f);
-	matTranslate.Translation(Pos);
+	matTranslate.Translation(WorldPos);
 
 	m_matWorld = matScale * matTranslate;
 }

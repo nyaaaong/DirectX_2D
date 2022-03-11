@@ -110,20 +110,26 @@ bool CRenderManager::Init()
 	m_RenderLayerList.push_back(Layer);
 
 	Layer = DBG_NEW RenderLayer;
-	Layer->Name = "Default";
+	Layer->Name = "PrevDefault";
 	Layer->LayerPriority = 1;
 
 	m_RenderLayerList.push_back(Layer);
 
 	Layer = DBG_NEW RenderLayer;
-	Layer->Name = "Particle";
+	Layer->Name = "Default";
 	Layer->LayerPriority = 2;
 
 	m_RenderLayerList.push_back(Layer);
 
 	Layer = DBG_NEW RenderLayer;
-	Layer->Name = "ScreenWidgetComponent";
+	Layer->Name = "Particle";
 	Layer->LayerPriority = 3;
+
+	m_RenderLayerList.push_back(Layer);
+
+	Layer = DBG_NEW RenderLayer;
+	Layer->Name = "ScreenWidgetComponent";
+	Layer->LayerPriority = 4;
 
 	m_RenderLayerList.push_back(Layer);
 	m_DepthDisable = m_RenderStateManager->FindRenderState("DepthDisable");

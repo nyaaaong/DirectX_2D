@@ -6,7 +6,6 @@
 #include "Scene/Viewport.h"
 #include "Resource/Particle/Particle.h"
 #include "../Object/Player2D.h"
-#include "../Object/Weapon.h"
 
 CMainScene::CMainScene()	:
 	m_TileMap(nullptr)
@@ -35,10 +34,19 @@ bool CMainScene::Init()
 
 	m_MainWidget = m_Scene->GetViewport()->CreateWidgetWindow<CMainWidget>("MainWidget");
 
+	CreateSound();
+
 	return true;
 }
 
 void CMainScene::Update(float DeltaTime)
 {
 	CSceneMode::Update(DeltaTime);
+}
+
+void CMainScene::CreateSound()
+{
+	m_Scene->GetResource()->LoadSound("Effect", false, "Player_Weap1", "Weapon/Shot/Weap1.wav");
+	m_Scene->GetResource()->LoadSound("Effect", false, "Player_Weap2", "Weapon/Shot/Weap2.wav");
+	m_Scene->GetResource()->LoadSound("Effect", false, "Player_Weap3", "Weapon/Shot/Weap3.wav");
 }

@@ -64,12 +64,12 @@ void CPlayerAnimation2D::Walk()
 
 void CPlayerAnimation2D::Dodge()
 {
-	AddAnimation(TEXT("Player/Dodge/Player_Dodge_D.sqc"), "Player_Dodge_D", ANIMATION_PATH, false, 0.3f);
-	AddAnimation(TEXT("Player/Dodge/Player_Dodge_DL.sqc"), "Player_Dodge_DL", ANIMATION_PATH, false, 0.3f);
-	AddAnimation(TEXT("Player/Dodge/Player_Dodge_DR.sqc"), "Player_Dodge_DR", ANIMATION_PATH, false, 0.3f);
-	AddAnimation(TEXT("Player/Dodge/Player_Dodge_U.sqc"), "Player_Dodge_U", ANIMATION_PATH, false, 0.3f);
-	AddAnimation(TEXT("Player/Dodge/Player_Dodge_UL.sqc"), "Player_Dodge_UL", ANIMATION_PATH, false, 0.3f);
-	AddAnimation(TEXT("Player/Dodge/Player_Dodge_UR.sqc"), "Player_Dodge_UR", ANIMATION_PATH, false, 0.3f);
+	AddAnimation(TEXT("Player/Dodge/Player_Dodge_D.sqc"), "Player_Dodge_D", ANIMATION_PATH, false, 0.5f);
+	AddAnimation(TEXT("Player/Dodge/Player_Dodge_DL.sqc"), "Player_Dodge_DL", ANIMATION_PATH, false, 0.5f);
+	AddAnimation(TEXT("Player/Dodge/Player_Dodge_DR.sqc"), "Player_Dodge_DR", ANIMATION_PATH, false, 0.5f);
+	AddAnimation(TEXT("Player/Dodge/Player_Dodge_U.sqc"), "Player_Dodge_U", ANIMATION_PATH, false, 0.5f);
+	AddAnimation(TEXT("Player/Dodge/Player_Dodge_UL.sqc"), "Player_Dodge_UL", ANIMATION_PATH, false, 0.5f);
+	AddAnimation(TEXT("Player/Dodge/Player_Dodge_UR.sqc"), "Player_Dodge_UR", ANIMATION_PATH, false, 0.5f);
 }
 
 void CPlayerAnimation2D::Death()

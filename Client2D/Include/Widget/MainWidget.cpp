@@ -13,8 +13,13 @@ CMainWidget::CMainWidget(const CMainWidget& window) :
 	CWidgetWindow(window)
 {
 	m_FPSText = FindWidget<CText>("FPSText");
-	m_MouseDirXText = FindWidget<CText>("MouseDirX");
-	m_MouseDirYText = FindWidget<CText>("MouseDirY");
+	m_MouseXText = FindWidget<CText>("MouseXText");
+	m_MouseYText = FindWidget<CText>("MouseYText");
+	m_WorldMouseXText = FindWidget<CText>("WorldMouseXText");
+	m_WorldMouseYText = FindWidget<CText>("WorldMouseYText");
+	m_MouseDirXText = FindWidget<CText>("MouseDirXText");
+	m_MouseDirYText = FindWidget<CText>("MouseDirYText");
+	m_MouseAngleText = FindWidget<CText>("MouseAngleText");
 }
 
 
@@ -103,6 +108,16 @@ bool CMainWidget::Init()
 	m_WorldMouseYText->SetShadowEnable(true);
 	m_WorldMouseYText->SetShadowOffset(2.f, 2.f);
 
+	m_MouseAngleText = CreateWidget<CText>("MouseAngleText");
+
+	m_MouseAngleText->SetPos(900.f, 440.f);
+	m_MouseAngleText->SetSize(300.f, 40.f);
+	m_MouseAngleText->SetZOrder(1);
+	m_MouseAngleText->SetColor(1.f, 1.f, 1.f);
+	m_MouseAngleText->SetAlignH(TEXT_ALIGN_H::Left);
+	m_MouseAngleText->SetShadowEnable(true);
+	m_MouseAngleText->SetShadowOffset(2.f, 2.f);
+
 	return true;
 }
 
@@ -166,13 +181,14 @@ void CMainWidget::Update(float DeltaTime)
 
 	CGameObject* Obj = m_Viewport->GetScene()->GetPlayerObject();
 	CPlayer2D* Player = dynamic_cast<CPlayer2D*>(Obj);
-	Vector3	Dir = Player->GetMouseDir();
 
 	if (!Player)
 		return;
 
+	Vector3	Dir = Player->GetMouseDir();
+
 	memset(Text, 0, sizeof(char) * 256);
-	sprintf_s(Text, "MouseDirX : %.3f", Dir.x);
+	sprintf_s(Text, "MouseDirX : %.2f", Dir.x);
 
 	memset(ConvertText, 0, sizeof(TCHAR) * 256);
 
@@ -182,7 +198,7 @@ void CMainWidget::Update(float DeltaTime)
 	m_MouseDirXText->SetText(ConvertText);
 
 	memset(Text, 0, sizeof(char) * 256);
-	sprintf_s(Text, "MouseDirY : %.3f", Dir.y);
+	sprintf_s(Text, "MouseDirY : %.2f", Dir.y);
 
 	memset(ConvertText, 0, sizeof(TCHAR) * 256);
 
@@ -190,6 +206,16 @@ void CMainWidget::Update(float DeltaTime)
 	MultiByteToWideChar(CP_ACP, 0, Text, -1, ConvertText, Length);
 
 	m_MouseDirYText->SetText(ConvertText);
+
+	memset(Text, 0, sizeof(char) * 256);
+	sprintf_s(Text, "MouseAngle : %.2f", Player->GetMouseAngle());
+
+	memset(ConvertText, 0, sizeof(TCHAR) * 256);
+
+	Length = MultiByteToWideChar(CP_ACP, 0, Text, -1, 0, 0);
+	MultiByteToWideChar(CP_ACP, 0, Text, -1, ConvertText, Length);
+
+	m_MouseAngleText->SetText(ConvertText);
 }
 
 void CMainWidget::PostUpdate(float DeltaTime)

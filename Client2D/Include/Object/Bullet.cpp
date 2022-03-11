@@ -1,11 +1,16 @@
 
 #include "Bullet.h"
 #include "Monster.h"
+#include "../Scene/MainScene.h"
+#include "Scene/SceneManager.h"
 #include "Component/SpriteComponent.h"
-#include "Component/ColliderCircle.h"
 
 CBullet::CBullet() :
-	m_Distance(600.f)
+	m_Distance(300.f),
+	m_BulletSpeed(600.f),
+	m_CharacterType(Character_Type::Max),
+	m_WeaponSlot(Weapon_Slot::None),
+	m_First(false)
 {
 	SetTypeID<CBullet>();
 }
@@ -14,9 +19,15 @@ CBullet::CBullet(const CBullet& obj) :
 	CGameObject(obj)
 {
 	m_Sprite = (CSpriteComponent*)FindComponent("BulletSprite");
-	m_Distance = obj.m_Distance;
+	m_Body = (CColliderBox2D*)FindComponent("Body");
 
-	m_Body = (CColliderCircle*)FindComponent("Body");
+	m_Distance = obj.m_Distance;
+	m_BulletSpeed = obj.m_BulletSpeed;
+
+	m_CharacterType = obj.m_CharacterType;
+	m_WeaponSlot = obj.m_WeaponSlot;
+
+	m_First = false;
 }
 
 CBullet::~CBullet()
@@ -39,12 +50,12 @@ bool CBullet::Init()
 
 	SetRootComponent(m_Sprite);
 
-	m_Sprite->SetRelativeScale(50.f, 50.f, 1.f);
+	m_Sprite->SetRelativeScale(24.f, 24.f, 1.f);
 	m_Sprite->SetPivot(0.5f, 0.5f, 0.f);
 
-	m_Body = CreateComponent<CColliderCircle>("Body");
+	m_Body = CreateComponent<CColliderBox2D>("Body");
 
-	m_Body->SetRadius(25.f);
+	m_Body->SetExtent(12.f, 12.f);
 
 	m_Sprite->AddChild(m_Body);
 
@@ -58,16 +69,53 @@ void CBullet::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
 
-	float	Dist = 500.f * DeltaTime;
+	if (!m_First)
+	{
+		m_First = true;
+
+		switch (m_CharacterType)
+		{
+		case Character_Type::Player:
+			m_Sprite->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "Player_Bullet", TEXT("Bullet/Player/Bullet.png"));
+			break;
+		case Character_Type::Monster:
+			m_Sprite->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "Monster_Bullet", TEXT("Bullet/Monster/Bullet.png"));
+			break;
+		}
+
+		switch (m_WeaponSlot)
+		{
+		case Weapon_Slot::Weap1:
+			m_BulletSpeed = 600.f;
+			m_Distance = 300.f;
+			m_SoundName = "Player_Weap1";
+			break;
+		case Weapon_Slot::Weap2:
+			m_BulletSpeed = 800.f;
+			m_Distance = 500.f;
+			m_SoundName = "Player_Weap2";
+			break;
+		case Weapon_Slot::Weap3:
+			m_BulletSpeed = 3000.f;
+			m_Distance = 2000.f;
+			m_SoundName = "Player_Weap3";
+			break;
+		}
+
+		if (m_SoundName == "")
+			ASSERT("if (m_SoundName == "")");
+
+		m_Scene->GetResource()->SoundPlay(m_SoundName);
+	}
+
+	float	Dist = m_BulletSpeed * DeltaTime;
 
 	m_Distance -= Dist;
 
-	if (m_Distance <= 0.f)
-	{
+	if (m_Distance <= 0.f || !IsNormalTile())
 		Destroy();
-	}
 
-	AddRelativePos(GetWorldAxis(AXIS_Y) * Dist);
+	AddRelativePos(m_BulletDir * Dist);
 }
 
 void CBullet::PostUpdate(float DeltaTime)
@@ -87,4 +135,20 @@ void CBullet::OnCollisionBegin(const CollisionResult& result)
 
 void CBullet::OnCollisionEnd(const CollisionResult& result)
 {
+}
+
+bool CBullet::IsNormalTile()
+{
+	CSceneMode* SceneMode = CSceneManager::GetInst()->GetSceneMode();
+	CMainScene* Scene = dynamic_cast<CMainScene*>(SceneMode);
+
+	if (!Scene)
+		return false;
+
+	CTileMap* TileMap = Scene->GetTileMap();
+
+	if (!TileMap)
+		return false;
+
+	return TileMap->GetTileType(GetWorldPos()) == Tile_Type::Normal;
 }

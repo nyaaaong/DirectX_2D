@@ -187,6 +187,11 @@ public:
 	}
 
 public:
+	void SetPivotX(float x)
+	{
+		m_Pivot.x;
+	}
+
 	void SetPivot(const Vector3& Pivot)
 	{
 		m_Pivot = Pivot;

@@ -26,6 +26,7 @@ private:
 	CSharedPtr<CText>	m_WorldMouseYText;
 	CSharedPtr<CText>	m_MouseDirXText;
 	CSharedPtr<CText>	m_MouseDirYText;
+	CSharedPtr<CText>	m_MouseAngleText;
 
 public:
 	virtual void Start();

@@ -39,9 +39,6 @@
     <Filter Include="01. Object\05. TileMap">
       <UniqueIdentifier>{74c3e0e8-8fc4-49aa-8aa8-349efca73f8e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Object\06. Weapon">
-      <UniqueIdentifier>{d7f2a2b4-b6bd-4b50-981c-050148f10b0c}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -103,12 +100,6 @@
     </ClCompile>
     <ClCompile Include="Object\TileMap.cpp">
       <Filter>01. Object\05. TileMap</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Weapon.cpp">
-      <Filter>01. Object\06. Weapon</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\WeaponAnimation.cpp">
-      <Filter>01. Object\06. Weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -174,12 +165,6 @@
     </ClInclude>
     <ClInclude Include="Object\TileMap.h">
       <Filter>01. Object\05. TileMap</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Weapon.h">
-      <Filter>01. Object\06. Weapon</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\WeaponAnimation.h">
-      <Filter>01. Object\06. Weapon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

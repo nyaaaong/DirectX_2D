@@ -17,27 +17,41 @@ protected:
 	virtual ~CPlayer2D();
 
 private:
-	CSharedPtr<CColliderBox2D>       m_Body;
-	CSharedPtr<CCameraComponent>     m_Camera;
-	CSharedPtr<CWidgetComponent>     m_SimpleHUDWidget;
-	CSharedPtr<class CWeapon>     m_WeaponObject;
+	CSharedPtr<CColliderBox2D>		m_Body;
+	CSharedPtr<CCameraComponent>	m_Camera;
+	CSharedPtr<CWidgetComponent>	m_SimpleHUDWidget;
+	CSharedPtr<CSpriteComponent>	m_Weapon1;
+	CSharedPtr<CSpriteComponent>	m_Weapon1L;
+	CSharedPtr<CSpriteComponent>	m_Weapon2;
+	CSharedPtr<CSpriteComponent>	m_Weapon2L;
+	CSharedPtr<CSpriteComponent>	m_Weapon3;
+	CSharedPtr<CSpriteComponent>	m_Weapon3L;
+	CSpriteComponent*	m_CurWeapon;
+	Vector3	m_PrevPos;
+	Vector3	m_MouseDir;
+	Weapon_Slot	m_WeaponSlot;
 	bool	m_EnableInput;
 	bool	m_Move;
 	bool	m_AttackCoolDown;
-	float       m_Opacity;
+	bool	m_SetCameraInfo;
+	bool	m_DodgeCoolDown;
+	float   m_Opacity;
 	float	m_AttackTimer;
 	float	m_AttackTimerMax;
 	float	m_MoveSpeed;	
-	float	m_DodgeSpeed;	
-	Vector3	m_PrevPos;
-	int		m_Dir;
-	bool	m_SetCameraInfo;
+	float	m_DodgeSpeed;
 	float	m_DodgeTimer;
 	float	m_DodgeTimerMax;
-	bool	m_DodgeCoolDown;
-	Vector3	m_MouseDir;
+	float	m_MouseAngle;
+	int		m_Dir;
+	int		m_MoveDir;
 
 public:
+	float GetMouseAngle()	const
+	{
+		return m_MouseAngle;
+	}
+
 	const Vector3& GetMouseDir()	const
 	{
 		return m_MouseDir;
@@ -51,6 +65,11 @@ public:
 	bool IsDir(Character_Direction Dir)
 	{
 		return m_Dir & (int)Dir;
+	}
+
+	bool IsMoveDir(Character_Direction Dir)
+	{
+		return m_MoveDir & (int)Dir;
 	}
 
 	bool IsMove()	const
@@ -84,12 +103,21 @@ private:
 	void Weapon2(float DeltaTime);
 	void Weapon3(float DeltaTime);
 
+private:
+	void HideAllWeapon();
+
 public:
 	void SetDir(Character_Direction Dir);
+	void SetMoveDir(Character_Direction Dir);
 	void ClearDir(Character_Direction Dir);
+	void ClearMoveDir(Character_Direction Dir);
 
 private:
+	void UpdateAttackCoolDown(float DeltaTime);
+	void UpdateDodgeCoolDown(float DeltaTime);
 	void UpdateMousePos();
+	void UpdateGun();
+	void UpdateGunDir(CSpriteComponent* Weapon);
 	void UpdateAnimDir();
 
 private:

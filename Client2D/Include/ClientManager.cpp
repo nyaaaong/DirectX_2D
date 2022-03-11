@@ -48,13 +48,18 @@ bool CClientManager::Init(HINSTANCE hInst)
 	CInput::GetInst()->CreateKey("MoveLeft", 'A');
 	CInput::GetInst()->CreateKey("MoveRight", 'D');
 	CInput::GetInst()->CreateKey("Dodge", VK_RBUTTON);
+	CInput::GetInst()->CreateKey("Attack", VK_LBUTTON);
 	CInput::GetInst()->CreateKey("NoWeapon", '1');
 	CInput::GetInst()->CreateKey("Weapon1", '2');
 	CInput::GetInst()->CreateKey("Weapon2", '3');
 	CInput::GetInst()->CreateKey("Weapon3", '4');
 
 	CResourceManager::GetInst()->CreateSoundChannelGroup("UI");
-	CResourceManager::GetInst()->SetVolume(10);
+	CResourceManager::GetInst()->SetVolume("UI", 80);
+	CResourceManager::GetInst()->CreateSoundChannelGroup("BGM");
+	CResourceManager::GetInst()->SetVolume("BGM", 50);
+	CResourceManager::GetInst()->CreateSoundChannelGroup("Effect");
+	CResourceManager::GetInst()->SetVolume("Effect", 80);
 
 	// 마우스 위젯 설정
 	CMouseCursor* MouseCursor = CEngine::GetInst()->CreateMouse<CMouseCursor>(Mouse_State::Normal, "MouseCursor");

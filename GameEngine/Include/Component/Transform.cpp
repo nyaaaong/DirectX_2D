@@ -613,6 +613,11 @@ void CTransform::Update(float DeltaTime)
 
 void CTransform::PostUpdate(float DeltaTime)
 {
+	Vector3	WorldPos = m_WorldPos;
+
+	if (CEngine::GetInst()->GetEngineSpace() == Engine_Space::Space2D)
+		WorldPos.z = WorldPos.y / 30000.f * 1000.f;
+
 	if (m_UpdateScale)
 		m_matScale.Scaling(m_WorldScale);
 

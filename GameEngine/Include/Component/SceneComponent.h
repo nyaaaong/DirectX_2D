@@ -310,6 +310,11 @@ public:
 	}
 
 public:
+	void SetPivotX(float x)
+	{
+		m_Transform->SetPivotX(x);
+	}
+
 	void SetPivot(const Vector3& Pivot)
 	{
 		m_Transform->SetPivot(Pivot);

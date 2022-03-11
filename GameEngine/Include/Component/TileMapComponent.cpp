@@ -34,6 +34,8 @@ CTileMapComponent::CTileMapComponent()	:
 	m_TileColor[(int)Tile_Type::Wall] = Vector4(1.f, 0.f, 0.f, 1.f);
 
 	m_EditMode = false;
+
+	m_SortDisable = true;
 }
 
 CTileMapComponent::CTileMapComponent(const CTileMapComponent& com) :
@@ -66,6 +68,8 @@ CTileMapComponent::CTileMapComponent(const CTileMapComponent& com) :
 	}
 
 	m_EditMode = com.m_EditMode;
+
+	m_SortDisable = true;
 }
 
 CTileMapComponent::~CTileMapComponent()
@@ -510,7 +514,7 @@ void CTileMapComponent::PrevRender()
 			{
 				int	Index = i * m_CountX + j;
 
-				m_vecTile[Index]->Update(m_DeltaTime);
+				m_vecTile[Index]->Update(m_DeltaTime, m_SortDisable);
 
 				if (m_vecTile[Index]->GetRender())
 				{

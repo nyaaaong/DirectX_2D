@@ -26,6 +26,9 @@ public:
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
 
+private:
+	void CreateSound();
+
 public:
 	template <typename T>
 	void SetLoadingFunction(T* Obj, void(T::* Func)(bool, float))
