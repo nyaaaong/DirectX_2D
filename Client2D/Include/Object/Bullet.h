@@ -15,11 +15,13 @@ protected:
 
 private:
 	CSharedPtr<class CSpriteComponent>	m_Sprite;
+	float								m_StartDistance;
 	float								m_Distance;
 	CSharedPtr<class CColliderBox2D>	m_Body;
 	Character_Type	m_CharacterType;
 	Vector3			m_BulletDir;
 	bool			m_First;
+	bool			m_RenderAfterFirst;
 	float			m_BulletSpeed;
 	Weapon_Slot		m_WeaponSlot;
 	std::string		m_SoundName;
@@ -55,6 +57,6 @@ public:
 	void OnCollisionEnd(const CollisionResult& result);
 
 private:
-	bool IsNormalTile();
+	bool IsNormalTile(const Vector3& NextWorldPos);
 };
 

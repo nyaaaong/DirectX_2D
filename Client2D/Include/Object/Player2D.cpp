@@ -22,7 +22,7 @@ CPlayer2D::CPlayer2D() :
 	m_DodgeCoolDown(false),
 	m_Move(false),
 	m_SetCameraInfo(false),
-	m_MoveSpeed(400.f),
+	m_MoveSpeed(300.f),
 	m_DodgeSpeed(500.f),
 	m_Dir(0),
 	m_MoveDir(0),
@@ -312,8 +312,6 @@ void CPlayer2D::MoveUp(float DeltaTime)
 	SetMoveDir(Character_Direction::Up);
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_Y) * m_MoveSpeed * DeltaTime;
-	Result.x = ceil(Result.x);
-	Result.y = ceil(Result.y);
 
 	if (!IsNormalTile(Result))
 		return;
@@ -333,10 +331,7 @@ void CPlayer2D::MoveDown(float DeltaTime)
 
 	SetMoveDir(Character_Direction::Down);
 
-	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_Y) * m_MoveSpeed * DeltaTime;
-	//Vector3	Result = m_Sprite->GetWorldAxis(AXIS_Y) * -m_MoveSpeed * DeltaTime;
-	Result.x = ceil(Result.x) * -1.f;
-	Result.y = ceil(Result.y) * -1.f;
+	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_Y) * -m_MoveSpeed * DeltaTime;
 
 	if (!IsNormalTile(Result))
 		return;
@@ -356,10 +351,7 @@ void CPlayer2D::MoveLeft(float DeltaTime)
 
 	SetMoveDir(Character_Direction::Left);
 
-	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_X) * m_MoveSpeed * DeltaTime;
-	//Vector3	Result = m_Sprite->GetWorldAxis(AXIS_X) * -m_MoveSpeed * DeltaTime;
-	Result.x = ceil(Result.x) * -1.f;
-	Result.y = ceil(Result.y) * -1.f;
+	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_X) * -m_MoveSpeed * DeltaTime;
 
 	if (!IsNormalTile(Result))
 		return;
@@ -380,8 +372,6 @@ void CPlayer2D::MoveRight(float DeltaTime)
 	SetMoveDir(Character_Direction::Right);
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_X) * m_MoveSpeed * DeltaTime;
-	Result.x = ceil(Result.x);
-	Result.y = ceil(Result.y);
 
 	if (!IsNormalTile(Result))
 		return;
@@ -460,15 +450,17 @@ void CPlayer2D::HideAllWeapon()
 
 void CPlayer2D::Attack(float DeltaTime)
 {
-	if (!m_EnableInput || m_AttackCoolDown || m_WeaponSlot == Weapon_Slot::None)
+	if (!m_EnableInput || m_AttackCoolDown || m_WeaponSlot == Weapon_Slot::None || !m_CurWeapon)
 		return;
+
+	Vector3	WorldPos = GetWorldPos();
 
 	m_AttackCoolDown = true;
 
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
 
 	Bullet->SetBulletDir(m_MouseDir);
-	Bullet->SetWorldPos(GetWorldPos() + (m_MouseDir * 100.f));
+	Bullet->SetWorldPos(GetWorldPos());
 	Bullet->SetWorldRotation(m_CurWeapon->GetWorldRot());
 	Bullet->SetCollisionProfile("PlayerAttack");
 	Bullet->SetCharacterType(Character_Type::Player);

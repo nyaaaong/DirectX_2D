@@ -6,11 +6,13 @@
 #include "Component/SpriteComponent.h"
 
 CBullet::CBullet() :
+	m_StartDistance(100.f),
 	m_Distance(300.f),
 	m_BulletSpeed(600.f),
 	m_CharacterType(Character_Type::Max),
 	m_WeaponSlot(Weapon_Slot::None),
-	m_First(false)
+	m_First(false),
+	m_RenderAfterFirst(false)
 {
 	SetTypeID<CBullet>();
 }
@@ -21,6 +23,7 @@ CBullet::CBullet(const CBullet& obj) :
 	m_Sprite = (CSpriteComponent*)FindComponent("BulletSprite");
 	m_Body = (CColliderBox2D*)FindComponent("Body");
 
+	m_StartDistance = obj.m_StartDistance;
 	m_Distance = obj.m_Distance;
 	m_BulletSpeed = obj.m_BulletSpeed;
 
@@ -28,6 +31,7 @@ CBullet::CBullet(const CBullet& obj) :
 	m_WeaponSlot = obj.m_WeaponSlot;
 
 	m_First = false;
+	m_RenderAfterFirst = false;
 }
 
 CBullet::~CBullet()
@@ -56,6 +60,7 @@ bool CBullet::Init()
 	m_Body = CreateComponent<CColliderBox2D>("Body");
 
 	m_Body->SetExtent(12.f, 12.f);
+	m_Body->SetRender(false);
 
 	m_Sprite->AddChild(m_Body);
 
@@ -68,6 +73,11 @@ bool CBullet::Init()
 void CBullet::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
+
+	float	Dist = m_BulletSpeed * DeltaTime;
+
+	if (m_Distance <= 0.f || !IsNormalTile(m_BulletDir * Dist))
+		Destroy();
 
 	if (!m_First)
 	{
@@ -102,18 +112,30 @@ void CBullet::Update(float DeltaTime)
 			break;
 		}
 
+		m_Sprite->SetRender(false);
+	}
+
+	m_Distance -= Dist;
+
+	if (m_StartDistance >= 0.f)
+		m_StartDistance -= Dist;
+
+	else
+	{
+		m_StartDistance = -1.f;
+		m_Sprite->SetRender(true);
+		m_Body->SetRender(true);
+	}
+
+	if (!m_RenderAfterFirst && m_Sprite->IsRender())
+	{
+		m_RenderAfterFirst = true;
+
 		if (m_SoundName == "")
 			ASSERT("if (m_SoundName == "")");
 
 		m_Scene->GetResource()->SoundPlay(m_SoundName);
 	}
-
-	float	Dist = m_BulletSpeed * DeltaTime;
-
-	m_Distance -= Dist;
-
-	if (m_Distance <= 0.f || !IsNormalTile())
-		Destroy();
 
 	AddRelativePos(m_BulletDir * Dist);
 }
@@ -137,7 +159,7 @@ void CBullet::OnCollisionEnd(const CollisionResult& result)
 {
 }
 
-bool CBullet::IsNormalTile()
+bool CBullet::IsNormalTile(const Vector3& NextWorldPos)
 {
 	CSceneMode* SceneMode = CSceneManager::GetInst()->GetSceneMode();
 	CMainScene* Scene = dynamic_cast<CMainScene*>(SceneMode);
@@ -150,5 +172,45 @@ bool CBullet::IsNormalTile()
 	if (!TileMap)
 		return false;
 
-	return TileMap->GetTileType(GetWorldPos()) == Tile_Type::Normal;
+	// 8방향 체크
+
+	const Vector3	Center = GetWorldPos();
+	const Vector2	Size = m_Body->GetInfo().Length;
+
+	Vector3	MoveDir[(int)Move_Dir::End];
+
+	for (int i = 0; i < (int)Move_Dir::End; ++i)
+	{
+		MoveDir[i] = Center;
+	}
+
+	MoveDir[(int)Move_Dir::LB].x -= Size.x;
+	MoveDir[(int)Move_Dir::LB].y -= (Size.y * 1.4f);
+
+	MoveDir[(int)Move_Dir::B].y -= (Size.y * 1.4f);
+
+	MoveDir[(int)Move_Dir::RB].x += Size.x;
+	MoveDir[(int)Move_Dir::RB].y -= (Size.y * 1.4f);
+
+	MoveDir[(int)Move_Dir::L].x -= Size.x;
+	MoveDir[(int)Move_Dir::L].y -= (Size.y * 1.4f);
+
+	MoveDir[(int)Move_Dir::R].x += Size.x;
+	MoveDir[(int)Move_Dir::R].y -= (Size.y * 1.4f);
+
+	MoveDir[(int)Move_Dir::LT].x -= Size.x;
+	MoveDir[(int)Move_Dir::LT].y += (Size.y * 0.2f);
+
+	MoveDir[(int)Move_Dir::T].y += (Size.y * 0.2f);
+
+	MoveDir[(int)Move_Dir::RT].x += Size.x;
+	MoveDir[(int)Move_Dir::RT].y += (Size.y * 0.2f);
+
+	for (int i = 0; i < (int)Move_Dir::End; ++i)
+	{
+		if (TileMap->GetTileType(MoveDir[i] + NextWorldPos) != Tile_Type::Normal)
+			return false;
+	}
+
+	return true;
 }

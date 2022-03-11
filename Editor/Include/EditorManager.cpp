@@ -83,7 +83,15 @@ bool CEditorManager::Init(HINSTANCE hInst)
 {
 	//CEngine::GetInst()->SetPlay(false);
 
-	if (!CEngine::GetInst()->Init(hInst, TEXT("GameEngine"), 1280, 720, IDI_ICON1))
+	TCHAR	Title[256] = {};
+
+#ifdef _DEBUG
+	lstrcpy(Title, TEXT("Enter The Gungeon - Editor (Debug Mode)"));
+#else
+	lstrcpy(Title, TEXT("Enter The Gungeon - Editor"));
+#endif // _DEBUG
+
+	if (!CEngine::GetInst()->Init(hInst, Title, 1280, 720, IDI_ICON1))
 	{
 		CEngine::DestroyInst();
 		return false;
