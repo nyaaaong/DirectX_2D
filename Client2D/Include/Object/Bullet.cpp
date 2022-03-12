@@ -1,5 +1,6 @@
 
 #include "Bullet.h"
+#include "BulletImpactAnimation2D.h"
 #include "Monster.h"
 #include "../Scene/MainScene.h"
 #include "Scene/SceneManager.h"
@@ -8,11 +9,11 @@
 CBullet::CBullet() :
 	m_StartDistance(100.f),
 	m_Distance(300.f),
-	m_BulletSpeed(600.f),
+	m_BulletSpeed(10000.f),
 	m_CharacterType(Character_Type::Max),
 	m_WeaponSlot(Weapon_Slot::None),
 	m_First(false),
-	m_RenderAfterFirst(false)
+	m_StartAnim(false)
 {
 	SetTypeID<CBullet>();
 }
@@ -31,7 +32,7 @@ CBullet::CBullet(const CBullet& obj) :
 	m_WeaponSlot = obj.m_WeaponSlot;
 
 	m_First = false;
-	m_RenderAfterFirst = false;
+	m_StartAnim = false;
 }
 
 CBullet::~CBullet()
@@ -67,6 +68,8 @@ bool CBullet::Init()
 	m_Body->AddCollisionCallback(Collision_State::Begin, this, &CBullet::OnCollisionBegin);
 	m_Body->AddCollisionCallback(Collision_State::End, this, &CBullet::OnCollisionEnd);
 
+	m_Sprite->SetRender(false);
+
 	return true;
 }
 
@@ -76,10 +79,40 @@ void CBullet::Update(float DeltaTime)
 
 	float	Dist = m_BulletSpeed * DeltaTime;
 
-	if (m_Distance <= 0.f || !IsNormalTile(m_BulletDir * Dist))
+	if (m_StartAnim)
+	{
 		Destroy();
+		/*if (m_ImpactSprite)
+		{
+			CAnimationSequence2DInstance*	CurAnim = m_ImpactSprite->GetAnimationInstance();
 
-	if (!m_First)
+			if (!CurAnim->GetCurrentAnimation())
+				return;
+
+			if (CurAnim->IsEnd())
+			{
+				Destroy();
+				m_ImpactSprite->SetRender(false);
+			}
+		}*/
+	}
+
+	if (m_Distance <= 0.f || !IsNormalTile(m_BulletDir * Dist))
+		CreateBulletImpact();
+
+	m_Distance -= Dist;
+
+	if (m_StartDistance >= 0.f)
+		m_StartDistance -= Dist;
+
+	else
+	{
+		m_StartDistance = -1.f;
+		m_Sprite->SetRender(true);
+		m_Body->SetRender(true);
+	}
+
+	if (!m_First && m_Sprite->IsRender())
 	{
 		m_First = true;
 
@@ -97,39 +130,20 @@ void CBullet::Update(float DeltaTime)
 		{
 		case Weapon_Slot::Weap1:
 			m_BulletSpeed = 600.f;
-			m_Distance = 300.f;
+			m_Distance = 500.f;
 			m_SoundName = "Player_Weap1";
 			break;
 		case Weapon_Slot::Weap2:
 			m_BulletSpeed = 800.f;
-			m_Distance = 500.f;
+			m_Distance = 800.f;
 			m_SoundName = "Player_Weap2";
 			break;
 		case Weapon_Slot::Weap3:
-			m_BulletSpeed = 3000.f;
+			m_BulletSpeed = 5000.f;
 			m_Distance = 2000.f;
 			m_SoundName = "Player_Weap3";
 			break;
 		}
-
-		m_Sprite->SetRender(false);
-	}
-
-	m_Distance -= Dist;
-
-	if (m_StartDistance >= 0.f)
-		m_StartDistance -= Dist;
-
-	else
-	{
-		m_StartDistance = -1.f;
-		m_Sprite->SetRender(true);
-		m_Body->SetRender(true);
-	}
-
-	if (!m_RenderAfterFirst && m_Sprite->IsRender())
-	{
-		m_RenderAfterFirst = true;
 
 		if (m_SoundName == "")
 			ASSERT("if (m_SoundName == "")");
@@ -152,7 +166,7 @@ CBullet* CBullet::Clone()
 
 void CBullet::OnCollisionBegin(const CollisionResult& result)
 {
-	Destroy();
+	CreateBulletImpact();
 }
 
 void CBullet::OnCollisionEnd(const CollisionResult& result)
@@ -213,4 +227,20 @@ bool CBullet::IsNormalTile(const Vector3& NextWorldPos)
 	}
 
 	return true;
+}
+
+void CBullet::CreateBulletImpact()
+{
+	if (m_StartAnim)
+		return;
+
+	/*m_Sprite->SetRender(false);
+	m_Body->SetRender(false);*/
+
+	m_StartAnim = true;
+
+	/*m_ImpactSprite = CreateComponent<CSpriteComponent>("BulletImpactSprite");
+	m_ImpactSprite->CreateAnimationInstance<CBulletImpactAnimation2D>();
+	m_ImpactSprite->SetPivot(0.5f, 0.5f, 0.f);
+	m_ImpactSprite->SetWorldPos(GetWorldPos());*/
 }

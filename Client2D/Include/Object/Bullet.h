@@ -15,16 +15,17 @@ protected:
 
 private:
 	CSharedPtr<class CSpriteComponent>	m_Sprite;
+	CSharedPtr<class CSpriteComponent>	m_ImpactSprite;
 	float								m_StartDistance;
 	float								m_Distance;
 	CSharedPtr<class CColliderBox2D>	m_Body;
 	Character_Type	m_CharacterType;
 	Vector3			m_BulletDir;
 	bool			m_First;
-	bool			m_RenderAfterFirst;
 	float			m_BulletSpeed;
 	Weapon_Slot		m_WeaponSlot;
 	std::string		m_SoundName;
+	bool			m_StartAnim;
 
 public:
 	void SetWeaponSlot(Weapon_Slot Slot)
@@ -58,5 +59,6 @@ public:
 
 private:
 	bool IsNormalTile(const Vector3& NextWorldPos);
+	void CreateBulletImpact();
 };
 

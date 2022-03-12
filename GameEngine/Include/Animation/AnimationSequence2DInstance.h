@@ -17,8 +17,14 @@ protected:
 	CAnimationSequence2DData* m_CurrentAnimation;
 	class CAnimation2DConstantBuffer* m_CBuffer;
 	bool		m_PlayAnimation;
+	bool		m_AnimEnd;
 
 public:
+	bool IsEnd()	const
+	{
+		return m_AnimEnd;
+	}
+
 	size_t GetTypeID()	const
 	{
 		return m_TypeID;

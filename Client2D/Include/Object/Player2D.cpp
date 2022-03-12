@@ -136,13 +136,6 @@ bool CPlayer2D::Init()
 	if (!CGameObject::Init())
 		return false;
 
-	/*	
-	m_ChildRightSprite->SetRelativeScale(50.f, 50.f, 1.f);
-	m_ChildRightSprite->SetInheritScale(false);
-	m_ChildRightSprite->SetRelativePos(100.f, 0.f, 0.f);
-	m_ChildRightSprite->SetPivot(0.5f, 0.5f, 0.f);
-	m_ChildRightSprite->SetInheritRotZ(true);
-	*/
 	m_Sprite = CreateComponent<CSpriteComponent>("PlayerSprite");
 
 	m_Weapon1 = CreateComponent<CSpriteComponent>("Weapon1Sprite");
@@ -551,8 +544,8 @@ void CPlayer2D::UpdateGun()
 	{
 	case Weapon_Slot::Weap1:
 		
-		if ((180.f >= m_MouseAngle && m_MouseAngle > 90.f) ||
-			(-180.f <= m_MouseAngle && m_MouseAngle < -90.f))
+		if ((180.999f >= m_MouseAngle && m_MouseAngle > 90.999f) ||
+			(-180.999f <= m_MouseAngle && m_MouseAngle < -90.999f))
 		{
 			m_Weapon1L->SetRender(true);
 			m_CurWeapon = m_Weapon1L;
@@ -565,8 +558,8 @@ void CPlayer2D::UpdateGun()
 		
 		break;
 	case Weapon_Slot::Weap2:
-		if ((180.f >= m_MouseAngle && m_MouseAngle > 90.f) ||
-			(-180.f <= m_MouseAngle && m_MouseAngle < -90.f))
+		if ((180.999f >= m_MouseAngle && m_MouseAngle > 90.999f) ||
+			(-180.999f <= m_MouseAngle && m_MouseAngle < -90.999f))
 		{
 			m_Weapon2L->SetRender(true);
 			m_CurWeapon = m_Weapon2L;
@@ -578,8 +571,8 @@ void CPlayer2D::UpdateGun()
 		}
 		break;
 	case Weapon_Slot::Weap3:
-		if ((180.f >= m_MouseAngle && m_MouseAngle > 90.f) ||
-			(-180.f <= m_MouseAngle && m_MouseAngle < -90.f))
+		if ((180.999f >= m_MouseAngle && m_MouseAngle > 90.999f) ||
+			(-180.999f <= m_MouseAngle && m_MouseAngle < -90.999f))
 		{
 			m_Weapon3L->SetRender(true);
 			m_CurWeapon = m_Weapon3L;
@@ -610,10 +603,12 @@ void CPlayer2D::UpdateGunDir(CSpriteComponent* Weapon)
 	Weapon->SetRelativeRotationZ(m_MouseAngle);
 
 	if (IsDir(Character_Direction::Up))
+	{
 		Weapon->SetLayerName("PrevDefault");
+		return;
+	}
 
-	else
-		Weapon->SetLayerName("Default");
+	Weapon->SetLayerName("Default");
 }
 
 void CPlayer2D::UpdateAnimDir()

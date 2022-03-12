@@ -13,7 +13,7 @@ CText::CText()	:
 	m_Layout(nullptr),
 	m_ColorBrush(nullptr),
 	m_2DTarget(nullptr),
-	m_FontSize(20.f),
+	m_FontSize(14.f),
 	m_Alpha(true),
 	m_Opacity(1.f),
 	m_ShadowEnable(false),

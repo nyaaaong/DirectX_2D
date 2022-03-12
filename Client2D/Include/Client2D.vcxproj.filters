@@ -101,6 +101,9 @@
     <ClCompile Include="Object\TileMap.cpp">
       <Filter>01. Object\05. TileMap</Filter>
     </ClCompile>
+    <ClCompile Include="Object\BulletImpactAnimation2D.cpp">
+      <Filter>01. Object\01. Bullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene\MainScene.h">
@@ -165,6 +168,9 @@
     </ClInclude>
     <ClInclude Include="Object\TileMap.h">
       <Filter>01. Object\05. TileMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\BulletImpactAnimation2D.h">
+      <Filter>01. Object\01. Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
