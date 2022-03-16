@@ -16,14 +16,9 @@ protected:
 	size_t		m_TypeID;
 
 public:
-	virtual void Enable(bool Enable)
+	bool CheckTypeID(size_t ID)
 	{
-		m_Enable = Enable;
-	}
-
-	virtual void Destroy()
-	{
-		m_Active = false;
+		return m_TypeID == ID;
 	}
 
 	bool IsActive()	const
@@ -36,14 +31,35 @@ public:
 		return m_Enable;
 	}
 
-	void AddRef()
-	{
-		++m_RefCount;
-	}
-
 	int GetRefCount()	const
 	{
 		return m_RefCount;
+	}
+
+	const std::string& GetName()	const
+	{
+		return m_Name;
+	}
+
+	size_t GetTypeID()	const
+	{
+		return m_TypeID;
+	}
+
+public:
+	virtual void Enable(bool Enable)
+	{
+		m_Enable = Enable;
+	}
+
+	virtual void Destroy()
+	{
+		m_Active = false;
+	}
+
+	void AddRef()
+	{
+		++m_RefCount;
 	}
 
 	int Release()
@@ -62,16 +78,6 @@ public:
 	void SetName(const std::string& Name)
 	{
 		m_Name = Name;
-	}
-
-	const std::string& GetName()	const
-	{
-		return m_Name;
-	}
-
-	size_t GetTypeID()	const
-	{
-		return m_TypeID;
 	}
 
 public:

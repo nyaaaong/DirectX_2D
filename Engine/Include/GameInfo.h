@@ -57,6 +57,7 @@
 #include "imgui_impl_win32.h"
 #include "fmod.hpp"
 #include "Resource/Texture/DirectXTex.h"
+#include "Flag.h"
 
 #ifdef _DEBUG
 
@@ -392,4 +393,15 @@ struct NavResultData
 {
 	std::function<void(const std::list<Vector3>&)>	Callback;
 	std::list<Vector3>	vecPath;
+};
+
+struct Object_Info
+{
+	std::string	Name;
+	Object_Type	Type;
+	Vector3		WorldPos;
+
+	Object_Info()	:
+		Type(Object_Type::Max)
+	{}
 };

@@ -13,9 +13,7 @@ private:
 	class CIMGUITextInput* m_ObjectNameInput;
 	class CIMGUIComboBox* m_ObjectCombo;
 
-	class CIMGUIButton* m_ComponentCreateButton;
-	class CIMGUITextInput* m_ComponentNameInput;
-	class CIMGUIComboBox* m_ComponentCombo;
+	class CPublic* m_Public;
 
 public:
 	virtual bool Init();
@@ -23,9 +21,8 @@ public:
 
 public:
 	void ObjectCreateButton();
-	void ComponentCreateButton();
-	void SaveScene();
-	void LoadScene();
+	void SaveObject();
+	void LoadObject();
 	void GamePlay();
 
 private:

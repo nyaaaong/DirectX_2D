@@ -9,20 +9,20 @@ private:
 	HINSTANCE	m_hInst;
 	HWND		m_hWnd;
 	Resolution	m_RS;
-	static bool	m_Loop;
-	float		m_ClearColor[4];
-	class CTimer* m_Timer;
-	bool		m_Start;
-	bool		m_Play;
 	Engine_Space	m_Space;
-	int				m_ShowCursorCount;
 	Mouse_State		m_MouseState;
 	CSharedPtr<class CWidgetWindow>	m_MouseWidget[(int)Mouse_State::Max];
-	class CGlobalConstantBuffer* m_GlobalCBuffer;
-	float			m_GlobalAccTime;
 	CSharedPtr<class CTexture>	m_GlobalNoiseTexture;
+	static bool	m_Loop;
+	class CTimer* m_Timer;
+	class CGlobalConstantBuffer* m_GlobalCBuffer;
 	class CStructuredBuffer* m_RandomBuffer;
+	bool		m_Start;
+	bool		m_Play;
 	bool		m_MouseWindowOut;
+	float		m_ClearColor[4];
+	float		m_GlobalAccTime;
+	int			m_ShowCursorCount;
 
 public:
 	bool IsMouseWindowOut()	const

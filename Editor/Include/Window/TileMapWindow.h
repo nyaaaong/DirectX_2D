@@ -64,6 +64,7 @@ private:
 
 private:
 	void CreateTileEditControl();
+	void CreateTileMap();
 
 };
 

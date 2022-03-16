@@ -219,6 +219,7 @@ enum class Tile_Type
 {
 	Normal,
 	Wall,
+	BulletKin,
 	End
 };
 
@@ -288,5 +289,11 @@ enum class Bullet_Type
 	Weap1,
 	Weap2,
 	Weap3,
+	Max
+};
+
+enum class Object_Type
+{
+	BulletKin,
 	Max
 };

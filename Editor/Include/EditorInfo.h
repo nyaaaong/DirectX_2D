@@ -4,12 +4,12 @@
 
 enum class CreateObject_Type
 {
-	GameObject,
-	Player
+	BulletKin
 };
 
 enum class TileEdit_Mode
 {
 	Type,
-	Frame
+	Frame,
+	Object
 };

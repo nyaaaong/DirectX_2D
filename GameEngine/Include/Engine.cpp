@@ -3,6 +3,7 @@
 #include "PathManager.h"
 #include "Timer.h"
 #include "Input.h"
+#include "Public.h"
 #include "IMGUIManager.h"
 #include "Resource/ResourceManager.h"
 #include "Resource/Shader/GlobalConstantBuffer.h"
@@ -44,6 +45,8 @@ CEngine::CEngine()	:
 
 CEngine::~CEngine()
 {
+	CPublic::DestroyInst();
+
 	CSceneManager::DestroyInst();
 
 	m_RandomBuffer->ResetShader(90, (int)Buffer_Shader_Type::Compute);

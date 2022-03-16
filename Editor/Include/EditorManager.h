@@ -20,13 +20,24 @@ private:
 	class CObjectHierarchy* m_ObjectHierarchy;
 	class CTileMapWindow* m_TileMapWindow;
 	class CTileWindow* m_TileWindow;
-	class CSceneWindow* m_SceneWindow;
 	Vector3		m_PrevMousePos;
 	Vector3		m_CurMousePos;
 	bool				m_MousePush;
 	float				m_CameraMoveSpeed;
+	bool	m_HasTileMap;
 
 public:
+	void TileMap(bool HasTileMap)
+	{
+		m_HasTileMap = HasTileMap;
+	}
+
+public:
+	bool HasTileMap()	const
+	{
+		return m_HasTileMap;
+	}
+
 	class CSpriteWindow* GetSpriteWindow()	const
 	{
 		return m_SpriteWindow;

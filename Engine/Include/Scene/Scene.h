@@ -7,6 +7,7 @@
 #include "Viewport.h"
 #include "NavigationManager.h"
 #include "../GameObject/GameObject.h"
+#include "../Component/SceneComponent.h"
 
 class CScene
 {
@@ -95,6 +96,73 @@ public:
 public:
 	void GetObjectName(std::vector<std::string>& vecName);
 	void GetSceneComponentName(const std::string& ObjectName, std::vector<std::string>& vecComponentName);
+
+public:
+	bool FindAllObjectComponentType(SceneComponent_Type	Type)
+	{
+		auto	iter = m_ObjList.begin();
+		auto	iterEnd = m_ObjList.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if ((*iter)->FindCompoentType(Type))
+				return true;
+		}
+
+		return false;
+	}
+
+
+public:
+	template <typename T>
+	bool FindAllObjectComponentType()
+	{
+		auto	iter = m_ObjList.begin();
+		auto	iterEnd = m_ObjList.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if ((*iter)->FindCompoentType<T>)
+				return true;
+		}
+
+		return false;
+	}
+
+public:
+	template <typename ObjType, typename ComponentType>
+	bool FindObjectComponentType()
+	{
+		auto	iter = m_ObjList.begin();
+		auto	iterEnd = m_ObjList.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if ((*iter)->CheckTypeID<ObjType>())
+			{
+				if ((*iter)->FindCompoentType<ComponentType>)
+					return true;
+			}
+		}
+
+		return false;
+	}
+
+public:
+	template <typename T>
+	bool FindObjectType()
+	{
+		auto	iter = m_ObjList.begin();
+		auto	iterEnd = m_ObjList.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if ((*iter)->CheckTypeID<T>())
+				return true;
+		}
+
+		return false;
+	}
 
 public:
 	template <typename T>

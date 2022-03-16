@@ -11,6 +11,7 @@
 #include "../Component/CameraComponent.h"
 #include "../Component/WidgetComponent.h"
 #include "../Component/ParticleComponent.h"
+#include "../Component/TileMapComponent.h"
 
 CGameObject::CGameObject()	:
 	m_Scene(nullptr),
@@ -428,6 +429,56 @@ void CGameObject::Load(const char* FileName, const std::string& PathName)
 	strcat_s(FullPath, FileName);
 
 	Load(FullPath);
+}
+
+bool CGameObject::FindCompoentType(SceneComponent_Type Type)
+{
+	size_t ID = 0;
+
+	switch (Type)
+	{
+	case SceneComponent_Type::Sprite:
+		ID = GetTypeID<CSpriteComponent>();
+		break;
+	case SceneComponent_Type::StaticMesh:
+		ID = GetTypeID<CStaticMeshComponent>();
+		break;
+	case SceneComponent_Type::Box2D:
+		ID = GetTypeID<CColliderBox2D>();
+		break;
+	case SceneComponent_Type::Circle:
+		ID = GetTypeID<CColliderCircle>();
+		break;
+	case SceneComponent_Type::Pixel:
+		ID = GetTypeID<CColliderPixel>();
+		break;
+	case SceneComponent_Type::Camera:
+		ID = GetTypeID<CCameraComponent>();
+		break;
+	case SceneComponent_Type::Widget:
+		ID = GetTypeID<CWidgetComponent>();
+		break;
+	case SceneComponent_Type::Particle:
+		ID = GetTypeID<CParticleComponent>();
+		break;
+	case SceneComponent_Type::TileMap:
+		ID = GetTypeID<CTileMapComponent>();
+		break;
+	}
+
+	if (!ID)
+		return false;
+
+	auto	iter = m_SceneComponentList.begin();
+	auto	iterEnd = m_SceneComponentList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if ((*iter)->CheckTypeID(ID))
+			return true;
+	}
+
+	return false;
 }
 
 void CGameObject::Move(const Vector3& EndPos)

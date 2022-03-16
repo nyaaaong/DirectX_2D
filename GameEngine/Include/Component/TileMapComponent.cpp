@@ -31,7 +31,12 @@ CTileMapComponent::CTileMapComponent()	:
 		m_TileColor[i] = Vector4(1.f, 1.f, 1.f, 1.f);
 	}
 
+#ifdef _DEBUG
+
 	m_TileColor[(int)Tile_Type::Wall] = Vector4(1.f, 0.f, 0.f, 1.f);
+	m_TileColor[(int)Tile_Type::BulletKin] = Vector4(1.f, 0.f, 1.f, 1.f);
+
+#endif // _DEBUG
 
 	m_EditMode = false;
 
@@ -466,6 +471,13 @@ bool CTileMapComponent::Init()
 void CTileMapComponent::Update(float DeltaTime)
 {
 	CSceneComponent::Update(DeltaTime);
+
+	/*if (!m_First)
+	{
+		m_First = true;
+
+		m_Scene->TileMap(true);
+	}*/
 
 	if (m_TileMaterial)
 	{

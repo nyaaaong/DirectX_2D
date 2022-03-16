@@ -82,6 +82,10 @@ public:
 	virtual void Load(const char* FileName, const std::string& PathName);
 
 public:
+	bool FindCompoentType(SceneComponent_Type Type);
+
+
+public:
 	void SetInheritScale(bool Inherit)
 	{
 		if (!m_RootComponent)
@@ -608,6 +612,22 @@ public:
 					m_RootComponent = nullptr;
 			}
 		}
+	}
+
+public:
+	template <typename T>
+	bool FindCompoentType()
+	{
+		auto	iter = m_SceneComponentList.begin();
+		auto	iterEnd = m_SceneComponentList.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if ((*iter)->CheckTypeID<T>())
+				return true;
+		}
+
+		return false;
 	}
 
 public:

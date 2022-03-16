@@ -40,9 +40,9 @@ CEditorManager::CEditorManager()	:
 	m_ObjectHierarchy(nullptr),
 	m_TileMapWindow(nullptr),
 	m_TileWindow(nullptr),
-	m_SceneWindow(nullptr),
 	m_CameraMoveSpeed(3000.f),
-	m_MousePush(false)
+	m_MousePush(false),
+	m_HasTileMap(false)
 {
 }
 
@@ -66,11 +66,6 @@ void CEditorManager::SetEditMode(EditMode Mode)
 		m_DragObj->SetWorldScale(0.f, 0.f, 1.f);
 		break;
 	case EditMode::TileMap:
-		/*if (m_DragObj)
-		{
-			m_DragObj->Destroy();
-			m_DragObj = nullptr;
-		}*/
 		break;
 	}
 
@@ -109,7 +104,7 @@ bool CEditorManager::Init(HINSTANCE hInst)
 	m_ObjectHierarchy = CIMGUIManager::GetInst()->AddWindow<CObjectHierarchy>("ObjectHierarchy");
 	m_TileMapWindow = CIMGUIManager::GetInst()->AddWindow<CTileMapWindow>("TileMapWindow");
 	m_TileWindow = CIMGUIManager::GetInst()->AddWindow<CTileWindow>("TileWindow");
-	m_SceneWindow = CIMGUIManager::GetInst()->AddWindow<CSceneWindow>("SceneWindow");
+	//m_SceneWindow = CIMGUIManager::GetInst()->AddWindow<CSceneWindow>("SceneWindow");
 
 	CInput::GetInst()->CreateKey("MouseClick", VK_LBUTTON);
 

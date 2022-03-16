@@ -16,6 +16,7 @@
 #include "Scene/SceneResource.h"
 #include "Resource/Texture/Texture.h"
 #include "Component/Tile.h"
+#include "Component/TileMapComponent.h"
 #include "Component/SpriteComponent.h"
 #include "../EditorManager.h"
 
@@ -214,6 +215,30 @@ void CTileMapWindow::CreateTileEditControl()
 	m_DefaultFrameButton->SetClickCallback(this, &CTileMapWindow::DefaultFrameButton);
 }
 
+void CTileMapWindow::CreateTileMap()
+{
+	if (!m_TileMap)
+	{
+		CGameObject* TileMapObj = CSceneManager::GetInst()->GetScene()->CreateGameObject<CGameObject>("TileMap");
+
+		CSceneComponent* Root = TileMapObj->GetRootComponent();
+
+		CTileMapComponent* Component = TileMapObj->CreateComponent<CTileMapComponent>("TileMap");
+
+		if (Root)
+			Root->AddChild(Component);
+
+		CMaterial* Material = CSceneManager::GetInst()->GetScene()->GetResource()->FindMaterial("TileMap");
+
+		Component->SetTileMaterial(Material);
+
+		CEditorManager::GetInst()->SetEditMode(EditMode::TileMap);
+		CEditorManager::GetInst()->TileMap(true);
+
+		m_TileMap = Component;
+	}
+}
+
 void CTileMapWindow::Update(float DeltaTime)
 {
 	CIMGUIWindow::Update(DeltaTime);
@@ -335,8 +360,7 @@ void CTileMapWindow::TileMapCreateButton()
 
 void CTileMapWindow::LoadTileMapButton()
 {
-	if (!m_TileMap)
-		return;
+	CreateTileMap();
 
 	OPENFILENAME    OpenFile = {};
 
@@ -433,8 +457,7 @@ void CTileMapWindow::TileMapSaveButton()
 
 void CTileMapWindow::TileMapLoadButton()
 {
-	if (!m_TileMap)
-		return;
+	CreateTileMap();
 
 	TCHAR   FilePath[MAX_PATH] = {};
 
