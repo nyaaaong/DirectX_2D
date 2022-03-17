@@ -12,8 +12,7 @@ public:
 
 private:
 	class CIMGUIListBox* m_ObjectListWidget;
-	Object_Info*		m_SelectObjectInfo;
-	CSharedPtr<CGameObject>		m_SelectObject;
+	Object_Type		m_SelectObjectType;
 	CSharedPtr<CSceneComponent>	m_SelectComponent;
 
 public:
@@ -22,14 +21,9 @@ public:
 		return m_ObjectListWidget;
 	}
 
-	Object_Info* GetSelectObjectInfo()	const
+	Object_Type GetSelectObjectType()	const
 	{
-		return m_SelectObjectInfo;
-	}
-
-	CSharedPtr<CGameObject> GetSelectObject()	const
-	{
-		return m_SelectObject;
+		return m_SelectObjectType;
 	}
 
 	CSharedPtr<CSceneComponent> GetSelectComponent()	const

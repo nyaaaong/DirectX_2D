@@ -47,6 +47,22 @@ bool CSceneManager::PostUpdate(float DeltaTime)
 	return ChangeScene();
 }
 
+void CSceneManager::Editor(bool IsEditor)
+{
+	if (!m_Scene)
+		return;
+
+	m_Scene->Editor(IsEditor);
+}
+
+bool CSceneManager::IsEditor() const
+{
+	if (!m_Scene)
+		return false;
+
+	return m_Scene->IsEditor();
+}
+
 CSharedPtr<CSceneMode> CSceneManager::GetSceneMode() const
 {
 	if (!m_Scene)

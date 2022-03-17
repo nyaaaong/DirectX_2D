@@ -13,7 +13,8 @@
 #include "../Scene/NavigationManager.h"
 
 CTileMapComponent::CTileMapComponent()	:
-	m_CBuffer(nullptr)
+	m_CBuffer(nullptr),
+	m_Count(0)
 {
 	SetTypeID<CTileMapComponent>();
 	m_Render = true;
@@ -31,12 +32,21 @@ CTileMapComponent::CTileMapComponent()	:
 		m_TileColor[i] = Vector4(1.f, 1.f, 1.f, 1.f);
 	}
 
-#ifdef _DEBUG
+	if (CSceneManager::GetInst()->IsEditor())
+	{
+		m_TileColor[(int)Tile_Type::Wall] = Vector4(1.f, 0.f, 0.f, 1.f);
+		m_TileColor[(int)Tile_Type::Object] = Vector4(1.f, 0.f, 1.f, 1.f);
+	}
 
-	m_TileColor[(int)Tile_Type::Wall] = Vector4(1.f, 0.f, 0.f, 1.f);
-	m_TileColor[(int)Tile_Type::BulletKin] = Vector4(1.f, 0.f, 1.f, 1.f);
+	else
+	{
+	#ifdef _DEBUG
 
-#endif // _DEBUG
+		m_TileColor[(int)Tile_Type::Wall] = Vector4(1.f, 0.f, 0.f, 1.f);
+		m_TileColor[(int)Tile_Type::Object] = Vector4(1.f, 0.f, 1.f, 1.f);
+
+	#endif // _DEBUG
+	}
 
 	m_EditMode = false;
 

@@ -27,14 +27,39 @@ private:
 	std::list<CSharedPtr<CGameObject>>	m_ObjList;
 	bool		m_Start;
 	bool		m_Change;
+	bool		m_Editor;
 
 public:
+	void Editor(bool IsEditor)
+	{
+		m_Editor = IsEditor;
+	}
+
 	void SetAutoChange(bool Change)
 	{
 		m_Change = Change;
 	}
 
 public:
+	bool IsEditor()	const
+	{
+		return m_Editor;
+	}
+
+	bool FindAllObjectComponentType(SceneComponent_Type	Type)
+	{
+		auto	iter = m_ObjList.begin();
+		auto	iterEnd = m_ObjList.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if ((*iter)->FindCompoentType(Type))
+				return true;
+		}
+
+		return false;
+	}
+	
 	CSharedPtr<CSceneMode> GetSceneMode()	const
 	{
 		return m_Mode;
@@ -96,22 +121,6 @@ public:
 public:
 	void GetObjectName(std::vector<std::string>& vecName);
 	void GetSceneComponentName(const std::string& ObjectName, std::vector<std::string>& vecComponentName);
-
-public:
-	bool FindAllObjectComponentType(SceneComponent_Type	Type)
-	{
-		auto	iter = m_ObjList.begin();
-		auto	iterEnd = m_ObjList.end();
-
-		for (; iter != iterEnd; ++iter)
-		{
-			if ((*iter)->FindCompoentType(Type))
-				return true;
-		}
-
-		return false;
-	}
-
 
 public:
 	template <typename T>

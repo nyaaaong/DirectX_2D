@@ -54,6 +54,12 @@ public:
 	bool PostUpdate(float DeltaTime);
 
 public:
+	void Editor(bool IsEditor);
+
+public:
+	bool IsEditor()	const;
+
+public:
 	CSharedPtr<class CSceneMode> GetSceneMode()	const;
 
 private:

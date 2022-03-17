@@ -27,14 +27,25 @@ private:
 	std::list<CSharedPtr<CGameObject>>	m_ObjList;
 	bool		m_Start;
 	bool		m_Change;
+	bool		m_Editor;
 
 public:
+	void Editor(bool IsEditor)
+	{
+		m_Editor = IsEditor;
+	}
+
 	void SetAutoChange(bool Change)
 	{
 		m_Change = Change;
 	}
 
 public:
+	bool IsEditor()	const
+	{
+		return m_Editor;
+	}
+
 	bool FindAllObjectComponentType(SceneComponent_Type	Type)
 	{
 		auto	iter = m_ObjList.begin();

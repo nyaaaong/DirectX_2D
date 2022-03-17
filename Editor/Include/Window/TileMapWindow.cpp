@@ -3,6 +3,7 @@
 #include "TileWindow.h"
 #include "Input.h"
 #include "PathManager.h"
+#include "Public.h"
 #include "IMGUIButton.h"
 #include "IMGUISameLine.h"
 #include "IMGUILabel.h"
@@ -31,11 +32,11 @@ CTileMapWindow::CTileMapWindow()	:
 	m_FrameEndY(nullptr),
 	m_TypeCombo(nullptr),
 	m_TileEditCombo(nullptr),
-	m_TileMapCreateButton(nullptr),
+	m_CreateTileMapButton(nullptr),
 	m_DefaultFrameButton(nullptr),
+	m_LoadImageButton(nullptr),
+	m_SaveTileMapButton(nullptr),
 	m_LoadTileMapButton(nullptr),
-	m_TileMapSaveButton(nullptr),
-	m_TileMapLoadButton(nullptr),
 	m_TileMapFullPath{}
 {
 }
@@ -57,8 +58,8 @@ bool CTileMapWindow::Init()
 	if (!CIMGUIWindow::Init())
 		return false;
 
-	m_LoadTileMapButton = AddWidget<CIMGUIButton>("LoadTileMapButton", 324.f, 40.f);
-	m_LoadTileMapButton->SetClickCallback(this, &CTileMapWindow::LoadTileMapButton);
+	m_LoadImageButton = AddWidget<CIMGUIButton>("LoadImageButton", 324.f, 40.f);
+	m_LoadImageButton->SetClickCallback(this, &CTileMapWindow::LoadImageButton);
 
 	CIMGUILabel* Label = AddWidget<CIMGUILabel>("TileMapInfo", 324.f, 20.f);
 	Label->SetAlign(0.5f, 0.f);
@@ -108,19 +109,19 @@ bool CTileMapWindow::Init()
 	m_SizeY->SetHideName(true);
 	m_SizeY->SetTextType(ImGuiText_Type::Float);
 
-	m_TileMapCreateButton = AddWidget<CIMGUIButton>("TileMapCreateButton", 324.f, 20.f);
-	m_TileMapCreateButton->SetClickCallback(this, &CTileMapWindow::TileMapCreateButton);
+	m_CreateTileMapButton = AddWidget<CIMGUIButton>("CreateTileMapButton", 324.f, 20.f);
+	m_CreateTileMapButton->SetClickCallback(this, &CTileMapWindow::CreateTileMapButton);
 
 	CreateTileEditControl();
 
 
-	m_TileMapSaveButton = AddWidget<CIMGUIButton>("TileMapSaveButton", 160.f, 20.f);
-	m_TileMapSaveButton->SetClickCallback(this, &CTileMapWindow::TileMapSaveButton);
+	m_SaveTileMapButton = AddWidget<CIMGUIButton>("SaveTileMapButton", 160.f, 20.f);
+	m_SaveTileMapButton->SetClickCallback(this, &CTileMapWindow::SaveTileMapButton);
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 
-	m_TileMapLoadButton = AddWidget<CIMGUIButton>("TileMapLoadButton", 156.f, 20.f);
-	m_TileMapLoadButton->SetClickCallback(this, &CTileMapWindow::TileMapLoadButton);
+	m_LoadTileMapButton = AddWidget<CIMGUIButton>("LoadTileMapButton", 156.f, 20.f);
+	m_LoadTileMapButton->SetClickCallback(this, &CTileMapWindow::LoadTileMapButton);
 
 	m_CountX->SetInt(100);
 	m_CountY->SetInt(100);
@@ -151,6 +152,7 @@ void CTileMapWindow::CreateTileEditControl()
 	m_TypeCombo->SetHideName(true);
 	m_TypeCombo->AddItem("Normal");
 	m_TypeCombo->AddItem("Wall");
+	m_TypeCombo->AddItem("Object Monster");
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 
@@ -223,19 +225,17 @@ void CTileMapWindow::CreateTileMap()
 
 		CSceneComponent* Root = TileMapObj->GetRootComponent();
 
-		CTileMapComponent* Component = TileMapObj->CreateComponent<CTileMapComponent>("TileMap");
+		m_TileMap = TileMapObj->CreateComponent<CTileMapComponent>("TileMap");
 
 		if (Root)
-			Root->AddChild(Component);
+			Root->AddChild(m_TileMap);
 
 		CMaterial* Material = CSceneManager::GetInst()->GetScene()->GetResource()->FindMaterial("TileMap");
 
-		Component->SetTileMaterial(Material);
+		m_TileMap->SetTileMaterial(Material);
 
 		CEditorManager::GetInst()->SetEditMode(EditMode::TileMap);
 		CEditorManager::GetInst()->TileMap(true);
-
-		m_TileMap = Component;
 	}
 }
 
@@ -269,6 +269,22 @@ void CTileMapWindow::Update(float DeltaTime)
 						return;
 
 					Tile_Type	Type = (Tile_Type)TileType;
+
+					switch (Type)
+					{
+					case Tile_Type::Object:
+					{
+						if (Tile->GetTileType() == Tile_Type::Object)
+							return;
+
+						Object_Type ObjectType = CEditorManager::GetInst()->GetSelectObjectType();
+
+						CPublic::GetInst()->AddObjectWorldPos(ObjectType, Tile->GetWorldPos());
+
+						int a = 0;
+						break;
+					}
+					}
 
 					Tile->SetTileType(Type);
 				}
@@ -328,7 +344,7 @@ void CTileMapWindow::SetTileEnd(const Vector2& End)
 	m_FrameEndY->SetText(End.y);
 }
 
-void CTileMapWindow::TileMapCreateButton()
+void CTileMapWindow::CreateTileMapButton()
 {
 	if (!m_TileMap || !lstrlen(m_TileMapFullPath))
 		return;
@@ -358,7 +374,7 @@ void CTileMapWindow::TileMapCreateButton()
 		Material->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "TileTexture", Texture);
 }
 
-void CTileMapWindow::LoadTileMapButton()
+void CTileMapWindow::LoadImageButton()
 {
 	CreateTileMap();
 
@@ -408,7 +424,7 @@ void CTileMapWindow::DefaultFrameButton()
 	m_TileMap->SetTileDefaultFrame(StartX, StartY, EndX, EndY);
 }
 
-void CTileMapWindow::TileMapSaveButton()
+void CTileMapWindow::SaveTileMapButton()
 {
 	if (!m_TileMap)
 		return;
@@ -451,11 +467,23 @@ void CTileMapWindow::TileMapSaveButton()
 
 		CGameObject* TileMapObj = m_TileMap->GetGameObject();
 
-		TileMapObj->Save(ConvertFullPath);
+		FILE* File = nullptr;
+
+		fopen_s(&File, ConvertFullPath, "wb");
+
+		if (!File)
+			return;
+
+		TileMapObj->Save(File);
+		CPublic::GetInst()->Save(File);
+
+		fclose(File);
+
+		//TileMapObj->Save(ConvertFullPath);
 	}
 }
 
-void CTileMapWindow::TileMapLoadButton()
+void CTileMapWindow::LoadTileMapButton()
 {
 	CreateTileMap();
 
@@ -500,8 +528,20 @@ void CTileMapWindow::TileMapLoadButton()
 
 		CGameObject* TileMapObj = m_TileMap->GetGameObject();
 
-		TileMapObj->ClearSceneComponent<CTileMapComponent>();
+		FILE* File = nullptr;
 
-		TileMapObj->Load(ConvertFullPath);
+		fopen_s(&File, ConvertFullPath, "rb");
+
+		if (!File)
+			return;
+
+		TileMapObj->Load(File);
+		CPublic::GetInst()->Load(File);
+		CPublic::GetInst()->LoadObjPos(TileMapObj);
+
+		fclose(File);
+
+		CEditorManager::GetInst()->LoadSceneObject();
+		CEditorManager::GetInst()->SetEditMode(EditMode::TileMap);
 	}
 }

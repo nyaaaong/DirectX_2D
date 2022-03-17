@@ -26,6 +26,8 @@ CScene::CScene()	:
 	m_Viewport->Init();
 	m_NavManager->Init();
 
+	m_Editor = false;
+
 	m_Change = true;
 }
 

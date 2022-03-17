@@ -1,11 +1,13 @@
 
 #include "MainScene.h"
 #include "Device.h"
+#include "Public.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneResource.h"
 #include "Scene/Viewport.h"
 #include "Resource/Particle/Particle.h"
 #include "../Object/Player2D.h"
+#include "../Object/BulletKin.h"
 
 CMainScene::CMainScene()	:
 	m_TileMap(nullptr)
@@ -31,6 +33,30 @@ bool CMainScene::Init()
 
 	m_TileMap = m_Scene->LoadGameObject<CTileMap>();
 	m_TileMap->Load("TileMap.dat", SCENE_PATH);
+	CPublic::GetInst()->LoadObjPos(m_TileMap);
+	CGameObject* Obj = nullptr;
+
+	std::vector<Vector3>	vecObjectPos;
+
+	for (int i = 0; i < (int)Object_Type::Max; ++i)
+	{
+		vecObjectPos.clear();
+
+		CPublic::GetInst()->GetObjectPos((Object_Type)i, vecObjectPos);
+
+		size_t Size = vecObjectPos.size();
+
+		for (int j = 0; j < Size; ++j)
+		{
+			switch ((Object_Type)i)
+			{
+			case Object_Type::BulletKin:
+				Obj = m_Scene->CreateGameObject<CBulletKin>("BulletKin");
+				Obj->SetWorldPos(vecObjectPos[j]);
+				break;
+			}
+		}
+	}
 
 	m_MainWidget = m_Scene->GetViewport()->CreateWidgetWindow<CMainWidget>("MainWidget");
 

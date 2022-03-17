@@ -23,11 +23,11 @@ private:
 	class CIMGUITextInput* m_FrameEndY;
 	class CIMGUIComboBox* m_TypeCombo;
 	class CIMGUIComboBox* m_TileEditCombo;
-	class CIMGUIButton* m_TileMapCreateButton;
+	class CIMGUIButton* m_CreateTileMapButton;
 	class CIMGUIButton* m_DefaultFrameButton;
+	class CIMGUIButton* m_LoadImageButton;
+	class CIMGUIButton* m_SaveTileMapButton;
 	class CIMGUIButton* m_LoadTileMapButton;
-	class CIMGUIButton* m_TileMapSaveButton;
-	class CIMGUIButton* m_TileMapLoadButton;
 	CSharedPtr<CTileMapComponent>		m_TileMap;
 	CSharedPtr<CTileMapSprite>	m_TileMapSprite;
 	TCHAR	m_TileMapFullPath[MAX_PATH];
@@ -57,10 +57,10 @@ public:
 
 private:
 	void DefaultFrameButton();
-	void TileMapCreateButton();
+	void CreateTileMapButton();
+	void LoadImageButton();
+	void SaveTileMapButton();
 	void LoadTileMapButton();
-	void TileMapSaveButton();
-	void TileMapLoadButton();
 
 private:
 	void CreateTileEditControl();

@@ -9,6 +9,7 @@ class CTileMapComponent :
 	public CSceneComponent
 {
 	friend class CGameObject;
+	friend class CPublic;
 
 protected:
 	CTileMapComponent();
@@ -45,6 +46,28 @@ public:
 	}
 
 public:
+	void GetSameTypeTile(Tile_Type Type, std::vector<CTile*>& vecTile)
+	{
+		int Size = (int)m_vecTile.size();
+
+		for (int i = 0; i < Size; ++i)
+		{
+			if (m_vecTile[i]->GetTileType() == Type)
+				vecTile.push_back(m_vecTile[i]);
+		}
+	}
+
+	void GetSameObjectTypeTile(Object_Type Type, const std::vector<CTile*>& vecInput, std::vector<CTile*>& vecOutput)
+	{
+		int Size = (int)vecInput.size();
+
+		for (int i = 0; i < Size; ++i)
+		{
+			if (m_vecTile[i]->GetObjectType() == Type)
+				vecOutput.push_back(vecInput[i]);
+		}
+	}
+
 	CMaterial* GetBackMaterial()    const
 	{
 		return m_BackMaterial;
@@ -53,6 +76,11 @@ public:
 	CMaterial* GetTileMaterial()    const
 	{
 		return m_TileMaterial;
+	}
+
+	int GetTileCount()	const
+	{
+		return m_Count;
 	}
 
 	int GetTileCountX() const

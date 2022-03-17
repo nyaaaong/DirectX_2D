@@ -72,6 +72,9 @@ public:
 	void SetEditMode(EditMode Mode);
 
 public:
+	Object_Type GetSelectObjectType();
+
+public:
 	bool Init(HINSTANCE hInst);
 	void CreateDefaultSceneMode();
 	int Run();
@@ -103,6 +106,9 @@ public:
 	class CGameObject* CreateObject(class CScene* Scene, size_t Type);
 	class CComponent* CreateComponent(class CGameObject* Obj, size_t Type);
 	void CreateAnimInstance(class CSpriteComponent* Sprite, size_t Type);
+
+public:
+	void LoadSceneObject();
 
 public:
 	DECLARE_SINGLE(CEditorManager)

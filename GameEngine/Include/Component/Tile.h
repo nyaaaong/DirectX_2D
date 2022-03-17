@@ -15,7 +15,9 @@ private:
 private:
 	class CTileMapComponent* m_Owner;
 	Tile_Type	m_TileType;
+	Object_Type	m_ObjectType;
 	Vector3		m_Pos;			// 좌 하단 기준.
+	Vector3		m_WorldPos;			// 좌 하단 기준.
 	Vector3		m_Size;
 	Vector3		m_Center;
 	Matrix		m_matWorld;
@@ -27,6 +29,14 @@ private:
 	float		m_Opacity;
 
 public:
+	Object_Type GetObjectType()	const
+	{
+		if (m_TileType == Tile_Type::Object)
+			return m_ObjectType;
+
+		return Object_Type::Max;
+	}
+
 	float GetOpacity()	const
 	{
 		return m_Opacity;
@@ -45,6 +55,11 @@ public:
 	const Vector3& GetCenter()	const
 	{
 		return m_Center;
+	}
+
+	const Vector3& GetWorldPos()	const
+	{
+		return m_WorldPos;
 	}
 
 	const Vector3& GetPos()	const
@@ -88,6 +103,14 @@ public:
 	}
 
 public:
+	void SetObjectType(Object_Type Type)
+	{
+		if (m_TileType == Tile_Type::Object)
+			m_ObjectType = Type;
+
+		m_ObjectType = Object_Type::Max;
+	}
+
 	void SetOpacity(float Opacity)
 	{
 		m_Opacity = Opacity;

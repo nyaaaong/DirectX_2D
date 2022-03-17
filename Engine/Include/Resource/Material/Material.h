@@ -24,6 +24,10 @@ struct RenderCallback
 {
     std::function<void()>   Func;
     void* Obj;
+
+	RenderCallback()	:
+		Obj(nullptr)
+	{ }
 };
 
 

@@ -1,5 +1,7 @@
 #include "Public.h"
 #include "PathManager.h"
+#include "GameObject/GameObject.h"
+#include "Component/TileMapComponent.h"
 
 DEFINITION_SINGLE(CPublic)
 
@@ -9,8 +11,8 @@ CPublic::CPublic()
 
 CPublic::~CPublic()
 {
-	auto	iter = m_mapObjectInfo.begin();
-	auto	iterEnd = m_mapObjectInfo.end();
+	auto	iter = m_mapObject.begin();
+	auto	iterEnd = m_mapObject.end();
 
 	for (; iter != iterEnd; ++iter)
 	{
@@ -18,93 +20,183 @@ CPublic::~CPublic()
 	}
 }
 
+Object_Type CPublic::GetMultibyteToType(const char* Multibyte)
+{
+	if (!strcmp(Multibyte, "BulletKin"))
+		return Object_Type::BulletKin;
+
+	return Object_Type::Max;
+}
+
 void CPublic::GetObjectName(std::vector<std::string>& vecName)
 {
-	size_t Size = m_mapObjectInfo.size();
+	size_t Size = m_mapObject.size();
 
-	vecName.resize(Size);
+	vecName.reserve(Size);
 
-	int Index = 0;
-
-	auto	iter = m_mapObjectInfo.begin();
-	auto	iterEnd = m_mapObjectInfo.end();
+	auto	iter = m_mapObject.begin();
+	auto	iterEnd = m_mapObject.end();
 
 	for (; iter != iterEnd; ++iter)
 	{
-		vecName[Index] = iter->second->Name;
-
-		++Index;
+		switch (iter->first)
+		{
+		case Object_Type::BulletKin:
+			vecName.push_back("BulletKin");
+			break;
+		}
 	}
 }
 
-void CPublic::SetObjectWorldPos(const std::string& Name, const Vector3& WorldPos)
+void CPublic::GetObjectPos(Object_Type Type, std::vector<Vector3> vecPos)
 {
-	Object_Info* Data = FindObjectInfo(Name);
+	auto	iter = m_mapObject.find(Type);
 
-	if (!Data)
+	if (iter == m_mapObject.end())
 		return;
 
-	Data->WorldPos = WorldPos;
+	int Size = (int)m_mapObject.size();
+
+	for (int i = 0; i < Size; ++i)
+	{
+		int ObjCount = iter->second->size();
+		int j = 0;
+		vecPos.resize(ObjCount);
+
+		auto	iter1 = iter->second->begin();
+		auto	iter1End = iter->second->end();
+
+		for (; iter1 != iter1End; ++iter1)
+		{
+			vecPos[j] = (*iter1);
+			++j;
+		}
+	}
 }
 
-Object_Info* CPublic::FindObjectInfo(const std::string& Name)
+void CPublic::AddObjectWorldPos(Object_Type Type, const Vector3& WorldPos)
 {
-	auto	iter = m_mapObjectInfo.find(Name);
+	std::list<Vector3>*	ObjectList = FindObjectPosList(Type);
 
-	if (iter == m_mapObjectInfo.end())
-		return nullptr;
+	if (!ObjectList)
+		CreateObjectType(Type);
 
-	return iter->second;
+	ObjectList->push_back(WorldPos);
 }
 
-bool CPublic::CreateObjectInfo(const std::string& Name, Object_Type Type)
+void CPublic::DeleteObjectWorldPos(Object_Type Type, const Vector3& WorldPos)
 {
-	if (FindObjectInfo(Name))
+	std::list<Vector3>* ObjectList = FindObjectPosList(Type);
+
+	if (!ObjectList)
+		return;
+
+	auto	iter = ObjectList->begin();
+	auto	iterEnd = ObjectList->end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if ((*iter) == WorldPos)
+		{
+			ObjectList->erase(iter);
+			return;
+		}
+	}
+}
+
+void CPublic::ClearObjectWorldPos(Object_Type Type)
+{
+	if (!FindObjectType(Type))
+		return;
+
+	auto	iter = m_mapObject.begin();
+	auto	iterEnd = m_mapObject.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		SAFE_DELETE(iter->second);
+	}
+}
+
+std::list<Vector3>* CPublic::FindObjectPosList(Object_Type Type)
+{
+	auto	iter = m_mapObject.begin();
+	auto	iterEnd = m_mapObject.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if (iter->first == Type)
+			return iter->second;
+	}
+
+	return nullptr;
+}
+
+bool CPublic::CreateObjectType(Object_Type Type)
+{
+	if (FindObjectType(Type))
+		return true;
+
+	switch (Type)
+	{
+	case Object_Type::BulletKin:
+	{
+		std::list<Vector3>* NewObjPosList = DBG_NEW std::list<Vector3>;
+
+		m_mapObject.insert(std::make_pair(Type, NewObjPosList));
+	}
+		break;
+	}
+
+	return false;
+}
+
+void CPublic::DeleteObjectType(Object_Type Type)
+{
+	if (!FindObjectType(Type))
+		return;
+
+	switch (Type)
+	{
+	case Object_Type::BulletKin:
+	{
+		auto	iter = m_mapObject.find(Type);
+
+		SAFE_DELETE(iter->second);
+		m_mapObject.erase(iter);
+	}
+	break;
+	}
+}
+
+bool CPublic::FindObjectType(Object_Type Type)
+{
+	auto	iter = m_mapObject.find(Type);
+
+	if (iter == m_mapObject.end())
 		return false;
-
-	Object_Info* NewInfo = new Object_Info;
-
-	NewInfo->Name = Name;
-	NewInfo->Type = Type;
-
-	m_mapObjectInfo.insert(std::make_pair(Name, NewInfo));
 
 	return true;
 }
 
-void CPublic::DeleteObjectInfo(const std::string& Name)
+bool CPublic::FindObjectType(const char* TypeMultibyte)
 {
-	auto	iter = m_mapObjectInfo.find(Name);
-
-	if (iter == m_mapObjectInfo.end())
-		return;
-
-	SAFE_DELETE(iter->second);
-
-	m_mapObjectInfo.erase(iter);
+	return FindObjectType(GetMultibyteToType(TypeMultibyte));
 }
 
 void CPublic::Save(FILE* File)
 {
-	int Size = (int)m_mapObjectInfo.size();
+	int Size = (int)m_mapObject.size();
 	fwrite(&Size, sizeof(int), 1, File);
 
-	auto	iter = m_mapObjectInfo.begin();
-	auto	iterEnd = m_mapObjectInfo.end();
+	auto	iter = m_mapObject.begin();
+	auto	iterEnd = m_mapObject.end();
 
 	for (; iter != iterEnd; ++iter)
 	{
-		Object_Info*	Data = iter->second;
+		Object_Type Type = iter->first;
 
-		int Length = (int)(Data->Name.length());
-		fwrite(&Length, sizeof(int), 1, File);
-		fwrite(Data->Name.c_str(), sizeof(char), 1, File);
-
-		fwrite(&Data->Type, sizeof(Object_Type), 1, File);
-
-		fwrite(&Data->WorldPos.x, sizeof(float), 1, File);
-		fwrite(&Data->WorldPos.y, sizeof(float), 1, File);
-		fwrite(&Data->WorldPos.z, sizeof(float), 1, File);
+		fwrite(&Type, sizeof(Object_Type), 1, File);
 	}
 }
 
@@ -138,36 +230,21 @@ void CPublic::SaveFullPath(const char* FullPath)
 
 void CPublic::Load(FILE* File)
 {
-	auto	iter = m_mapObjectInfo.begin();
-	auto	iterEnd = m_mapObjectInfo.end();
-
-	for (; iter != iterEnd; ++iter)
-	{
-		SAFE_DELETE(iter->second);
-	}
-	
 	int Size = 0;
 	fread(&Size, sizeof(int), 1, File);
 
-	m_mapObjectInfo.reserve((size_t)Size);
+	m_mapObject.reserve((size_t)Size);
 
 	for (int i = 0; i < Size; ++i)
 	{
-		Object_Info*	Data = new Object_Info;
+		Object_Type Type = Object_Type::Max;
 
-		int Length = 0;
-		fread(&Length, sizeof(int), 1, File);
+		fread(&Type, sizeof(Object_Type), 1, File);
 
-		char	Name[256] = {};
-		fread(Name, sizeof(char), Length, File);
-		Data->Name = Name;
+		if (Type == Object_Type::Max)
+			ASSERT("if (Type == Object_Type::Max)");
 
-		fread(&Data->Type, sizeof(Object_Type), 1, File);
-		fread(&Data->WorldPos.x, sizeof(float), 1, File);
-		fread(&Data->WorldPos.y, sizeof(float), 1, File);
-		fread(&Data->WorldPos.z, sizeof(float), 1, File);
-
-		m_mapObjectInfo.insert(std::make_pair(Name, Data));
+		CreateObjectType(Type);
 	}
 }
 
@@ -197,4 +274,39 @@ void CPublic::LoadFullPath(const char* FullPath)
 	Load(File);
 
 	fclose(File);
+}
+
+void CPublic::LoadObjPos(CGameObject* TileMapObj)
+{
+	if (!TileMapObj)
+		ASSERT("if (!TileMapObj)");
+
+	CSceneComponent* Root = TileMapObj->GetRootComponent();
+
+	CTileMapComponent* TileMap = dynamic_cast<CTileMapComponent*>(Root);
+
+	if (!TileMap)
+		ASSERT("if (!TileMap)");
+	
+	auto	iter = m_mapObject.begin();
+	std::vector<CTile*>	vecTypeTile;
+	std::vector<CTile*> vecObjTypeTile;
+
+	TileMap->GetSameTypeTile(Tile_Type::Object, vecTypeTile);
+
+	int Size = (int)m_mapObject.size();
+
+	for (int i = 0; i < Size; ++i)
+	{
+		vecObjTypeTile.clear();
+
+		TileMap->GetSameObjectTypeTile(iter->first, vecTypeTile, vecObjTypeTile);
+
+		int ObjTypeSize = (int)vecObjTypeTile.size();
+
+		for (int j = 0; j < ObjTypeSize; ++j)
+		{
+			iter->second->push_back(vecObjTypeTile[j]->GetWorldPos());
+		}
+	}
 }

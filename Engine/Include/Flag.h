@@ -219,7 +219,7 @@ enum class Tile_Type
 {
 	Normal,
 	Wall,
-	BulletKin,
+	Object,
 	End
 };
 

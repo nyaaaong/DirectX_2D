@@ -9,7 +9,7 @@
 
 CObjectHierarchy::CObjectHierarchy()	:
 	m_ObjectListWidget(nullptr),
-	m_SelectObjectInfo(nullptr)
+	m_SelectObjectType(Object_Type::Max)
 {
 }
 
@@ -46,23 +46,8 @@ void CObjectHierarchy::Update(float DeltaTime)
 
 void CObjectHierarchy::SelectObject(int Index, const char* Item)
 {
-	CGameObject* Object = CSceneManager::GetInst()->GetScene()->FindObject(Item);
+	Object_Type	Type = CPublic::GetInst()->GetMultibyteToType(Item);
 
-	if (!Object)
-	{
-		// 만약 씬에 등록된 오브젝트를 못찾았다면 타일맵이 아닌 오브젝트 정보일 수 도 있다
-		Object_Info*	Data = CPublic::GetInst()->FindObjectInfo(Item);
-
-		m_SelectObjectInfo = Data;
-		m_SelectObject = nullptr;
-
-		if (!m_SelectObjectInfo)
-			return;
-	}
-
-	else
-	{
-		m_SelectObject = Object;
-		m_SelectObjectInfo = nullptr;
-	}
+	if (CPublic::GetInst()->FindObjectType(Type))
+		m_SelectObjectType = Type;
 }

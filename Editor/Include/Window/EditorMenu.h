@@ -10,7 +10,6 @@ public:
 
 private:
 	class CIMGUIButton* m_ObjectCreateButton;
-	class CIMGUITextInput* m_ObjectNameInput;
 	class CIMGUIComboBox* m_ObjectCombo;
 
 	class CPublic* m_Public;
@@ -21,11 +20,9 @@ public:
 
 public:
 	void ObjectCreateButton();
-	void SaveObject();
-	void LoadObject();
 	void GamePlay();
 
-private:
+public:
 	void LoadSceneObject();
 };
 

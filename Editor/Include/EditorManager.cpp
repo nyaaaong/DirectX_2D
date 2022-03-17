@@ -74,6 +74,14 @@ void CEditorManager::SetEditMode(EditMode Mode)
 	}
 }
 
+Object_Type CEditorManager::GetSelectObjectType()
+{
+	if (!m_ObjectHierarchy)
+		return Object_Type::Max;
+
+	return m_ObjectHierarchy->GetSelectObjectType();
+}
+
 bool CEditorManager::Init(HINSTANCE hInst)
 {
 	//CEngine::GetInst()->SetPlay(false);
@@ -595,10 +603,15 @@ CComponent* CEditorManager::CreateComponent(CGameObject* Obj, size_t Type)
 
 	else if (Type == typeid(CTileMapComponent).hash_code())
 	{
-		CTileMapComponent* Component = Obj->LoadComponent<CTileMapComponent>();
+		CTileMapComponent* Component = Obj->FindComponentFromType<CTileMapComponent>();
 
-		if (Root)
-			Root->AddChild((CTileMapComponent*)Component);
+		if (!Component)
+		{
+			Component = Obj->LoadComponent<CTileMapComponent>();
+
+			if (Root)
+				Root->AddChild((CTileMapComponent*)Component);
+		}
 
 		Component->EnableEditMode(true);
 
@@ -674,4 +687,12 @@ void CEditorManager::CreateAnimInstance(CSpriteComponent* Sprite, size_t Type)
 	{
 		Sprite->LoadAnimationInstance<CAnimationSequence2DInstance>();
 	}
+}
+
+void CEditorManager::LoadSceneObject()
+{
+	if (!m_EditorMenu)
+		return;
+
+	m_EditorMenu->LoadSceneObject();
 }

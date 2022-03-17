@@ -5,6 +5,7 @@
 
 CTile::CTile() :
 	m_TileType(Tile_Type::Normal),
+	m_ObjectType(Object_Type::Max),
 	m_Owner(nullptr),
 	m_IndexX(-1),
 	m_IndexY(-1),
@@ -33,21 +34,21 @@ void CTile::Update(float DeltaTime, bool SortDiable)
 
 	Vector3	Pos = OwnerPos + m_Pos;
 
-	Vector3	WorldPos = Pos;
+	m_WorldPos = Pos;
 
 	if (CEngine::GetInst()->GetEngineSpace() == Engine_Space::Space2D)
 	{
 		if (SortDiable)
-			WorldPos.z = 999.9999f;
+			m_WorldPos.z = 999.9999f;
 
 		else
-			WorldPos.z = WorldPos.y / 30000.f * 1000.f;;
+			m_WorldPos.z = m_WorldPos.y / 30000.f * 1000.f;;
 	}
 
 	Matrix	matScale, matTranslate;
 
 	matScale.Scaling(m_Size.x, m_Size.y, 1.f);
-	matTranslate.Translation(WorldPos);
+	matTranslate.Translation(m_WorldPos);
 
 	m_matWorld = matScale * matTranslate;
 }
@@ -55,6 +56,7 @@ void CTile::Update(float DeltaTime, bool SortDiable)
 void CTile::Save(FILE* File)
 {
 	fwrite(&m_TileType, sizeof(Tile_Type), 1, File);
+	fwrite(&m_ObjectType, sizeof(Tile_Type), 1, File);
 
 	fwrite(&m_Pos, sizeof(Vector3), 1, File);
 	fwrite(&m_Size, sizeof(Vector3), 1, File);
@@ -73,6 +75,7 @@ void CTile::Save(FILE* File)
 void CTile::Load(FILE* File)
 {
 	fread(&m_TileType, sizeof(Tile_Type), 1, File);
+	fread(&m_ObjectType, sizeof(Tile_Type), 1, File);
 
 	fread(&m_Pos, sizeof(Vector3), 1, File);
 	fread(&m_Size, sizeof(Vector3), 1, File);

@@ -1,7 +1,8 @@
 
 #include "Shader.h"
 
-CShader::CShader()
+CShader::CShader()	:
+	m_Type(Shader_Type::Compute)
 {
 }
 
