@@ -9,10 +9,18 @@ CBulletKinAnim::CBulletKinAnim()
 CBulletKinAnim::CBulletKinAnim(const CBulletKinAnim& Anim) :
 	CAnimationSequence2DInstance(Anim)
 {
+	SetTypeID<CBulletKinAnim>();
 }
 
 CBulletKinAnim::~CBulletKinAnim()
 {
+}
+
+void CBulletKinAnim::Start()
+{
+	CAnimationSequence2DInstance::Start();
+
+	Play();
 }
 
 bool CBulletKinAnim::Init()

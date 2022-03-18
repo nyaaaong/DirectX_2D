@@ -11,6 +11,7 @@ public:
 	~CBulletKinAnim();
 
 public:
+	virtual void Start();
 	virtual bool Init();
 	virtual CBulletKinAnim* Clone();
 };

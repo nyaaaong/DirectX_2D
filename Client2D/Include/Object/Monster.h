@@ -1,46 +1,43 @@
 #pragma once
 
-#include "GameObject/GameObject.h"
+#include "GameObject\GameObject.h"
 #include "Component/SpriteComponent.h"
 #include "Component/PaperBurnComponent.h"
-#include "Component/ColliderCircle.h"
-#include "Component/WidgetComponent.h"
+#include "Component/ColliderBox2D.h"
 
 class CMonster :
-    public CGameObject
+	public CGameObject
 {
-    friend class CScene;
+	friend class CScene;
 
 protected:
-    CMonster();
-    CMonster(const CMonster& obj);
-    virtual ~CMonster();
+	CMonster();
+	CMonster(const CMonster& obj);
+	virtual ~CMonster() = 0;
 
-private:
-    CSharedPtr<CSpriteComponent>    m_Sprite;
-    CSharedPtr<CColliderCircle>       m_Body;
-    CSharedPtr<CPaperBurnComponent>   m_PaperBurn;
-
-	CSharedPtr<CWidgetComponent>     m_SimpleHUDWidget;
-	class CSimpleHUD* m_SimpleHUD;
-
-    int                 m_HP;
-
-public:
-    virtual void Start();
-    virtual bool Init();
-    virtual void Update(float DeltaTime);
-    virtual void PostUpdate(float DeltaTime);
-    virtual CMonster* Clone();
+protected:
+	CSharedPtr<CColliderBox2D>       m_Body;
+	CSharedPtr<CPaperBurnComponent>   m_PaperBurn;
+	float	m_HP;
+	float	m_HitEffectTime;
+	float	m_HitEffectTimeMax;
+	bool	m_IsDied;
+	bool	m_IsPaperBurn;
+	bool	m_Hit;
 
 public:
-	void OnMouseBegin(const CollisionResult& result);
-	void OnMouseEnd(const CollisionResult& result);
-public:
-    void OnCollisionBegin(const CollisionResult& result);
-    void OnCollisionEnd(const CollisionResult& result);
+	virtual void Start();
+	virtual bool Init();
+	virtual void Update(float DeltaTime);
+	virtual CMonster* Clone() = 0;
+	virtual void Destroy();
 
-private:
-    void PaperBurnEnd();
+public:
+	virtual void OnCollisionBegin(const CollisionResult& result);
+
+protected:
+	virtual void PaperBurnEnd();
+	virtual void Dead();
+	virtual void Hit(float DeltaTime);
 };
 

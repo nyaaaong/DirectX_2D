@@ -24,9 +24,6 @@
     <Filter Include="01. Object\02. Monster">
       <UniqueIdentifier>{7526515e-b606-45aa-b3a3-821c8cc39806}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Object\03. Test">
-      <UniqueIdentifier>{3f806700-ca87-4c24-8059-1c81e37b1e07}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. UI">
       <UniqueIdentifier>{2fcfbd2d-0e82-413c-bd3e-8c29a713674a}</UniqueIdentifier>
     </Filter>
@@ -38,6 +35,12 @@
     </Filter>
     <Filter Include="01. Object\05. TileMap">
       <UniqueIdentifier>{74c3e0e8-8fc4-49aa-8aa8-349efca73f8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Object\02. Monster\00. Example">
+      <UniqueIdentifier>{88ddac5a-2590-4fd3-88ab-791efa18cdb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Object\02. Monster\01. BulletKin">
+      <UniqueIdentifier>{a65f0085-5027-4e44-b4c5-cb8caf0d1a3c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -58,15 +61,6 @@
     </ClCompile>
     <ClCompile Include="Object\PlayerAnimation2D.cpp">
       <Filter>01. Object\00. Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\MonsterAnimation.cpp">
-      <Filter>01. Object\02. Monster</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Monster.cpp">
-      <Filter>01. Object\02. Monster</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\PixelTest.cpp">
-      <Filter>01. Object\03. Test</Filter>
     </ClCompile>
     <ClCompile Include="Widget\MainWidget.cpp">
       <Filter>02. UI</Filter>
@@ -104,6 +98,21 @@
     <ClCompile Include="Object\BulletImpactAnimation2D.cpp">
       <Filter>01. Object\01. Bullet</Filter>
     </ClCompile>
+    <ClCompile Include="Object\Example_Monster.cpp">
+      <Filter>01. Object\02. Monster\00. Example</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Example_MonsterAnimation.cpp">
+      <Filter>01. Object\02. Monster\00. Example</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Monster.cpp">
+      <Filter>01. Object\02. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\BulletKin.cpp">
+      <Filter>01. Object\02. Monster\01. BulletKin</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\BulletKinAnim.cpp">
+      <Filter>01. Object\02. Monster\01. BulletKin</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene\MainScene.h">
@@ -123,15 +132,6 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>리소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Monster.h">
-      <Filter>01. Object\02. Monster</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\MonsterAnimation.h">
-      <Filter>01. Object\02. Monster</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\PixelTest.h">
-      <Filter>01. Object\03. Test</Filter>
     </ClInclude>
     <ClInclude Include="Widget\MainWidget.h">
       <Filter>02. UI</Filter>
@@ -171,6 +171,21 @@
     </ClInclude>
     <ClInclude Include="Object\BulletImpactAnimation2D.h">
       <Filter>01. Object\01. Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Example_Monster.h">
+      <Filter>01. Object\02. Monster\00. Example</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Example_MonsterAnimation.h">
+      <Filter>01. Object\02. Monster\00. Example</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Monster.h">
+      <Filter>01. Object\02. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\BulletKin.h">
+      <Filter>01. Object\02. Monster\01. BulletKin</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\BulletKinAnim.h">
+      <Filter>01. Object\02. Monster\01. BulletKin</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

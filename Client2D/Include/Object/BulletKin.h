@@ -1,12 +1,9 @@
 #pragma once
 
-#include "GameObject/GameObject.h"
-#include "Component/SpriteComponent.h"
-#include "Component/PaperBurnComponent.h"
-#include "Component/ColliderBox2D.h"
+#include "Monster.h"
 
 class CBulletKin :
-	public CGameObject
+	public CMonster
 {
 	friend class CScene;
 
@@ -14,16 +11,6 @@ protected:
 	CBulletKin();
 	CBulletKin(const CBulletKin& obj);
 	virtual ~CBulletKin();
-
-private:
-	CSharedPtr<CColliderBox2D>       m_Body;
-	CSharedPtr<CPaperBurnComponent>   m_PaperBurn;
-	float	m_HP;
-	float	m_HitEffectTime;
-	float	m_HitEffectTimeMax;
-	bool	m_IsDied;
-	bool	m_IsPaperBurn;
-	bool	m_Hit;
 
 public:
 	class CSpriteComponent* GetSpriteComponent()    const
@@ -35,16 +22,15 @@ public:
 	virtual void Start();
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
-	virtual void PostUpdate(float DeltaTime);
 	virtual CBulletKin* Clone();
-public:
-	void OnCollisionBegin(const CollisionResult& result);
+	virtual void Destroy();
 
-private:
-	void PaperBurnEnd();
-	void Dead();
+protected:
+	virtual void OnCollisionBegin(const CollisionResult& result);
 
-private:
-	void Hit(float DeltaTime);
+protected:
+	virtual void PaperBurnEnd();
+	virtual void Dead();
+	virtual void Hit(float DeltaTime);
 };
 
