@@ -306,7 +306,7 @@ void CPlayer2D::MoveUp(float DeltaTime)
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_Y) * m_MoveSpeed * DeltaTime;
 
-	if (!IsNormalTile(Result))
+	if (IsWallTile(Result))
 		return;
 
 	m_Sprite->AddRelativePos(Result);
@@ -326,7 +326,7 @@ void CPlayer2D::MoveDown(float DeltaTime)
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_Y) * -m_MoveSpeed * DeltaTime;
 
-	if (!IsNormalTile(Result))
+	if (IsWallTile(Result))
 		return;
 
 	m_Sprite->AddRelativePos(Result);
@@ -346,7 +346,7 @@ void CPlayer2D::MoveLeft(float DeltaTime)
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_X) * -m_MoveSpeed * DeltaTime;
 
-	if (!IsNormalTile(Result))
+	if (IsWallTile(Result))
 		return;
 
 	m_Sprite->AddRelativePos(Result);
@@ -366,7 +366,7 @@ void CPlayer2D::MoveRight(float DeltaTime)
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_X) * m_MoveSpeed * DeltaTime;
 
-	if (!IsNormalTile(Result))
+	if (IsWallTile(Result))
 		return;
 
 	m_Sprite->AddRelativePos(Result);
@@ -400,7 +400,7 @@ void CPlayer2D::Dodge(float DeltaTime)
 	else if (IsMoveDir(Character_Direction::Right))
 		Result += (m_Sprite->GetWorldAxis(AXIS_X) * m_DodgeSpeed * DeltaTime);
 
-	if (!IsNormalTile(Result))
+	if (IsWallTile(Result))
 		return;
 
 	m_Sprite->AddRelativePos(Result);
@@ -782,18 +782,18 @@ void CPlayer2D::ChangeAnimDodge()
 	}
 }
 
-bool CPlayer2D::IsNormalTile(const Vector3& NextWorldPos)
+bool CPlayer2D::IsWallTile(const Vector3& NextWorldPos)
 {
 	CSceneMode* SceneMode = CSceneManager::GetInst()->GetSceneMode();
 	CMainScene* Scene = dynamic_cast<CMainScene*>(SceneMode);
 
 	if (!Scene)
-		return false;
+		return true;
 
 	CTileMap* TileMap = Scene->GetTileMap();
 
 	if (!TileMap)
-		return false;
+		return true;
 
 	// 8방향 체크
 
@@ -831,9 +831,9 @@ bool CPlayer2D::IsNormalTile(const Vector3& NextWorldPos)
 
 	for (int i = 0; i < (int)Move_Dir::End; ++i)
 	{
-		if (TileMap->GetTileType(MoveDir[i] + NextWorldPos) != Tile_Type::Normal)
-			return false;
+		if (TileMap->GetTileType(MoveDir[i] + NextWorldPos) == Tile_Type::Wall)
+			return true;
 	}
 
-	return true;
+	return false;
 }

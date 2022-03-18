@@ -33,7 +33,16 @@ bool CMainScene::Init()
 
 	m_TileMap = m_Scene->LoadGameObject<CTileMap>();
 	m_TileMap->Load("TileMap.dat", SCENE_PATH);
+
 	CPublic::GetInst()->LoadObjPos(m_TileMap);
+	CSceneComponent*	Root = m_TileMap->GetRootComponent();
+	CTileMapComponent* TileMapComponent = dynamic_cast<CTileMapComponent*>(Root);
+
+	if (!Root)
+		ASSERT("if (!Root)");
+
+	TileMapComponent->SetTileColorWhite();
+
 	CGameObject* Obj = nullptr;
 
 	std::vector<Vector3>	vecObjectPos;

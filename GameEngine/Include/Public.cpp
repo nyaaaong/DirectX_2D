@@ -48,7 +48,7 @@ void CPublic::GetObjectName(std::vector<std::string>& vecName)
 	}
 }
 
-void CPublic::GetObjectPos(Object_Type Type, std::vector<Vector3> vecPos)
+void CPublic::GetObjectPos(Object_Type Type, std::vector<Vector3>& vecPos)
 {
 	auto	iter = m_mapObject.find(Type);
 
@@ -59,7 +59,7 @@ void CPublic::GetObjectPos(Object_Type Type, std::vector<Vector3> vecPos)
 
 	for (int i = 0; i < Size; ++i)
 	{
-		int ObjCount = iter->second->size();
+		int ObjCount = (int)iter->second->size();
 		int j = 0;
 		vecPos.resize(ObjCount);
 
@@ -283,16 +283,16 @@ void CPublic::LoadObjPos(CGameObject* TileMapObj)
 
 	CSceneComponent* Root = TileMapObj->GetRootComponent();
 
-	CTileMapComponent* TileMap = dynamic_cast<CTileMapComponent*>(Root);
+	CTileMapComponent* TileMapComponent = dynamic_cast<CTileMapComponent*>(Root);
 
-	if (!TileMap)
-		ASSERT("if (!TileMap)");
+	if (!TileMapComponent)
+		ASSERT("if (!TileMapComponent)");
 	
 	auto	iter = m_mapObject.begin();
 	std::vector<CTile*>	vecTypeTile;
 	std::vector<CTile*> vecObjTypeTile;
 
-	TileMap->GetSameTypeTile(Tile_Type::Object, vecTypeTile);
+	TileMapComponent->GetSameTypeTile(Tile_Type::Object, vecTypeTile);
 
 	int Size = (int)m_mapObject.size();
 
@@ -300,7 +300,7 @@ void CPublic::LoadObjPos(CGameObject* TileMapObj)
 	{
 		vecObjTypeTile.clear();
 
-		TileMap->GetSameObjectTypeTile(iter->first, vecTypeTile, vecObjTypeTile);
+		TileMapComponent->GetSameObjectTypeTile(iter->first, vecTypeTile, vecObjTypeTile);
 
 		int ObjTypeSize = (int)vecObjTypeTile.size();
 

@@ -29,6 +29,11 @@ public:
 		m_WindowFlag |= Flag;
 	}
 
+	void DeleteWindowFlag(ImGuiWindowFlags_ Flag)
+	{
+		m_WindowFlag &= ~Flag;
+	}
+
 	void EnableModalPopup()
 	{
 		m_ModalPopup = true;

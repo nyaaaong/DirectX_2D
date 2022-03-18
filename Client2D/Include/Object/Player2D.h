@@ -126,6 +126,6 @@ private:
 	void ChangeAnimDodge();
 
 private:
-	bool IsNormalTile(const Vector3& NextWorldPos);
+	bool IsWallTile(const Vector3& NextWorldPos);
 };
 

@@ -14,12 +14,12 @@ protected:
 	virtual ~CTileMap();
 
 private:
-	CSharedPtr<CTileMapComponent>    m_TileMap;
+	CSharedPtr<CTileMapComponent>    m_TileMapComponent;
 
 public:
-	bool HasTileMap()	const
+	bool HasTileMapComponent()	const
 	{
-		return m_TileMap != nullptr;
+		return m_TileMapComponent != nullptr;
 	}
 
 public:
@@ -28,6 +28,9 @@ public:
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
 	virtual CTileMap* Clone();
+	virtual void Load(FILE* File);
+	virtual void Load(const char* FullPath);
+	virtual void Load(const char* FileName, const std::string& PathName);
 
 public:
 	int GetTileCountX()	const;

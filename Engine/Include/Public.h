@@ -25,7 +25,7 @@ public:
 
 public:
 	void GetObjectName(std::vector<std::string>& vecName);
-	void GetObjectPos(Object_Type Type, std::vector<Vector3> vecPos);
+	void GetObjectPos(Object_Type Type, std::vector<Vector3>& vecPos);
 	void AddObjectWorldPos(Object_Type Type, const Vector3& WorldPos);
 	void DeleteObjectWorldPos(Object_Type Type, const Vector3& WorldPos);
 	void ClearObjectWorldPos(Object_Type Type);

@@ -35,6 +35,14 @@ protected:
 	bool    m_SortDisable;
 
 public:
+	void SetTileColorWhite()
+	{
+		for (int i = 0; i < (int)Tile_Type::End; ++i)
+		{
+			m_TileColor[i] = Vector4(1.f, 1.f, 1.f, 1.f);
+		}
+	}
+
 	void EnableEditMode(bool Mode)
 	{
 		m_EditMode = Mode;
@@ -63,7 +71,7 @@ public:
 
 		for (int i = 0; i < Size; ++i)
 		{
-			if (m_vecTile[i]->GetObjectType() == Type)
+			if (vecInput[i]->GetObjectType() == Type)
 				vecOutput.push_back(vecInput[i]);
 		}
 	}

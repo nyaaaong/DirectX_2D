@@ -279,14 +279,19 @@ void CTileMapWindow::Update(float DeltaTime)
 
 						Object_Type ObjectType = CEditorManager::GetInst()->GetSelectObjectType();
 
-						CPublic::GetInst()->AddObjectWorldPos(ObjectType, Tile->GetWorldPos());
+						if (ObjectType == Object_Type::Max)
+							return;
 
-						int a = 0;
+						Tile->SetTileType(Type);
+
+						CPublic::GetInst()->AddObjectWorldPos(ObjectType, Tile->GetWorldPos());
+						Tile->SetObjectType(ObjectType);
 						break;
 					}
+					default:
+						Tile->SetTileType(Type);
+						break;
 					}
-
-					Tile->SetTileType(Type);
 				}
 				break;
 				case TileEdit_Mode::Frame:

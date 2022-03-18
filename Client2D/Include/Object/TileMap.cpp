@@ -1,8 +1,9 @@
 
 #include "TileMap.h"
+#include "Engine.h"
+#include "Public.h"
 #include "Scene/Scene.h"
 #include "Resource/Material/Material.h"
-#include "Engine.h"
 
 CTileMap::CTileMap()
 {
@@ -12,7 +13,7 @@ CTileMap::CTileMap()
 CTileMap::CTileMap(const CTileMap& obj) :
 	CGameObject(obj)
 {
-	m_TileMap = (CTileMapComponent*)FindComponent("TileMap");
+	m_TileMapComponent = (CTileMapComponent*)FindComponent("TileMapComponent");
 }
 
 CTileMap::~CTileMap()
@@ -23,15 +24,15 @@ void CTileMap::Start()
 {
 	CGameObject::Start();
 
-	if (!m_TileMap)
+	if (!m_TileMapComponent)
 	{
 		CSceneComponent* Root = m_RootComponent;
-		CTileMapComponent* TileMap = dynamic_cast<CTileMapComponent*>(Root);
+		CTileMapComponent* TileMapComponent = dynamic_cast<CTileMapComponent*>(Root);
 
-		if (!TileMap)
-			ASSERT("if (!TileMap)");
+		if (!TileMapComponent)
+			ASSERT("if (!TileMapComponent)");
 
-		m_TileMap = TileMap;
+		m_TileMapComponent = TileMapComponent;
 	}
 }
 
@@ -40,17 +41,17 @@ bool CTileMap::Init()
 	if (!CGameObject::Init())
 		return false;
 
-	m_TileMap = CreateComponent<CTileMapComponent>("TileMap");
+	m_TileMapComponent = CreateComponent<CTileMapComponent>("TileMapComponent");
 
-	SetRootComponent(m_TileMap);
+	SetRootComponent(m_TileMapComponent);
 
-	m_TileMap->CreateTile(100, 100, Vector3(54.f, 54.f, 0.f));
+	m_TileMapComponent->CreateTile(100, 100, Vector3(54.f, 54.f, 0.f));
 
 	CMaterial* Material = m_Scene->GetResource()->FindMaterial("TileMap");
 
-	m_TileMap->SetTileMaterial(Material);
+	m_TileMapComponent->SetTileMaterial(Material);
 
-	m_TileMap->SetTileDefaultFrame(0.f, 0.f, 54.f, 54.f);
+	m_TileMapComponent->SetTileDefaultFrame(0.f, 0.f, 54.f, 54.f);
 
 	return true;
 }
@@ -70,60 +71,87 @@ CTileMap* CTileMap::Clone()
 	return DBG_NEW CTileMap(*this);
 }
 
+void CTileMap::Load(FILE* File)
+{
+	CGameObject::Load(File);
+}
+
+void CTileMap::Load(const char* FullPath)
+{
+	FILE* File = nullptr;
+
+	fopen_s(&File, FullPath, "rb");
+
+	if (!File)
+		return;
+
+	Load(File);
+	CPublic::GetInst()->Load(File);
+
+	fclose(File);
+}
+
+void CTileMap::Load(const char* FileName, const std::string& PathName)
+{
+	CGameObject::Load(FileName, PathName);
+
+	m_TileMapComponent = (CTileMapComponent*)GetRootComponent();
+}
+
 int CTileMap::GetTileCountX() const
 {
-	if (!m_TileMap)
+	if (!m_TileMapComponent)
 		return -1;
 
-	return m_TileMap->GetTileCountX();
+	return m_TileMapComponent->GetTileCountX();
 }
 
 int CTileMap::GetTileCountY() const
 {
-	if (!m_TileMap)
+	if (!m_TileMapComponent)
 		return -1;
 
-	return m_TileMap->GetTileCountY();
+	return m_TileMapComponent->GetTileCountY();
 }
 
 Vector3 CTileMap::GetTileSize() const
 {
-	if (!m_TileMap)
+	if (!m_TileMapComponent)
 		return Vector3();
 
-	return m_TileMap->GetTileSize();
+	return m_TileMapComponent->GetTileSize();
 }
 
 CTile* CTileMap::GetTile(const Vector3& Pos) const
 {
-	if (!m_TileMap)
+	if (!m_TileMapComponent)
 		return nullptr;
 
-	return m_TileMap->GetTile(Pos);
+	return m_TileMapComponent->GetTile(Pos);
 }
 
 CTile* CTileMap::GetTile(int x, int y) const
 {
-	if (!m_TileMap)
+	if (!m_TileMapComponent)
 		return nullptr;
 
-	return m_TileMap->GetTile(x, y);
+	return m_TileMapComponent->GetTile(x, y);
 }
 
 CTile* CTileMap::GetTile(int Index) const
 {
-	if (!m_TileMap)
+	if (!m_TileMapComponent)
 		return nullptr;
 
-	return m_TileMap->GetTile(Index);
+	return m_TileMapComponent->GetTile(Index);
 }
 
 Tile_Type CTileMap::GetTileType(const Vector3& Pos) const
 {
-	if (!m_TileMap)
+	if (!m_TileMapComponent)
 		return Tile_Type::End;
 
-	CTile* Tile = m_TileMap->GetTile(Pos);
+	CTile* Tile = m_TileMapComponent->GetTile(Pos);
 
 	if (!Tile)
 		return Tile_Type::End;
@@ -133,10 +161,10 @@ Tile_Type CTileMap::GetTileType(const Vector3& Pos) const
 
 Tile_Type CTileMap::GetTileType(int x, int y) const
 {
-	if (!m_TileMap)
+	if (!m_TileMapComponent)
 		return Tile_Type::End;
 
-	CTile* Tile = m_TileMap->GetTile(x, y);
+	CTile* Tile = m_TileMapComponent->GetTile(x, y);
 
 	if (!Tile)
 		return Tile_Type::End;
@@ -146,10 +174,10 @@ Tile_Type CTileMap::GetTileType(int x, int y) const
 
 Tile_Type CTileMap::GetTileType(int Index) const
 {
-	if (!m_TileMap)
+	if (!m_TileMapComponent)
 		return Tile_Type::End;
 
-	CTile* Tile = m_TileMap->GetTile(Index);
+	CTile* Tile = m_TileMapComponent->GetTile(Index);
 
 	if (!Tile)
 		return Tile_Type::End;

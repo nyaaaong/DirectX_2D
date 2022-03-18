@@ -56,9 +56,13 @@ void CTile::Update(float DeltaTime, bool SortDiable)
 void CTile::Save(FILE* File)
 {
 	fwrite(&m_TileType, sizeof(Tile_Type), 1, File);
-	fwrite(&m_ObjectType, sizeof(Tile_Type), 1, File);
+	fwrite(&m_ObjectType, sizeof(Object_Type), 1, File);
+
+	if (m_ObjectType == Object_Type::BulletKin)
+		int a = 0;
 
 	fwrite(&m_Pos, sizeof(Vector3), 1, File);
+	fwrite(&m_WorldPos, sizeof(Vector3), 1, File);
 	fwrite(&m_Size, sizeof(Vector3), 1, File);
 	fwrite(&m_Center, sizeof(Vector3), 1, File);
 
@@ -75,9 +79,13 @@ void CTile::Save(FILE* File)
 void CTile::Load(FILE* File)
 {
 	fread(&m_TileType, sizeof(Tile_Type), 1, File);
-	fread(&m_ObjectType, sizeof(Tile_Type), 1, File);
+	fread(&m_ObjectType, sizeof(Object_Type), 1, File);
+
+	if (m_ObjectType == Object_Type::BulletKin)
+		int a = 0;
 
 	fread(&m_Pos, sizeof(Vector3), 1, File);
+	fread(&m_WorldPos, sizeof(Vector3), 1, File);
 	fread(&m_Size, sizeof(Vector3), 1, File);
 	fread(&m_Center, sizeof(Vector3), 1, File);
 

@@ -12,6 +12,7 @@ CTileWindow::CTileWindow()	:
 	m_HoveredTile(nullptr),
 	m_SelectTile(nullptr)
 {
+	DeleteWindowFlag(ImGuiWindowFlags_AlwaysAutoResize);
 }
 
 CTileWindow::~CTileWindow()

@@ -31,10 +31,10 @@ private:
 public:
 	Object_Type GetObjectType()	const
 	{
-		if (m_TileType == Tile_Type::Object)
-			return m_ObjectType;
+		if (m_ObjectType == Object_Type::BulletKin)
+			int a = 0;
 
-		return Object_Type::Max;
+		return m_ObjectType;
 	}
 
 	float GetOpacity()	const
@@ -105,10 +105,10 @@ public:
 public:
 	void SetObjectType(Object_Type Type)
 	{
-		if (m_TileType == Tile_Type::Object)
-			m_ObjectType = Type;
+		if (m_ObjectType == Object_Type::BulletKin)
+			int a = 0;
 
-		m_ObjectType = Object_Type::Max;
+		m_ObjectType = Type;
 	}
 
 	void SetOpacity(float Opacity)

@@ -32,21 +32,8 @@ CTileMapComponent::CTileMapComponent()	:
 		m_TileColor[i] = Vector4(1.f, 1.f, 1.f, 1.f);
 	}
 
-	if (CSceneManager::GetInst()->IsEditor())
-	{
-		m_TileColor[(int)Tile_Type::Wall] = Vector4(1.f, 0.f, 0.f, 1.f);
-		m_TileColor[(int)Tile_Type::Object] = Vector4(1.f, 0.f, 1.f, 1.f);
-	}
-
-	else
-	{
-	#ifdef _DEBUG
-
-		m_TileColor[(int)Tile_Type::Wall] = Vector4(1.f, 0.f, 0.f, 1.f);
-		m_TileColor[(int)Tile_Type::Object] = Vector4(1.f, 0.f, 1.f, 1.f);
-
-	#endif // _DEBUG
-	}
+	m_TileColor[(int)Tile_Type::Wall] = Vector4(1.f, 0.f, 0.f, 1.f);
+	m_TileColor[(int)Tile_Type::Object] = Vector4(1.f, 0.f, 1.f, 1.f);
 
 	m_EditMode = false;
 

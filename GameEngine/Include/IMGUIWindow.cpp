@@ -6,7 +6,7 @@ CIMGUIWindow::CIMGUIWindow()	:
 	m_Open(true), 
 	m_ModalPopup(false),
 	m_Start(false),
-	m_WindowFlag(ImGuiWindowFlags_NoCollapse)	
+	m_WindowFlag(ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking)
 {
 }
 
