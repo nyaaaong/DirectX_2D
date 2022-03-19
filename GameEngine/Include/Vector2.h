@@ -80,5 +80,7 @@ struct Vector2
 
 	XMVECTOR Convert()	const;
 	void Convert(const XMVECTOR& v);
+
+	const Vector2& Ceil();
 };
 

@@ -377,6 +377,23 @@ void Vector3::Convert(const XMVECTOR& v)
 	XMStoreFloat3((XMFLOAT3*)this, v);
 }
 
+const Vector3& Vector3::Ceil()
+{
+	if (x < 0.f)
+		x = ceil(abs(x)) * -1.f;
+
+	else if (x > 0.f)
+		x = ceil(x);
+
+	if (y < 0.f)
+		y = ceil(abs(y)) * -1.f;
+
+	else if (y > 0.f)
+		y = ceil(y);
+
+	return *this;
+}
+
 Vector3 Vector3::Normalize(const Vector3& v)
 {
 	return XMVector3Normalize(v.Convert());

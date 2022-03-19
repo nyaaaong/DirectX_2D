@@ -90,6 +90,8 @@ struct Vector3
 	XMVECTOR Convert()	const;
 	void Convert(const XMVECTOR& v);
 
+	const Vector3& Ceil();
+
 	static Vector3 Normalize(const Vector3& v);
 
 	static Vector3	Zero;

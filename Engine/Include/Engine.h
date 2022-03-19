@@ -23,8 +23,14 @@ private:
 	float		m_ClearColor[4];
 	float		m_GlobalAccTime;
 	int			m_ShowCursorCount;
+	bool		m_IsFocusClient;
 
 public:
+	bool IsFocusClient()	const
+	{
+		return m_IsFocusClient;
+	}
+
 	bool IsMouseWindowOut()	const
 	{
 		return m_MouseWindowOut;
@@ -66,6 +72,11 @@ public:
 	}
 
 public:
+	void SetMouseOnClient(bool IsOn)
+	{
+		m_IsFocusClient = IsOn;
+	}
+
 	void SetEngineSpace(Engine_Space Space)
 	{
 		m_Space = Space;

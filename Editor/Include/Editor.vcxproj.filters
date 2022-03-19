@@ -41,9 +41,6 @@
     <ClCompile Include="Object\DragObject.cpp">
       <Filter>03. Object</Filter>
     </ClCompile>
-    <ClCompile Include="Window\DetailWindow.cpp">
-      <Filter>02. Editor</Filter>
-    </ClCompile>
     <ClCompile Include="Window\EditorMenu.cpp">
       <Filter>02. Editor</Filter>
     </ClCompile>
@@ -54,9 +51,6 @@
       <Filter>03. Object</Filter>
     </ClCompile>
     <ClCompile Include="Window\TileMapWindow.cpp">
-      <Filter>02. Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="Window\SceneWindow.cpp">
       <Filter>02. Editor</Filter>
     </ClCompile>
     <ClCompile Include="Window\TileWindow.cpp">
@@ -88,9 +82,6 @@
     <ClInclude Include="resource.h">
       <Filter>리소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Window\DetailWindow.h">
-      <Filter>02. Editor</Filter>
-    </ClInclude>
     <ClInclude Include="Window\EditorMenu.h">
       <Filter>02. Editor</Filter>
     </ClInclude>
@@ -104,9 +95,6 @@
       <Filter>03. Object</Filter>
     </ClInclude>
     <ClInclude Include="Window\TileMapWindow.h">
-      <Filter>02. Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="Window\SceneWindow.h">
       <Filter>02. Editor</Filter>
     </ClInclude>
     <ClInclude Include="Window\TileWindow.h">

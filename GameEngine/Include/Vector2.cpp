@@ -330,3 +330,20 @@ void Vector2::Convert(const XMVECTOR& v)
 {
 	XMStoreFloat2((XMFLOAT2*)this, v);
 }
+
+const Vector2& Vector2::Ceil()
+{
+	if (x < 0.f)
+		x = ceil(abs(x)) * -1.f;
+
+	else if (x > 0.f)
+		x = ceil(x);
+
+	if (y < 0.f)
+		y = ceil(abs(y)) * -1.f;
+
+	else if (y > 0.f)
+		y = ceil(y);
+
+	return *this;
+}

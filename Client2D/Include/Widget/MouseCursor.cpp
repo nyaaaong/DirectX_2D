@@ -77,9 +77,6 @@ void CMouseCursor::CameraUpdater(float DeltaTime)
 		if (!Player)
 			return;
 
-		else if (CEngine::GetInst()->IsMouseWindowOut())
-			return;
-
 		// 마우스와 센터의 거리로 카메라 위치를 조절해야 한다.
 
 		CPlayer2D* Player = dynamic_cast<CPlayer2D*>(Scene->GetPlayerObject());

@@ -25,6 +25,7 @@ CEngine::CEngine()	:
 	m_hWnd(0),
 	m_RS{},
 	m_Start(false),
+	m_IsFocusClient(false),
 	m_Play(true),
 	m_Space(Engine_Space::Space2D),
 	m_ShowCursorCount(0),
@@ -396,6 +397,14 @@ LRESULT CEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	switch (message)
 	{
+	case WM_ACTIVATE:
+		if (LOWORD(wParam) == WA_INACTIVE)
+			CEngine::GetInst()->SetMouseOnClient(false);
+
+		else
+			CEngine::GetInst()->SetMouseOnClient(true);
+
+		break;
 	case WM_PAINT:
 	{
 		PAINTSTRUCT ps;

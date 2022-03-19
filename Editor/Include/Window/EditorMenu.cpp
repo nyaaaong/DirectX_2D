@@ -27,18 +27,20 @@ bool CEditorMenu::Init()
 {
 	CIMGUIWindow::Init();
 
-	m_ObjectCombo = AddWidget<CIMGUIComboBox>("Object", 200.f, 20.f);
+	m_ObjectCombo = AddWidget<CIMGUIComboBox>("Object", 150.f, 20.f);
 
 	m_ObjectCombo->SetHideName(true);
 	m_ObjectCombo->AddItem("Monster : BulletKin");
 
 	CIMGUISameLine* Line = AddWidget<CIMGUISameLine>("Line");
 
-	m_ObjectCreateButton = AddWidget<CIMGUIButton>("CreateObject", 200.f, 20.f);
+	m_ObjectCreateButton = AddWidget<CIMGUIButton>("CreateObject", 90.f, 20.f);
 
 	m_ObjectCreateButton->SetClickCallback(this, &CEditorMenu::ObjectCreateButton);
 
-	CIMGUIButton* PlayButton = AddWidget<CIMGUIButton>("Play", 50.f, 20.f);
+	Line = AddWidget<CIMGUISameLine>("Line");
+
+	CIMGUIButton* PlayButton = AddWidget<CIMGUIButton>("Play", 40.f, 20.f);
 
 	PlayButton->SetClickCallback(this, &CEditorMenu::GamePlay);
 

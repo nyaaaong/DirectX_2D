@@ -250,6 +250,9 @@ void CTileMapWindow::Update(float DeltaTime)
 
 		if (CEditorManager::GetInst()->GetLButtonPush())
 		{
+			if (CEngine::GetInst()->IsMouseWindowOut() || !CEngine::GetInst()->IsFocusClient())
+				return;
+
 			// 마우스 위치를 얻어와서 어떤 타일인지를 구한다.
 			Vector2 MouseWorldPos = CInput::GetInst()->GetMouseWorld2DPos();
 

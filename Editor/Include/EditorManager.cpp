@@ -9,12 +9,10 @@
 #include "Scene/DefaultScene.h"
 #include "Scene/CameraManager.h"
 #include "Window/SpriteWindow.h"
-#include "Window/DetailWindow.h"
 #include "Window/EditorMenu.h"
 #include "Window/ObjectHierarchy.h"
 #include "Window/TileMapWindow.h"
 #include "Window/TileWindow.h"
-#include "Window/SceneWindow.h"
 #include "Render/RenderManager.h"
 #include "Object/SpriteEditObject.h"
 #include "Object/DragObject.h"
@@ -35,7 +33,6 @@ CEditorManager::CEditorManager()	:
 	m_EditMode(EditMode::Scene),
 	m_DragObj(nullptr),
 	m_SpriteWindow(nullptr),
-	m_DetailWindow(nullptr),
 	m_EditorMenu(nullptr),
 	m_ObjectHierarchy(nullptr),
 	m_TileMapWindow(nullptr),
@@ -107,12 +104,10 @@ bool CEditorManager::Init(HINSTANCE hInst)
 
 	// IMGUI로 에디터에서 사용할 윈도우를 만들어준다.
 	m_SpriteWindow = CIMGUIManager::GetInst()->AddWindow<CSpriteWindow>("SpriteWindow");
-	m_DetailWindow = CIMGUIManager::GetInst()->AddWindow<CDetailWindow>("DetailWindow");
 	m_EditorMenu = CIMGUIManager::GetInst()->AddWindow<CEditorMenu>("EditorMenu");
 	m_ObjectHierarchy = CIMGUIManager::GetInst()->AddWindow<CObjectHierarchy>("ObjectHierarchy");
 	m_TileMapWindow = CIMGUIManager::GetInst()->AddWindow<CTileMapWindow>("TileMapWindow");
 	m_TileWindow = CIMGUIManager::GetInst()->AddWindow<CTileWindow>("TileWindow");
-	//m_SceneWindow = CIMGUIManager::GetInst()->AddWindow<CSceneWindow>("SceneWindow");
 
 	CInput::GetInst()->CreateKey("MouseClick", VK_LBUTTON);
 
@@ -179,6 +174,9 @@ void CEditorManager::Esc(float DeltaTime)
 
 void CEditorManager::MouseLButtonDown(float DeltaTime)
 {
+	if (CEngine::GetInst()->IsMouseWindowOut() || !CEngine::GetInst()->IsFocusClient())
+		return;
+
 	if (!m_DragObj || !m_SpriteWindow->HasSprite())
 		return;
 	
@@ -215,6 +213,9 @@ void CEditorManager::MouseLButtonDown(float DeltaTime)
 
 void CEditorManager::MouseLButtonPush(float DeltaTime)
 {
+	if (!CEngine::GetInst()->IsFocusClient())
+		return;
+
 	m_MousePush = true;
 
 	if (!m_DragObj || !m_SpriteWindow->HasSprite())
@@ -295,7 +296,7 @@ void CEditorManager::MouseLButtonUp(float DeltaTime)
 
 void CEditorManager::KeyboardUp(float DeltaTime)
 {
-	if (m_DragObj && m_SpriteWindow->HasSprite())
+	if (m_DragObj && m_SpriteWindow->HasSprite() || CEngine::GetInst()->IsFocusClient())
 	{
 		Vector3		RectPos = m_DragObj->GetWorldPos();
 		Vector3		ResultPos = RectPos + Vector3(0.f, 1.f, 0.f);
@@ -317,7 +318,7 @@ void CEditorManager::KeyboardUp(float DeltaTime)
 
 void CEditorManager::KeyboardDown(float DeltaTime)
 {
-	if (m_DragObj && m_SpriteWindow->HasSprite())
+	if (m_DragObj && m_SpriteWindow->HasSprite() || CEngine::GetInst()->IsFocusClient())
 	{
 		Vector3		RectPos = m_DragObj->GetWorldPos();
 		Vector3		ResultPos = RectPos + Vector3(0.f, -1.f, 0.f);
@@ -341,7 +342,7 @@ void CEditorManager::KeyboardDown(float DeltaTime)
 
 void CEditorManager::KeyboardLeft(float DeltaTime)
 {
-	if (m_DragObj && m_SpriteWindow->HasSprite())
+	if (m_DragObj && m_SpriteWindow->HasSprite() || CEngine::GetInst()->IsFocusClient())
 	{
 		Vector3		RectPos = m_DragObj->GetWorldPos();
 		Vector3		ResultPos = RectPos + Vector3(-1.f, 0.f, 0.f);
@@ -364,7 +365,7 @@ void CEditorManager::KeyboardLeft(float DeltaTime)
 
 void CEditorManager::KeyboardRight(float DeltaTime)
 {
-	if (m_DragObj && m_SpriteWindow->HasSprite())
+	if (m_DragObj && m_SpriteWindow->HasSprite() || CEngine::GetInst()->IsFocusClient())
 	{
 		Vector3		RectPos = m_DragObj->GetWorldPos();
 		Vector3		ResultPos = RectPos + Vector3(1.f, 0.f, 0.f);
@@ -388,7 +389,7 @@ void CEditorManager::KeyboardRight(float DeltaTime)
 
 void CEditorManager::MoveCameraUp(float DeltaTime)
 {
-	if (m_SpriteWindow->HasSprite())
+	if (m_SpriteWindow->HasSprite() || !CEngine::GetInst()->IsFocusClient())
 		return;
 
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
@@ -399,7 +400,7 @@ void CEditorManager::MoveCameraUp(float DeltaTime)
 
 void CEditorManager::MoveCameraDown(float DeltaTime)
 {
-	if (m_SpriteWindow->HasSprite())
+	if (m_SpriteWindow->HasSprite() || !CEngine::GetInst()->IsFocusClient())
 		return;
 
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
@@ -409,7 +410,7 @@ void CEditorManager::MoveCameraDown(float DeltaTime)
 
 void CEditorManager::MoveCameraLeft(float DeltaTime)
 {
-	if (m_SpriteWindow->HasSprite())
+	if (m_SpriteWindow->HasSprite() || !CEngine::GetInst()->IsFocusClient())
 		return;
 
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
@@ -419,7 +420,7 @@ void CEditorManager::MoveCameraLeft(float DeltaTime)
 
 void CEditorManager::MoveCameraRight(float DeltaTime)
 {
-	if (m_SpriteWindow->HasSprite())
+	if (m_SpriteWindow->HasSprite() || !CEngine::GetInst()->IsFocusClient())
 		return;
 
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
@@ -429,7 +430,7 @@ void CEditorManager::MoveCameraRight(float DeltaTime)
 
 void CEditorManager::MoveTabUp(float DeltaTime)
 {
-	if (m_DragObj && m_SpriteWindow->HasSprite())
+	if (m_SpriteWindow->HasSprite() || !CEngine::GetInst()->IsFocusClient())
 	{
 		float		RectSizeY = m_DragObj->GetEndPos().y - m_DragObj->GetStartPos().y;
 		float		MoveScale = abs(RectSizeY);
@@ -454,7 +455,7 @@ void CEditorManager::MoveTabUp(float DeltaTime)
 
 void CEditorManager::MoveTabDown(float DeltaTime)
 {
-	if (m_DragObj && m_SpriteWindow->HasSprite())
+	if (m_SpriteWindow->HasSprite() || !CEngine::GetInst()->IsFocusClient())
 	{
 		float		RectSizeY = m_DragObj->GetEndPos().y - m_DragObj->GetStartPos().y;
 		float		MoveScale = abs(RectSizeY);
@@ -479,7 +480,7 @@ void CEditorManager::MoveTabDown(float DeltaTime)
 
 void CEditorManager::MoveTabLeft(float DeltaTime)
 {
-	if (m_DragObj && m_SpriteWindow->HasSprite())
+	if (m_DragObj && m_SpriteWindow->HasSprite() || !CEngine::GetInst()->IsFocusClient())
 	{
 		float		RectSizeX = m_DragObj->GetEndPos().x - m_DragObj->GetStartPos().x;
 		float		MoveScale = abs(RectSizeX);
@@ -504,7 +505,7 @@ void CEditorManager::MoveTabLeft(float DeltaTime)
 
 void CEditorManager::MoveTabRight(float DeltaTime)
 {
-	if (m_DragObj && m_SpriteWindow->HasSprite())
+	if (m_DragObj && m_SpriteWindow->HasSprite() || !CEngine::GetInst()->IsFocusClient())
 	{
 		float		RectSizeX = m_DragObj->GetEndPos().x - m_DragObj->GetStartPos().x;
 		float		MoveScale = abs(RectSizeX);

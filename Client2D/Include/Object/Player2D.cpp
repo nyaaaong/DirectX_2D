@@ -22,8 +22,8 @@ CPlayer2D::CPlayer2D() :
 	m_DodgeCoolDown(false),
 	m_Move(false),
 	m_SetCameraInfo(false),
-	m_MoveSpeed(300.f),
-	m_DodgeSpeed(500.f),
+	m_MoveSpeed(1.f),
+	m_DodgeSpeed(1.f),
 	m_Dir(0),
 	m_MoveDir(0),
 	m_MouseAngle(0.f),
@@ -226,6 +226,9 @@ void CPlayer2D::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
 
+	if (!CEngine::GetInst()->IsFocusClient())
+		return;
+
 	UpdateMousePos();
 	UpdateGun();
 
@@ -285,6 +288,8 @@ void CPlayer2D::Update(float DeltaTime)
 void CPlayer2D::PostUpdate(float DeltaTime)
 {
 	CGameObject::PostUpdate(DeltaTime);
+
+	Vector3 WorldPos = m_Sprite->GetWorldPos();
 }
 
 CPlayer2D* CPlayer2D::Clone()
@@ -294,7 +299,7 @@ CPlayer2D* CPlayer2D::Clone()
 
 void CPlayer2D::MoveUp(float DeltaTime)
 {
-	if (!m_EnableInput)
+	if (!m_EnableInput || !CEngine::GetInst()->IsFocusClient())
 		return;
 
 	m_Move = true;
@@ -305,6 +310,7 @@ void CPlayer2D::MoveUp(float DeltaTime)
 	SetMoveDir(Character_Direction::Up);
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_Y) * m_MoveSpeed * DeltaTime;
+	Result.Ceil();
 
 	if (IsWallTile(Result))
 		return;
@@ -314,7 +320,7 @@ void CPlayer2D::MoveUp(float DeltaTime)
 
 void CPlayer2D::MoveDown(float DeltaTime)
 {
-	if (!m_EnableInput)
+	if (!m_EnableInput || !CEngine::GetInst()->IsFocusClient())
 		return;
 
 	m_Move = true;
@@ -325,6 +331,7 @@ void CPlayer2D::MoveDown(float DeltaTime)
 	SetMoveDir(Character_Direction::Down);
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_Y) * -m_MoveSpeed * DeltaTime;
+	Result.Ceil();
 
 	if (IsWallTile(Result))
 		return;
@@ -334,7 +341,7 @@ void CPlayer2D::MoveDown(float DeltaTime)
 
 void CPlayer2D::MoveLeft(float DeltaTime)
 {
-	if (!m_EnableInput)
+	if (!m_EnableInput || !CEngine::GetInst()->IsFocusClient())
 		return;
 
 	m_Move = true;
@@ -345,6 +352,7 @@ void CPlayer2D::MoveLeft(float DeltaTime)
 	SetMoveDir(Character_Direction::Left);
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_X) * -m_MoveSpeed * DeltaTime;
+	Result.Ceil();
 
 	if (IsWallTile(Result))
 		return;
@@ -354,7 +362,7 @@ void CPlayer2D::MoveLeft(float DeltaTime)
 
 void CPlayer2D::MoveRight(float DeltaTime)
 {
-	if (!m_EnableInput)
+	if (!m_EnableInput || !CEngine::GetInst()->IsFocusClient())
 		return;
 
 	m_Move = true;
@@ -365,6 +373,7 @@ void CPlayer2D::MoveRight(float DeltaTime)
 	SetMoveDir(Character_Direction::Right);
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_X) * m_MoveSpeed * DeltaTime;
+	Result.Ceil();
 
 	if (IsWallTile(Result))
 		return;
@@ -374,7 +383,7 @@ void CPlayer2D::MoveRight(float DeltaTime)
 
 void CPlayer2D::DodgeStart(float DeltaTime)
 {
-	if (!m_EnableInput)
+	if (!m_EnableInput || !CEngine::GetInst()->IsFocusClient())
 		return;
 
 	m_Move = true;
@@ -399,6 +408,8 @@ void CPlayer2D::Dodge(float DeltaTime)
 
 	else if (IsMoveDir(Character_Direction::Right))
 		Result += (m_Sprite->GetWorldAxis(AXIS_X) * m_DodgeSpeed * DeltaTime);
+
+	Result.Ceil();
 
 	if (IsWallTile(Result))
 		return;
@@ -443,7 +454,7 @@ void CPlayer2D::HideAllWeapon()
 
 void CPlayer2D::Attack(float DeltaTime)
 {
-	if (!m_EnableInput || m_AttackCoolDown || m_WeaponSlot == Weapon_Slot::None || !m_CurWeapon)
+	if (!m_EnableInput || m_AttackCoolDown || m_WeaponSlot == Weapon_Slot::None || !m_CurWeapon || !CEngine::GetInst()->IsFocusClient())
 		return;
 
 	Vector3	WorldPos = GetWorldPos();
@@ -537,7 +548,7 @@ void CPlayer2D::UpdateGun()
 {
 	HideAllWeapon();
 
-	if (!m_EnableInput)
+	if (!m_EnableInput || !CEngine::GetInst()->IsFocusClient())
 		return;
 
 	switch (m_WeaponSlot)

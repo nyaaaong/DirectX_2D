@@ -171,10 +171,8 @@
     <ClCompile Include="Object\SpriteEditObject.cpp" />
     <ClCompile Include="Object\TileMapSprite.cpp" />
     <ClCompile Include="Scene\DefaultScene.cpp" />
-    <ClCompile Include="Window\DetailWindow.cpp" />
     <ClCompile Include="Window\EditorMenu.cpp" />
     <ClCompile Include="Window\ObjectHierarchy.cpp" />
-    <ClCompile Include="Window\SceneWindow.cpp" />
     <ClCompile Include="Window\SpriteWindow.cpp" />
     <ClCompile Include="Window\TileMapWindow.cpp" />
     <ClCompile Include="Window\TileWindow.cpp" />
@@ -188,10 +186,8 @@
     <ClInclude Include="Object\TileMapSprite.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene\DefaultScene.h" />
-    <ClInclude Include="Window\DetailWindow.h" />
     <ClInclude Include="Window\EditorMenu.h" />
     <ClInclude Include="Window\ObjectHierarchy.h" />
-    <ClInclude Include="Window\SceneWindow.h" />
     <ClInclude Include="Window\SpriteWindow.h" />
     <ClInclude Include="Window\TileMapWindow.h" />
     <ClInclude Include="Window\TileWindow.h" />
