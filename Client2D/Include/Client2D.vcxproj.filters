@@ -15,32 +15,35 @@
     <Filter Include="01. Object">
       <UniqueIdentifier>{99a16237-af5c-4c98-83f2-4aced3cda663}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Object\00. Player">
-      <UniqueIdentifier>{e13cf40a-893e-466b-aeea-69fc235c0c1f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Object\01. Bullet">
-      <UniqueIdentifier>{a8df3148-6792-434c-a18b-b9e714c5fc22}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Object\02. Monster">
-      <UniqueIdentifier>{7526515e-b606-45aa-b3a3-821c8cc39806}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. UI">
       <UniqueIdentifier>{2fcfbd2d-0e82-413c-bd3e-8c29a713674a}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. UI\00. Mouse">
       <UniqueIdentifier>{b52b790d-80b3-4140-8175-b7afcf470712}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Object\04. Particle">
-      <UniqueIdentifier>{a0767c51-912b-4a7f-abb0-b6e29fd4af97}</UniqueIdentifier>
+    <Filter Include="01. Object\00. Character">
+      <UniqueIdentifier>{755bcea6-4bc5-46c2-8cfb-fe5f02e8ea3e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Object\05. TileMap">
-      <UniqueIdentifier>{74c3e0e8-8fc4-49aa-8aa8-349efca73f8e}</UniqueIdentifier>
+    <Filter Include="01. Object\00. Character\00. Player">
+      <UniqueIdentifier>{e13cf40a-893e-466b-aeea-69fc235c0c1f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Object\02. Monster\00. Example">
+    <Filter Include="01. Object\00. Character\01. Monster">
+      <UniqueIdentifier>{7526515e-b606-45aa-b3a3-821c8cc39806}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Object\00. Character\01. Monster\00. Example">
       <UniqueIdentifier>{88ddac5a-2590-4fd3-88ab-791efa18cdb0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Object\02. Monster\01. BulletKin">
+    <Filter Include="01. Object\00. Character\01. Monster\01. BulletKin">
       <UniqueIdentifier>{a65f0085-5027-4e44-b4c5-cb8caf0d1a3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Object\01. Bullet">
+      <UniqueIdentifier>{a8df3148-6792-434c-a18b-b9e714c5fc22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Object\02. TileMap">
+      <UniqueIdentifier>{74c3e0e8-8fc4-49aa-8aa8-349efca73f8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Object\01. Bullet\00. Effect">
+      <UniqueIdentifier>{3b50db4d-574e-4776-8e75-52cee0d01e3b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -54,13 +57,13 @@
       <Filter>01. Object\01. Bullet</Filter>
     </ClCompile>
     <ClCompile Include="Object\Player2D.cpp">
-      <Filter>01. Object\00. Player</Filter>
+      <Filter>01. Object\00. Character\00. Player</Filter>
     </ClCompile>
     <ClCompile Include="ClientManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Object\PlayerAnimation2D.cpp">
-      <Filter>01. Object\00. Player</Filter>
+      <Filter>01. Object\00. Character\00. Player</Filter>
     </ClCompile>
     <ClCompile Include="Widget\MainWidget.cpp">
       <Filter>02. UI</Filter>
@@ -86,32 +89,29 @@
     <ClCompile Include="Scene\LoadingScene.cpp">
       <Filter>00. SceneMode</Filter>
     </ClCompile>
-    <ClCompile Include="Object\BubbleParticle.cpp">
-      <Filter>01. Object\04. Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\SparkParticle.cpp">
-      <Filter>01. Object\04. Particle</Filter>
-    </ClCompile>
     <ClCompile Include="Object\TileMap.cpp">
-      <Filter>01. Object\05. TileMap</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\BulletImpactAnimation2D.cpp">
-      <Filter>01. Object\01. Bullet</Filter>
+      <Filter>01. Object\02. TileMap</Filter>
     </ClCompile>
     <ClCompile Include="Object\Example_Monster.cpp">
-      <Filter>01. Object\02. Monster\00. Example</Filter>
+      <Filter>01. Object\00. Character\01. Monster\00. Example</Filter>
     </ClCompile>
     <ClCompile Include="Object\Example_MonsterAnimation.cpp">
-      <Filter>01. Object\02. Monster\00. Example</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Monster.cpp">
-      <Filter>01. Object\02. Monster</Filter>
+      <Filter>01. Object\00. Character\01. Monster\00. Example</Filter>
     </ClCompile>
     <ClCompile Include="Object\BulletKin.cpp">
-      <Filter>01. Object\02. Monster\01. BulletKin</Filter>
+      <Filter>01. Object\00. Character\01. Monster\01. BulletKin</Filter>
     </ClCompile>
     <ClCompile Include="Object\BulletKinAnim.cpp">
-      <Filter>01. Object\02. Monster\01. BulletKin</Filter>
+      <Filter>01. Object\00. Character\01. Monster\01. BulletKin</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Character.cpp">
+      <Filter>01. Object\00. Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\BulletAnim.cpp">
+      <Filter>01. Object\01. Bullet\00. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\BulletDummy.cpp">
+      <Filter>01. Object\01. Bullet\00. Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -122,13 +122,13 @@
       <Filter>01. Object\01. Bullet</Filter>
     </ClInclude>
     <ClInclude Include="Object\Player2D.h">
-      <Filter>01. Object\00. Player</Filter>
+      <Filter>01. Object\00. Character\00. Player</Filter>
     </ClInclude>
     <ClInclude Include="ClientManager.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="Object\PlayerAnimation2D.h">
-      <Filter>01. Object\00. Player</Filter>
+      <Filter>01. Object\00. Character\00. Player</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>리소스 파일</Filter>
@@ -160,32 +160,29 @@
     <ClInclude Include="Scene\StartScene.h">
       <Filter>00. SceneMode</Filter>
     </ClInclude>
-    <ClInclude Include="Object\BubbleParticle.h">
-      <Filter>01. Object\04. Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\SparkParticle.h">
-      <Filter>01. Object\04. Particle</Filter>
-    </ClInclude>
     <ClInclude Include="Object\TileMap.h">
-      <Filter>01. Object\05. TileMap</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\BulletImpactAnimation2D.h">
-      <Filter>01. Object\01. Bullet</Filter>
+      <Filter>01. Object\02. TileMap</Filter>
     </ClInclude>
     <ClInclude Include="Object\Example_Monster.h">
-      <Filter>01. Object\02. Monster\00. Example</Filter>
+      <Filter>01. Object\00. Character\01. Monster\00. Example</Filter>
     </ClInclude>
     <ClInclude Include="Object\Example_MonsterAnimation.h">
-      <Filter>01. Object\02. Monster\00. Example</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Monster.h">
-      <Filter>01. Object\02. Monster</Filter>
+      <Filter>01. Object\00. Character\01. Monster\00. Example</Filter>
     </ClInclude>
     <ClInclude Include="Object\BulletKin.h">
-      <Filter>01. Object\02. Monster\01. BulletKin</Filter>
+      <Filter>01. Object\00. Character\01. Monster\01. BulletKin</Filter>
     </ClInclude>
     <ClInclude Include="Object\BulletKinAnim.h">
-      <Filter>01. Object\02. Monster\01. BulletKin</Filter>
+      <Filter>01. Object\00. Character\01. Monster\01. BulletKin</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Character.h">
+      <Filter>01. Object\00. Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\BulletAnim.h">
+      <Filter>01. Object\01. Bullet\00. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\BulletDummy.h">
+      <Filter>01. Object\01. Bullet\00. Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
