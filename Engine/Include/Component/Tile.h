@@ -105,9 +105,6 @@ public:
 public:
 	void SetObjectType(Object_Type Type)
 	{
-		if (Type == Object_Type::BulletKin)
-			int a = 0;
-
 		m_ObjectType = Type;
 	}
 

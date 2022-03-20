@@ -44,6 +44,7 @@ bool CMainScene::Init()
 	TileMapComponent->SetTileColorWhite();
 
 	CGameObject* Obj = nullptr;
+	Vector3	TileCenterSize = TileMapComponent->GetTileSize() * 0.5f;
 
 	std::vector<Vector3>	vecObjectPos;
 
@@ -61,7 +62,7 @@ bool CMainScene::Init()
 			{
 			case Object_Type::BulletKin:
 				Obj = m_Scene->CreateGameObject<CBulletKin>("BulletKin");
-				Obj->SetWorldPos(vecObjectPos[j]);
+				Obj->SetWorldPos(vecObjectPos[j] + TileCenterSize); // 타일 중앙으로 위치하게 한다.
 				break;
 			}
 		}
@@ -84,4 +85,12 @@ void CMainScene::CreateSound()
 	m_Scene->GetResource()->LoadSound("Effect", false, "Player_Weap1", "Weapon/Shot/Weap1.wav");
 	m_Scene->GetResource()->LoadSound("Effect", false, "Player_Weap2", "Weapon/Shot/Weap2.wav");
 	m_Scene->GetResource()->LoadSound("Effect", false, "Player_Weap3", "Weapon/Shot/Weap3.wav");
+
+	m_Scene->GetResource()->LoadSound("Effect", false, "Monster_Hit", "Monster/Effect/Hit.wav");
+	m_Scene->GetResource()->LoadSound("Effect", false, "Monster_Die", "Monster/Effect/Die.wav");
+
+	m_Scene->GetResource()->LoadSound("Effect", false, "BulletKin_Die1", "Monster/BulletKin/Die1.wav");
+	m_Scene->GetResource()->LoadSound("Effect", false, "BulletKin_Die2", "Monster/BulletKin/Die2.wav");
+	m_Scene->GetResource()->LoadSound("Effect", false, "BulletKin_Die3", "Monster/BulletKin/Die3.wav");
+	m_Scene->GetResource()->LoadSound("Effect", false, "BulletKin_Die4", "Monster/BulletKin/Die4.wav");
 }

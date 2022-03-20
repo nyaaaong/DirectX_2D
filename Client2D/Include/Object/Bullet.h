@@ -14,20 +14,35 @@ protected:
 	virtual ~CBullet();
 
 private:
-	CSharedPtr<class CSpriteComponent>	m_Sprite;
-	CSharedPtr<class CSpriteComponent>	m_ImpactSprite;
 	float								m_StartDistance;
 	float								m_Distance;
 	CSharedPtr<class CColliderBox2D>	m_Body;
 	Character_Type	m_CharacterType;
 	Vector3			m_BulletDir;
-	bool			m_First;
 	float			m_BulletSpeed;
 	Weapon_Slot		m_WeaponSlot;
 	std::string		m_SoundName;
-	bool			m_StartAnim;
+	float			m_Damage;
+	CSharedPtr<class CCharacter> m_Owner;
+	bool			m_HitObject;
+	bool			m_Pierce;
 
 public:
+	void Pierce(bool IsPierce)
+	{
+		m_Pierce = IsPierce;
+	}
+
+	void SetOwner(CSharedPtr<class CCharacter> Owner)
+	{
+		m_Owner = Owner;
+	}
+
+	void SetBulletDamage(float Damage)
+	{
+		m_Damage = Damage;
+	}
+
 	void SetWeaponSlot(Weapon_Slot Slot)
 	{
 		m_WeaponSlot = Slot;
@@ -48,6 +63,7 @@ public:
 
 public:
 	virtual void Start();
+	virtual void First();
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
@@ -55,10 +71,8 @@ public:
 
 public:
 	void OnCollisionBegin(const CollisionResult& result);
-	void OnCollisionEnd(const CollisionResult& result);
 
 private:
-	bool IsNormalTile(const Vector3& NextWorldPos);
-	void CreateBulletImpact();
+	bool IsWallTile(const Vector3& NextWorldPos);
+	void CreateHitEffect(bool IsDie);
 };
-

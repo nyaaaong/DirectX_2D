@@ -1,0 +1,78 @@
+#pragma once
+
+#include "GameObject\GameObject.h"
+#include "Component/SpriteComponent.h"
+#include "Component/PaperBurnComponent.h"
+#include "Component/ColliderBox2D.h"
+
+class CCharacter :
+    public CGameObject
+{
+	friend class CScene;
+
+protected:
+	CCharacter();
+	CCharacter(const CCharacter& obj);
+	virtual ~CCharacter() = 0;
+
+protected:
+	CSharedPtr<CColliderBox2D>       m_Body;
+	CSharedPtr<CPaperBurnComponent>   m_PaperBurn;
+	float	m_HP;
+	float	m_HitEffectTime;
+	float	m_HitEffectTimeMax;
+	bool	m_IsDied;
+	bool	m_IsPaperBurn;
+	bool	m_Hit;
+	bool	m_IsPlayedHitSound;
+	float	m_Damage;
+	Character_Type	m_Type;
+
+public:
+	virtual void Start();
+	virtual bool Init();
+	virtual void Update(float DeltaTime);
+	virtual CCharacter* Clone() = 0;
+	virtual void Destroy();
+
+public:
+	virtual void OnCollisionBegin(const CollisionResult& result);
+
+public:
+	Character_Type GetType()	const
+	{
+		return m_Type;
+	}
+
+	float GetDamage()	const
+	{
+		return m_Damage;
+	}
+
+public:
+	void AddDamage(float Damage)
+	{
+		m_HP -= Damage;
+
+		if (m_HP <= 0.f)
+		{
+			m_HP = 0.f;
+		}
+	}
+
+	void AddHP(float HP)
+	{
+		m_HP += HP;
+
+		if (m_HP <= 0.f)
+		{
+			m_HP = 0.f;
+		}
+	}
+
+protected:
+	virtual void PaperBurnEnd();
+	virtual void Dead(float DeltaTime);
+	virtual void Hit(float DeltaTime);
+};
+

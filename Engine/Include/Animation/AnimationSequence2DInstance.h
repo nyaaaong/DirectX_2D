@@ -18,6 +18,7 @@ protected:
 	class CAnimation2DConstantBuffer* m_CBuffer;
 	bool		m_PlayAnimation;
 	bool		m_AnimEnd;
+	bool		m_First;
 
 public:
 	bool IsEnd()	const
@@ -87,6 +88,7 @@ public:
 public:
 	virtual void Start();
 	virtual bool Init();
+	virtual void First();
 	virtual void Update(float DeltaTime);
 	void SetShader();
 	void ResetShader();

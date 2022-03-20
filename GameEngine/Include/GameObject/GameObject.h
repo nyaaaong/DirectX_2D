@@ -24,6 +24,7 @@ protected:
 	float		m_LifeSpan;
 	Vector2		m_AnimationSize;
 	class CAnimationSequence2DInstance* m_AnimationInstance;
+	bool	m_First;
 
 public:
 	void SetRootComponent(CSceneComponent* Component)
@@ -64,6 +65,7 @@ public:
 	Vector3 GetAnimationSize()	const;
 
 public:
+	virtual void First();
 	virtual void Start();
 	virtual bool Init();
 	virtual void Update(float DeltaTime);

@@ -1,13 +1,11 @@
 #pragma once
 
-#include "GameObject/GameObject.h"
-#include "Component/SpriteComponent.h"
-#include "Component/ColliderBox2D.h"
+#include "Character.h"
 #include "Component/CameraComponent.h"
 #include "Component/WidgetComponent.h"
 
 class CPlayer2D :
-	public CGameObject
+	public CCharacter
 {
 	friend class CScene;
 
@@ -17,7 +15,6 @@ protected:
 	virtual ~CPlayer2D();
 
 private:
-	CSharedPtr<CColliderBox2D>		m_Body;
 	CSharedPtr<CCameraComponent>	m_Camera;
 	CSharedPtr<CWidgetComponent>	m_SimpleHUDWidget;
 	CSharedPtr<CSpriteComponent>	m_Weapon1;
@@ -35,6 +32,7 @@ private:
 	bool	m_AttackCoolDown;
 	bool	m_SetCameraInfo;
 	bool	m_DodgeCoolDown;
+	bool	m_PierceBullet;
 	float   m_Opacity;
 	float	m_AttackTimer;
 	float	m_AttackTimerMax;

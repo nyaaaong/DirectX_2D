@@ -17,7 +17,8 @@ CGameObject::CGameObject()	:
 	m_Scene(nullptr),
 	m_Parent(nullptr),
 	m_LifeSpan(0.f),
-	m_AnimationInstance(nullptr)
+	m_AnimationInstance(nullptr),
+	m_First(false)
 {
 	SetTypeID<CGameObject>();
 }
@@ -25,6 +26,8 @@ CGameObject::CGameObject()	:
 CGameObject::CGameObject(const CGameObject& obj)
 {
 	*this = obj;
+
+	m_First = false;
 
 	m_AnimationInstance = nullptr;
 
@@ -189,6 +192,11 @@ Vector3 CGameObject::GetAnimationSize() const
 	return Vector3(Size2D.x, Size2D.y, 0.f);
 }
 
+void CGameObject::First()
+{
+	m_First = true;
+}
+
 void CGameObject::Start()
 {
 	if (m_RootComponent)
@@ -209,6 +217,9 @@ bool CGameObject::Init()
 
 void CGameObject::Update(float DeltaTime)
 {
+	if (!m_First)
+		First();
+
 	if (m_LifeSpan > 0.f)
 	{
 		m_LifeSpan -= DeltaTime;

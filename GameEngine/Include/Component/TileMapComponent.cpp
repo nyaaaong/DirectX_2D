@@ -469,13 +469,6 @@ void CTileMapComponent::Update(float DeltaTime)
 {
 	CSceneComponent::Update(DeltaTime);
 
-	/*if (!m_First)
-	{
-		m_First = true;
-
-		m_Scene->TileMap(true);
-	}*/
-
 	if (m_TileMaterial)
 	{
 		if (!m_TileMaterial->EmptyTexture())

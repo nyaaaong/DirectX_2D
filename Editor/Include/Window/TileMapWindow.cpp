@@ -275,6 +275,32 @@ void CTileMapWindow::Update(float DeltaTime)
 
 					switch (Type)
 					{
+					case Tile_Type::Normal:
+						if (Tile->GetTileType() == Tile_Type::Normal)
+							return;
+
+						else if (Tile->GetTileType() == Tile_Type::Object)
+						{
+							CPublic::GetInst()->DeleteObjectWorldPos(Tile->GetWorldPos());
+							Tile->SetObjectType(Object_Type::Max);
+						}
+
+						Tile->SetTileType(Type);
+						break;
+
+					case Tile_Type::Wall:
+						if (Tile->GetTileType() == Tile_Type::Wall)
+							return;
+
+						else if (Tile->GetTileType() == Tile_Type::Object)
+						{
+							CPublic::GetInst()->DeleteObjectWorldPos(Tile->GetWorldPos());
+							Tile->SetObjectType(Object_Type::Max);
+						}
+
+						Tile->SetTileType(Type);
+						break;
+
 					case Tile_Type::Object:
 					{
 						if (Tile->GetTileType() == Tile_Type::Object)
@@ -291,9 +317,6 @@ void CTileMapWindow::Update(float DeltaTime)
 						Tile->SetObjectType(ObjectType);
 						break;
 					}
-					default:
-						Tile->SetTileType(Type);
-						break;
 					}
 				}
 				break;

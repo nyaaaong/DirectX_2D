@@ -84,22 +84,23 @@ void CPublic::AddObjectWorldPos(Object_Type Type, const Vector3& WorldPos)
 	ObjectList->push_back(WorldPos);
 }
 
-void CPublic::DeleteObjectWorldPos(Object_Type Type, const Vector3& WorldPos)
+void CPublic::DeleteObjectWorldPos(const Vector3& WorldPos)
 {
-	std::list<Vector3>* ObjectList = FindObjectPosList(Type);
-
-	if (!ObjectList)
-		return;
-
-	auto	iter = ObjectList->begin();
-	auto	iterEnd = ObjectList->end();
+	auto	iter = m_mapObject.begin();
+	auto	iterEnd = m_mapObject.end();
 
 	for (; iter != iterEnd; ++iter)
 	{
-		if ((*iter) == WorldPos)
+		auto	iter1 = iter->second->begin();
+		auto	iter1End = iter->second->end();
+
+		for (; iter1 != iter1End; ++iter1)
 		{
-			ObjectList->erase(iter);
-			return;
+			if ((*iter1) == WorldPos)
+			{
+				iter->second->erase(iter1);
+				return;
+			}
 		}
 	}
 }

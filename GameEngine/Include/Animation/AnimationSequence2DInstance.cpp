@@ -15,7 +15,8 @@ CAnimationSequence2DInstance::CAnimationSequence2DInstance()	:
 	m_CurrentAnimation(nullptr),
 	m_CBuffer(nullptr),
 	m_PlayAnimation(false),
-	m_AnimEnd(false)
+	m_AnimEnd(false),
+	m_First(false)
 {
 	SetTypeID<CAnimationSequence2DInstance>();
 }
@@ -30,6 +31,7 @@ CAnimationSequence2DInstance::CAnimationSequence2DInstance(const CAnimationSeque
 
 	m_PlayAnimation = Anim.m_PlayAnimation;
 	m_AnimEnd = false;
+	m_First = false;
 
 	auto	iter = Anim.m_mapAnimation.begin();
 	auto	iterEnd = Anim.m_mapAnimation.end();
@@ -305,10 +307,18 @@ bool CAnimationSequence2DInstance::Init()
 	return true;
 }
 
+void CAnimationSequence2DInstance::First()
+{
+	m_First = true;
+}
+
 void CAnimationSequence2DInstance::Update(float DeltaTime)
 {
 	if (!m_CurrentAnimation || !m_PlayAnimation || m_CurrentAnimation->m_Sequence->GetFrameCount() == 0)
 		return;
+
+	if (!m_First)
+		First();
 
 	m_CurrentAnimation->m_Time += DeltaTime * m_CurrentAnimation->m_PlayScale;
 

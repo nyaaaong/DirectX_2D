@@ -1,13 +1,11 @@
 
 #include "Player2D.h"
 #include "Bullet.h"
-#include "BubbleParticle.h"
 #include "Input.h"
 #include "PlayerAnimation2D.h"
 #include "Device.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneManager.h"
-#include "Scene/NavigationManager.h"
 #include "Resource/Material/Material.h"
 #include "Component/CameraComponent.h"
 #include "../Widget/SimpleHUD.h"
@@ -22,6 +20,7 @@ CPlayer2D::CPlayer2D() :
 	m_DodgeCoolDown(false),
 	m_Move(false),
 	m_SetCameraInfo(false),
+	m_PierceBullet(false),
 	m_MoveSpeed(1.f),
 	m_DodgeSpeed(1.f),
 	m_Dir(0),
@@ -34,10 +33,12 @@ CPlayer2D::CPlayer2D() :
 	m_Opacity = 1.f;
 
 	m_AttackTimerMax = 0.6f;
+
+	m_Type = Character_Type::Player;
 }
 
 CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
-	CGameObject(obj)
+	CCharacter(obj)
 {
 	SetTypeID<CPlayer2D>();
 
@@ -49,6 +50,7 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 
 	m_Opacity = obj.m_Opacity;
 	m_Move = false;
+	m_PierceBullet = false;
 
 	m_AttackTimer = 0.f;
 	m_AttackTimerMax = obj.m_AttackTimerMax;
@@ -68,6 +70,8 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_SetCameraInfo = false;
 
 	m_WeaponSlot = Weapon_Slot::None;
+
+	m_Type = Character_Type::Player;
 }
 
 CPlayer2D::~CPlayer2D()
@@ -420,24 +424,35 @@ void CPlayer2D::Dodge(float DeltaTime)
 void CPlayer2D::NoWeapon(float DeltaTime)
 {
 	m_WeaponSlot = Weapon_Slot::None;
+
+	m_PierceBullet = false;
 }
 
 void CPlayer2D::Weapon1(float DeltaTime)
 {
 	m_WeaponSlot = Weapon_Slot::Weap1;
 	m_AttackTimerMax = 0.6f;
+	m_Damage = 3.f;
+
+	m_PierceBullet = false;
 }
 
 void CPlayer2D::Weapon2(float DeltaTime)
 {
 	m_WeaponSlot = Weapon_Slot::Weap2;
 	m_AttackTimerMax = 0.08f;
+	m_Damage = 5.f;
+
+	m_PierceBullet = false;
 }
 
 void CPlayer2D::Weapon3(float DeltaTime)
 {
 	m_WeaponSlot = Weapon_Slot::Weap3;
 	m_AttackTimerMax = 1.3f;
+	m_Damage = 50.f;
+
+	m_PierceBullet = true;
 }
 
 void CPlayer2D::HideAllWeapon()
@@ -463,12 +478,14 @@ void CPlayer2D::Attack(float DeltaTime)
 
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
 
+	Bullet->SetOwner(this);
 	Bullet->SetBulletDir(m_MouseDir);
 	Bullet->SetWorldPos(GetWorldPos());
 	Bullet->SetWorldRotation(m_CurWeapon->GetWorldRot());
 	Bullet->SetCollisionProfile("PlayerAttack");
 	Bullet->SetCharacterType(Character_Type::Player);
 	Bullet->SetWeaponSlot(m_WeaponSlot);
+	Bullet->Pierce(m_PierceBullet);
 }
 
 void CPlayer2D::UpdateAttackCoolDown(float DeltaTime)
