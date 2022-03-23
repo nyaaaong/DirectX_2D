@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Character.h"
+#include "Monster.h"
 
 class CBulletKin :
-	public CCharacter
+	public CMonster
 {
 	friend class CScene;
 
@@ -11,10 +11,6 @@ protected:
 	CBulletKin();
 	CBulletKin(const CBulletKin& obj);
 	virtual ~CBulletKin();
-
-private:
-	float	m_BurnStartDelay;
-	float	m_BurnStartDelayMax;
 
 public:
 	class CSpriteComponent* GetSpriteComponent()    const
@@ -36,5 +32,8 @@ protected:
 	virtual void PaperBurnEnd();
 	virtual void Dead(float DeltaTime);
 	virtual void Hit(float DeltaTime);
+
+protected:
+	virtual void PlaySoundDie();
 };
 

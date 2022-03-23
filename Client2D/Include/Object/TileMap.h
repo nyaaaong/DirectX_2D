@@ -40,6 +40,7 @@ public:
 	CTile* GetTile(int x, int y)	const;
 	CTile* GetTile(int Index)	const;
 	Tile_Type GetTileType(const Vector3& Pos)	const;
+	Tile_Type GetTileType(const Vector2& Pos)	const;
 	Tile_Type GetTileType(int x, int y)	const;
 	Tile_Type GetTileType(int Index)	const;
 };

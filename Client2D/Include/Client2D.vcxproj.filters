@@ -113,6 +113,12 @@
     <ClCompile Include="Object\BulletDummy.cpp">
       <Filter>01. Object\01. Bullet\00. Effect</Filter>
     </ClCompile>
+    <ClCompile Include="Object\Monster.cpp">
+      <Filter>01. Object\00. Character\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\MonsterAnim.cpp">
+      <Filter>01. Object\00. Character\01. Monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene\MainScene.h">
@@ -183,6 +189,12 @@
     </ClInclude>
     <ClInclude Include="Object\BulletDummy.h">
       <Filter>01. Object\01. Bullet\00. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Monster.h">
+      <Filter>01. Object\00. Character\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\MonsterAnim.h">
+      <Filter>01. Object\00. Character\01. Monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

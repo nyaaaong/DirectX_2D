@@ -1,18 +1,23 @@
 #pragma once
 
-#include "Animation\AnimationSequence2DInstance.h"
+#include "MonsterAnim.h"
 
 class CBulletKinAnim :
-    public CAnimationSequence2DInstance
+	public CMonsterAnim
 {
 public:
 	CBulletKinAnim();
 	CBulletKinAnim(const CBulletKinAnim& Anim);
-	~CBulletKinAnim();
+	virtual ~CBulletKinAnim();
 
 public:
 	virtual void Start();
 	virtual bool Init();
+	virtual void Update(float DeltaTime);
 	virtual CBulletKinAnim* Clone();
+
+protected:
+	virtual void ChangeAnimLeft();
+	virtual void ChangeAnimRight();
 };
 

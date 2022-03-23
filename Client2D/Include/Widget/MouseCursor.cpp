@@ -79,7 +79,9 @@ void CMouseCursor::CameraUpdater(float DeltaTime)
 
 		// 마우스와 센터의 거리로 카메라 위치를 조절해야 한다.
 
-		CPlayer2D* Player = dynamic_cast<CPlayer2D*>(Scene->GetPlayerObject());
+		CGameObject* PlayerObj = Scene->GetPlayerObject();
+
+		CPlayer2D* Player = dynamic_cast<CPlayer2D*>(PlayerObj);
 
 		CCameraComponent* Camera = Player->GetCameraComponent();
 

@@ -9,12 +9,18 @@ class CMainScene :
 {
 public:
 	CMainScene();
-	~CMainScene();
+	virtual ~CMainScene();
 
 private:
 	CSharedPtr<CMainWidget> m_MainWidget;
 	std::function<void(bool, float)> m_LoadingFunction;
 	CSharedPtr<CTileMap> m_TileMap;
+
+public:
+	void SetWidgetText(const char* Text)
+	{
+		m_MainWidget->SetText(Text);
+	}
 
 public:
 	CSharedPtr<CTileMap> GetTileMap()	const

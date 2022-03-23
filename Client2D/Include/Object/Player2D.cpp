@@ -21,13 +21,13 @@ CPlayer2D::CPlayer2D() :
 	m_Move(false),
 	m_SetCameraInfo(false),
 	m_PierceBullet(false),
-	m_MoveSpeed(1.f),
 	m_DodgeSpeed(1.f),
 	m_Dir(0),
 	m_MoveDir(0),
 	m_MouseAngle(0.f),
 	m_WeaponSlot(Weapon_Slot::None),
-	m_CurWeapon(nullptr)
+	m_CurWeapon(nullptr),
+	m_SightLimitSize(800.f)
 {
 	SetTypeID<CPlayer2D>();
 	m_Opacity = 1.f;
@@ -35,6 +35,11 @@ CPlayer2D::CPlayer2D() :
 	m_AttackTimerMax = 0.6f;
 
 	m_Type = Character_Type::Player;
+
+	m_MoveSpeed = 1.f;
+
+	m_TopOffsetY = 1.4f;
+	m_BottomOffsetY = 0.2f;
 }
 
 CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
@@ -45,6 +50,7 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_Sprite = (CSpriteComponent*)FindComponent("PlayerSprite");
 
 	m_Body = (CColliderBox2D*)FindComponent("Body");
+	m_SightLimit = (CColliderCircle*)FindComponent("SightLimit");
 	m_Camera = (CCameraComponent*)FindComponent("Camera");
 	m_SimpleHUDWidget = (CWidgetComponent*)FindComponent("SimpleHUD");
 
@@ -56,7 +62,6 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_AttackTimerMax = obj.m_AttackTimerMax;
 	m_AttackCoolDown = false;
 
-	m_MoveSpeed = obj.m_MoveSpeed;
 	m_DodgeSpeed = obj.m_DodgeSpeed;
 
 	m_DodgeTimer = 0.f;
@@ -72,6 +77,8 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_WeaponSlot = Weapon_Slot::None;
 
 	m_Type = Character_Type::Player;
+
+	m_SightLimitSize = obj.m_SightLimitSize;
 }
 
 CPlayer2D::~CPlayer2D()
@@ -132,15 +139,32 @@ void CPlayer2D::ClearMoveDir(Character_Direction Dir)
 
 void CPlayer2D::Start()
 {
-	CGameObject::Start();
+	CCharacter::Start();
+
+	Vector3	WorldPos = GetWorldPos();
+
+	m_Body->SetWorldPos(WorldPos);
+	m_SightLimit->SetWorldPos(WorldPos);
 }
 
 bool CPlayer2D::Init()
 {
-	if (!CGameObject::Init())
+	if (!CCharacter::Init())
 		return false;
 
 	m_Sprite = CreateComponent<CSpriteComponent>("PlayerSprite");
+
+	m_Sprite->SetTransparency(true);
+	m_Sprite->CreateAnimationInstance<CPlayerAnimation2D>();
+	m_Sprite->SetRelativePos(650.f, 600.f, 0.f);
+	m_Sprite->SetPivot(0.5f, 0.5f, 0.f);
+
+	SetRootComponent(m_Sprite);
+
+	m_Body->SetExtent(30.f, 30.f);
+	m_Body->SetCollisionProfile("Player");
+
+	m_Sprite->AddChild(m_Body);
 
 	m_Weapon1 = CreateComponent<CSpriteComponent>("Weapon1Sprite");
 	m_Weapon1L = CreateComponent<CSpriteComponent>("Weapon1LSprite");
@@ -148,6 +172,13 @@ bool CPlayer2D::Init()
 	m_Weapon2L = CreateComponent<CSpriteComponent>("Weapon2LSprite");
 	m_Weapon3 = CreateComponent<CSpriteComponent>("Weapon3Sprite");
 	m_Weapon3L = CreateComponent<CSpriteComponent>("Weapon3LSprite");
+
+	m_Sprite->AddChild(m_Weapon1);
+	m_Sprite->AddChild(m_Weapon1L);
+	m_Sprite->AddChild(m_Weapon2);
+	m_Sprite->AddChild(m_Weapon2L);
+	m_Sprite->AddChild(m_Weapon3);
+	m_Sprite->AddChild(m_Weapon3L);
 
 	m_Weapon1->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "Weapon1", TEXT("Weapon/Right/Weapon1.png"));
 	m_Weapon2->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "Weapon2", TEXT("Weapon/Right/Weapon2.png"));
@@ -177,40 +208,17 @@ bool CPlayer2D::Init()
 	m_Weapon3->SetPivotX(-1.f);
 	m_Weapon3L->SetPivotX(-1.f);
 
-	m_Body = CreateComponent<CColliderBox2D>("Body");
-	m_Body->SetExtent(30.f, 30.f);
+	m_SightLimit = CreateComponent<CColliderCircle>("SightLimit");
+	m_SightLimit->SetRadius(m_SightLimitSize * 0.5f);
+	m_SightLimit->SetCollisionProfile("SightLimit");
+	m_SightLimit->UseMouseCollision(false);
+
+	m_Sprite->AddChild(m_SightLimit);
 
 	m_Camera = CreateComponent<CCameraComponent>("Camera");
-
-	//m_SimpleHUDWidget = CreateComponent<CWidgetComponent>("SimpleHUD");
-
-	//m_SimpleHUDWidget->CreateWidgetWindow<CSimpleHUD>("SimpleHUDWidget");
-
-	SetRootComponent(m_Sprite);
-
-	m_Body->SetCollisionProfile("Player");
-
 	m_Camera->OnViewportCenter();
-	//m_Camera->SetViewportRatio(0.7f, 0.7f);
 
-	m_Sprite->AddChild(m_Body);
 	m_Sprite->AddChild(m_Camera);
-	m_Sprite->AddChild(m_Weapon1);
-	m_Sprite->AddChild(m_Weapon1L);
-	m_Sprite->AddChild(m_Weapon2);
-	m_Sprite->AddChild(m_Weapon2L);
-	m_Sprite->AddChild(m_Weapon3);
-	m_Sprite->AddChild(m_Weapon3L);
-	//m_Sprite->AddChild(m_SimpleHUDWidget);
-
-	//m_SimpleHUDWidget->SetRelativePos(-50.f, 50.f, 0.f);
-
-	m_Sprite->SetTransparency(true);
-
-	m_Sprite->CreateAnimationInstance<CPlayerAnimation2D>();
-
-	m_Sprite->SetRelativePos(650.f, 600.f, 0.f);
-	m_Sprite->SetPivot(0.5f, 0.5f, 0.f);
 
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveUp", KeyState_Push, this, &CPlayer2D::MoveUp);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveDown", KeyState_Push, this, &CPlayer2D::MoveDown);
@@ -228,7 +236,7 @@ bool CPlayer2D::Init()
 
 void CPlayer2D::Update(float DeltaTime)
 {
-	CGameObject::Update(DeltaTime);
+	CCharacter::Update(DeltaTime);
 
 	if (!CEngine::GetInst()->IsFocusClient())
 		return;
@@ -291,7 +299,7 @@ void CPlayer2D::Update(float DeltaTime)
 
 void CPlayer2D::PostUpdate(float DeltaTime)
 {
-	CGameObject::PostUpdate(DeltaTime);
+	CCharacter::PostUpdate(DeltaTime);
 
 	Vector3 WorldPos = m_Sprite->GetWorldPos();
 }
@@ -808,60 +816,4 @@ void CPlayer2D::ChangeAnimDodge()
 			return;
 		}
 	}
-}
-
-bool CPlayer2D::IsWallTile(const Vector3& NextWorldPos)
-{
-	CSceneMode* SceneMode = CSceneManager::GetInst()->GetSceneMode();
-	CMainScene* Scene = dynamic_cast<CMainScene*>(SceneMode);
-
-	if (!Scene)
-		return true;
-
-	CTileMap* TileMap = Scene->GetTileMap();
-
-	if (!TileMap)
-		return true;
-
-	// 8방향 체크
-
-	const Vector3	Center = GetWorldPos();
-	const Vector2	Size = m_Body->GetInfo().Length;
-
-	Vector3	MoveDir[(int)Move_Dir::End];
-
-	for (int i = 0; i < (int)Move_Dir::End; ++i)
-	{
-		MoveDir[i] = Center;
-	}
-
-	MoveDir[(int)Move_Dir::LB].x -= Size.x;
-	MoveDir[(int)Move_Dir::LB].y -= (Size.y * 1.4f);
-
-	MoveDir[(int)Move_Dir::B].y -= (Size.y * 1.4f);
-
-	MoveDir[(int)Move_Dir::RB].x += Size.x;
-	MoveDir[(int)Move_Dir::RB].y -= (Size.y * 1.4f);
-
-	MoveDir[(int)Move_Dir::L].x -= Size.x;
-	MoveDir[(int)Move_Dir::L].y -= (Size.y * 1.4f);
-
-	MoveDir[(int)Move_Dir::R].x += Size.x;
-	MoveDir[(int)Move_Dir::R].y -= (Size.y * 1.4f);
-
-	MoveDir[(int)Move_Dir::LT].x -= Size.x;
-	MoveDir[(int)Move_Dir::LT].y += (Size.y * 0.2f);
-
-	MoveDir[(int)Move_Dir::T].y += (Size.y * 0.2f);
-
-	MoveDir[(int)Move_Dir::RT].x += Size.x;
-	MoveDir[(int)Move_Dir::RT].y += (Size.y * 0.2f);
-
-	for (int i = 0; i < (int)Move_Dir::End; ++i)
-	{
-		if (TileMap->GetTileType(MoveDir[i] + NextWorldPos) == Tile_Type::Wall)
-			return true;
-	}
-
-	return false;
 }

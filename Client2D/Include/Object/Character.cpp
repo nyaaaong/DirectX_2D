@@ -1,8 +1,10 @@
 
 #include "Character.h"
 #include "Scene/Scene.h"
+#include "Scene/SceneManager.h"
 #include "Scene/SceneResource.h"
 #include "Animation/AnimationSequence2DInstance.h"
+#include "../Scene/MainScene.h"
 
 CCharacter::CCharacter() :
 	m_HP(50.f),
@@ -13,16 +15,16 @@ CCharacter::CCharacter() :
 	m_Hit(false),
 	m_IsPlayedHitSound(false),
 	m_Damage(3.f),
-	m_Type(Character_Type::Max)
+	m_MoveSpeed(300.f),
+	m_Type(Character_Type::Max),
+	m_TopOffsetY(1.f),
+	m_BottomOffsetY(1.f)
 {
-	SetTypeID<CCharacter>();
 }
 
 CCharacter::CCharacter(const CCharacter& obj) :
 	CGameObject(obj)
 {
-	SetTypeID<CCharacter>();
-
 	m_Body = (CColliderBox2D*)FindComponent("Body");
 	m_PaperBurn = (CPaperBurnComponent*)FindComponent("PaperBurn");
 
@@ -34,6 +36,10 @@ CCharacter::CCharacter(const CCharacter& obj) :
 	m_Type = obj.m_Type;
 
 	m_Damage = obj.m_Damage;
+	m_MoveSpeed = obj.m_MoveSpeed;
+
+	m_TopOffsetY = obj.m_TopOffsetY;
+	m_BottomOffsetY = obj.m_BottomOffsetY;
 }
 
 CCharacter::~CCharacter()
@@ -53,6 +59,8 @@ bool CCharacter::Init()
 	m_Body = CreateComponent<CColliderBox2D>("Body");
 	m_PaperBurn = CreateComponent<CPaperBurnComponent>("PaperBurn");
 
+	m_Body->UseMouseCollision(false);
+
 	return true;
 }
 
@@ -67,6 +75,11 @@ void CCharacter::Update(float DeltaTime)
 void CCharacter::OnCollisionBegin(const CollisionResult& result)
 {
 	m_Hit = true;
+}
+
+void CCharacter::OnCollisionEnd(const CollisionResult& result)
+{
+	
 }
 
 void CCharacter::PaperBurnEnd()
@@ -118,6 +131,106 @@ void CCharacter::Hit(float DeltaTime)
 			m_IsPlayedHitSound = false;
 		}
 	}
+}
+
+bool CCharacter::IsWallTile(const Vector3& NextWorldPos)
+{
+	CSceneMode* SceneMode = CSceneManager::GetInst()->GetSceneMode();
+	CMainScene* Scene = dynamic_cast<CMainScene*>(SceneMode);
+
+	if (!Scene)
+		ASSERT("if (!Scene)");
+
+	CTileMap* TileMap = Scene->GetTileMap();
+
+	if (!TileMap)
+		ASSERT("if (!TileMap)");
+	// 8방향 체크
+	
+	const Vector2	Center = m_Body->GetInfo().Center;
+	const Vector2	Size = m_Body->GetInfo().Length;
+
+	Vector3	MoveDir[(int)Move_Dir::End];
+
+	for (int i = 0; i < (int)Move_Dir::End; ++i)
+	{
+		MoveDir[i].x = Center.x;
+		MoveDir[i].y = Center.y;
+	}
+
+	float	CtrSizeTop = Size.y * m_TopOffsetY;
+	float	CtrSizeBottom = Size.y * m_BottomOffsetY;
+
+	MoveDir[(int)Move_Dir::LB].x -= Size.x;
+	MoveDir[(int)Move_Dir::LB].y -= CtrSizeTop;
+
+	MoveDir[(int)Move_Dir::B].y -= CtrSizeTop;
+
+	MoveDir[(int)Move_Dir::RB].x += Size.x;
+	MoveDir[(int)Move_Dir::RB].y -= CtrSizeTop;
+
+	MoveDir[(int)Move_Dir::L].x -= Size.x;
+	MoveDir[(int)Move_Dir::L].y -= CtrSizeTop;
+
+	MoveDir[(int)Move_Dir::R].x += Size.x;
+	MoveDir[(int)Move_Dir::R].y -= CtrSizeTop;
+
+	MoveDir[(int)Move_Dir::LT].x -= Size.x;
+	MoveDir[(int)Move_Dir::LT].y += CtrSizeBottom;
+
+	MoveDir[(int)Move_Dir::T].y += CtrSizeBottom;
+
+	MoveDir[(int)Move_Dir::RT].x += Size.x;
+	MoveDir[(int)Move_Dir::RT].y += CtrSizeBottom;
+
+	for (int i = 0; i < (int)Move_Dir::End; ++i)
+	{
+		if (TileMap->GetTileType(MoveDir[i] + NextWorldPos) == Tile_Type::Wall)
+			return true;
+	}
+
+	/*const Vector3	Center = GetWorldPos();
+	const Vector2	Size = m_Body->GetInfo().Length;
+
+	Vector3	MoveDir[(int)Move_Dir::End];
+
+	for (int i = 0; i < (int)Move_Dir::End; ++i)
+	{
+		MoveDir[i] = Center;
+	}
+
+	float	CtrSizeTop = Size.y * m_TopOffsetY;
+	float	CtrSizeBottom = Size.y * m_BottomOffsetY;
+
+	MoveDir[(int)Move_Dir::LB].x -= Size.x;
+	MoveDir[(int)Move_Dir::LB].y -= CtrSizeTop;
+
+	MoveDir[(int)Move_Dir::B].y -= CtrSizeTop;
+
+	MoveDir[(int)Move_Dir::RB].x += Size.x;
+	MoveDir[(int)Move_Dir::RB].y -= CtrSizeTop;
+
+	MoveDir[(int)Move_Dir::L].x -= Size.x;
+	MoveDir[(int)Move_Dir::L].y -= CtrSizeTop;
+
+	MoveDir[(int)Move_Dir::R].x += Size.x;
+	MoveDir[(int)Move_Dir::R].y -= CtrSizeTop;
+
+	MoveDir[(int)Move_Dir::LT].x -= Size.x;
+	MoveDir[(int)Move_Dir::LT].y += CtrSizeBottom;
+
+	MoveDir[(int)Move_Dir::T].y += CtrSizeBottom;
+
+	MoveDir[(int)Move_Dir::RT].x += Size.x;
+	MoveDir[(int)Move_Dir::RT].y += CtrSizeBottom;
+
+	for (int i = 0; i < (int)Move_Dir::End; ++i)
+	{
+		if (TileMap->GetTileType(MoveDir[i] + NextWorldPos) == Tile_Type::Wall)
+			return true;
+	}*/
+
+	return false;
 }
 
 void CCharacter::Destroy()

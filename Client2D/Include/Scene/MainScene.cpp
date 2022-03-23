@@ -43,7 +43,6 @@ bool CMainScene::Init()
 
 	TileMapComponent->SetTileColorWhite();
 
-	CGameObject* Obj = nullptr;
 	Vector3	TileCenterSize = TileMapComponent->GetTileSize() * 0.5f;
 
 	std::vector<Vector3>	vecObjectPos;
@@ -58,6 +57,8 @@ bool CMainScene::Init()
 
 		for (int j = 0; j < Size; ++j)
 		{
+			CGameObject* Obj = nullptr;
+
 			switch ((Object_Type)i)
 			{
 			case Object_Type::BulletKin:
@@ -65,6 +66,8 @@ bool CMainScene::Init()
 				Obj->SetWorldPos(vecObjectPos[j] + TileCenterSize); // 타일 중앙으로 위치하게 한다.
 				break;
 			}
+
+			break; // test
 		}
 	}
 

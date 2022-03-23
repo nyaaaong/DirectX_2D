@@ -8,7 +8,7 @@ class CPlayerAnimation2D :
 public:
 	CPlayerAnimation2D();
 	CPlayerAnimation2D(const CPlayerAnimation2D& Anim);
-	~CPlayerAnimation2D();
+	virtual ~CPlayerAnimation2D();
 
 public:
 	virtual bool Init();

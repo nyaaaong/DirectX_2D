@@ -8,7 +8,7 @@
 #include "Character.h"
 
 CBullet::CBullet() :
-	m_StartDistance(100.f),
+	m_StartDistance(50.f),
 	m_Distance(300.f),
 	m_BulletSpeed(10000.f),
 	m_CharacterType(Character_Type::Max),
@@ -79,12 +79,12 @@ void CBullet::First()
 		switch (m_WeaponSlot)
 		{
 		case Weapon_Slot::Weap1:
-			m_BulletSpeed = 600.f;
+			m_BulletSpeed = 1000.f;
 			m_Distance = 500.f;
 			m_SoundName = "Player_Weap1";
 			break;
 		case Weapon_Slot::Weap2:
-			m_BulletSpeed = 800.f;
+			m_BulletSpeed = 1000.f;
 			m_Distance = 800.f;
 			m_SoundName = "Player_Weap2";
 			break;

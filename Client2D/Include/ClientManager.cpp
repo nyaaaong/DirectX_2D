@@ -66,7 +66,7 @@ bool CClientManager::Init(HINSTANCE hInst)
 	CResourceManager::GetInst()->CreateSoundChannelGroup("BGM");
 	CResourceManager::GetInst()->SetVolume("BGM", 50);
 	CResourceManager::GetInst()->CreateSoundChannelGroup("Effect");
-	CResourceManager::GetInst()->SetVolume("Effect", 30);
+	CResourceManager::GetInst()->SetVolume("Effect", 20);
 
 	// 마우스 위젯 설정
 	CMouseCursor* MouseCursor = CEngine::GetInst()->CreateMouse<CMouseCursor>(Mouse_State::Normal, "MouseCursor");

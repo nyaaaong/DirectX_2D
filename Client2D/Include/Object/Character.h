@@ -6,14 +6,14 @@
 #include "Component/ColliderBox2D.h"
 
 class CCharacter :
-    public CGameObject
+	public CGameObject
 {
 	friend class CScene;
 
 protected:
 	CCharacter();
 	CCharacter(const CCharacter& obj);
-	virtual ~CCharacter() = 0;
+	virtual ~CCharacter();
 
 protected:
 	CSharedPtr<CColliderBox2D>       m_Body;
@@ -21,6 +21,9 @@ protected:
 	float	m_HP;
 	float	m_HitEffectTime;
 	float	m_HitEffectTimeMax;
+	float	m_MoveSpeed;
+	float	m_TopOffsetY; // 타일체크용
+	float	m_BottomOffsetY; // 타일체크용
 	bool	m_IsDied;
 	bool	m_IsPaperBurn;
 	bool	m_Hit;
@@ -37,6 +40,7 @@ public:
 
 public:
 	virtual void OnCollisionBegin(const CollisionResult& result);
+	virtual void OnCollisionEnd(const CollisionResult& result);
 
 public:
 	Character_Type GetType()	const
@@ -74,5 +78,8 @@ protected:
 	virtual void PaperBurnEnd();
 	virtual void Dead(float DeltaTime);
 	virtual void Hit(float DeltaTime);
+
+protected:
+	bool IsWallTile(const Vector3& NextWorldPos);
 };
 

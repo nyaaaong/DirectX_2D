@@ -5,7 +5,8 @@
 #include "Scene/ViewPort.h"
 #include "Scene/Scene.h"
 
-CMainWidget::CMainWidget()
+CMainWidget::CMainWidget()	:
+	m_Text{}
 {
 }
 
@@ -20,6 +21,9 @@ CMainWidget::CMainWidget(const CMainWidget& window) :
 	m_MouseDirXText = FindWidget<CText>("MouseDirXText");
 	m_MouseDirYText = FindWidget<CText>("MouseDirYText");
 	m_MouseAngleText = FindWidget<CText>("MouseAngleText");
+	m_DebugText = FindWidget<CText>("DebugText");
+	
+	memset(m_Text, 0, sizeof(char) * 256);
 }
 
 
@@ -29,6 +33,7 @@ CMainWidget::~CMainWidget()
 
 void CMainWidget::Start()
 {
+	CWidgetWindow::Start();
 }
 
 bool CMainWidget::Init()
@@ -127,6 +132,17 @@ bool CMainWidget::Init()
 	m_MouseAngleText->SetAlignH(TEXT_ALIGN_H::Left);
 	m_MouseAngleText->SetShadowEnable(true);
 	m_MouseAngleText->SetShadowOffset(2.f, 2.f);
+
+	PosY -= 14.f;
+
+	m_DebugText = CreateWidget<CText>("DebugText");
+	m_DebugText->SetPos(0.f, PosY);
+	m_DebugText->SetSize(300.f, 14.f);
+	m_DebugText->SetZOrder(1);
+	m_DebugText->SetColor(1.f, 1.f, 1.f);
+	m_DebugText->SetAlignH(TEXT_ALIGN_H::Left);
+	m_DebugText->SetShadowEnable(true);
+	m_DebugText->SetShadowOffset(2.f, 2.f);
 #endif // _DEBUG
 
 	return true;
@@ -240,6 +256,18 @@ void CMainWidget::Update(float DeltaTime)
 	MultiByteToWideChar(CP_ACP, 0, Text, -1, ConvertText, Length);
 
 	m_MouseAngleText->SetText(ConvertText);
+
+	//
+
+	memset(Text, 0, sizeof(char) * 256);
+	sprintf_s(Text, "%s", m_Text);
+
+	memset(ConvertText, 0, sizeof(TCHAR) * 256);
+
+	Length = MultiByteToWideChar(CP_ACP, 0, Text, -1, 0, 0);
+	MultiByteToWideChar(CP_ACP, 0, Text, -1, ConvertText, Length);
+
+	m_DebugText->SetText(ConvertText);
 #endif // _DEBUG
 }
 

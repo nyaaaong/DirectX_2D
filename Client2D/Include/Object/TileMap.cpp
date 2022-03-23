@@ -159,6 +159,11 @@ Tile_Type CTileMap::GetTileType(const Vector3& Pos) const
 	return Tile->GetTileType();
 }
 
+Tile_Type CTileMap::GetTileType(const Vector2& Pos) const
+{
+    return GetTileType((int)Pos.x, (int)Pos.y);
+}
+
 Tile_Type CTileMap::GetTileType(int x, int y) const
 {
 	if (!m_TileMapComponent)

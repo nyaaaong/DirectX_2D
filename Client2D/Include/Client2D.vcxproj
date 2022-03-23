@@ -185,6 +185,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Object\Monster.cpp" />
+    <ClCompile Include="Object\MonsterAnim.cpp" />
     <ClCompile Include="Object\Player2D.cpp" />
     <ClCompile Include="Object\PlayerAnimation2D.cpp" />
     <ClCompile Include="Object\TileMap.cpp" />
@@ -219,6 +221,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="Object\Monster.h" />
+    <ClInclude Include="Object\MonsterAnim.h" />
     <ClInclude Include="Object\Player2D.h" />
     <ClInclude Include="Object\PlayerAnimation2D.h" />
     <ClInclude Include="Object\TileMap.h" />

@@ -27,6 +27,14 @@ private:
 	CSharedPtr<CText>	m_MouseDirXText;
 	CSharedPtr<CText>	m_MouseDirYText;
 	CSharedPtr<CText>	m_MouseAngleText;
+	CSharedPtr<CText>	m_DebugText;
+	char	m_Text[256];
+
+public:
+	void SetText(const char* Text)
+	{
+		strcpy_s(m_Text, Text);
+	}
 
 public:
 	virtual void Start();

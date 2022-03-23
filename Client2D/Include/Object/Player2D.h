@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Character.h"
+#include "Component/ColliderCircle.h"
 #include "Component/CameraComponent.h"
 #include "Component/WidgetComponent.h"
 
@@ -23,6 +24,7 @@ private:
 	CSharedPtr<CSpriteComponent>	m_Weapon2L;
 	CSharedPtr<CSpriteComponent>	m_Weapon3;
 	CSharedPtr<CSpriteComponent>	m_Weapon3L;
+	CSharedPtr<CColliderCircle>		m_SightLimit;
 	CSpriteComponent*	m_CurWeapon;
 	Vector3	m_PrevPos;
 	Vector3	m_MouseDir;
@@ -36,11 +38,11 @@ private:
 	float   m_Opacity;
 	float	m_AttackTimer;
 	float	m_AttackTimerMax;
-	float	m_MoveSpeed;	
 	float	m_DodgeSpeed;
 	float	m_DodgeTimer;
 	float	m_DodgeTimerMax;
 	float	m_MouseAngle;
+	float	m_SightLimitSize;
 	int		m_Dir;
 	int		m_MoveDir;
 
@@ -122,8 +124,5 @@ private:
 	void ChangeAnimIdle();
 	void ChangeAnimWalk();
 	void ChangeAnimDodge();
-
-private:
-	bool IsWallTile(const Vector3& NextWorldPos);
 };
 
