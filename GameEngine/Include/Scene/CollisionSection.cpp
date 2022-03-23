@@ -100,7 +100,7 @@ void CCollisionSection::Collision(float DeltaTime)
 }
 
 CColliderComponent* CCollisionSection::CollisionMouse(bool Is2D, float DeltaTime)
-{
+{	
 	if (Is2D)
 	{
 		Vector2	MousePos = CInput::GetInst()->GetMouseWorld2DPos();
@@ -112,8 +112,11 @@ CColliderComponent* CCollisionSection::CollisionMouse(bool Is2D, float DeltaTime
 
 		for (size_t i = 0; i < Size; ++i)
 		{
-			if (m_vecCollider[i]->CollisionMouse(MousePos))
-				return m_vecCollider[i];
+			if (m_vecCollider[i]->IsUseMouseCollision())
+			{
+				if (m_vecCollider[i]->CollisionMouse(MousePos))
+					return m_vecCollider[i];
+			}
 		}
 	}
 

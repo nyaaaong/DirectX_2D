@@ -385,6 +385,7 @@ struct TileInfo
 struct NavWorkData
 {
 	std::function<void(const std::list<Vector3>&)>	Callback;
+	size_t	TypeID;
 	Vector3		Start;
 	Vector3		End;
 };

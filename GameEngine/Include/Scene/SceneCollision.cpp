@@ -55,7 +55,13 @@ void CSceneCollision::Collision(float DeltaTime)
 
 	for (; iter != iterEnd;)
 	{
-		if (!(*iter)->IsActive())
+		if (!(*iter)->IsUseMouseCollision())
+		{
+			++iter;
+			continue;
+		}
+
+		else if (!(*iter)->IsActive())
 		{
 			if (*iter == m_MouseCollision)
 				m_MouseCollision = nullptr;

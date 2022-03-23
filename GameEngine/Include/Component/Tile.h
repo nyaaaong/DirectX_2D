@@ -31,9 +31,6 @@ private:
 public:
 	Object_Type GetObjectType()	const
 	{
-		if (m_ObjectType == Object_Type::BulletKin)
-			int a = 0;
-
 		return m_ObjectType;
 	}
 
@@ -105,9 +102,6 @@ public:
 public:
 	void SetObjectType(Object_Type Type)
 	{
-		if (m_ObjectType == Object_Type::BulletKin)
-			int a = 0;
-
 		m_ObjectType = Type;
 	}
 

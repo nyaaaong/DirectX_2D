@@ -150,7 +150,7 @@ int CGameObject::GetAllComponentFlag()
 			Ret |= (int)Component_Flag::TileMap;
 	}
 
-    return Ret;
+	return Ret;
 }
 
 void CGameObject::GetSceneComponentName(std::vector<std::string>& vecName)
@@ -182,7 +182,7 @@ Vector2 CGameObject::GetAnimationSize2D() const
 			return AnimInstance->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(0).Size;
 	}
 
-    return Vector2();
+	return Vector2();
 }
 
 Vector3 CGameObject::GetAnimationSize() const
@@ -248,7 +248,11 @@ void CGameObject::Update(float DeltaTime)
 
 		if (m_AnimationInstance)
 		{
-			m_AnimationSize = m_AnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(0).Size;
+			CAnimationSequence2DData* Anim = m_AnimationInstance->GetCurrentAnimation();
+
+			int Index = Anim->GetCurrentFrame();
+
+			m_AnimationSize = m_AnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(Index).Size;
 
 			m_Sprite->SetRelativeScale(m_AnimationSize.x, m_AnimationSize.y, 1.f);
 		}
@@ -501,6 +505,20 @@ void CGameObject::Move(const Vector3& EndPos)
 		if (m_vecObjectComponent[i]->CheckTypeID<CNavAgent>())
 		{
 			((CNavAgent*)m_vecObjectComponent[i].Get())->Move(EndPos);
+			break;
+		}
+	}
+}
+
+void CGameObject::Stop()
+{
+	size_t	Size = m_vecObjectComponent.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		if (m_vecObjectComponent[i]->CheckTypeID<CNavAgent>())
+		{
+			((CNavAgent*)m_vecObjectComponent[i].Get())->Stop();
 			break;
 		}
 	}

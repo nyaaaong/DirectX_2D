@@ -90,7 +90,7 @@ public:
 		return m_Collision;
 	}
 
-	CGameObject* GetPlayerObject()	const
+	CSharedPtr<CGameObject> GetPlayerObject()	const
 	{
 		return m_Mode->GetPlayerObject();
 	}

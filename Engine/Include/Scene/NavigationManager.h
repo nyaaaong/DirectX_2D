@@ -30,6 +30,20 @@ public:
 
 public:
 	template <typename T>
+	void Stop()
+	{
+		if (m_vecNavigationThread.empty())
+			return;
+
+		size_t	Size = m_vecNavigationThread.size();
+
+		for (size_t i = 0; i < Size; ++i)
+		{
+			//m_vecNavigationThread[i]->AddWork
+		}
+	}
+
+	template <typename T>
 	bool FindPath(T* Obj, void(T::* Func)(const std::list<Vector3>&), const Vector3& Start, const Vector3& End)
 	{
 		if (m_vecNavigationThread.empty())

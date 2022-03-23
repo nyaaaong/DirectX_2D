@@ -31,9 +31,6 @@ private:
 public:
 	Object_Type GetObjectType()	const
 	{
-		if (m_ObjectType == Object_Type::BulletKin)
-			int a = 0;
-
 		return m_ObjectType;
 	}
 

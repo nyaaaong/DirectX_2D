@@ -115,7 +115,7 @@ enum class Collision_Channel
 	Monster,
 	PlayerAttack,
 	MonsterAttack,
-	Custom1,
+	SightLimit,
 	Custom2,
 	Custom3,
 	Custom4,
@@ -295,5 +295,13 @@ enum class Bullet_Type
 enum class Object_Type
 {
 	BulletKin,
+	Max
+};
+
+enum class Monster_State
+{
+	Idle,
+	Walk,
+	Die,
 	Max
 };

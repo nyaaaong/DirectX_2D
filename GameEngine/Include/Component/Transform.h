@@ -161,6 +161,11 @@ public:
 		return m_WorldPos.y;
 	}
 
+	Vector2 GetWorldPos2D()	const
+	{
+		return Vector2(m_WorldPos.x, m_WorldPos.y);
+	}
+
 	const Vector3& GetWorldPos()	const
 	{
 		return m_WorldPos;

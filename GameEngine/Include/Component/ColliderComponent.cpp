@@ -16,6 +16,8 @@ CColliderComponent::CColliderComponent()	:
 	m_Profile = nullptr;
 	m_MouseCollision = false;
 	m_CBuffer = nullptr;
+
+	m_UseMouseCollision = false;
 }
 
 CColliderComponent::CColliderComponent(const CColliderComponent& com) :
@@ -31,6 +33,7 @@ CColliderComponent::CColliderComponent(const CColliderComponent& com) :
 	m_CBuffer = com.m_CBuffer->Clone();
 	m_Mesh = com.m_Mesh;
 	m_Shader = com.m_Shader;
+	m_UseMouseCollision = com.m_UseMouseCollision;
 }
 
 CColliderComponent::~CColliderComponent()

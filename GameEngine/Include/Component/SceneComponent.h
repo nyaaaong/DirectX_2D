@@ -284,6 +284,11 @@ public:
 		return m_Transform->GetWorldPosY();
 	}
 
+	Vector2 GetWorldPos2D()	const
+	{
+		return m_Transform->GetWorldPos2D();
+	}
+
 	const Vector3& GetWorldPos()	const
 	{
 		return m_Transform->GetWorldPos();

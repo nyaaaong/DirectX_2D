@@ -18,6 +18,7 @@ private:
 public:
 	void SetUpdateComponent(class CSceneComponent* UpdateComponent);
 	bool Move(const Vector3& EndPos);
+	void Stop();
 	void SetMoveSpeed(float Speed)
 	{
 		m_MoveSpeed = Speed;

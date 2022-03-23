@@ -27,7 +27,7 @@ public:
         return m_Scene;
     }
 
-    class CGameObject* GetGameObject()    const
+	class CGameObject* GetGameObject()    const
     {
         return m_Object;
     }

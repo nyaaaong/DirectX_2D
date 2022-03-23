@@ -28,15 +28,16 @@ protected:
 	std::list<std::function<void(const CollisionResult&)>>  m_CollisionCallback[(int)Collision_State::Max];
 	std::list<std::function<void(const CollisionResult&)>>  m_CollisionMouseCallback[(int)Collision_State::Max];
 	bool                m_MouseCollision;
+	bool				m_UseMouseCollision;
 	CSharedPtr<class CMesh> m_Mesh;
 	CSharedPtr<class CShader> m_Shader;
 	class CColliderConstantBuffer* m_CBuffer;
 
 public:
-    Collider_Type GetColliderType() const
-    {
-        return m_ColliderType;
-    }
+	void UseMouseCollision(bool Use)
+	{
+		m_UseMouseCollision = Use;
+	}
 
 	void SetOffset(const Vector3& Offset)
 	{
@@ -47,6 +48,27 @@ public:
 	{
 		m_Offset = Vector3(x, y, z);
 	}
+
+	void AddSectionIndex(int Index)
+	{
+		m_vecSectionIndex.push_back(Index);
+	}
+
+	void CurrentSectionCheck()
+	{
+		m_CurrentSectionCheck = true;
+	}
+
+public:
+	bool IsUseMouseCollision()	const
+	{
+		return m_UseMouseCollision;
+	}
+
+    Collider_Type GetColliderType() const
+    {
+        return m_ColliderType;
+    }
 
 	const Vector3& GetMin()    const
 	{
@@ -66,16 +88,6 @@ public:
 	CollisionProfile* GetCollisionProfile() const
 	{
 		return m_Profile;
-	}
-
-	void AddSectionIndex(int Index)
-	{
-		m_vecSectionIndex.push_back(Index);
-	}
-
-	void CurrentSectionCheck()
-	{
-		m_CurrentSectionCheck = true;
 	}
 
 	bool GetCurrentSectionCheck()   const

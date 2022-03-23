@@ -1,7 +1,8 @@
 
 #include "NavigationManager.h"
 
-CNavigationManager::CNavigationManager()
+CNavigationManager::CNavigationManager()	:
+	m_Scene(nullptr)
 {
 }
 
