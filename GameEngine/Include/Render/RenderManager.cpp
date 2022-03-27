@@ -132,6 +132,12 @@ bool CRenderManager::Init()
 	Layer->LayerPriority = 4;
 
 	m_RenderLayerList.push_back(Layer);
+
+	Layer = DBG_NEW RenderLayer;
+	Layer->Name = "Fade";
+	Layer->LayerPriority = 5;
+
+	m_RenderLayerList.push_back(Layer);
 	m_DepthDisable = m_RenderStateManager->FindRenderState("DepthDisable");
 	m_AlphaBlend = m_RenderStateManager->FindRenderState("AlphaBlend");
 

@@ -33,16 +33,15 @@ bool CNavAgent::Move(const Vector3& EndPos)
 	if (!m_UpdateComponent)
 		return false;
 
-	return m_Scene->GetNavigationManager()->FindPath<CNavAgent>(this, &CNavAgent::PathResult, 
-		m_UpdateComponent->GetWorldPos(), EndPos);
+	return m_Scene->GetNavigationManager()->FindPath<CNavAgent>(this, &CNavAgent::PathResult, m_UpdateComponent->GetWorldPos(), EndPos);
 }
 
-void CNavAgent::Stop()
+void CNavAgent::Clear()
 {
-	if (!m_UpdateComponent)
-		return;
+	CNavigationManager* NavManager = m_Scene->GetNavigationManager();
 
-	//return m_Scene->GetNavigationManager()->FindPath<CNavAgent>(this, &CNavAgent::PathResult, m_UpdateComponent->GetWorldPos(), EndPos);
+	if (NavManager)
+		NavManager->Clear();
 }
 
 void CNavAgent::Start()

@@ -61,7 +61,7 @@ public:
 	void GetSceneComponentName(std::vector<std::string>& vecName);
 	// NavAgent가 있을 경우에 동작한다.
 	void Move(const Vector3& EndPos);
-	void Stop();
+	void ClearNavigation();
 	Vector2 GetAnimationSize2D()	const;
 	Vector3 GetAnimationSize()	const;
 

@@ -3,7 +3,8 @@
 #include "../Scene/MainScene.h"
 #include "Scene/SceneManager.h"
 
-CLoadingWidget::CLoadingWidget()
+CLoadingWidget::CLoadingWidget()	:
+	m_Percent(0.f)
 {
 }
 
@@ -11,7 +12,9 @@ CLoadingWidget::CLoadingWidget(const CLoadingWidget& window) :
     CWidgetWindow(window)
 {
     m_Back = FindWidget<CImage>("Back");
-    m_LoadingBar = FindWidget<CProgressBar>("LoadingBar");
+	m_Loading = FindWidget<CImage>("Loading");
+
+	m_Percent = 0.f;
 }
 
 CLoadingWidget::~CLoadingWidget()
@@ -30,16 +33,36 @@ bool CLoadingWidget::Init()
     SetSize(1280.f, 720.f);
 
     m_Back = CreateWidget<CImage>("Back");
-    m_LoadingBar = CreateWidget<CProgressBar>("LoadingBar");
+	m_Loading = CreateWidget<CImage>("Loading");
 
-    m_Back->SetTexture("LoadingBack", TEXT("LoadingBack.jpg"));
+    m_Back->SetTexture("LoadingBack", TEXT("Loading/LoadingScreen.png"));
     m_Back->SetSize(1280.f, 720.f);
 
-    m_LoadingBar->SetPos(150.f, 100.f);
-    m_LoadingBar->SetSize(980.f, 40.f);
-    m_LoadingBar->SetTexture("LoadingBar", TEXT("HPBar.png"));
-    m_LoadingBar->SetZOrder(1);
-    m_LoadingBar->SetPercent(0.f);
+	m_Loading->SetPos(1000.f, 150.f);
+	m_Loading->SetSize(411.f * 0.7f, 431.f * 0.7f);
+	m_Loading->SetPlayTime(2.f);
+
+	std::vector<TCHAR*>	vecFileName;
+
+	for (int i = 0; i < 34; ++i)
+	{
+		TCHAR* FileName = DBG_NEW TCHAR[MAX_PATH];
+		memset(FileName, 0, sizeof(TCHAR) * MAX_PATH);
+
+		wsprintf(FileName, TEXT("Loading/1-%d.png"), i);
+
+		vecFileName.push_back(FileName);
+	}
+
+	m_Loading->SetTexture("Loading", vecFileName);
+	m_Loading->AddFrameData(34);
+	m_Loading->SetZOrder(1);
+
+	for (int i = 0; i < 34; ++i)
+	{
+		SAFE_DELETE_ARRAY(vecFileName[i]);
+	}
+
 
     return true;
 }

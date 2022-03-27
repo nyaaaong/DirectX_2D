@@ -57,6 +57,19 @@ void CNavigationManager::AddNavResult(const NavResultData& NavData)
 	m_ResultQueue.push(NavData);
 }
 
+void CNavigationManager::Clear()
+{
+	if (!m_NavData)
+		return;
+
+	size_t Size = m_vecNavigationThread.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		m_vecNavigationThread[i]->Clear();
+	}
+}
+
 void CNavigationManager::Start()
 {
 }

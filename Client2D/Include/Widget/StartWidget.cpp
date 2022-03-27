@@ -46,12 +46,8 @@ bool CStartWidget::Init()
 	m_StartButton->SetTexture(Button_State::MouseOn, "StartButtonMouseOn", TEXT("Title/Start_Select.png"));
 	m_StartButton->SetTexture(Button_State::Click, "StartButtonClick", TEXT("Title/Start_Select.png"));
 
-	m_StartButton->SetTextureTint(Button_State::Normal, 255, 255, 255, 255);
-	m_StartButton->SetTextureTint(Button_State::MouseOn, 255, 255, 255, 255);
-	m_StartButton->SetTextureTint(Button_State::Click, 255, 255, 255, 255);
-
-	//m_StartButton->SetSound(Button_Sound_State::MouseOn, "UI", "ButtonMouseOn", "TeemoSmile.mp3");
-	//m_StartButton->SetSound(Button_Sound_State::Click, "UI", "ButtonClick", "TeemoStartClicck.mp3");
+	m_StartButton->SetSound(Button_Sound_State::MouseOn, "UI", "Menu_MouseOver", "UI/Menu_MouseOver.wav");
+	m_StartButton->SetSound(Button_Sound_State::Click, "UI", "Menu_Select", "UI/Menu_Select.wav");
 
 	m_StartButton->SetClickCallback<CStartWidget>(this, &CStartWidget::StartButtonClick);
 
@@ -61,12 +57,8 @@ bool CStartWidget::Init()
 	m_ExitButton->SetTexture(Button_State::MouseOn, "ExitButtonMouseOn", TEXT("Title/Exit_Select.png"));
 	m_ExitButton->SetTexture(Button_State::Click, "ExitButtonClick", TEXT("Title/Exit_Select.png"));
 
-	m_ExitButton->SetTextureTint(Button_State::Normal, 255, 255, 255, 255);
-	m_ExitButton->SetTextureTint(Button_State::MouseOn, 255, 255, 255, 255);
-	m_ExitButton->SetTextureTint(Button_State::Click, 255, 255, 255, 255);
-
-	//m_ExitButton->SetSound(Button_Sound_State::MouseOn, "UI", "ButtonMouseOn", "TeemoSmile.mp3");
-	//m_ExitButton->SetSound(Button_Sound_State::Click, "UI", "ButtonClick", "TeemoStartClicck.mp3");
+	m_ExitButton->SetSound(Button_Sound_State::MouseOn, "UI", "Menu_MouseOver", "UI/Menu_MouseOver.wav");
+	m_ExitButton->SetSound(Button_Sound_State::Click, "UI", "Menu_Select", "UI/Menu_Select.wav");
 
 	m_ExitButton->SetClickCallback<CStartWidget>(this, &CStartWidget::ExitButtonClick);
 

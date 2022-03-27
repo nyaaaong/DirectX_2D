@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Character.h"
-#include "Component/ColliderCircle.h"
 #include "Component/CameraComponent.h"
 #include "Component/WidgetComponent.h"
 
@@ -24,7 +23,6 @@ private:
 	CSharedPtr<CSpriteComponent>	m_Weapon2L;
 	CSharedPtr<CSpriteComponent>	m_Weapon3;
 	CSharedPtr<CSpriteComponent>	m_Weapon3L;
-	CSharedPtr<CColliderCircle>		m_SightLimit;
 	CSpriteComponent*	m_CurWeapon;
 	Vector3	m_PrevPos;
 	Vector3	m_MouseDir;

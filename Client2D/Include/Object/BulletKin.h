@@ -12,28 +12,16 @@ protected:
 	CBulletKin(const CBulletKin& obj);
 	virtual ~CBulletKin();
 
-public:
-	class CSpriteComponent* GetSpriteComponent()    const
-	{
-		return m_Sprite;
-	}
+private:
 
 public:
 	virtual void Start();
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
 	virtual CBulletKin* Clone();
-	virtual void Destroy();
-
-protected:
-	virtual void OnCollisionBegin(const CollisionResult& result);
-
-protected:
-	virtual void PaperBurnEnd();
-	virtual void Dead(float DeltaTime);
-	virtual void Hit(float DeltaTime);
 
 protected:
 	virtual void PlaySoundDie();
+	virtual void Attack(float DeltaTime);
 };
 

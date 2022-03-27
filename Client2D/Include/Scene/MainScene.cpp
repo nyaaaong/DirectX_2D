@@ -17,15 +17,26 @@ CMainScene::CMainScene()	:
 
 CMainScene::~CMainScene()
 {
+	m_Scene->GetResource()->SoundStop("Main");
+}
+
+void CMainScene::Start()
+{
+	CSceneMode::Start();
+
+	m_Scene->GetResource()->SoundPlay("Main");
 }
 
 bool CMainScene::Init()
 {
+	if (m_LoadingFunction)
+		m_LoadingFunction(false, 0.1f);
+
 	if (!CSceneMode::Init())
 		return false;
 
 	if (m_LoadingFunction)
-		m_LoadingFunction(false, 0.5f);
+		m_LoadingFunction(false, 0.3f);
 
 	CPlayer2D* Player = m_Scene->CreateGameObject<CPlayer2D>("Player");
 
@@ -66,14 +77,15 @@ bool CMainScene::Init()
 				Obj->SetWorldPos(vecObjectPos[j] + TileCenterSize); // 타일 중앙으로 위치하게 한다.
 				break;
 			}
-
-			break; // test
 		}
 	}
 
 	m_MainWidget = m_Scene->GetViewport()->CreateWidgetWindow<CMainWidget>("MainWidget");
 
 	CreateSound();
+
+	if (m_LoadingFunction)
+		m_LoadingFunction(false, 0.7f);
 
 	return true;
 }
@@ -85,9 +97,11 @@ void CMainScene::Update(float DeltaTime)
 
 void CMainScene::CreateSound()
 {
-	m_Scene->GetResource()->LoadSound("Effect", false, "Player_Weap1", "Weapon/Shot/Weap1.wav");
-	m_Scene->GetResource()->LoadSound("Effect", false, "Player_Weap2", "Weapon/Shot/Weap2.wav");
-	m_Scene->GetResource()->LoadSound("Effect", false, "Player_Weap3", "Weapon/Shot/Weap3.wav");
+	m_Scene->GetResource()->LoadSound("BGM", true, "Main", "BGM/Main.mp3");
+
+	m_Scene->GetResource()->LoadSound("Effect", false, "Weap1", "Weapon/Shot/Weap1.wav");
+	m_Scene->GetResource()->LoadSound("Effect", false, "Weap2", "Weapon/Shot/Weap2.wav");
+	m_Scene->GetResource()->LoadSound("Effect", false, "Weap3", "Weapon/Shot/Weap3.wav");
 
 	m_Scene->GetResource()->LoadSound("Effect", false, "Monster_Hit", "Monster/Effect/Hit.wav");
 	m_Scene->GetResource()->LoadSound("Effect", false, "Monster_Die", "Monster/Effect/Die.wav");

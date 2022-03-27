@@ -405,6 +405,12 @@ LRESULT CEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			CEngine::GetInst()->SetMouseOnClient(true);
 
 		break;
+	case WM_SYSKEYDOWN:
+		if (message == VK_MENU)
+		{
+		}
+		break;
+
 	case WM_PAINT:
 	{
 		PAINTSTRUCT ps;

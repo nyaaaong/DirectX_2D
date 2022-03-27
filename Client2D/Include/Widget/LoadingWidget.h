@@ -16,12 +16,13 @@ protected:
 
 private:
 	CSharedPtr<CImage>	m_Back;
-	CSharedPtr<CProgressBar>	m_LoadingBar;
+	CSharedPtr<CImage>	m_Loading;
+	float	m_Percent;
 
 public:
 	void SetLoadingPercent(float Percent)
 	{
-		m_LoadingBar->SetPercent(Percent);
+		m_Percent = Percent;
 	}
 
 public:

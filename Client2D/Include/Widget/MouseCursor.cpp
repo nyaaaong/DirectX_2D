@@ -100,8 +100,8 @@ void CMouseCursor::CameraUpdater(float DeltaTime)
 		float	CamSpeed = Camera->GetCameraSpeed();
 
 		Vector3 NextPos = Distance - Center - Dir * CamSpeed * DeltaTime;
-		NextPos.x = ceil(NextPos.x);
-		NextPos.y = ceil(NextPos.y);
+		NextPos.x = NextPos.x;
+		NextPos.y = NextPos.y;
 
 		Camera->SetRelativePos(NextPos);
 	}

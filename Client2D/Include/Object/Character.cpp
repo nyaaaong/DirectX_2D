@@ -68,6 +68,7 @@ void CCharacter::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
 
+	Calc(DeltaTime);
 	Hit(DeltaTime);
 	Dead(DeltaTime);
 }
@@ -80,6 +81,10 @@ void CCharacter::OnCollisionBegin(const CollisionResult& result)
 void CCharacter::OnCollisionEnd(const CollisionResult& result)
 {
 	
+}
+
+void CCharacter::Calc(float DeltaTime)
+{
 }
 
 void CCharacter::PaperBurnEnd()
@@ -139,12 +144,13 @@ bool CCharacter::IsWallTile(const Vector3& NextWorldPos)
 	CMainScene* Scene = dynamic_cast<CMainScene*>(SceneMode);
 
 	if (!Scene)
-		ASSERT("if (!Scene)");
+		return true;
 
 	CTileMap* TileMap = Scene->GetTileMap();
 
 	if (!TileMap)
-		ASSERT("if (!TileMap)");
+		return true;
+
 	// 8방향 체크
 	
 	const Vector2	Center = m_Body->GetInfo().Center;
@@ -188,47 +194,6 @@ bool CCharacter::IsWallTile(const Vector3& NextWorldPos)
 		if (TileMap->GetTileType(MoveDir[i] + NextWorldPos) == Tile_Type::Wall)
 			return true;
 	}
-
-	/*const Vector3	Center = GetWorldPos();
-	const Vector2	Size = m_Body->GetInfo().Length;
-
-	Vector3	MoveDir[(int)Move_Dir::End];
-
-	for (int i = 0; i < (int)Move_Dir::End; ++i)
-	{
-		MoveDir[i] = Center;
-	}
-
-	float	CtrSizeTop = Size.y * m_TopOffsetY;
-	float	CtrSizeBottom = Size.y * m_BottomOffsetY;
-
-	MoveDir[(int)Move_Dir::LB].x -= Size.x;
-	MoveDir[(int)Move_Dir::LB].y -= CtrSizeTop;
-
-	MoveDir[(int)Move_Dir::B].y -= CtrSizeTop;
-
-	MoveDir[(int)Move_Dir::RB].x += Size.x;
-	MoveDir[(int)Move_Dir::RB].y -= CtrSizeTop;
-
-	MoveDir[(int)Move_Dir::L].x -= Size.x;
-	MoveDir[(int)Move_Dir::L].y -= CtrSizeTop;
-
-	MoveDir[(int)Move_Dir::R].x += Size.x;
-	MoveDir[(int)Move_Dir::R].y -= CtrSizeTop;
-
-	MoveDir[(int)Move_Dir::LT].x -= Size.x;
-	MoveDir[(int)Move_Dir::LT].y += CtrSizeBottom;
-
-	MoveDir[(int)Move_Dir::T].y += CtrSizeBottom;
-
-	MoveDir[(int)Move_Dir::RT].x += Size.x;
-	MoveDir[(int)Move_Dir::RT].y += CtrSizeBottom;
-
-	for (int i = 0; i < (int)Move_Dir::End; ++i)
-	{
-		if (TileMap->GetTileType(MoveDir[i] + NextWorldPos) == Tile_Type::Wall)
-			return true;
-	}*/
 
 	return false;
 }

@@ -4,7 +4,7 @@
 #include "NavigationManager.h"
 
 CNavigationThread::CNavigationThread()	:
-	m_Process(true)
+	m_NavManager(nullptr)
 {
 	SetLoop(true);
 
@@ -35,12 +35,6 @@ void CNavigationThread::Run()
 	{
 		if (!m_WorkQueue.empty())
 		{
-			if (!m_Process)
-			{
-				m_WorkQueue.clear();
-				continue;
-			}
-
 			NavWorkData Work = m_WorkQueue.front();
 			m_WorkQueue.pop();
 

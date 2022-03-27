@@ -56,6 +56,7 @@ CGameObject::CGameObject(const CGameObject& obj)
 
 CGameObject::~CGameObject()
 {
+	ClearNavigation();
 }
 
 void CGameObject::SetScene(CScene* Scene)
@@ -510,7 +511,7 @@ void CGameObject::Move(const Vector3& EndPos)
 	}
 }
 
-void CGameObject::Stop()
+void CGameObject::ClearNavigation()
 {
 	size_t	Size = m_vecObjectComponent.size();
 
@@ -518,7 +519,7 @@ void CGameObject::Stop()
 	{
 		if (m_vecObjectComponent[i]->CheckTypeID<CNavAgent>())
 		{
-			((CNavAgent*)m_vecObjectComponent[i].Get())->Stop();
+			((CNavAgent*)m_vecObjectComponent[i].Get())->Clear();
 			break;
 		}
 	}

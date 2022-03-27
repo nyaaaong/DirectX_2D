@@ -21,13 +21,13 @@ CPlayer2D::CPlayer2D() :
 	m_Move(false),
 	m_SetCameraInfo(false),
 	m_PierceBullet(false),
-	m_DodgeSpeed(1.f),
+	m_DodgeSpeed(800.f),
 	m_Dir(0),
 	m_MoveDir(0),
 	m_MouseAngle(0.f),
 	m_WeaponSlot(Weapon_Slot::None),
 	m_CurWeapon(nullptr),
-	m_SightLimitSize(800.f)
+	m_SightLimitSize(1300.f)
 {
 	SetTypeID<CPlayer2D>();
 	m_Opacity = 1.f;
@@ -36,10 +36,12 @@ CPlayer2D::CPlayer2D() :
 
 	m_Type = Character_Type::Player;
 
-	m_MoveSpeed = 1.f;
+	m_MoveSpeed = 500.f;
 
 	m_TopOffsetY = 1.4f;
 	m_BottomOffsetY = 0.2f;
+
+	m_HP = 10000.f;
 }
 
 CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
@@ -50,7 +52,6 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_Sprite = (CSpriteComponent*)FindComponent("PlayerSprite");
 
 	m_Body = (CColliderBox2D*)FindComponent("Body");
-	m_SightLimit = (CColliderCircle*)FindComponent("SightLimit");
 	m_Camera = (CCameraComponent*)FindComponent("Camera");
 	m_SimpleHUDWidget = (CWidgetComponent*)FindComponent("SimpleHUD");
 
@@ -144,7 +145,6 @@ void CPlayer2D::Start()
 	Vector3	WorldPos = GetWorldPos();
 
 	m_Body->SetWorldPos(WorldPos);
-	m_SightLimit->SetWorldPos(WorldPos);
 }
 
 bool CPlayer2D::Init()
@@ -207,13 +207,6 @@ bool CPlayer2D::Init()
 	m_Weapon2L->SetPivotX(-1.f);
 	m_Weapon3->SetPivotX(-1.f);
 	m_Weapon3L->SetPivotX(-1.f);
-
-	m_SightLimit = CreateComponent<CColliderCircle>("SightLimit");
-	m_SightLimit->SetRadius(m_SightLimitSize * 0.5f);
-	m_SightLimit->SetCollisionProfile("SightLimit");
-	m_SightLimit->UseMouseCollision(false);
-
-	m_Sprite->AddChild(m_SightLimit);
 
 	m_Camera = CreateComponent<CCameraComponent>("Camera");
 	m_Camera->OnViewportCenter();
@@ -322,7 +315,7 @@ void CPlayer2D::MoveUp(float DeltaTime)
 	SetMoveDir(Character_Direction::Up);
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_Y) * m_MoveSpeed * DeltaTime;
-	Result.Ceil();
+	//Result.Ceil();
 
 	if (IsWallTile(Result))
 		return;
@@ -343,7 +336,7 @@ void CPlayer2D::MoveDown(float DeltaTime)
 	SetMoveDir(Character_Direction::Down);
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_Y) * -m_MoveSpeed * DeltaTime;
-	Result.Ceil();
+	//Result.Ceil();
 
 	if (IsWallTile(Result))
 		return;
@@ -364,7 +357,7 @@ void CPlayer2D::MoveLeft(float DeltaTime)
 	SetMoveDir(Character_Direction::Left);
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_X) * -m_MoveSpeed * DeltaTime;
-	Result.Ceil();
+	//Result.Ceil();
 
 	if (IsWallTile(Result))
 		return;
@@ -385,7 +378,7 @@ void CPlayer2D::MoveRight(float DeltaTime)
 	SetMoveDir(Character_Direction::Right);
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_X) * m_MoveSpeed * DeltaTime;
-	Result.Ceil();
+	//Result.Ceil();
 
 	if (IsWallTile(Result))
 		return;
@@ -421,7 +414,7 @@ void CPlayer2D::Dodge(float DeltaTime)
 	else if (IsMoveDir(Character_Direction::Right))
 		Result += (m_Sprite->GetWorldAxis(AXIS_X) * m_DodgeSpeed * DeltaTime);
 
-	Result.Ceil();
+	//Result.Ceil();
 
 	if (IsWallTile(Result))
 		return;

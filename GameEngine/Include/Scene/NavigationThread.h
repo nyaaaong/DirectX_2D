@@ -18,31 +18,17 @@ private:
 	CThreadQueue<NavWorkData>			m_WorkQueue;
 	class CNavigation* m_Navigation;
 	HANDLE				m_ExitEvent;
-	bool			m_Process;
 
 public:
-	void SetProcess(bool Process)
+	void Clear()
 	{
-		m_Process = Process;
+		m_WorkQueue.clear();
 	}
 
 public:
 	int GetWorkCount()
 	{
 		return m_WorkQueue.size();
-	}
-
-	void Stop(size_t ObjTypeID)
-	{
-		int Size = m_WorkQueue.size();
-
-		for (int i = 0; i < Size; ++i)
-		{
-			NavWorkData Data = m_WorkQueue.front();
-
-			//if (Data.TypeID == ObjTypeID)
-
-		}
 	}
 
 	void CreateNavigationNode(class CTileMapComponent* TileMap);
@@ -55,7 +41,6 @@ public:
 	{
 		NavWorkData	Data;
 		Data.Callback = std::bind(Func, Obj, std::placeholders::_1);
-		Data.TypeID = Obj->GetTypeID();
 		Data.Start = Start;
 		Data.End = End;
 

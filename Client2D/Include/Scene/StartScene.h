@@ -14,6 +14,10 @@ private:
     CSharedPtr<CStartWidget> m_StartWidget;
 
 public:
+	virtual void Start();
     virtual bool Init();
+
+private:
+	void CreateSound();
 };
 

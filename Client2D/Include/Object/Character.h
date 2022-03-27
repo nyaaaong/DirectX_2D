@@ -24,11 +24,11 @@ protected:
 	float	m_MoveSpeed;
 	float	m_TopOffsetY; // 타일체크용
 	float	m_BottomOffsetY; // 타일체크용
+	float	m_Damage;
 	bool	m_IsDied;
 	bool	m_IsPaperBurn;
 	bool	m_Hit;
 	bool	m_IsPlayedHitSound;
-	float	m_Damage;
 	Character_Type	m_Type;
 
 public:
@@ -75,6 +75,7 @@ public:
 	}
 
 protected:
+	virtual void Calc(float DeltaTime);
 	virtual void PaperBurnEnd();
 	virtual void Dead(float DeltaTime);
 	virtual void Hit(float DeltaTime);

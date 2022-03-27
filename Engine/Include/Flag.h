@@ -277,6 +277,11 @@ enum class Weapon_Slot
 	Weap3
 };
 
+enum class MonsterWeap_Type
+{
+	BulletKin
+};
+
 enum class Character_Type
 {
 	Player,
