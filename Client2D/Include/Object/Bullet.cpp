@@ -19,6 +19,7 @@ CBullet::CBullet() :
 	m_Destroyed(false),
 	m_ImpactDestroyed(false),
 	m_ImpactCreated(false),
+	m_Impact(nullptr),
 	m_MonsterWeapType(MonsterWeap_Type::BulletKin)
 {
 	SetTypeID<CBullet>();
