@@ -5,7 +5,8 @@
 #include "Resource/Material/Material.h"
 #include "Animation/AnimationSequence2DInstance.h"
 
-CPlayer2D::CPlayer2D()
+CPlayer2D::CPlayer2D()	:
+	m_AnimInstance(nullptr)
 {
 	SetTypeID<CPlayer2D>();
 }
