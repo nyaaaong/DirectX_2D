@@ -22,6 +22,9 @@ public:
 	}
 
 public:
+	bool IsAnimEnd()	const;
+
+public:
 	virtual bool Init();
 	virtual void First();
 	virtual void Update(float DeltaTime);

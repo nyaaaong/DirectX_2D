@@ -18,6 +18,11 @@ CBulletDummy::~CBulletDummy()
 {
 }
 
+bool CBulletDummy::IsAnimEnd() const
+{
+	return m_Sprite->GetAnimationInstance()->IsEnd();
+}
+
 bool CBulletDummy::Init()
 {
 	if (!CGameObject::Init())
@@ -34,6 +39,8 @@ bool CBulletDummy::Init()
 
 void CBulletDummy::First()
 {
+	CGameObject::First();
+
 	CAnimationSequence2DInstance* Anim = m_Sprite->GetAnimationInstance();
 	CBulletAnim* Convert = dynamic_cast<CBulletAnim*>(Anim);
 
@@ -51,9 +58,6 @@ void CBulletDummy::Update(float DeltaTime)
 void CBulletDummy::PostUpdate(float DeltaTime)
 {
 	CGameObject::PostUpdate(DeltaTime);
-
-	if (m_Sprite->GetAnimationInstance()->IsEnd())
-		Destroy();
 }
 
 CBulletDummy* CBulletDummy::Clone()

@@ -21,13 +21,23 @@ private:
 	Vector3			m_BulletDir;
 	float			m_BulletSpeed;
 	Weapon_Slot		m_WeaponSlot;
+	MonsterWeap_Type	m_MonsterWeapType;
 	std::string		m_SoundName;
 	float			m_Damage;
 	CSharedPtr<class CCharacter> m_Owner;
 	bool			m_HitObject;
 	bool			m_Pierce;
+	bool			m_Destroyed;
+	bool			m_ImpactDestroyed;
+	class CBulletDummy* m_Impact;
+	bool			m_ImpactCreated;
 
 public:
+	void SetMonsterWeapType(MonsterWeap_Type Type)
+	{
+		m_MonsterWeapType = Type;
+	}
+
 	void Pierce(bool IsPierce)
 	{
 		m_Pierce = IsPierce;
@@ -71,6 +81,7 @@ public:
 
 public:
 	void OnCollisionBegin(const CollisionResult& result);
+	void OnCollisionEnd(const CollisionResult& result);
 
 private:
 	bool IsWallTile(const Vector3& NextWorldPos);
