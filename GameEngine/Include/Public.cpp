@@ -25,6 +25,15 @@ Object_Type CPublic::GetMultibyteToType(const char* Multibyte)
 	if (!strcmp(Multibyte, "BulletKin"))
 		return Object_Type::BulletKin;
 
+	else if (!strcmp(Multibyte, "Bandana"))
+		return Object_Type::Bandana;
+
+	else if (!strcmp(Multibyte, "ShotgunKin1"))
+		return Object_Type::ShotgunKin1;
+
+	else if (!strcmp(Multibyte, "ShotgunKin2"))
+		return Object_Type::ShotgunKin2;
+
 	return Object_Type::Max;
 }
 
@@ -43,6 +52,15 @@ void CPublic::GetObjectName(std::vector<std::string>& vecName)
 		{
 		case Object_Type::BulletKin:
 			vecName.push_back("BulletKin");
+			break;
+		case Object_Type::Bandana:
+			vecName.push_back("Bandana");
+			break;
+		case Object_Type::ShotgunKin1:
+			vecName.push_back("ShotgunKin1");
+			break;
+		case Object_Type::ShotgunKin2:
+			vecName.push_back("ShotgunKin2");
 			break;
 		}
 	}
@@ -138,15 +156,14 @@ bool CPublic::CreateObjectType(Object_Type Type)
 	if (FindObjectType(Type))
 		return true;
 
-	switch (Type)
-	{
-	case Object_Type::BulletKin:
+	else if (Type == Object_Type::BulletKin ||
+			 Type == Object_Type::Bandana ||
+			 Type == Object_Type::ShotgunKin1 ||
+			 Type == Object_Type::ShotgunKin2)
 	{
 		std::list<Vector3>* NewObjPosList = DBG_NEW std::list<Vector3>;
 
 		m_mapObject.insert(std::make_pair(Type, NewObjPosList));
-	}
-		break;
 	}
 
 	return false;
@@ -157,16 +174,15 @@ void CPublic::DeleteObjectType(Object_Type Type)
 	if (!FindObjectType(Type))
 		return;
 
-	switch (Type)
-	{
-	case Object_Type::BulletKin:
+	else if (Type == Object_Type::BulletKin ||
+			 Type == Object_Type::Bandana ||
+			 Type == Object_Type::ShotgunKin1 ||
+			 Type == Object_Type::ShotgunKin2)
 	{
 		auto	iter = m_mapObject.find(Type);
 
 		SAFE_DELETE(iter->second);
 		m_mapObject.erase(iter);
-	}
-	break;
 	}
 }
 
@@ -293,21 +309,29 @@ void CPublic::LoadObjPos(CGameObject* TileMapObj)
 	std::vector<CTile*>	vecTypeTile;
 	std::vector<CTile*> vecObjTypeTile;
 
-	TileMapComponent->GetSameTypeTile(Tile_Type::Object, vecTypeTile);
+	int TypeSize = (int)Tile_Type::End;
 
-	int Size = (int)m_mapObject.size();
-
-	for (int i = 0; i < Size; ++i)
+	for (int i = 0; i < TypeSize; ++i)
 	{
+		vecTypeTile.clear();
 		vecObjTypeTile.clear();
 
-		TileMapComponent->GetSameObjectTypeTile(iter->first, vecTypeTile, vecObjTypeTile);
+		TileMapComponent->GetSameTypeTile((Tile_Type)i, vecTypeTile);
 
-		int ObjTypeSize = (int)vecObjTypeTile.size();
+		int Size = (int)m_mapObject.size();
 
-		for (int j = 0; j < ObjTypeSize; ++j)
+		for (int i = 0; i < Size; ++i)
 		{
-			iter->second->push_back(vecObjTypeTile[j]->GetWorldPos());
+			vecObjTypeTile.clear();
+
+			TileMapComponent->GetSameObjectTypeTile(iter->first, vecTypeTile, vecObjTypeTile);
+
+			int ObjTypeSize = (int)vecObjTypeTile.size();
+
+			for (int j = 0; j < ObjTypeSize; ++j)
+			{
+				iter->second->push_back(vecObjTypeTile[j]->GetWorldPos());
+			}
 		}
 	}
 }

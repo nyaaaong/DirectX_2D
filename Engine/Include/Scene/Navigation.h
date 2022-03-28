@@ -34,7 +34,7 @@ struct NavNode
 	NavNode()	:
 		Parent(nullptr),
 		NodeType(Nav_Node_Type::None),
-		TileType(Tile_Type::Normal),
+		TileType(Tile_Type::T_Normal),
 		IndexX(-1),
 		IndexY(-1),
 		Index(-1),

@@ -4,7 +4,7 @@
 #include "../Resource/Animation/AnimationSequence2D.h"
 
 CTile::CTile() :
-	m_TileType(Tile_Type::Normal),
+	m_TileType(Tile_Type::T_Normal),
 	m_ObjectType(Object_Type::Max),
 	m_Owner(nullptr),
 	m_IndexX(-1),

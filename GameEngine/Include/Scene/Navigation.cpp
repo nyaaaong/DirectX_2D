@@ -77,7 +77,7 @@ bool CNavigation::FindPath(const Vector3& Start, const Vector3& End, std::list<V
 	NavNode* StartNode = m_vecNode[StartIndex];
 	NavNode* EndNode = m_vecNode[EndIndex];
 
-	if (EndNode->TileType == Tile_Type::Wall)
+	if (EndNode->TileType == Tile_Type::T_Wall)
 		return false;
 
 	else if (StartNode == EndNode)
@@ -250,7 +250,7 @@ NavNode* CNavigation::GetRectNodeTop(NavNode* Node, NavNode* EndNode, const Vect
 		else if (CheckNode->NodeType == Nav_Node_Type::Close)
 			return nullptr;
 
-		else if (CheckNode->TileType == Tile_Type::Wall)
+		else if (CheckNode->TileType == Tile_Type::T_Wall)
 			return nullptr;
 
 		int	CornerX = Node->IndexX + 1;
@@ -258,8 +258,8 @@ NavNode* CNavigation::GetRectNodeTop(NavNode* Node, NavNode* EndNode, const Vect
 
 		if (CornerX < m_CountX && CornerY + 1 < m_CountY)
 		{
-			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::Wall &&
-				m_vecNode[(CornerY + 1) * m_CountX + CornerX]->TileType == Tile_Type::Normal)
+			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::T_Wall &&
+				m_vecNode[(CornerY + 1) * m_CountX + CornerX]->TileType == Tile_Type::T_Normal)
 			{
 				return CheckNode;
 			}
@@ -270,8 +270,8 @@ NavNode* CNavigation::GetRectNodeTop(NavNode* Node, NavNode* EndNode, const Vect
 
 		if (CornerX >= 0 && CornerY + 1 < m_CountY)
 		{
-			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::Wall &&
-				m_vecNode[(CornerY + 1) * m_CountX + CornerX]->TileType == Tile_Type::Normal)
+			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::T_Wall &&
+				m_vecNode[(CornerY + 1) * m_CountX + CornerX]->TileType == Tile_Type::T_Normal)
 			{
 				return CheckNode;
 			}
@@ -304,7 +304,7 @@ NavNode* CNavigation::GetRectNodeRightTop(NavNode* Node, NavNode* EndNode, const
 		else if (CheckNode->NodeType == Nav_Node_Type::Close)
 			return nullptr;
 
-		else if (CheckNode->TileType == Tile_Type::Wall)
+		else if (CheckNode->TileType == Tile_Type::T_Wall)
 			return nullptr;
 
 		int	CornerX = IndexX - 1;
@@ -312,8 +312,8 @@ NavNode* CNavigation::GetRectNodeRightTop(NavNode* Node, NavNode* EndNode, const
 
 		if (CornerX >= 0 && CornerY + 1 < m_CountY)
 		{
-			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::Wall &&
-				m_vecNode[(CornerY + 1) * m_CountX + CornerX]->TileType == Tile_Type::Normal)
+			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::T_Wall &&
+				m_vecNode[(CornerY + 1) * m_CountX + CornerX]->TileType == Tile_Type::T_Normal)
 			{
 				return CheckNode;
 			}
@@ -324,8 +324,8 @@ NavNode* CNavigation::GetRectNodeRightTop(NavNode* Node, NavNode* EndNode, const
 
 		if (CornerY >= 0 && CornerX + 1 < m_CountX)
 		{
-			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::Wall &&
-				m_vecNode[CornerY * m_CountX + (CornerX + 1)]->TileType == Tile_Type::Normal)
+			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::T_Wall &&
+				m_vecNode[CornerY * m_CountX + (CornerX + 1)]->TileType == Tile_Type::T_Normal)
 			{
 				return CheckNode;
 			}
@@ -369,7 +369,7 @@ NavNode* CNavigation::GetRectNodeRight(NavNode* Node, NavNode* EndNode, const Ve
 		else if (CheckNode->NodeType == Nav_Node_Type::Close)
 			return nullptr;
 
-		else if (CheckNode->TileType == Tile_Type::Wall)
+		else if (CheckNode->TileType == Tile_Type::T_Wall)
 			return nullptr;
 
 		int	CornerX = IndexX;
@@ -377,8 +377,8 @@ NavNode* CNavigation::GetRectNodeRight(NavNode* Node, NavNode* EndNode, const Ve
 
 		if (CornerY < m_CountY && CornerX + 1 < m_CountX)
 		{
-			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::Wall &&
-				m_vecNode[CornerY * m_CountX + (CornerX + 1)]->TileType == Tile_Type::Normal)
+			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::T_Wall &&
+				m_vecNode[CornerY * m_CountX + (CornerX + 1)]->TileType == Tile_Type::T_Normal)
 			{
 				return CheckNode;
 			}
@@ -389,8 +389,8 @@ NavNode* CNavigation::GetRectNodeRight(NavNode* Node, NavNode* EndNode, const Ve
 
 		if (CornerY >= 0 && CornerX + 1 < m_CountX)
 		{
-			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::Wall &&
-				m_vecNode[CornerY * m_CountX + (CornerX + 1)]->TileType == Tile_Type::Normal)
+			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::T_Wall &&
+				m_vecNode[CornerY * m_CountX + (CornerX + 1)]->TileType == Tile_Type::T_Normal)
 			{
 				return CheckNode;
 			}
@@ -423,7 +423,7 @@ NavNode* CNavigation::GetRectNodeRightBottom(NavNode* Node, NavNode* EndNode, co
 		else if (CheckNode->NodeType == Nav_Node_Type::Close)
 			return nullptr;
 
-		else if (CheckNode->TileType == Tile_Type::Wall)
+		else if (CheckNode->TileType == Tile_Type::T_Wall)
 			return nullptr;
 
 		int	CornerX = IndexX - 1;
@@ -431,8 +431,8 @@ NavNode* CNavigation::GetRectNodeRightBottom(NavNode* Node, NavNode* EndNode, co
 
 		if (CornerX >= 0 && CornerY - 1 >= 0)
 		{
-			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::Wall &&
-				m_vecNode[(CornerY - 1) * m_CountX + CornerX]->TileType == Tile_Type::Normal)
+			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::T_Wall &&
+				m_vecNode[(CornerY - 1) * m_CountX + CornerX]->TileType == Tile_Type::T_Normal)
 			{
 				return CheckNode;
 			}
@@ -443,8 +443,8 @@ NavNode* CNavigation::GetRectNodeRightBottom(NavNode* Node, NavNode* EndNode, co
 
 		if (CornerY < m_CountY && CornerX + 1 < m_CountX)
 		{
-			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::Wall &&
-				m_vecNode[CornerY * m_CountX + (CornerX + 1)]->TileType == Tile_Type::Normal)
+			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::T_Wall &&
+				m_vecNode[CornerY * m_CountX + (CornerX + 1)]->TileType == Tile_Type::T_Normal)
 			{
 				return CheckNode;
 			}
@@ -488,7 +488,7 @@ NavNode* CNavigation::GetRectNodeBottom(NavNode* Node, NavNode* EndNode, const V
 		else if (CheckNode->NodeType == Nav_Node_Type::Close)
 			return nullptr;
 
-		else if (CheckNode->TileType == Tile_Type::Wall)
+		else if (CheckNode->TileType == Tile_Type::T_Wall)
 			return nullptr;
 
 		int	CornerX = Node->IndexX + 1;
@@ -496,8 +496,8 @@ NavNode* CNavigation::GetRectNodeBottom(NavNode* Node, NavNode* EndNode, const V
 
 		if (CornerX < m_CountX && CornerY - 1 >= 0)
 		{
-			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::Wall &&
-				m_vecNode[(CornerY - 1) * m_CountX + CornerX]->TileType == Tile_Type::Normal)
+			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::T_Wall &&
+				m_vecNode[(CornerY - 1) * m_CountX + CornerX]->TileType == Tile_Type::T_Normal)
 			{
 				return CheckNode;
 			}
@@ -508,8 +508,8 @@ NavNode* CNavigation::GetRectNodeBottom(NavNode* Node, NavNode* EndNode, const V
 
 		if (CornerX >= 0 && CornerY - 1 >= 0)
 		{
-			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::Wall &&
-				m_vecNode[(CornerY - 1) * m_CountX + CornerX]->TileType == Tile_Type::Normal)
+			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::T_Wall &&
+				m_vecNode[(CornerY - 1) * m_CountX + CornerX]->TileType == Tile_Type::T_Normal)
 			{
 				return CheckNode;
 			}
@@ -542,7 +542,7 @@ NavNode* CNavigation::GetRectNodeLeftBottom(NavNode* Node, NavNode* EndNode, con
 		else if (CheckNode->NodeType == Nav_Node_Type::Close)
 			return nullptr;
 
-		else if (CheckNode->TileType == Tile_Type::Wall)
+		else if (CheckNode->TileType == Tile_Type::T_Wall)
 			return nullptr;
 
 		int	CornerX = IndexX;
@@ -550,8 +550,8 @@ NavNode* CNavigation::GetRectNodeLeftBottom(NavNode* Node, NavNode* EndNode, con
 
 		if (CornerY < m_CountY && CornerX - 1 >= 0)
 		{
-			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::Wall &&
-				m_vecNode[CornerY * m_CountX + (CornerX - 1)]->TileType == Tile_Type::Normal)
+			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::T_Wall &&
+				m_vecNode[CornerY * m_CountX + (CornerX - 1)]->TileType == Tile_Type::T_Normal)
 			{
 				return CheckNode;
 			}
@@ -562,8 +562,8 @@ NavNode* CNavigation::GetRectNodeLeftBottom(NavNode* Node, NavNode* EndNode, con
 
 		if (CornerX < m_CountX && CornerY - 1 >= 0)
 		{
-			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::Wall &&
-				m_vecNode[(CornerY - 1) * m_CountX + CornerX]->TileType == Tile_Type::Normal)
+			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::T_Wall &&
+				m_vecNode[(CornerY - 1) * m_CountX + CornerX]->TileType == Tile_Type::T_Normal)
 			{
 				return CheckNode;
 			}
@@ -607,7 +607,7 @@ NavNode* CNavigation::GetRectNodeLeft(NavNode* Node, NavNode* EndNode, const Vec
 		else if (CheckNode->NodeType == Nav_Node_Type::Close)
 			return nullptr;
 
-		else if (CheckNode->TileType == Tile_Type::Wall)
+		else if (CheckNode->TileType == Tile_Type::T_Wall)
 			return nullptr;
 
 		int	CornerX = IndexX;
@@ -615,8 +615,8 @@ NavNode* CNavigation::GetRectNodeLeft(NavNode* Node, NavNode* EndNode, const Vec
 
 		if (CornerY < m_CountY && CornerX - 1 >= 0)
 		{
-			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::Wall &&
-				m_vecNode[CornerY * m_CountX + (CornerX - 1)]->TileType == Tile_Type::Normal)
+			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::T_Wall &&
+				m_vecNode[CornerY * m_CountX + (CornerX - 1)]->TileType == Tile_Type::T_Normal)
 			{
 				return CheckNode;
 			}
@@ -627,8 +627,8 @@ NavNode* CNavigation::GetRectNodeLeft(NavNode* Node, NavNode* EndNode, const Vec
 
 		if (CornerY >= 0 && CornerX - 1 >= 0)
 		{
-			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::Wall &&
-				m_vecNode[CornerY * m_CountX + (CornerX - 1)]->TileType == Tile_Type::Normal)
+			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::T_Wall &&
+				m_vecNode[CornerY * m_CountX + (CornerX - 1)]->TileType == Tile_Type::T_Normal)
 			{
 				return CheckNode;
 			}
@@ -661,7 +661,7 @@ NavNode* CNavigation::GetRectNodeLeftTop(NavNode* Node, NavNode* EndNode, const 
 		else if (CheckNode->NodeType == Nav_Node_Type::Close)
 			return nullptr;
 
-		else if (CheckNode->TileType == Tile_Type::Wall)
+		else if (CheckNode->TileType == Tile_Type::T_Wall)
 			return nullptr;
 
 		int	CornerX = IndexX;
@@ -669,8 +669,8 @@ NavNode* CNavigation::GetRectNodeLeftTop(NavNode* Node, NavNode* EndNode, const 
 
 		if (CornerY >= 0 && CornerX - 1 >= 0)
 		{
-			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::Wall &&
-				m_vecNode[CornerY * m_CountX + (CornerX - 1)]->TileType == Tile_Type::Normal)
+			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::T_Wall &&
+				m_vecNode[CornerY * m_CountX + (CornerX - 1)]->TileType == Tile_Type::T_Normal)
 			{
 				return CheckNode;
 			}
@@ -681,8 +681,8 @@ NavNode* CNavigation::GetRectNodeLeftTop(NavNode* Node, NavNode* EndNode, const 
 
 		if (CornerX < m_CountX && CornerY + 1 < m_CountY)
 		{
-			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::Wall &&
-				m_vecNode[(CornerY + 1) * m_CountX + CornerX]->TileType == Tile_Type::Normal)
+			if (m_vecNode[CornerY * m_CountX + CornerX]->TileType == Tile_Type::T_Wall &&
+				m_vecNode[(CornerY + 1) * m_CountX + CornerX]->TileType == Tile_Type::T_Normal)
 			{
 				return CheckNode;
 			}

@@ -217,9 +217,22 @@ enum class Mouse_State
 
 enum class Tile_Type
 {
-	Normal,
-	Wall,
-	Object,
+	T_Normal,
+	T_Wall,
+	M_BulletKin,
+	M_Bandana,
+	M_ShotgunKin1,
+	M_ShotgunKin2,
+	Test1,
+	Test2,
+	Test3,
+	Test4,
+	Test5,
+	Test6,
+	Test7,
+	Test8,
+	Test9,
+	Test10,
 	End
 };
 
@@ -277,11 +290,6 @@ enum class Weapon_Slot
 	Weap3
 };
 
-enum class MonsterWeap_Type
-{
-	BulletKin
-};
-
 enum class Character_Type
 {
 	Player,
@@ -291,15 +299,28 @@ enum class Character_Type
 
 enum class Bullet_Type
 {
-	Weap1,
-	Weap2,
-	Weap3,
+	Pistol,
+	Rifle,
+	Shotgun,
 	Max
 };
 
 enum class Object_Type
 {
 	BulletKin,
+	Bandana,
+	ShotgunKin1,
+	ShotgunKin2,
+	Test1,
+	Test2,
+	Test3,
+	Test4,
+	Test5,
+	Test6,
+	Test7,
+	Test8,
+	Test9,
+	Test10,
 	Max
 };
 
