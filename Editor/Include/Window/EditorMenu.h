@@ -20,7 +20,6 @@ public:
 
 public:
 	void ObjectCreateButton();
-	void GamePlay();
 
 public:
 	void LoadSceneObject();

@@ -389,7 +389,7 @@ void CEditorManager::KeyboardRight(float DeltaTime)
 
 void CEditorManager::MoveCameraUp(float DeltaTime)
 {
-	if (m_SpriteWindow->HasSprite() || !CEngine::GetInst()->IsFocusClient())
+	if (m_SpriteWindow->HasSprite())
 		return;
 
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
@@ -399,7 +399,7 @@ void CEditorManager::MoveCameraUp(float DeltaTime)
 
 void CEditorManager::MoveCameraDown(float DeltaTime)
 {
-	if (m_SpriteWindow->HasSprite() || !CEngine::GetInst()->IsFocusClient())
+	if (m_SpriteWindow->HasSprite())
 		return;
 
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
@@ -409,7 +409,7 @@ void CEditorManager::MoveCameraDown(float DeltaTime)
 
 void CEditorManager::MoveCameraLeft(float DeltaTime)
 {
-	if (m_SpriteWindow->HasSprite() || !CEngine::GetInst()->IsFocusClient())
+	if (m_SpriteWindow->HasSprite())
 		return;
 
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
@@ -419,7 +419,7 @@ void CEditorManager::MoveCameraLeft(float DeltaTime)
 
 void CEditorManager::MoveCameraRight(float DeltaTime)
 {
-	if (m_SpriteWindow->HasSprite() || !CEngine::GetInst()->IsFocusClient())
+	if (m_SpriteWindow->HasSprite())
 		return;
 
 	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();

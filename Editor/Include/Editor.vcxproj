@@ -80,6 +80,7 @@
     <IntDir>../BinObj/</IntDir>
     <IncludePath>../../Engine/Include/;$(IncludePath)</IncludePath>
     <LibraryPath>../Bin/;$(ProjectDir)Excel/;$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)_Debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -94,6 +95,7 @@
     <IntDir>../BinObj/</IntDir>
     <IncludePath>../../Engine/Include/;$(IncludePath)</IncludePath>
     <LibraryPath>../Bin/;$(ProjectDir)Excel/;$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)_Debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

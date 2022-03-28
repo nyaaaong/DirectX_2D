@@ -150,9 +150,12 @@ void CTileMapWindow::CreateTileEditControl()
 	m_TypeCombo = AddWidget<CIMGUIComboBox>("Type", 80.f, 20.f);
 
 	m_TypeCombo->SetHideName(true);
-	m_TypeCombo->AddItem("Normal");
-	m_TypeCombo->AddItem("Wall");
-	m_TypeCombo->AddItem("Object Monster");
+	m_TypeCombo->AddItem("T_Normal");
+	m_TypeCombo->AddItem("T_Wall");
+	m_TypeCombo->AddItem("M_BulletKin");
+	m_TypeCombo->AddItem("M_Bandana");
+	m_TypeCombo->AddItem("M_ShotgunKin1");
+	m_TypeCombo->AddItem("M_ShotgunKin2");
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 
@@ -272,14 +275,16 @@ void CTileMapWindow::Update(float DeltaTime)
 						return;
 
 					Tile_Type	Type = (Tile_Type)TileType;
+					Tile_Type	PrevTileType = Tile->GetTileType();
 
-					switch (Type)
+					if (Type == Tile_Type::T_Normal ||
+						Type == Tile_Type::T_Wall)
 					{
-					case Tile_Type::Normal:
-						if (Tile->GetTileType() == Tile_Type::Normal)
+						if (Type == PrevTileType)
 							return;
 
-						else if (Tile->GetTileType() == Tile_Type::Object)
+						else if ((int)PrevTileType >= (int)Tile_Type::M_BulletKin ||
+								 (int)PrevTileType <= (int)Tile_Type::M_ShotgunKin2)
 						{
 							CPublic::GetInst()->DeleteObjectWorldPos(Tile->GetWorldPos());
 							Tile->SetObjectType(Object_Type::Max);
@@ -287,23 +292,12 @@ void CTileMapWindow::Update(float DeltaTime)
 
 						Tile->SetTileType(Type);
 						break;
+					}
 
-					case Tile_Type::Wall:
-						if (Tile->GetTileType() == Tile_Type::Wall)
-							return;
-
-						else if (Tile->GetTileType() == Tile_Type::Object)
-						{
-							CPublic::GetInst()->DeleteObjectWorldPos(Tile->GetWorldPos());
-							Tile->SetObjectType(Object_Type::Max);
-						}
-
-						Tile->SetTileType(Type);
-						break;
-
-					case Tile_Type::Object:
+					else if ((int)Type >= (int)Tile_Type::M_BulletKin ||
+							 (int)Type <= (int)Tile_Type::M_ShotgunKin2)
 					{
-						if (Tile->GetTileType() == Tile_Type::Object)
+						if (Type == PrevTileType)
 							return;
 
 						Object_Type ObjectType = CEditorManager::GetInst()->GetSelectObjectType();
@@ -316,7 +310,6 @@ void CTileMapWindow::Update(float DeltaTime)
 						CPublic::GetInst()->AddObjectWorldPos(ObjectType, Tile->GetWorldPos());
 						Tile->SetObjectType(ObjectType);
 						break;
-					}
 					}
 				}
 				break;

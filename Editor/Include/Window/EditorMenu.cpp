@@ -31,18 +31,17 @@ bool CEditorMenu::Init()
 
 	m_ObjectCombo->SetHideName(true);
 	m_ObjectCombo->AddItem("Monster : BulletKin");
+	m_ObjectCombo->AddItem("Monster : Bandana");
+	m_ObjectCombo->AddItem("Monster : ShotgunKin1");
+	m_ObjectCombo->AddItem("Monster : ShotgunKin2");
 
 	CIMGUISameLine* Line = AddWidget<CIMGUISameLine>("Line");
 
-	m_ObjectCreateButton = AddWidget<CIMGUIButton>("CreateObject", 90.f, 20.f);
+	m_ObjectCreateButton = AddWidget<CIMGUIButton>("CreateObject", 140.f, 20.f);
 
 	m_ObjectCreateButton->SetClickCallback(this, &CEditorMenu::ObjectCreateButton);
 
 	Line = AddWidget<CIMGUISameLine>("Line");
-
-	CIMGUIButton* PlayButton = AddWidget<CIMGUIButton>("Play", 40.f, 20.f);
-
-	PlayButton->SetClickCallback(this, &CEditorMenu::GamePlay);
 
 	return true;
 }
@@ -65,21 +64,26 @@ void CEditorMenu::ObjectCreateButton()
 	case CreateObject_Type::BulletKin:
 		CPublic::GetInst()->CreateObjectType(Object_Type::BulletKin);
 		break;
+	case CreateObject_Type::Bandana:
+		CPublic::GetInst()->CreateObjectType(Object_Type::Bandana);
+		break;
+	case CreateObject_Type::ShotgunKin1:
+		CPublic::GetInst()->CreateObjectType(Object_Type::ShotgunKin1);
+		break;
+	case CreateObject_Type::ShotgunKin2:
+		CPublic::GetInst()->CreateObjectType(Object_Type::ShotgunKin2);
+		break;
 	}
 
 	CObjectHierarchy* Hierarchy = (CObjectHierarchy*)CIMGUIManager::GetInst()->FindIMGUIWindow("ObjectHierarchy");
 
 	if (Hierarchy)
+	{
 		Hierarchy->AddObjectList("BulletKin");
-}
-
-void CEditorMenu::GamePlay()
-{
-	if (!CEngine::GetInst()->IsPlay())
-		CEngine::GetInst()->SetPlay(true);
-
-	else
-		CEngine::GetInst()->SetPlay(false);
+		Hierarchy->AddObjectList("Bandana");
+		Hierarchy->AddObjectList("ShotgunKin1");
+		Hierarchy->AddObjectList("ShotgunKin2");
+	}
 }
 
 void CEditorMenu::LoadSceneObject()
