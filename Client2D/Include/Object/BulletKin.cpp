@@ -98,5 +98,5 @@ void CBulletKin::Attack(float DeltaTime)
 	Bullet->SetWorldRotation(m_CurWeapon->GetWorldRot());
 	Bullet->SetCollisionProfile("MonsterAttack");
 	Bullet->SetCharacterType(Character_Type::Monster);
-	Bullet->SetMonsterWeapType(MonsterWeap_Type::BulletKin);
+	Bullet->SetBulletType(Bullet_Type::Pistol);
 }

@@ -191,7 +191,7 @@ bool CCharacter::IsWallTile(const Vector3& NextWorldPos)
 
 	for (int i = 0; i < (int)Move_Dir::End; ++i)
 	{
-		if (TileMap->GetTileType(MoveDir[i] + NextWorldPos) == Tile_Type::Wall)
+		if (TileMap->GetTileType(MoveDir[i] + NextWorldPos) == Tile_Type::T_Wall)
 			return true;
 	}
 

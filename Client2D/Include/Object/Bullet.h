@@ -21,7 +21,7 @@ private:
 	Vector3			m_BulletDir;
 	float			m_BulletSpeed;
 	Weapon_Slot		m_WeaponSlot;
-	MonsterWeap_Type	m_MonsterWeapType;
+	Bullet_Type		m_BulletType;
 	std::string		m_SoundName;
 	float			m_Damage;
 	CSharedPtr<class CCharacter> m_Owner;
@@ -33,9 +33,9 @@ private:
 	bool			m_ImpactCreated;
 
 public:
-	void SetMonsterWeapType(MonsterWeap_Type Type)
+	void SetBulletType(Bullet_Type Type)
 	{
-		m_MonsterWeapType = Type;
+		m_BulletType = Type;
 	}
 
 	void Pierce(bool IsPierce)

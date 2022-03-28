@@ -20,7 +20,7 @@ CBullet::CBullet() :
 	m_ImpactDestroyed(false),
 	m_ImpactCreated(false),
 	m_Impact(nullptr),
-	m_MonsterWeapType(MonsterWeap_Type::BulletKin)
+	m_BulletType(Bullet_Type::Pistol)
 {
 	SetTypeID<CBullet>();
 }
@@ -48,7 +48,7 @@ CBullet::CBullet(const CBullet& obj) :
 
 	m_Owner = obj.m_Owner;
 
-	m_MonsterWeapType = obj.m_MonsterWeapType;
+	m_BulletType = obj.m_BulletType;
 }
 
 CBullet::~CBullet()
@@ -103,12 +103,16 @@ void CBullet::First()
 		case Character_Type::Monster:
 			m_Sprite->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "Monster_Bullet", TEXT("Bullet/Enemy/Bullet.png"));
 
-			switch (m_MonsterWeapType)
+			switch (m_BulletType)
 			{
-			case MonsterWeap_Type::BulletKin:
+			case Bullet_Type::Pistol:
 				m_BulletSpeed = 1000.f;
 				m_Distance = 800.f;
 				m_SoundName = "Weap1";
+				break;
+			case Bullet_Type::Rifle:
+				break;
+			case Bullet_Type::Shotgun:
 				break;
 			}
 			break;
@@ -271,7 +275,7 @@ bool CBullet::IsWallTile(const Vector3& NextWorldPos)
 
 	for (int i = 0; i < (int)Move_Dir::End; ++i)
 	{
-		if (TileMap->GetTileType(MoveDir[i] + NextWorldPos) == Tile_Type::Wall)
+		if (TileMap->GetTileType(MoveDir[i] + NextWorldPos) == Tile_Type::T_Wall)
 			return true;
 	}
 

@@ -76,6 +76,12 @@ bool CMainScene::Init()
 				Obj = m_Scene->CreateGameObject<CBulletKin>("BulletKin");
 				Obj->SetWorldPos(vecObjectPos[j] + TileCenterSize); // 타일 중앙으로 위치하게 한다.
 				break;
+			case Object_Type::Bandana:
+				break;
+			case Object_Type::ShotgunKin1:
+				break;
+			case Object_Type::ShotgunKin2:
+				break;
 			}
 		}
 	}
