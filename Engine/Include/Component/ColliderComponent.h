@@ -100,6 +100,7 @@ public:
 	void CheckPrevColliderSection();
 	void AddPrevCollision(CColliderComponent* Collider);
 	void DeletePrevCollision(CColliderComponent* Collider);
+	void DeletePrevCollisionAll();
 	bool EmptyPrevCollision();
 	bool CheckPrevCollision(CColliderComponent* Collider);
 	bool CheckCurrentFrameCollision(CColliderComponent* Collider);

@@ -40,7 +40,6 @@ private:
 	float	m_DodgeTimer;
 	float	m_DodgeTimerMax;
 	float	m_MouseAngle;
-	float	m_SightLimitSize;
 	int		m_Dir;
 	int		m_MoveDir;
 

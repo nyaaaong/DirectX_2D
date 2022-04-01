@@ -94,6 +94,8 @@ void CPublic::GetObjectPos(Object_Type Type, std::vector<Vector3>& vecPos)
 
 void CPublic::AddObjectWorldPos(Object_Type Type, const Vector3& WorldPos)
 {
+	DeleteObjectWorldPos(WorldPos);
+
 	std::list<Vector3>*	ObjectList = FindObjectPosList(Type);
 
 	if (!ObjectList)
@@ -109,6 +111,9 @@ void CPublic::DeleteObjectWorldPos(const Vector3& WorldPos)
 
 	for (; iter != iterEnd; ++iter)
 	{
+		if (iter->second->empty())
+			return;
+
 		auto	iter1 = iter->second->begin();
 		auto	iter1End = iter->second->end();
 
@@ -125,15 +130,22 @@ void CPublic::DeleteObjectWorldPos(const Vector3& WorldPos)
 
 void CPublic::ClearObjectWorldPos(Object_Type Type)
 {
-	if (!FindObjectType(Type))
+	auto	iter = m_mapObject.find(Type);
+
+	if (iter == m_mapObject.end())
 		return;
 
+	iter->second->clear();
+}
+
+void CPublic::ClearAllObjectWorldPos()
+{
 	auto	iter = m_mapObject.begin();
 	auto	iterEnd = m_mapObject.end();
 
 	for (; iter != iterEnd; ++iter)
 	{
-		SAFE_DELETE(iter->second);
+		iter->second->clear();
 	}
 }
 

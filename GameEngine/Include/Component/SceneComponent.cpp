@@ -71,6 +71,8 @@ CSceneComponent::CSceneComponent(const CSceneComponent& com) :
 
 CSceneComponent::~CSceneComponent()
 {
+	DeleteChildAll();
+
 	SAFE_DELETE(m_Transform);
 }
 
@@ -219,6 +221,18 @@ bool CSceneComponent::DeleteChild(const std::string& Name)
 	}
 
 	return false;
+}
+
+void CSceneComponent::DeleteChildAll()
+{
+	size_t	Size = m_vecChild.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		m_vecChild[i]->DeleteChildAll();
+	}
+
+	m_vecChild.clear();	
 }
 
 CSceneComponent* CSceneComponent::FindComponent(const std::string& Name)

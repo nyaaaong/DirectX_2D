@@ -4,14 +4,14 @@
 #include "Component/SpriteComponent.h"
 
 CBulletDummy::CBulletDummy()	:
-	m_HitObject(false)
+	m_GrayEffect(false)
 {
 }
 
 CBulletDummy::CBulletDummy(const CBulletDummy& obj)	:
 	CGameObject(obj)
 {
-	m_HitObject = obj.m_HitObject;
+	m_GrayEffect = obj.m_GrayEffect;
 }
 
 CBulletDummy::~CBulletDummy()
@@ -47,7 +47,7 @@ void CBulletDummy::First()
 	if (!Convert)
 		ASSERT("if (!Convert)");
 
-	Convert->HitObject(m_HitObject);
+	Convert->SetGrayColor(m_GrayEffect);
 }
 
 void CBulletDummy::Update(float DeltaTime)
@@ -58,6 +58,9 @@ void CBulletDummy::Update(float DeltaTime)
 void CBulletDummy::PostUpdate(float DeltaTime)
 {
 	CGameObject::PostUpdate(DeltaTime);
+
+	if (m_Sprite->GetAnimationInstance()->IsEnd())
+		Destroy();
 }
 
 CBulletDummy* CBulletDummy::Clone()

@@ -8,6 +8,9 @@
 #include "Resource/Particle/Particle.h"
 #include "../Object/Player2D.h"
 #include "../Object/BulletKin.h"
+#include "../Object/Bandana.h"
+#include "../Object/ShotgunKin1.h"
+#include "../Object/ShotgunKin2.h"
 
 CMainScene::CMainScene()	:
 	m_TileMap(nullptr)
@@ -40,6 +43,8 @@ bool CMainScene::Init()
 
 	CPlayer2D* Player = m_Scene->CreateGameObject<CPlayer2D>("Player");
 
+	Player->SetWorldPos(400.f, 300.f, 0.f);
+
 	SetPlayerObject(Player);
 
 	m_TileMap = m_Scene->LoadGameObject<CTileMap>();
@@ -48,9 +53,6 @@ bool CMainScene::Init()
 	CPublic::GetInst()->LoadObjPos(m_TileMap);
 	CSceneComponent*	Root = m_TileMap->GetRootComponent();
 	CTileMapComponent* TileMapComponent = dynamic_cast<CTileMapComponent*>(Root);
-
-	if (!Root)
-		ASSERT("if (!Root)");
 
 	TileMapComponent->SetTileColorWhite();
 
@@ -74,15 +76,19 @@ bool CMainScene::Init()
 			{
 			case Object_Type::BulletKin:
 				Obj = m_Scene->CreateGameObject<CBulletKin>("BulletKin");
-				Obj->SetWorldPos(vecObjectPos[j] + TileCenterSize); // 타일 중앙으로 위치하게 한다.
 				break;
 			case Object_Type::Bandana:
+				Obj = m_Scene->CreateGameObject<CBandana>("Bandana");
 				break;
 			case Object_Type::ShotgunKin1:
+				Obj = m_Scene->CreateGameObject<CShotgunKin1>("ShotgunKin1");
 				break;
 			case Object_Type::ShotgunKin2:
+				Obj = m_Scene->CreateGameObject<CShotgunKin2>("ShotgunKin2");
 				break;
 			}
+
+			Obj->SetWorldPos(vecObjectPos[j] + TileCenterSize); // 타일 중앙으로 위치하게 한다.
 		}
 	}
 
@@ -105,9 +111,10 @@ void CMainScene::CreateSound()
 {
 	m_Scene->GetResource()->LoadSound("BGM", true, "Main", "BGM/Main.mp3");
 
-	m_Scene->GetResource()->LoadSound("Effect", false, "Weap1", "Weapon/Shot/Weap1.wav");
-	m_Scene->GetResource()->LoadSound("Effect", false, "Weap2", "Weapon/Shot/Weap2.wav");
-	m_Scene->GetResource()->LoadSound("Effect", false, "Weap3", "Weapon/Shot/Weap3.wav");
+	m_Scene->GetResource()->LoadSound("Effect", false, "Pistol", "Weapon/Shot/Pistol.wav");
+	m_Scene->GetResource()->LoadSound("Effect", false, "Rifle", "Weapon/Shot/Rifle.wav");
+	m_Scene->GetResource()->LoadSound("Effect", false, "Sniper", "Weapon/Shot/Sniper.wav");
+	m_Scene->GetResource()->LoadSound("Effect", false, "Shotgun", "Weapon/Shot/Shotgun.wav");
 
 	m_Scene->GetResource()->LoadSound("Effect", false, "Monster_Hit", "Monster/Effect/Hit.wav");
 	m_Scene->GetResource()->LoadSound("Effect", false, "Monster_Die", "Monster/Effect/Die.wav");

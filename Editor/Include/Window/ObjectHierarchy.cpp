@@ -22,9 +22,27 @@ void CObjectHierarchy::AddObjectList(const char* Name)
 	m_ObjectListWidget->AddItem(Name);
 }
 
+void CObjectHierarchy::DeleteObjectList(const char* Name)
+{
+	m_ObjectListWidget->DeleteItem(Name);
+
+	m_SelectObjectType = Object_Type::Max;
+
+	SelectCancleObjectList();
+}
+
 void CObjectHierarchy::ClearObjectList()
 {
 	m_ObjectListWidget->Clear();
+
+	m_SelectObjectType = Object_Type::Max;
+
+	SelectCancleObjectList();
+}
+
+void CObjectHierarchy::SelectCancleObjectList()
+{
+	m_ObjectListWidget->SetSelectCancel(true);
 }
 
 bool CObjectHierarchy::Init()

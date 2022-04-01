@@ -13,7 +13,7 @@ class CParticle :
 private:
 	CParticle();
 	CParticle(const CParticle& particle);
-	~CParticle();
+	virtual ~CParticle();
 
 private:
 	class CScene* m_Scene;

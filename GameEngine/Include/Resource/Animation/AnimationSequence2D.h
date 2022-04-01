@@ -3,18 +3,18 @@
 #include "../../Ref.h"
 
 class CAnimationSequence2D :
-    public CRef
+	public CRef
 {
-    friend class CAnimationManager;
+	friend class CAnimationManager;
 
 protected:
-    CAnimationSequence2D();
-    ~CAnimationSequence2D();
+	CAnimationSequence2D();
+	virtual ~CAnimationSequence2D();
 
 private:
-    class CScene* m_Scene;
-    CSharedPtr<class CTexture>  m_Texture;
-    std::vector<AnimationFrameData> m_vecFrameData;
+	class CScene* m_Scene;
+	CSharedPtr<class CTexture>  m_Texture;
+	std::vector<AnimationFrameData> m_vecFrameData;
 
 public:
 	void SetFrameData(int FrameIndex, const Vector2& StartPos, const Vector2& Size)
@@ -26,33 +26,33 @@ public:
 		m_vecFrameData[FrameIndex].Size = Size;
 	}
 
-    void SetScene(class CScene* Scene)
-    {
-        m_Scene = Scene;
-    }
+	void SetScene(class CScene* Scene)
+	{
+		m_Scene = Scene;
+	}
 
 public:
-    class CTexture* GetTexture()    const
-    {
-        return m_Texture;
-    }
+	class CTexture* GetTexture()    const
+	{
+		return m_Texture;
+	}
 
-    const AnimationFrameData& GetFrameData(int Index)   const
-    {
-        return m_vecFrameData[Index];
-    }
+	const AnimationFrameData& GetFrameData(int Index)   const
+	{
+		return m_vecFrameData[Index];
+	}
 
-    int GetFrameCount() const
-    {
-        return (int)m_vecFrameData.size();
-    }
+	int GetFrameCount() const
+	{
+		return (int)m_vecFrameData.size();
+	}
 
 public:
-    bool Init(class CTexture* Texture);
-    bool Init(const std::string& Name, const TCHAR* FileName, 
-        const std::string& PathName = TEXTURE_PATH);
-    void AddFrame(const Vector2& StartPos, const Vector2& Size);
-    void AddFrame(float StartX, float StartY, float Width, float Height);
+	bool Init(class CTexture* Texture);
+	bool Init(const std::string& Name, const TCHAR* FileName, 
+		const std::string& PathName = TEXTURE_PATH);
+	void AddFrame(const Vector2& StartPos, const Vector2& Size);
+	void AddFrame(float StartX, float StartY, float Width, float Height);
 	void DeleteFrame(int Index);
 	void ClearFrame();
 	bool SaveFullPath(const char* FullPath);

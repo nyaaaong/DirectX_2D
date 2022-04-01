@@ -3,6 +3,7 @@
 #include "Bullet.h"
 #include "BulletKinAnim.h"
 #include "Scene/Scene.h"
+#include "Scene/SceneManager.h"
 
 CBulletKin::CBulletKin()
 {
@@ -59,6 +60,16 @@ bool CBulletKin::Init()
 	m_WeaponL->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "WeaponL", TEXT("Weapon/Monster/Weapon1L.png"));
 
 	HideAllWeapon();
+
+	m_AttackTimerMax = 1000.f;
+
+	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
+
+	CharacterInfo	Info = SceneMode->GetPlayerInfo();
+	m_HP = Info.HP;
+	m_HPMax = Info.HP;
+	m_MoveSpeed = Info.MoveSpeed;
+	m_Damage = Info.Damage;
 
 	return true;
 }

@@ -4,18 +4,18 @@
 #include "../Widget/LoadingWidget.h"
 
 class CLoadingScene :
-    public CSceneMode
+	public CSceneMode
 {
 public:
-    CLoadingScene();
-    ~CLoadingScene();
+	CLoadingScene();
+	virtual ~CLoadingScene();
 
 private:
-    CSharedPtr<CLoadingWidget> m_LoadingWidget;
-    class CLoadingThread* m_LoadingThread;
+	CSharedPtr<CLoadingWidget> m_LoadingWidget;
+	class CLoadingThread* m_LoadingThread;
 
 public:
-    virtual bool Init();
-    virtual void Update(float DeltaTime);
+	virtual bool Init();
+	virtual void Update(float DeltaTime);
 };
 

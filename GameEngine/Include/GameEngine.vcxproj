@@ -234,6 +234,7 @@
     <ClInclude Include="Device.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EngineMath.h" />
+    <ClInclude Include="Excel\Character\Excel_Monster.h" />
     <ClInclude Include="Excel\Character\Excel_Player.h" />
     <ClInclude Include="Excel\Excel.h" />
     <ClInclude Include="Excel\ExcelManager.h" />
@@ -390,6 +391,7 @@
     <ClCompile Include="Component\WidgetComponent.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="Excel\Character\Excel_Monster.cpp" />
     <ClCompile Include="Excel\Character\Excel_Player.cpp" />
     <ClCompile Include="Excel\Excel.cpp" />
     <ClCompile Include="Excel\ExcelManager.cpp" />

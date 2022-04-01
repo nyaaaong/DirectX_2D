@@ -159,6 +159,9 @@ private:
 	int GetTileRenderIndexY(const Vector3& Pos);
 
 public:
+	void DeleteTile(Object_Type Type);
+
+public:
 	virtual void Start();
 	virtual bool Init();
 	virtual void Update(float DeltaTime);

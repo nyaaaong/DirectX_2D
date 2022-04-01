@@ -144,6 +144,33 @@ public:
 		m_vecItemUTF8.erase(iter1);
 	}
 
+	void DeleteItem(const std::string& Item)
+	{
+		auto	iter = m_vecItem.begin();
+		auto	iterEnd = m_vecItem.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if (!strcmp((*iter).c_str(), Item.c_str()))
+			{
+				m_vecItem.erase(iter);
+				break;
+			}
+		}
+
+		iter = m_vecItemUTF8.begin();
+		iterEnd = m_vecItemUTF8.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if (!(*iter).compare(Item))
+			{
+				m_vecItemUTF8.erase(iter);
+				break;
+			}
+		}
+	}
+
 	void DeleteLastItem()
 	{
 		auto	iter = m_vecItem.end() - 1;

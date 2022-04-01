@@ -8,15 +8,15 @@ class CBulletAnim :
 public:
 	CBulletAnim();
 	CBulletAnim(const CBulletAnim& Anim);
-	~CBulletAnim();
+	virtual ~CBulletAnim();
 
 private:
-	bool	m_HitObject;
+	bool	m_GrayEffect;
 
 public:
-	void HitObject(bool IsHit)
+	void SetGrayColor(bool IsGray)
 	{
-		m_HitObject = IsHit;
+		m_GrayEffect = IsGray;
 	}
 
 public:

@@ -4,18 +4,18 @@
 #include "../Widget/StartWidget.h"
 
 class CStartScene :
-    public CSceneMode
+	public CSceneMode
 {
 public:
-    CStartScene();
-    ~CStartScene();
+	CStartScene();
+	virtual ~CStartScene();
 
 private:
-    CSharedPtr<CStartWidget> m_StartWidget;
+	CSharedPtr<CStartWidget> m_StartWidget;
 
 public:
 	virtual void Start();
-    virtual bool Init();
+	virtual bool Init();
 
 private:
 	void CreateSound();

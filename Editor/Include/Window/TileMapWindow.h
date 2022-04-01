@@ -66,5 +66,8 @@ private:
 	void CreateTileEditControl();
 	void CreateTileMap();
 
+public:
+	void DeleteTile(Object_Type Type);
+
 };
 

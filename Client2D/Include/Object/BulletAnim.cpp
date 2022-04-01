@@ -2,7 +2,7 @@
 #include "BulletAnim.h"
 
 CBulletAnim::CBulletAnim()	:
-	m_HitObject(false)
+	m_GrayEffect(false)
 {
 	SetTypeID<CBulletAnim>();
 }
@@ -12,7 +12,7 @@ CBulletAnim::CBulletAnim(const CBulletAnim& Anim)	:
 {
 	SetTypeID<CBulletAnim>();
 
-	m_HitObject = Anim.m_HitObject;
+	m_GrayEffect = Anim.m_GrayEffect;
 }
 
 CBulletAnim::~CBulletAnim()
@@ -43,7 +43,7 @@ void CBulletAnim::First()
 {
 	CAnimationSequence2DInstance::First();
 
-	if (!m_HitObject)
+	if (!m_GrayEffect)
 		SetCurrentAnimation("Bullet_Impact_2");
 }
 

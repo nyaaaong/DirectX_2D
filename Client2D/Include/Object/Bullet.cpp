@@ -14,11 +14,12 @@ CBullet::CBullet() :
 	m_CharacterType(Character_Type::Max),
 	m_WeaponSlot(Weapon_Slot::None),
 	m_Damage(3.f),
-	m_HitObject(false),
+	m_Hit(false),
 	m_Pierce(false),
-	m_Destroyed(false),
 	m_ImpactDestroyed(false),
 	m_ImpactCreated(false),
+	m_Check(false),
+	m_NeedDestroyCollider(false),
 	m_Impact(nullptr),
 	m_BulletType(Bullet_Type::Pistol)
 {
@@ -29,7 +30,7 @@ CBullet::CBullet(const CBullet& obj) :
 	CGameObject(obj)
 {
 	m_Sprite = (CSpriteComponent*)FindComponent("BulletSprite");
-	m_Body = (CColliderBox2D*)FindComponent("Body");
+	m_Body = (CColliderBox2D*)FindComponent("BulletBody");
 
 	m_StartDistance = obj.m_StartDistance;
 	m_Distance = obj.m_Distance;
@@ -38,10 +39,11 @@ CBullet::CBullet(const CBullet& obj) :
 	m_CharacterType = obj.m_CharacterType;
 	m_WeaponSlot = obj.m_WeaponSlot;
 
-	m_HitObject = false;
-	m_Destroyed = false;
+	m_Hit = false;
 	m_ImpactDestroyed = false;
 	m_ImpactCreated = false;
+	m_Check = false;
+	m_NeedDestroyCollider = false;
 	m_Pierce = obj.m_Pierce;
 
 	m_Damage = obj.m_Damage;
@@ -55,6 +57,30 @@ CBullet::~CBullet()
 {
 }
 
+bool CBullet::Init()
+{
+	m_Sprite = CreateComponent<CSpriteComponent>("BulletSprite");
+
+	m_Sprite->SetRelativeScale(24.f, 24.f, 1.f);
+	m_Sprite->SetPivot(0.5f, 0.5f, 0.f);
+
+	m_Body = CreateComponent<CColliderBox2D>("BulletBody");
+	m_Body->SetCollisionProfile("AttackCheck");
+
+	m_Body->SetExtent(12.f, 12.f);
+	m_Body->SetRender(false);
+
+	m_Body->AddCollisionCallback(Collision_State::Begin, this, &CBullet::OnCollisionBegin);
+	m_Body->AddCollisionCallback(Collision_State::End, this, &CBullet::OnCollisionEnd);
+
+	m_Sprite->SetRender(false);
+	m_Sprite->AddChild(m_Body);
+
+	SetRootComponent(m_Sprite);
+
+	return true;
+}
+
 void CBullet::SetCollisionProfile(const std::string& Name)
 {
 	m_Body->SetCollisionProfile(Name);
@@ -63,11 +89,14 @@ void CBullet::SetCollisionProfile(const std::string& Name)
 void CBullet::Start()
 {
 	CGameObject::Start();
+
+	if (GetName() == "")
+		ASSERT("if (GetName() == "")");
 }
 
 void CBullet::First()
 {
-	if (m_Sprite->IsRender())
+	if (m_Check)
 	{
 		CGameObject::First();
 
@@ -79,28 +108,32 @@ void CBullet::First()
 		switch (m_CharacterType)
 		{
 		case Character_Type::Player:
+			m_Body->SetCollisionProfile("PlayerAttack");
+
 			m_Sprite->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "Player_Bullet", TEXT("Bullet/Player/Bullet.png"));
 
 			switch (m_WeaponSlot)
 			{
-			case Weapon_Slot::Weap1:
+			case Weapon_Slot::Pistol:
 				m_BulletSpeed = 1000.f;
 				m_Distance = 800.f;
-				m_SoundName = "Weap1";
+				m_SoundName = "Pistol";
 				break;
-			case Weapon_Slot::Weap2:
+			case Weapon_Slot::Rifle:
 				m_BulletSpeed = 1000.f;
 				m_Distance = 800.f;
-				m_SoundName = "Weap2";
+				m_SoundName = "Rifle";
 				break;
-			case Weapon_Slot::Weap3:
+			case Weapon_Slot::Sniper:
 				m_BulletSpeed = 5000.f;
 				m_Distance = 2000.f;
-				m_SoundName = "Weap3";
+				m_SoundName = "Sniper";
 				break;
 			}
 			break;
 		case Character_Type::Monster:
+			m_Body->SetCollisionProfile("MonsterAttack");
+
 			m_Sprite->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "Monster_Bullet", TEXT("Bullet/Enemy/Bullet.png"));
 
 			switch (m_BulletType)
@@ -108,11 +141,17 @@ void CBullet::First()
 			case Bullet_Type::Pistol:
 				m_BulletSpeed = 1000.f;
 				m_Distance = 800.f;
-				m_SoundName = "Weap1";
+				m_SoundName = "Pistol";
 				break;
 			case Bullet_Type::Rifle:
+				m_BulletSpeed = 1000.f;
+				m_Distance = 800.f;
+				m_SoundName = "Rifle";
 				break;
 			case Bullet_Type::Shotgun:
+				m_BulletSpeed = 5000.f;
+				m_Distance = 2000.f;
+				m_SoundName = "Shotgun";
 				break;
 			}
 			break;
@@ -125,70 +164,17 @@ void CBullet::First()
 	}
 }
 
-bool CBullet::Init()
-{
-	m_Sprite = CreateComponent<CSpriteComponent>("BulletSprite");
-
-	m_Sprite->SetRelativeScale(24.f, 24.f, 1.f);
-	m_Sprite->SetPivot(0.5f, 0.5f, 0.f);
-
-	m_Body = CreateComponent<CColliderBox2D>("Body");
-
-	m_Body->SetExtent(12.f, 12.f);
-	m_Body->SetRender(false);
-
-	m_Sprite->AddChild(m_Body);
-
-	m_Body->AddCollisionCallback(Collision_State::Begin, this, &CBullet::OnCollisionBegin);
-	m_Body->AddCollisionCallback(Collision_State::End, this, &CBullet::OnCollisionEnd);
-
-	m_Sprite->SetRender(false);
-
-	SetRootComponent(m_Sprite);
-
-	return true;
-}
-
 void CBullet::Update(float DeltaTime)
 {
-	CGameObject::Update(DeltaTime);
+	if (m_NeedDestroyCollider)
+		Destroy();
 
-	if (m_Destroyed)
-	{
-		if (!m_Pierce)
-		{
-			m_Sprite->SetRender(false);
-			m_Body->SetRender(false);
-		}
-		
-		if (m_Impact->IsAnimEnd())
-		{
-			m_Impact->Destroy();
-			CGameObject::Destroy();
-		}
-	}
+	CGameObject::Update(DeltaTime);
 
 	float	Dist = m_BulletSpeed * DeltaTime;
 
-	if (m_Distance <= 0.f || IsWallTile(m_BulletDir * Dist))
-		CreateHitEffect(true);
-
-	m_Distance -= Dist;
-
-	if (m_StartDistance >= 0.f)
-		m_StartDistance -= Dist;
-
-	else
-	{
-		if (!m_Destroyed)
-		{
-			m_StartDistance = -1.f;
-			m_Sprite->SetRender(true);
-			m_Body->SetRender(true);
-		}
-	}	
-
-	AddRelativePos(m_BulletDir * Dist);
+	CheckFirstBullet(Dist);
+	BulletUpdater(Dist);
 }
 
 void CBullet::PostUpdate(float DeltaTime)
@@ -201,9 +187,16 @@ CBullet* CBullet::Clone()
 	return DBG_NEW CBullet(*this);
 }
 
+void CBullet::Destroy()
+{
+	CGameObject::Destroy();
+
+	m_Body->Enable(false);
+}
+
 void CBullet::OnCollisionBegin(const CollisionResult& result)
 {
-	if (m_Destroyed)
+	if (!m_Check || m_Hit)
 		return;
 
 	CGameObject* DestObj = result.Dest->GetGameObject();
@@ -212,21 +205,24 @@ void CBullet::OnCollisionBegin(const CollisionResult& result)
 
 	if (CharacterObj)
 	{
-		m_HitObject = true;
+		m_Hit = true;
 
 		CharacterObj->AddHP(-m_Damage);
 	}
 
-	CreateHitEffect(false);
+	CreateHitEffect();
 }
 
 void CBullet::OnCollisionEnd(const CollisionResult& result)
 {
-	if (m_Pierce)
+	if (!m_Check)
+		return;
+
+	else
 		m_ImpactCreated = false;
 }
 
-bool CBullet::IsWallTile(const Vector3& NextWorldPos)
+bool CBullet::IsWallTile(const Vector3& NextPos)
 {
 	CSceneMode* SceneMode = CSceneManager::GetInst()->GetSceneMode();
 	CMainScene* Scene = dynamic_cast<CMainScene*>(SceneMode);
@@ -252,62 +248,84 @@ bool CBullet::IsWallTile(const Vector3& NextWorldPos)
 	}
 
 	MoveDir[(int)Move_Dir::LB].x -= Size.x;
-	MoveDir[(int)Move_Dir::LB].y -= (Size.y * 1.4f);
+	MoveDir[(int)Move_Dir::LB].y -= Size.y;
 
-	MoveDir[(int)Move_Dir::B].y -= (Size.y * 1.4f);
+	MoveDir[(int)Move_Dir::B].y -= Size.y;
 
 	MoveDir[(int)Move_Dir::RB].x += Size.x;
-	MoveDir[(int)Move_Dir::RB].y -= (Size.y * 1.4f);
+	MoveDir[(int)Move_Dir::RB].y -= Size.y;
 
 	MoveDir[(int)Move_Dir::L].x -= Size.x;
-	MoveDir[(int)Move_Dir::L].y -= (Size.y * 1.4f);
+	MoveDir[(int)Move_Dir::L].y -= Size.y;
 
 	MoveDir[(int)Move_Dir::R].x += Size.x;
-	MoveDir[(int)Move_Dir::R].y -= (Size.y * 1.4f);
+	MoveDir[(int)Move_Dir::R].y -= Size.y;
 
 	MoveDir[(int)Move_Dir::LT].x -= Size.x;
-	MoveDir[(int)Move_Dir::LT].y += (Size.y * 0.2f);
+	MoveDir[(int)Move_Dir::LT].y += Size.y;
 
-	MoveDir[(int)Move_Dir::T].y += (Size.y * 0.2f);
+	MoveDir[(int)Move_Dir::T].y += Size.y;
 
 	MoveDir[(int)Move_Dir::RT].x += Size.x;
-	MoveDir[(int)Move_Dir::RT].y += (Size.y * 0.2f);
+	MoveDir[(int)Move_Dir::RT].y += Size.y;
 
 	for (int i = 0; i < (int)Move_Dir::End; ++i)
 	{
-		if (TileMap->GetTileType(MoveDir[i] + NextWorldPos) == Tile_Type::T_Wall)
+		if (TileMap->GetTileType(MoveDir[i] + NextPos) == Tile_Type::T_Wall)
 			return true;
 	}
 
 	return false;
 }
 
-void CBullet::CreateHitEffect(bool IsDie)
+void CBullet::CreateHitEffect()
 {
-	if (!m_First)
-	{
-		m_Destroyed = true;
-		return;
-	}
-
 	if (!m_ImpactCreated)
 	{
+		m_ImpactCreated = true;
+
 		CScene* Scene = CSceneManager::GetInst()->GetScene();
 
 		m_Impact = Scene->CreateGameObject<CBulletDummy>("BulletImpact");
-
-		m_ImpactCreated = true;
-
-		m_Impact->HitObject(m_HitObject);
+		m_Impact->SetGrayColor(!m_Hit);
 		m_Impact->SetWorldPos(GetWorldPos());
 
-		if (!m_HitObject || !m_Pierce)
-			m_Destroyed = true;
-
-		else if (IsDie)
+		if (!m_Pierce)
 		{
-			m_Impact->HitObject(false);
-			m_Destroyed = true;
+			m_Body->Enable(false);
+			m_NeedDestroyCollider = true;
 		}
 	}
+}
+
+void CBullet::CheckFirstBullet(float Dist)
+{
+	if (IsWallTile(m_BulletDir * Dist))
+	{
+		Destroy();
+		return;
+	}
+
+	else
+	{
+		m_Check = true;
+	
+		m_Sprite->SetRender(true);
+		m_Body->SetRender(true);
+	}
+
+	m_StartDistance -= Dist;
+}
+
+void CBullet::BulletUpdater(float Dist)
+{
+	if (!m_Check)
+		return;
+
+	if (m_Distance <= 0.f || IsWallTile(m_BulletDir * Dist))
+		CreateHitEffect();
+
+	m_Distance -= Dist;
+
+	AddRelativePos(m_BulletDir * Dist);
 }

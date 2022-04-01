@@ -22,7 +22,7 @@ class CAnimationSequence2DData
 
 private:
 	CAnimationSequence2DData();
-	~CAnimationSequence2DData();
+	virtual ~CAnimationSequence2DData();
 
 private:
 	std::string	m_Name;

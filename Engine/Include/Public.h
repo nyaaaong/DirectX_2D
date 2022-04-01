@@ -29,6 +29,7 @@ public:
 	void AddObjectWorldPos(Object_Type Type, const Vector3& WorldPos);
 	void DeleteObjectWorldPos(const Vector3& WorldPos);
 	void ClearObjectWorldPos(Object_Type Type);
+	void ClearAllObjectWorldPos();
 
 public:
 	bool CreateObjectType(Object_Type Type);

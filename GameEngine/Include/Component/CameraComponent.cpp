@@ -135,16 +135,16 @@ void CCameraComponent::LimitCheck()
 		Vector3	CamEndPos = GetWorldPos() + Vector3((float)m_RS.Width, (float)m_RS.Height, 0.f);
 
 		if (m_LimitStartPos.x > CamStartPos.x)
-			SetWorldPosX(m_LimitStartPos.x);
+			CSceneComponent::SetWorldPosX(m_LimitStartPos.x);
 
 		else if (m_LimitEndPos.x < CamEndPos.x)
-			SetWorldPosX(m_LimitEndPos.x - (float)m_RS.Width);
+			CSceneComponent::SetWorldPosX(m_LimitEndPos.x - (float)m_RS.Width);
 
 		if (m_LimitStartPos.y > CamStartPos.y)
-			SetWorldPosY(m_LimitStartPos.y);
+			CSceneComponent::SetWorldPosY(m_LimitStartPos.y);
 
 		else if (m_LimitEndPos.y < CamEndPos.y)
-			SetWorldPosY(m_LimitEndPos.y - (float)m_RS.Height);
+			CSceneComponent::SetWorldPosY(m_LimitEndPos.y - (float)m_RS.Height);
 	}
 }
 
@@ -308,7 +308,7 @@ void CCameraComponent::Load(FILE* File)
 	fread(&m_matProj, sizeof(Matrix), 1, File);
 	fread(&m_ViewAngle, sizeof(float), 1, File);
 	fread(&m_Distance, sizeof(float), 1, File);
-	fread(&m_RS, sizeof(Resolution), 1, File);
+	fread(&m_RS, sizeof(Resolution), 1, File);	
 
 	CSceneComponent::Load(File);
 }

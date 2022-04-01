@@ -13,7 +13,7 @@ class CParticle :
 private:
 	CParticle();
 	CParticle(const CParticle& particle);
-	~CParticle();
+	virtual ~CParticle();
 
 private:
 	class CScene* m_Scene;
@@ -42,6 +42,7 @@ public:
 	{
 		return m_UpdateShader->Clone();
 	}
+
 	CParticleConstantBuffer* CloneConstantBuffer()	const
 	{
 		return m_CBuffer->Clone();
@@ -56,8 +57,12 @@ public:
 	bool Init();
 
 public:
-	void AddStructuredBuffer(const std::string& Name, unsigned int Size, unsigned int Count, int Register, bool Dynamic = false, int StructuredBufferShaderType = (int)Buffer_Shader_Type::Compute);
-	bool ResizeBuffer(const std::string& Name, unsigned int Size, unsigned int Count, int Register, bool Dynamic = false, int StructuredBufferShaderType = (int)Buffer_Shader_Type::Compute);
+	void AddStructuredBuffer(const std::string& Name, unsigned int Size, unsigned int Count,
+		int Register, bool Dynamic = false,
+		int StructuredBufferShaderType = (int)Buffer_Shader_Type::Compute);
+	bool ResizeBuffer(const std::string& Name, unsigned int Size, unsigned int Count,
+		int Register, bool Dynamic = false,
+		int StructuredBufferShaderType = (int)Buffer_Shader_Type::Compute);
 	void CloneStructuredBuffer(std::vector<CStructuredBuffer*>& vecBuffer);
 
 public:
@@ -96,6 +101,8 @@ public:
 	{
 		m_CBuffer->SetStartMax(StartMax);
 	}
+
+	void SetSpawnCountMax(unsigned int Count);
 
 	void SetScaleMin(const Vector3& ScaleMin)
 	{
@@ -162,8 +169,5 @@ public:
 	{
 		m_CBuffer->SetMoveAngle(MoveAngle);
 	}
-
-public:
-	void SetSpawnCountMax(unsigned int Count);
 };
 

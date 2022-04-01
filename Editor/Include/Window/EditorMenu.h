@@ -10,6 +10,7 @@ public:
 
 private:
 	class CIMGUIButton* m_ObjectCreateButton;
+	class CIMGUIButton* m_ObjectDeleteButton;
 	class CIMGUIComboBox* m_ObjectCombo;
 
 	class CPublic* m_Public;
@@ -20,6 +21,7 @@ public:
 
 public:
 	void ObjectCreateButton();
+	void ObjectDeleteButton();
 
 public:
 	void LoadSceneObject();

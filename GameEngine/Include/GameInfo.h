@@ -394,3 +394,17 @@ struct NavResultData
 	std::function<void(const std::list<Vector3>&)>	Callback;
 	std::list<Vector3>	vecPath;
 };
+
+struct CharacterInfo
+{
+	float	HP;
+	float	MoveSpeed;
+	float	Damage;
+
+	CharacterInfo()	:
+		HP(30.f),
+		MoveSpeed(300.f),
+		Damage(3.f)
+	{
+	}
+};

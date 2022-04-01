@@ -55,6 +55,7 @@ public:
 	void AddChild(CSceneComponent* Child);
 	bool DeleteChild(CSceneComponent* Child);
 	bool DeleteChild(const std::string& Name);
+	void DeleteChildAll();
 	CSceneComponent* FindComponent(const std::string& Name);
 
 public:

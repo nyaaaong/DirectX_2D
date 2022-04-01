@@ -242,6 +242,11 @@ void CTileMapWindow::CreateTileMap()
 	}
 }
 
+void CTileMapWindow::DeleteTile(Object_Type Type)
+{
+	m_TileMap->DeleteTile(Type);
+}
+
 void CTileMapWindow::Update(float DeltaTime)
 {
 	CIMGUIWindow::Update(DeltaTime);
@@ -302,13 +307,13 @@ void CTileMapWindow::Update(float DeltaTime)
 
 						Object_Type ObjectType = CEditorManager::GetInst()->GetSelectObjectType();
 
-						if (ObjectType == Object_Type::Max)
+						if ((int)Type != (int)ObjectType + 2)
 							return;
 
 						Tile->SetTileType(Type);
+						Tile->SetObjectType(ObjectType);
 
 						CPublic::GetInst()->AddObjectWorldPos(ObjectType, Tile->GetWorldPos());
-						Tile->SetObjectType(ObjectType);
 						break;
 					}
 				}

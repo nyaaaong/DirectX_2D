@@ -8,6 +8,7 @@
 
 CCharacter::CCharacter() :
 	m_HP(50.f),
+	m_HPMax(50.f),
 	m_HitEffectTime(0.f),
 	m_HitEffectTimeMax(0.3f),
 	m_IsDied(false),
@@ -29,6 +30,7 @@ CCharacter::CCharacter(const CCharacter& obj) :
 	m_PaperBurn = (CPaperBurnComponent*)FindComponent("PaperBurn");
 
 	m_HP = obj.m_HP;
+	m_HPMax = obj.m_HPMax;
 	m_IsDied = false;
 	m_IsPaperBurn = false;
 	m_Hit = false;

@@ -13,12 +13,12 @@ protected:
 	virtual ~CBulletDummy();
 
 private:
-	bool			m_HitObject;
+	bool			m_GrayEffect;
 
 public:
-	void HitObject(bool IsHit)
+	void SetGrayColor(bool IsGray)
 	{
-		m_HitObject = IsHit;
+		m_GrayEffect = IsGray;
 	}
 
 public:

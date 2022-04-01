@@ -113,9 +113,9 @@ enum class Collision_Channel
 	Object,
 	Player,
 	Monster,
+	AttackCheck,
 	PlayerAttack,
 	MonsterAttack,
-	SightLimit,
 	Custom2,
 	Custom3,
 	Custom4,
@@ -285,9 +285,9 @@ enum class Move_Dir
 enum class Weapon_Slot
 {
 	None,
-	Weap1,
-	Weap2,
-	Weap3
+	Pistol,
+	Rifle,
+	Sniper
 };
 
 enum class Character_Type

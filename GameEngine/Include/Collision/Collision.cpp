@@ -7,6 +7,9 @@ bool CCollision::CollisionBox2DToBox2D(CColliderBox2D* Src, CColliderBox2D* Dest
 {
 	CollisionResult	srcResult, destResult;
 
+	CGameObject* SrcObj = Src->GetGameObject();
+	CGameObject* DestObj = Dest->GetGameObject();
+
 	if (CollisionBox2DToBox2D(srcResult, destResult, Src->GetInfo(), Dest->GetInfo()))
 	{
 		srcResult.Src = Src;

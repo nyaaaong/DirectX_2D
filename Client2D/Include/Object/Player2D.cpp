@@ -26,8 +26,7 @@ CPlayer2D::CPlayer2D() :
 	m_MoveDir(0),
 	m_MouseAngle(0.f),
 	m_WeaponSlot(Weapon_Slot::None),
-	m_CurWeapon(nullptr),
-	m_SightLimitSize(1300.f)
+	m_CurWeapon(nullptr)
 {
 	SetTypeID<CPlayer2D>();
 	m_Opacity = 1.f;
@@ -78,73 +77,10 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_WeaponSlot = Weapon_Slot::None;
 
 	m_Type = Character_Type::Player;
-
-	m_SightLimitSize = obj.m_SightLimitSize;
 }
 
 CPlayer2D::~CPlayer2D()
 {
-}
-
-void CPlayer2D::SetDir(Character_Direction Dir)
-{
-	switch (Dir)
-	{
-	case Character_Direction::Down:
-		m_Dir &= ~(int)Character_Direction::Up;
-		break;
-	case Character_Direction::Left:
-		m_Dir &= ~(int)Character_Direction::Right;
-		break;
-	case Character_Direction::Right:
-		m_Dir &= ~(int)Character_Direction::Left;
-		break;
-	case Character_Direction::Up:
-		m_Dir &= ~(int)Character_Direction::Down;
-		break;
-	}
-
-	m_Dir |= (int)Dir;
-}
-
-void CPlayer2D::SetMoveDir(Character_Direction Dir)
-{
-	switch (Dir)
-	{
-	case Character_Direction::Down:
-		m_MoveDir &= ~(int)Character_Direction::Up;
-		break;
-	case Character_Direction::Left:
-		m_MoveDir &= ~(int)Character_Direction::Right;
-		break;
-	case Character_Direction::Right:
-		m_MoveDir &= ~(int)Character_Direction::Left;
-		break;
-	case Character_Direction::Up:
-		m_MoveDir &= ~(int)Character_Direction::Down;
-		break;
-	}
-
-	m_MoveDir |= (int)Dir;
-}
-
-void CPlayer2D::ClearDir(Character_Direction Dir)
-{
-	m_Dir &= ~(int)Dir;
-}
-
-void CPlayer2D::ClearMoveDir(Character_Direction Dir)
-{
-	m_MoveDir &= ~(int)Dir;
-}
-
-void CPlayer2D::Start()
-{
-	CCharacter::Start();
-
-	Vector3	WorldPos = GetWorldPos();
-
-	m_Body->SetWorldPos(WorldPos);
 }
 
 bool CPlayer2D::Init()
@@ -224,7 +160,76 @@ bool CPlayer2D::Init()
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Weapon2", KeyState_Down, this, &CPlayer2D::Weapon2);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Weapon3", KeyState_Down, this, &CPlayer2D::Weapon3);
 
+	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
+	
+	CharacterInfo	PlayerInfo = SceneMode->GetPlayerInfo();
+	m_HP = PlayerInfo.HP;
+	m_HPMax = PlayerInfo.HP;
+	m_MoveSpeed = PlayerInfo.MoveSpeed;
+	m_Damage = PlayerInfo.Damage;
+
 	return true;
+}
+
+void CPlayer2D::SetDir(Character_Direction Dir)
+{
+	switch (Dir)
+	{
+	case Character_Direction::Down:
+		m_Dir &= ~(int)Character_Direction::Up;
+		break;
+	case Character_Direction::Left:
+		m_Dir &= ~(int)Character_Direction::Right;
+		break;
+	case Character_Direction::Right:
+		m_Dir &= ~(int)Character_Direction::Left;
+		break;
+	case Character_Direction::Up:
+		m_Dir &= ~(int)Character_Direction::Down;
+		break;
+	}
+
+	m_Dir |= (int)Dir;
+}
+
+void CPlayer2D::SetMoveDir(Character_Direction Dir)
+{
+	switch (Dir)
+	{
+	case Character_Direction::Down:
+		m_MoveDir &= ~(int)Character_Direction::Up;
+		break;
+	case Character_Direction::Left:
+		m_MoveDir &= ~(int)Character_Direction::Right;
+		break;
+	case Character_Direction::Right:
+		m_MoveDir &= ~(int)Character_Direction::Left;
+		break;
+	case Character_Direction::Up:
+		m_MoveDir &= ~(int)Character_Direction::Down;
+		break;
+	}
+
+	m_MoveDir |= (int)Dir;
+}
+
+void CPlayer2D::ClearDir(Character_Direction Dir)
+{
+	m_Dir &= ~(int)Dir;
+}
+
+void CPlayer2D::ClearMoveDir(Character_Direction Dir)
+{
+	m_MoveDir &= ~(int)Dir;
+}
+
+void CPlayer2D::Start()
+{
+	CCharacter::Start();
+
+	Vector3	WorldPos = GetWorldPos();
+
+	m_Body->SetWorldPos(WorldPos);
 }
 
 void CPlayer2D::Update(float DeltaTime)
@@ -254,10 +259,8 @@ void CPlayer2D::Update(float DeltaTime)
 
 			Vector3	StartPos, EndPos;
 
-			float	Count = static_cast<float>(TileMap->GetTileCountX() * TileMap->GetTileCountY());
-
-			EndPos.x = Count;
-			EndPos.y = Count;
+			EndPos.x = TileMap->GetTileCountX() * TileMap->GetTileSize().x;
+			EndPos.y = TileMap->GetTileCountY() * TileMap->GetTileSize().y;
 
 			m_Camera->SetCameraLimit(StartPos, EndPos);
 		}
@@ -269,6 +272,7 @@ void CPlayer2D::Update(float DeltaTime)
 			!CInput::GetInst()->IsKeyDown("MoveLeft") && !CInput::GetInst()->IsKeyDown("MoveRight"))
 			m_Move = false;
 	}
+
 	UpdateAttackCoolDown(DeltaTime);
 	UpdateDodgeCoolDown(DeltaTime);
 
@@ -431,7 +435,7 @@ void CPlayer2D::NoWeapon(float DeltaTime)
 
 void CPlayer2D::Weapon1(float DeltaTime)
 {
-	m_WeaponSlot = Weapon_Slot::Weap1;
+	m_WeaponSlot = Weapon_Slot::Pistol;
 	m_AttackTimerMax = 0.6f;
 	m_Damage = 3.f;
 
@@ -440,7 +444,7 @@ void CPlayer2D::Weapon1(float DeltaTime)
 
 void CPlayer2D::Weapon2(float DeltaTime)
 {
-	m_WeaponSlot = Weapon_Slot::Weap2;
+	m_WeaponSlot = Weapon_Slot::Rifle;
 	m_AttackTimerMax = 0.08f;
 	m_Damage = 5.f;
 
@@ -449,7 +453,7 @@ void CPlayer2D::Weapon2(float DeltaTime)
 
 void CPlayer2D::Weapon3(float DeltaTime)
 {
-	m_WeaponSlot = Weapon_Slot::Weap3;
+	m_WeaponSlot = Weapon_Slot::Sniper;
 	m_AttackTimerMax = 1.3f;
 	m_Damage = 50.f;
 
@@ -483,7 +487,6 @@ void CPlayer2D::Attack(float DeltaTime)
 	Bullet->SetBulletDir(m_MouseDir);
 	Bullet->SetWorldPos(GetWorldPos());
 	Bullet->SetWorldRotation(m_CurWeapon->GetWorldRot());
-	Bullet->SetCollisionProfile("PlayerAttack");
 	Bullet->SetCharacterType(Character_Type::Player);
 	Bullet->SetWeaponSlot(m_WeaponSlot);
 	Bullet->Pierce(m_PierceBullet);
@@ -571,7 +574,7 @@ void CPlayer2D::UpdateGun()
 
 	switch (m_WeaponSlot)
 	{
-	case Weapon_Slot::Weap1:
+	case Weapon_Slot::Pistol:
 		
 		if ((180.999f >= m_MouseAngle && m_MouseAngle > 90.999f) ||
 			(-180.999f <= m_MouseAngle && m_MouseAngle < -90.999f))
@@ -586,7 +589,7 @@ void CPlayer2D::UpdateGun()
 		}
 		
 		break;
-	case Weapon_Slot::Weap2:
+	case Weapon_Slot::Rifle:
 		if ((180.999f >= m_MouseAngle && m_MouseAngle > 90.999f) ||
 			(-180.999f <= m_MouseAngle && m_MouseAngle < -90.999f))
 		{
@@ -599,7 +602,7 @@ void CPlayer2D::UpdateGun()
 			m_CurWeapon = m_Weapon2;
 		}
 		break;
-	case Weapon_Slot::Weap3:
+	case Weapon_Slot::Sniper:
 		if ((180.999f >= m_MouseAngle && m_MouseAngle > 90.999f) ||
 			(-180.999f <= m_MouseAngle && m_MouseAngle < -90.999f))
 		{

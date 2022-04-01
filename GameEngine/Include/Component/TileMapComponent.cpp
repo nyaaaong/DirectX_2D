@@ -447,6 +447,20 @@ int CTileMapComponent::GetTileRenderIndexY(const Vector3& Pos)
 	return IndexY;
 }
 
+void CTileMapComponent::DeleteTile(Object_Type Type)
+{
+	int Size = (int)m_vecTile.size();
+
+	for (int i = 0; i < Size; ++i)
+	{
+		if (m_vecTile[i]->GetObjectType() == Type)
+		{
+			m_vecTile[i]->SetTileType(Tile_Type::T_Normal);
+			m_vecTile[i]->SetObjectType(Object_Type::Max);
+		}
+	}
+}
+
 void CTileMapComponent::Start()
 {
 	CSceneComponent::Start();

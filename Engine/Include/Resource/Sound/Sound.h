@@ -9,7 +9,7 @@ class CSound :
 
 private:
 	CSound();
-	~CSound();
+	virtual ~CSound();
 
 private:
 	FMOD::System* m_System;

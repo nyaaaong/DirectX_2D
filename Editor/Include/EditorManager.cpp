@@ -166,10 +166,11 @@ int CEditorManager::Run()
 
 void CEditorManager::Esc(float DeltaTime)
 {
-	if (!m_SpriteWindow)
-		return;
+	if (m_SpriteWindow)
+		m_SpriteWindow->SelectCancelFrameList();
 
-	m_SpriteWindow->SelectCancelFrameList();
+	if (m_ObjectHierarchy)
+		m_ObjectHierarchy->SelectCancleObjectList();
 }
 
 void CEditorManager::MouseLButtonDown(float DeltaTime)

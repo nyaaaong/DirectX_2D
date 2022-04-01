@@ -46,6 +46,9 @@ bool CMouseCursor::Init()
 
 void CMouseCursor::Update(float DeltaTime)
 {
+	if (!CEngine::GetInst()->IsFocusClient())
+		return;
+
 	CWidgetWindow::Update(DeltaTime);
 
 	CameraUpdater(DeltaTime);
@@ -70,16 +73,14 @@ void CMouseCursor::CameraUpdater(float DeltaTime)
 {
 	CScene* Scene = CSceneManager::GetInst()->GetScene();
 
-	CGameObject* Player = Scene->GetSceneMode()->GetPlayerObject();
+	CGameObject* PlayerObj = Scene->GetSceneMode()->GetPlayerObject();
 
 	if (Scene->GetSceneMode()->IsUseCamera())
 	{
-		if (!Player)
+		if (!PlayerObj)
 			return;
 
 		// 마우스와 센터의 거리로 카메라 위치를 조절해야 한다.
-
-		CGameObject* PlayerObj = Scene->GetPlayerObject();
 
 		CPlayer2D* Player = dynamic_cast<CPlayer2D*>(PlayerObj);
 

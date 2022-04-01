@@ -55,6 +55,10 @@ void CTile::Update(float DeltaTime, bool SortDiable)
 
 void CTile::Save(FILE* File)
 {
+	if (m_TileType == Tile_Type::M_Bandana ||
+		m_ObjectType == Object_Type::Bandana)
+		int a = 0;
+
 	fwrite(&m_TileType, sizeof(Tile_Type), 1, File);
 	fwrite(&m_ObjectType, sizeof(Object_Type), 1, File);
 

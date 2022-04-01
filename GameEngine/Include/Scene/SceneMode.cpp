@@ -1,5 +1,6 @@
 
 #include "SceneMode.h"
+#include "../Excel/ExcelManager.h"
 #include "../GameObject/GameObject.h"
 
 CSceneMode::CSceneMode()	:
@@ -24,6 +25,15 @@ void CSceneMode::Start()
 
 bool CSceneMode::Init()
 {
+	m_PlayerInfo = CExcelManager::GetInst()->GetPlayerInfo();
+	
+	int Size = CExcelManager::GetInst()->GetMonsterSize();
+
+	for (int i = 0; i < Size; ++i)
+	{
+		m_MonsterInfo[i] = CExcelManager::GetInst()->GetMonsterInfo(i);
+	}
+
 	return true;
 }
 

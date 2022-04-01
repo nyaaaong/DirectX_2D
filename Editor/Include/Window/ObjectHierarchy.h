@@ -33,7 +33,9 @@ public:
 
 public:
 	void AddObjectList(const char* Name);
+	void DeleteObjectList(const char* Name);
 	void ClearObjectList();
+	void SelectCancleObjectList();
 
 public:
 	virtual bool Init();

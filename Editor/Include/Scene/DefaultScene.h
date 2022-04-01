@@ -1,11 +1,11 @@
 #pragma once
 #include "Scene/SceneMode.h"
 class CDefaultScene :
-    public CSceneMode
+	public CSceneMode
 {
 public:
-    CDefaultScene();
-    ~CDefaultScene();
+	CDefaultScene();
+	virtual ~CDefaultScene();
 
 public:
 	virtual bool Init();

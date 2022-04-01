@@ -122,9 +122,14 @@ void CMonster::Update(float DeltaTime)
 
 	if (!m_OutsideLimit)
 		return;
+	
+	int Randi = rand() % 2;
 
-	Move(DeltaTime);
-	Attack(DeltaTime);
+	if (Randi)
+		Move(DeltaTime);
+
+	else
+		Attack(DeltaTime);
 }
 
 void CMonster::Destroy()
@@ -263,21 +268,6 @@ void CMonster::Move(float DeltaTime)
 	WorldPos.z = 0.f;
 
 	CCharacter::Move(WorldPos + RandomPos());
-
-	//Vector3	WorldPos = m_PlayerWorldPos;
-
-	/*if (m_PlayerDir.x < 0.f)
-		WorldPos.x += 300.f;
-
-	else
-		WorldPos.x -= 300.f;
-
-	if (m_PlayerDir.y < 0.f)
-		WorldPos.y += 300.f;
-
-	else
-		WorldPos.y -= 300.f;*/
-	//CCharacter::Move(m_PlayerWorldPos);
 }
 
 void CMonster::Attack(float DeltaTime)

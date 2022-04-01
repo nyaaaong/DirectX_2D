@@ -47,7 +47,7 @@ CColliderComponent::~CColliderComponent()
 	{
 		(*iter)->DeletePrevCollision(this);
 		(*iter)->CallCollisionCallback(Collision_State::End);
-		//CallCollisionCallback(Collision_State::End);
+		CallCollisionCallback(Collision_State::End);
 	}
 }
 
@@ -123,6 +123,28 @@ void CColliderComponent::DeletePrevCollision(CColliderComponent* Collider)
 			m_PrevCollisionList.erase(iter);
 			return;
 		}
+	}
+}
+
+void CColliderComponent::DeletePrevCollisionAll()
+{
+	if (m_PrevCollisionList.empty())
+		return;
+
+	auto	iter = m_PrevCollisionList.begin();
+	auto	iterEnd = m_PrevCollisionList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		CallCollisionCallback(Collision_State::End);
+		(*iter)->CallCollisionCallback(Collision_State::End);
+
+		// 서로 이전 충돌목록에서 제거해준다.
+		(*iter)->DeletePrevCollision(this);
+
+		iter = m_PrevCollisionList.erase(iter);
+		iterEnd = m_PrevCollisionList.end();
+		continue;
 	}
 }
 

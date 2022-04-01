@@ -260,6 +260,9 @@
     <Filter Include="00. Engine\09. Public">
       <UniqueIdentifier>{e115bbcb-44b9-4af3-994d-8d069db1570d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06. Excel\01. Character\01. Enemy">
+      <UniqueIdentifier>{0e2b17d1-12d8-463e-ac95-f1fbfd11b7ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -730,6 +733,9 @@
     <ClInclude Include="Public.h">
       <Filter>00. Engine\09. Public</Filter>
     </ClInclude>
+    <ClInclude Include="Excel\Character\Excel_Monster.h">
+      <Filter>06. Excel\01. Character\01. Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -1118,6 +1124,9 @@
     </ClCompile>
     <ClCompile Include="Public.cpp">
       <Filter>00. Engine\09. Public</Filter>
+    </ClCompile>
+    <ClCompile Include="Excel\Character\Excel_Monster.cpp">
+      <Filter>06. Excel\01. Character\01. Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -14,8 +14,8 @@ protected:
 	virtual ~CBullet();
 
 private:
-	float								m_StartDistance;
-	float								m_Distance;
+	float			m_StartDistance;
+	float			m_Distance;
 	CSharedPtr<class CColliderBox2D>	m_Body;
 	Character_Type	m_CharacterType;
 	Vector3			m_BulletDir;
@@ -25,12 +25,13 @@ private:
 	std::string		m_SoundName;
 	float			m_Damage;
 	CSharedPtr<class CCharacter> m_Owner;
-	bool			m_HitObject;
+	bool			m_Hit;
 	bool			m_Pierce;
-	bool			m_Destroyed;
 	bool			m_ImpactDestroyed;
 	class CBulletDummy* m_Impact;
 	bool			m_ImpactCreated;
+	bool			m_Check;
+	bool			m_NeedDestroyCollider;
 
 public:
 	void SetBulletType(Bullet_Type Type)
@@ -78,12 +79,17 @@ public:
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
 	virtual CBullet* Clone();
+	virtual void Destroy();
 
 public:
 	void OnCollisionBegin(const CollisionResult& result);
 	void OnCollisionEnd(const CollisionResult& result);
 
 private:
-	bool IsWallTile(const Vector3& NextWorldPos);
-	void CreateHitEffect(bool IsDie);
+	bool IsWallTile(const Vector3& NextPos);
+	void CreateHitEffect();
+
+private:
+	void CheckFirstBullet(float Dist);
+	void BulletUpdater(float Dist);
 };

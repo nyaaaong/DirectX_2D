@@ -1,5 +1,6 @@
 
 #include "EditorMenu.h"
+#include "TileMapWindow.h"
 #include "Public.h"
 #include "PathManager.h"
 #include "ObjectHierarchy.h"
@@ -14,6 +15,7 @@
 
 CEditorMenu::CEditorMenu()	:
 	m_ObjectCreateButton(nullptr),
+	m_ObjectDeleteButton(nullptr),
 	m_ObjectCombo(nullptr),
 	m_Public(nullptr)
 {
@@ -37,11 +39,15 @@ bool CEditorMenu::Init()
 
 	CIMGUISameLine* Line = AddWidget<CIMGUISameLine>("Line");
 
-	m_ObjectCreateButton = AddWidget<CIMGUIButton>("CreateObject", 140.f, 20.f);
+	m_ObjectCreateButton = AddWidget<CIMGUIButton>("Create", 70.f, 20.f);
 
 	m_ObjectCreateButton->SetClickCallback(this, &CEditorMenu::ObjectCreateButton);
 
 	Line = AddWidget<CIMGUISameLine>("Line");
+
+	m_ObjectDeleteButton = AddWidget<CIMGUIButton>("Delete", 70.f, 20.f);
+
+	m_ObjectDeleteButton->SetClickCallback(this, &CEditorMenu::ObjectDeleteButton);
 
 	return true;
 }
@@ -79,11 +85,57 @@ void CEditorMenu::ObjectCreateButton()
 
 	if (Hierarchy)
 	{
-		Hierarchy->AddObjectList("BulletKin");
-		Hierarchy->AddObjectList("Bandana");
-		Hierarchy->AddObjectList("ShotgunKin1");
-		Hierarchy->AddObjectList("ShotgunKin2");
+		switch ((CreateObject_Type)SelectIndex)
+		{
+		case CreateObject_Type::BulletKin:
+			Hierarchy->AddObjectList("BulletKin");
+			break;
+		case CreateObject_Type::Bandana:
+			Hierarchy->AddObjectList("Bandana");
+			break;
+		case CreateObject_Type::ShotgunKin1:
+			Hierarchy->AddObjectList("ShotgunKin1");
+			break;
+		case CreateObject_Type::ShotgunKin2:
+			Hierarchy->AddObjectList("ShotgunKin2");
+			break;
+		}
 	}
+}
+
+void CEditorMenu::ObjectDeleteButton()
+{
+	CObjectHierarchy* Hierarchy = (CObjectHierarchy*)CIMGUIManager::GetInst()->FindIMGUIWindow("ObjectHierarchy");
+
+	Object_Type	SelectType = Hierarchy->GetSelectObjectType();
+
+	if (SelectType == Object_Type::Max || !CEditorManager::GetInst()->HasTileMap())
+		return;
+
+	std::string	Name;
+
+	switch (SelectType)
+	{
+	case Object_Type::BulletKin:
+		Name = "BulletKin";
+		break;
+	case Object_Type::Bandana:
+		Name = "Bandana";
+		break;
+	case Object_Type::ShotgunKin1:
+		Name = "ShotgunKin1";
+		break;
+	case Object_Type::ShotgunKin2:
+		Name = "ShotgunKin2";
+		break;
+	}
+
+	Hierarchy->DeleteObjectList(Name.c_str());
+
+	CPublic::GetInst()->ClearObjectWorldPos(SelectType);
+	CPublic::GetInst()->DeleteObjectType(SelectType);
+
+	CEditorManager::GetInst()->GetTileMapWindow()->DeleteTile(SelectType);
 }
 
 void CEditorMenu::LoadSceneObject()

@@ -19,9 +19,13 @@ bool CExcel_Player::Init()
 	if (!sheet)
 		return false;
 
+	float	Number[3] = {};
+	int		NumberIndex = 0;
+
 	for (int row = sheet->firstRow(); row < sheet->lastRow(); ++row)
 	{
-		for (int col = sheet->firstCol(); col < sheet->lastCol(); ++col)
+		// 무료버전은 맨 처음 string이 존재하기 때문에 한줄 건너띄워서 검사하게 해준다.
+		for (int col = sheet->firstCol() + 1; col < sheet->lastCol(); ++col)
 		{
 			libxl::CellType	cellType = sheet->cellType(row, col);
 
@@ -33,7 +37,8 @@ bool CExcel_Player::Init()
 					break;
 				case libxl::CELLTYPE_NUMBER:
 				{
-					double d = sheet->readNum(row, col);
+					Number[NumberIndex] = static_cast<float>(sheet->readNum(row, col));
+					++NumberIndex;
 					break;
 				}
 				case libxl::CELLTYPE_STRING:
@@ -43,7 +48,7 @@ bool CExcel_Player::Init()
 				}
 				case libxl::CELLTYPE_BOOLEAN:
 				{
-					bool b = sheet->readBool(row, col);
+					//bool b = sheet->readBool(row, col);
 					break;
 				}
 				case libxl::CELLTYPE_BLANK:
@@ -57,6 +62,10 @@ bool CExcel_Player::Init()
 
 		}
 	}
+
+	m_PlayerInfo.HP = Number[0];
+	m_PlayerInfo.MoveSpeed = Number[1];
+	m_PlayerInfo.Damage = Number[2];
 
 	return true;
 }

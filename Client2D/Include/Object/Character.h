@@ -19,6 +19,7 @@ protected:
 	CSharedPtr<CColliderBox2D>       m_Body;
 	CSharedPtr<CPaperBurnComponent>   m_PaperBurn;
 	float	m_HP;
+	float	m_HPMax;
 	float	m_HitEffectTime;
 	float	m_HitEffectTimeMax;
 	float	m_MoveSpeed;

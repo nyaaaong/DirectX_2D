@@ -15,6 +15,8 @@ protected:
 	class CScene* m_Scene;
 	CSharedPtr<class CGameObject> m_PlayerObject;
 	bool		m_UseCamera;
+	CharacterInfo		m_PlayerInfo;
+	CharacterInfo		m_MonsterInfo[(int)Object_Type::Max];
 
 public:
 	void UseCamera(bool UseCamera = true)
@@ -23,6 +25,16 @@ public:
 	}
 
 public:
+	CharacterInfo GetPlayerInfo()	const
+	{
+		return m_PlayerInfo;
+	}
+
+	CharacterInfo GetMonsterInfo(Object_Type MonsterType)	const
+	{
+		return m_MonsterInfo[(int)MonsterType];
+	}
+
 	bool IsUseCamera()	const
 	{
 		return m_UseCamera;
