@@ -30,6 +30,14 @@ CBulletKin::~CBulletKin()
 void CBulletKin::Start()
 {
 	CMonster::Start();
+
+	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
+
+	CharacterInfo	Info = SceneMode->GetPlayerInfo();
+	m_HP = Info.HP;
+	m_HPMax = Info.HP;
+	m_MoveSpeed = Info.MoveSpeed;
+	m_Damage = Info.Damage;
 }
 
 bool CBulletKin::Init()
@@ -62,14 +70,6 @@ bool CBulletKin::Init()
 	HideAllWeapon();
 
 	m_AttackTimerMax = 1000.f;
-
-	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
-
-	CharacterInfo	Info = SceneMode->GetPlayerInfo();
-	m_HP = Info.HP;
-	m_HPMax = Info.HP;
-	m_MoveSpeed = Info.MoveSpeed;
-	m_Damage = Info.Damage;
 
 	return true;
 }

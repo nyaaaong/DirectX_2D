@@ -22,9 +22,6 @@ CExcelManager::~CExcelManager()
 
 bool CExcelManager::Init()
 {
-	if (CSceneManager::GetInst()->IsEditor())
-		return true;
-
 	m_PlayerInfo = DBG_NEW CExcel_Player;
 	m_MonsterInfo = DBG_NEW CExcel_Monster;
 

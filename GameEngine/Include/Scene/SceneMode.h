@@ -25,12 +25,12 @@ public:
 	}
 
 public:
-	CharacterInfo GetPlayerInfo()	const
+	const CharacterInfo& GetPlayerInfo()	const
 	{
 		return m_PlayerInfo;
 	}
 
-	CharacterInfo GetMonsterInfo(Object_Type MonsterType)	const
+	const CharacterInfo& GetMonsterInfo(Object_Type MonsterType)	const
 	{
 		return m_MonsterInfo[(int)MonsterType];
 	}

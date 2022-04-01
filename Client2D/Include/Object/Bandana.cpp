@@ -5,7 +5,12 @@
 #include "Scene/SceneManager.h"
 #include "Scene/Scene.h"
 
-CBandana::CBandana()
+CBandana::CBandana()	:
+	m_BurstTimer(0.f),
+	m_BurstTimerMax(1.3f),
+	m_BurstCoolDownTimer(0.f),
+	m_BurstCoolDownTimerMax(2.f),
+	m_BurstCooldown(false)
 {
 	SetTypeID<CBandana>();
 }
@@ -30,6 +35,14 @@ CBandana::~CBandana()
 void CBandana::Start()
 {
 	CMonster::Start();
+
+	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
+
+	CharacterInfo	Info = SceneMode->GetPlayerInfo();
+	m_HP = Info.HP;
+	m_HPMax = Info.HP;
+	m_MoveSpeed = Info.MoveSpeed;
+	m_Damage = Info.Damage;
 }
 
 bool CBandana::Init()
@@ -63,14 +76,6 @@ bool CBandana::Init()
 
 	m_AttackTimerMax = 0.12f;
 
-	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
-
-	CharacterInfo	Info = SceneMode->GetPlayerInfo();
-	m_HP = Info.HP;
-	m_HPMax = Info.HP;
-	m_MoveSpeed = Info.MoveSpeed;
-	m_Damage = Info.Damage;
-
 	return true;
 }
 
@@ -82,6 +87,34 @@ void CBandana::Update(float DeltaTime)
 CBandana* CBandana::Clone()
 {
 	return DBG_NEW CBandana(*this);
+}
+
+void CBandana::Calc(float DeltaTime)
+{
+	CMonster::Calc(DeltaTime);
+
+	if (m_OutsideLimit)
+	{
+		m_BurstTimer += DeltaTime;
+
+		if (m_BurstTimer >= m_BurstTimerMax)
+		{
+			m_BurstTimer = 0.f;
+			m_BurstCooldown = true;
+			return;
+		}
+
+		if (m_BurstCooldown)
+		{
+			m_BurstCoolDownTimer += DeltaTime;
+
+			if (m_BurstCoolDownTimer >= m_BurstCoolDownTimerMax)
+			{
+				m_BurstCoolDownTimer = 0.f;
+				m_BurstCooldown = false;
+			}
+		}
+	}
 }
 
 void CBandana::PlaySoundDie()
@@ -96,7 +129,7 @@ void CBandana::PlaySoundDie()
 
 void CBandana::Attack(float DeltaTime)
 {
-	if (!m_InsideLimit || m_AttackCoolDown || m_IsDied)
+	if (!m_InsideLimit || m_AttackCoolDown || m_IsDied || m_BurstCooldown)
 		return;
 
 	m_AttackCoolDown = true;

@@ -160,14 +160,6 @@ bool CPlayer2D::Init()
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Weapon2", KeyState_Down, this, &CPlayer2D::Weapon2);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Weapon3", KeyState_Down, this, &CPlayer2D::Weapon3);
 
-	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
-	
-	CharacterInfo	PlayerInfo = SceneMode->GetPlayerInfo();
-	m_HP = PlayerInfo.HP;
-	m_HPMax = PlayerInfo.HP;
-	m_MoveSpeed = PlayerInfo.MoveSpeed;
-	m_Damage = PlayerInfo.Damage;
-
 	return true;
 }
 
@@ -230,6 +222,14 @@ void CPlayer2D::Start()
 	Vector3	WorldPos = GetWorldPos();
 
 	m_Body->SetWorldPos(WorldPos);
+
+	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
+
+	CharacterInfo	PlayerInfo = SceneMode->GetPlayerInfo();
+	m_HP = PlayerInfo.HP;
+	m_HPMax = PlayerInfo.HP;
+	m_MoveSpeed = PlayerInfo.MoveSpeed;
+	m_Damage = PlayerInfo.Damage;
 }
 
 void CPlayer2D::Update(float DeltaTime)

@@ -30,6 +30,14 @@ CShotgunKin2::~CShotgunKin2()
 void CShotgunKin2::Start()
 {
 	CMonster::Start();
+
+	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
+
+	CharacterInfo	Info = SceneMode->GetPlayerInfo();
+	m_HP = Info.HP;
+	m_HPMax = Info.HP;
+	m_MoveSpeed = Info.MoveSpeed;
+	m_Damage = Info.Damage;
 }
 
 bool CShotgunKin2::Init()
@@ -62,14 +70,6 @@ bool CShotgunKin2::Init()
 	HideAllWeapon();
 
 	m_AttackTimerMax = 0.7f;
-
-	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
-
-	CharacterInfo	Info = SceneMode->GetPlayerInfo();
-	m_HP = Info.HP;
-	m_HPMax = Info.HP;
-	m_MoveSpeed = Info.MoveSpeed;
-	m_Damage = Info.Damage;
 
 	return true;
 }
