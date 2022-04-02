@@ -35,6 +35,7 @@ public:
 	void AddObjectList(const char* Name);
 	void DeleteObjectList(const char* Name);
 	void ClearObjectList();
+	bool FindObjectList(const char* Name);
 	void SelectCancleObjectList();
 
 public:

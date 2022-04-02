@@ -65,41 +65,46 @@ void CEditorMenu::ObjectCreateButton()
 	if (SelectIndex == -1 || !CEditorManager::GetInst()->HasTileMap())
 		return;
 
+	CObjectHierarchy* Hierarchy = (CObjectHierarchy*)CIMGUIManager::GetInst()->FindIMGUIWindow("ObjectHierarchy");
+
 	switch ((CreateObject_Type)SelectIndex)
 	{
 	case CreateObject_Type::BulletKin:
+		if (Hierarchy->FindObjectList("BulletKin"))
+			return;
 		CPublic::GetInst()->CreateObjectType(Object_Type::BulletKin);
 		break;
 	case CreateObject_Type::Bandana:
+		if (Hierarchy->FindObjectList("Bandana"))
+			return;
 		CPublic::GetInst()->CreateObjectType(Object_Type::Bandana);
 		break;
 	case CreateObject_Type::ShotgunKin1:
+		if (Hierarchy->FindObjectList("ShotgunKin1"))
+			return;
 		CPublic::GetInst()->CreateObjectType(Object_Type::ShotgunKin1);
 		break;
 	case CreateObject_Type::ShotgunKin2:
+		if (Hierarchy->FindObjectList("ShotgunKin2"))
+			return;
 		CPublic::GetInst()->CreateObjectType(Object_Type::ShotgunKin2);
 		break;
 	}
 
-	CObjectHierarchy* Hierarchy = (CObjectHierarchy*)CIMGUIManager::GetInst()->FindIMGUIWindow("ObjectHierarchy");
-
-	if (Hierarchy)
+	switch ((CreateObject_Type)SelectIndex)
 	{
-		switch ((CreateObject_Type)SelectIndex)
-		{
-		case CreateObject_Type::BulletKin:
-			Hierarchy->AddObjectList("BulletKin");
-			break;
-		case CreateObject_Type::Bandana:
-			Hierarchy->AddObjectList("Bandana");
-			break;
-		case CreateObject_Type::ShotgunKin1:
-			Hierarchy->AddObjectList("ShotgunKin1");
-			break;
-		case CreateObject_Type::ShotgunKin2:
-			Hierarchy->AddObjectList("ShotgunKin2");
-			break;
-		}
+	case CreateObject_Type::BulletKin:
+		Hierarchy->AddObjectList("BulletKin");
+		break;
+	case CreateObject_Type::Bandana:
+		Hierarchy->AddObjectList("Bandana");
+		break;
+	case CreateObject_Type::ShotgunKin1:
+		Hierarchy->AddObjectList("ShotgunKin1");
+		break;
+	case CreateObject_Type::ShotgunKin2:
+		Hierarchy->AddObjectList("ShotgunKin2");
+		break;
 	}
 }
 

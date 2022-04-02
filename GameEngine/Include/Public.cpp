@@ -330,9 +330,59 @@ void CPublic::LoadObjPos(CGameObject* TileMapObj)
 
 		TileMapComponent->GetSameTypeTile((Tile_Type)i, vecTypeTile);
 
-		int Size = (int)m_mapObject.size();
+		if (vecTypeTile.empty() || (Tile_Type)i <= Tile_Type::T_Wall || (Tile_Type)i > Tile_Type::M_ShotgunKin2)
+			continue;
 
-		for (int i = 0; i < Size; ++i)
+		int Size = (int)vecTypeTile.size();
+
+		for (int j = 0; j < Size; ++j)
+		{
+			switch ((Tile_Type)i)
+			{
+			case Tile_Type::M_BulletKin:
+				iter = m_mapObject.find(Object_Type::BulletKin);
+
+				if (iter == m_mapObject.end())
+				{
+					CreateObjectType(Object_Type::BulletKin);
+					iter = m_mapObject.find(Object_Type::BulletKin);
+				}
+				break;
+			case Tile_Type::M_Bandana:
+				iter = m_mapObject.find(Object_Type::Bandana);
+
+				if (iter == m_mapObject.end())
+				{
+					CreateObjectType(Object_Type::Bandana);
+					iter = m_mapObject.find(Object_Type::Bandana);
+				}
+				break;
+			case Tile_Type::M_ShotgunKin1:
+				iter = m_mapObject.find(Object_Type::ShotgunKin1);
+
+				if (iter == m_mapObject.end())
+				{
+					CreateObjectType(Object_Type::ShotgunKin1);
+					iter = m_mapObject.find(Object_Type::ShotgunKin1);
+				}
+				break;
+			case Tile_Type::M_ShotgunKin2:
+				iter = m_mapObject.find(Object_Type::ShotgunKin2);
+
+				if (iter == m_mapObject.end())
+				{
+					CreateObjectType(Object_Type::ShotgunKin2);
+					iter = m_mapObject.find(Object_Type::ShotgunKin2);
+				}
+				break;
+			}
+
+			iter->second->push_back(vecTypeTile[j]->GetWorldPos());
+		}
+
+		/*int Size = (int)m_mapObject.size();
+
+		for (int j = 0; j < Size; ++j)
 		{
 			vecObjTypeTile.clear();
 
@@ -340,10 +390,10 @@ void CPublic::LoadObjPos(CGameObject* TileMapObj)
 
 			int ObjTypeSize = (int)vecObjTypeTile.size();
 
-			for (int j = 0; j < ObjTypeSize; ++j)
+			for (int k = 0; k < ObjTypeSize; ++k)
 			{
-				iter->second->push_back(vecObjTypeTile[j]->GetWorldPos());
+				iter->second->push_back(vecObjTypeTile[k]->GetWorldPos());
 			}
-		}
+		}*/
 	}
 }

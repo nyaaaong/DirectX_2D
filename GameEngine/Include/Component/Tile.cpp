@@ -81,8 +81,29 @@ void CTile::Load(FILE* File)
 {
 	fread(&m_TileType, sizeof(Tile_Type), 1, File);
 
-	if (m_TileType == Tile_Type::M_Bandana)
+	/*switch (m_TileType)
+	{
+	case Tile_Type::M_BulletKin:
+	{
 		int a = 0;
+	}
+		break;
+	case Tile_Type::M_Bandana:
+	{
+		int a = 0;
+	}
+		break;
+	case Tile_Type::M_ShotgunKin1:
+	{
+		int a = 0;
+	}
+		break;
+	case Tile_Type::M_ShotgunKin2:
+	{
+		int a = 0;
+	}
+		break;
+	}*/
 
 	fread(&m_ObjectType, sizeof(Object_Type), 1, File);
 

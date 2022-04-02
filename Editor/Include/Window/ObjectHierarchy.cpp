@@ -40,6 +40,11 @@ void CObjectHierarchy::ClearObjectList()
 	SelectCancleObjectList();
 }
 
+bool CObjectHierarchy::FindObjectList(const char* Name)
+{	
+    return m_ObjectListWidget->CheckItem(Name);
+}
+
 void CObjectHierarchy::SelectCancleObjectList()
 {
 	m_ObjectListWidget->SetSelectCancel(true);

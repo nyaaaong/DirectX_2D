@@ -60,7 +60,7 @@ bool CMainScene::Init()
 
 	std::vector<Vector3>	vecObjectPos;
 
-	for (int i = 0; i < (int)Object_Type::Max; ++i)
+	for (int i = (int)Object_Type::BulletKin; i <= (int)Object_Type::ShotgunKin2; ++i)
 	{
 		vecObjectPos.clear();
 
