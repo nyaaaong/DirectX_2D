@@ -10,9 +10,10 @@ CCharacter::CCharacter() :
 	m_HP(50.f),
 	m_HPMax(50.f),
 	m_HitEffectTime(0.f),
-	m_HitEffectTimeMax(0.3f),
+	m_HitEffectTimeMax(0.1f),
 	m_IsDied(false),
 	m_IsPaperBurn(false),
+	m_UsePaperburn(true),
 	m_Hit(false),
 	m_IsPlayedHitSound(false),
 	m_Damage(3.f),
@@ -33,6 +34,7 @@ CCharacter::CCharacter(const CCharacter& obj) :
 	m_HPMax = obj.m_HPMax;
 	m_IsDied = false;
 	m_IsPaperBurn = false;
+	m_UsePaperburn = obj.m_UsePaperburn;
 	m_Hit = false;
 	m_IsPlayedHitSound = false;
 	m_Type = obj.m_Type;
@@ -72,7 +74,9 @@ void CCharacter::Update(float DeltaTime)
 
 	Calc(DeltaTime);
 	Hit(DeltaTime);
-	Dead(DeltaTime);
+
+	if (!m_Hit)
+		Dead(DeltaTime);
 }
 
 void CCharacter::OnCollisionBegin(const CollisionResult& result)

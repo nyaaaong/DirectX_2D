@@ -34,7 +34,7 @@ CTileMapComponent::CTileMapComponent()	:
 
 	m_TileColor[(int)Tile_Type::T_Wall] = Vector4(1.f, 0.f, 0.f, 1.f);
 	m_TileColor[(int)Tile_Type::M_BulletKin] = Vector4(1.f, 0.f, 1.f, 1.f);
-	m_TileColor[(int)Tile_Type::M_Bandana] = Vector4(0.7f, 1.f, 0.f, 1.f);
+	m_TileColor[(int)Tile_Type::M_Bandana] = Vector4(0.0f, 1.f, 1.f, 1.f);
 	m_TileColor[(int)Tile_Type::M_ShotgunKin1] = Vector4(1.f, 0.7f, 0.f, 1.f);
 	m_TileColor[(int)Tile_Type::M_ShotgunKin2] = Vector4(0.f, 0.f, 1.f, 1.f);
 

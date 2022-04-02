@@ -20,11 +20,12 @@ CMonster::CMonster() :
 	m_AttackTimerMax(1.f),
 	m_AttackCoolDown(false),
 	m_CurWeapon(nullptr),
-	m_PlayerAngle(1.f),
+	m_PlayerAngle(0.f),
 	m_PlayerDist(0.f),
 	m_PlayerDistMin(1200.f),
 	m_PlayerDistMax(2200.f),
-	m_OutsideLimit(false)
+	m_OutsideLimit(false),
+	m_StartDestroyBefore(false)
 {
 	SetTypeID<CMonster>();
 
@@ -65,12 +66,13 @@ CMonster::CMonster(const CMonster& obj) :
 	m_AttackCoolDown = false;
 	m_CurWeapon = nullptr;
 
-	m_PlayerAngle = 1.f;
+	m_PlayerAngle = 0.f;
 	m_PlayerDist = 0.f;
 	m_PlayerDistMin = obj.m_PlayerDistMin;
 	m_PlayerDistMax = obj.m_PlayerDistMax;
 
 	m_OutsideLimit = false;
+	m_StartDestroyBefore = false;
 }
 
 CMonster::~CMonster()
@@ -178,9 +180,11 @@ void CMonster::Calc(float DeltaTime)
 		return;
 	}
 
-	m_PlayerDir = m_PlayerWorldPos - GetWorldPos();
-	m_PlayerDir.Normalize();
-	m_PlayerDir.z = 0.f;
+	Vector3	WorldPos = GetWorldPos();
+
+	m_PlayerAngle = atan2(m_PlayerWorldPos.y - WorldPos.y, m_PlayerWorldPos.x - WorldPos.x) * (180.f / PI);
+
+	m_PlayerDir = Vector3::ConvertDir(m_PlayerAngle);
 
 	if (m_PlayerDist <= m_PlayerDistMin)
 		m_InsideLimit = true;
@@ -197,11 +201,6 @@ void CMonster::Calc(float DeltaTime)
 	if (!m_IsDied)
 		m_State = Monster_State::Idle;
 
-	Vector3	WorldPos = GetWorldPos();
-
-	// 마우스를 향해서 앵글 변경
-	m_PlayerAngle = atan2(m_PlayerWorldPos.y - WorldPos.y, m_PlayerWorldPos.x - WorldPos.x) * (180.f / PI);
-
 	UpdateGun();
 	UpdateAttackCoolDown(DeltaTime);
 }
@@ -213,9 +212,6 @@ void CMonster::PaperBurnEnd()
 
 void CMonster::Dead(float DeltaTime)
 {
-	if (m_BurnStartDelay < m_BurnStartDelayMax)
-		m_BurnStartDelay += DeltaTime;
-
 	if (m_HP <= 0.f && !m_IsDied)
 	{
 		CCharacter::Dead(DeltaTime);
@@ -231,18 +227,42 @@ void CMonster::Dead(float DeltaTime)
 		m_State = Monster_State::Die;
 	}
 
-	else if (m_IsDied && !m_IsPaperBurn && m_BurnStartDelay >= m_BurnStartDelayMax)
+	if (m_UsePaperburn)
 	{
-		// 죽는 애니메이션이 실행중이며 만약 애니메이션이 끝났다면 페이퍼번을 실행한다.
-		if (m_Sprite->GetAnimationInstance()->IsEnd())
+		if (m_BurnStartDelay < m_BurnStartDelayMax)
+			m_BurnStartDelay += DeltaTime;
+
+		else if (m_IsDied && !m_IsPaperBurn && m_BurnStartDelay >= m_BurnStartDelayMax)
 		{
-			m_Sprite->GetAnimationInstance()->Stop();
+			// 죽는 애니메이션이 실행중이며 만약 애니메이션이 끝났다면 페이퍼번을 실행시킨다.
+			if (m_Sprite->GetAnimationInstance()->IsEnd())
+			{
+				m_Sprite->GetAnimationInstance()->Stop();
 
-			m_IsPaperBurn = true;
+				m_IsPaperBurn = true;
 
-			m_PaperBurn->StartPaperBurn();
+				m_PaperBurn->StartPaperBurn();
 
-			m_Sprite->SetOpacity(0.5f);
+				m_Sprite->SetOpacity(0.5f);
+			}
+		}
+	}
+
+	// 페이퍼번을 사용하지 않을때
+	else
+	{
+		if (m_IsDied)
+		{
+			// 죽는 애니메이션이 실행중이며 만약 애니메이션이 끝났다면
+			if (m_Sprite->GetAnimationInstance()->IsEnd())
+			{
+				m_Sprite->GetAnimationInstance()->Stop();
+
+				Destroy();
+			}
+
+			else if (!m_StartDestroyBefore)
+				DestroyBefore();
 		}
 	}
 }
@@ -276,6 +296,11 @@ void CMonster::Attack(float DeltaTime)
 
 void CMonster::PlaySoundDie()
 {
+}
+
+void CMonster::DestroyBefore()
+{
+	m_StartDestroyBefore = true;
 }
 
 void CMonster::HideAllWeapon()

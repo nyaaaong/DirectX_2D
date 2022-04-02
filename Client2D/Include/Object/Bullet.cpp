@@ -19,6 +19,7 @@ CBullet::CBullet() :
 	m_ImpactDestroyed(false),
 	m_ImpactCreated(false),
 	m_Check(false),
+	m_SetBulletSpeed(false),
 	m_NeedDestroyCollider(false),
 	m_Impact(nullptr),
 	m_BulletType(Bullet_Type::Pistol)
@@ -44,6 +45,7 @@ CBullet::CBullet(const CBullet& obj) :
 	m_ImpactCreated = false;
 	m_Check = false;
 	m_NeedDestroyCollider = false;
+	m_SetBulletSpeed = false;
 	m_Pierce = obj.m_Pierce;
 
 	m_Damage = obj.m_Damage;
@@ -115,19 +117,21 @@ void CBullet::First()
 			switch (m_WeaponSlot)
 			{
 			case Weapon_Slot::Pistol:
-				m_BulletSpeed = 1000.f;
+				if (!m_SetBulletSpeed)
+					m_BulletSpeed = 1000.f;
 				m_Distance = 800.f;
-				m_SoundName = "Pistol";
+				m_StartDistance = 100.f;
 				break;
 			case Weapon_Slot::Rifle:
-				m_BulletSpeed = 1000.f;
+				if (!m_SetBulletSpeed)
+					m_BulletSpeed = 1000.f;
 				m_Distance = 800.f;
-				m_SoundName = "Rifle";
+				m_StartDistance = 100.f;
 				break;
 			case Weapon_Slot::Sniper:
-				m_BulletSpeed = 5000.f;
+				if (!m_SetBulletSpeed)
+					m_BulletSpeed = 5000.f;
 				m_Distance = 2000.f;
-				m_SoundName = "Sniper";
 				break;
 			}
 			break;
@@ -139,28 +143,25 @@ void CBullet::First()
 			switch (m_BulletType)
 			{
 			case Bullet_Type::Pistol:
-				m_BulletSpeed = 1000.f;
+				if (!m_SetBulletSpeed)
+					m_BulletSpeed = 1000.f;
 				m_Distance = 800.f;
-				m_SoundName = "Pistol";
 				break;
 			case Bullet_Type::Rifle:
-				m_BulletSpeed = 1000.f;
+				if (!m_SetBulletSpeed)
+					m_BulletSpeed = 1000.f;
 				m_Distance = 800.f;
-				m_SoundName = "Rifle";
+				m_StartDistance = 100.f;
 				break;
 			case Bullet_Type::Shotgun:
-				m_BulletSpeed = 5000.f;
-				m_Distance = 2000.f;
-				m_SoundName = "Shotgun";
+				if (!m_SetBulletSpeed)
+					m_BulletSpeed = 1000.f;
+				m_Distance = 400.f;
+				m_StartDistance = 200.f;
 				break;
 			}
 			break;
 		}
-
-		if (m_SoundName == "")
-			ASSERT("if (m_SoundName == "")");
-
-		m_Scene->GetResource()->SoundPlay(m_SoundName);
 	}
 }
 

@@ -99,6 +99,8 @@ void CBulletKin::Attack(float DeltaTime)
 	if (!m_InsideLimit || m_AttackCoolDown || m_IsDied)
 		return;
 
+	m_Scene->GetResource()->SoundPlay("Pistol");
+
 	m_AttackCoolDown = true;
 
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");

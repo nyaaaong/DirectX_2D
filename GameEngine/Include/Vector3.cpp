@@ -356,6 +356,11 @@ Vector3 Vector3::ConvertAngle()	const
 	return Vector3(DegreeToRadian(x), DegreeToRadian(y), DegreeToRadian(z));
 }
 
+Vector3 Vector3::ConvertDir(float Angle)
+{
+	return Vector3(cosf(DegreeToRadian(Angle)), sinf(DegreeToRadian(Angle)), 0.f);
+}
+
 Vector3 Vector3::TransformNormal(const Matrix& m) const
 {
 	return Vector3(XMVector3TransformNormal(Convert(), m.m));

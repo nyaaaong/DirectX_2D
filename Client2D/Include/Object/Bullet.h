@@ -16,24 +16,31 @@ protected:
 private:
 	float			m_StartDistance;
 	float			m_Distance;
-	CSharedPtr<class CColliderBox2D>	m_Body;
-	Character_Type	m_CharacterType;
-	Vector3			m_BulletDir;
 	float			m_BulletSpeed;
-	Weapon_Slot		m_WeaponSlot;
-	Bullet_Type		m_BulletType;
-	std::string		m_SoundName;
 	float			m_Damage;
-	CSharedPtr<class CCharacter> m_Owner;
 	bool			m_Hit;
 	bool			m_Pierce;
 	bool			m_ImpactDestroyed;
-	class CBulletDummy* m_Impact;
 	bool			m_ImpactCreated;
 	bool			m_Check;
 	bool			m_NeedDestroyCollider;
+	bool			m_SetBulletSpeed;
+	CSharedPtr<class CColliderBox2D>	m_Body;
+	CSharedPtr<class CCharacter> m_Owner;
+	class CBulletDummy* m_Impact;
+	Character_Type	m_CharacterType;
+	Weapon_Slot		m_WeaponSlot;
+	Bullet_Type		m_BulletType;
+	Vector3			m_BulletDir;
 
 public:
+	void SetBulletSpeed(float Speed)
+	{
+		m_SetBulletSpeed = true;
+
+		m_BulletSpeed = Speed;
+	}
+
 	void SetBulletType(Bullet_Type Type)
 	{
 		m_BulletType = Type;

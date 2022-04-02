@@ -132,6 +132,8 @@ void CBandana::Attack(float DeltaTime)
 	if (!m_InsideLimit || m_AttackCoolDown || m_IsDied || m_BurstCooldown)
 		return;
 
+	m_Scene->GetResource()->SoundPlay("Rifle");
+
 	m_AttackCoolDown = true;
 
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");

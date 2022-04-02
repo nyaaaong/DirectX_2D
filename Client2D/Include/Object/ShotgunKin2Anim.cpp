@@ -35,7 +35,7 @@ bool CShotgunKin2Anim::Init()
 	AddAnimation(TEXT("Monster/ShotgunKin2/Walk/ShotgunKin2_Walk_L.sqc"), "ShotgunKin2_Walk_L", ANIMATION_PATH, true, 1.f);
 	AddAnimation(TEXT("Monster/ShotgunKin2/Walk/ShotgunKin2_Walk_R.sqc"), "ShotgunKin2_Walk_R", ANIMATION_PATH, true, 1.f);
 
-	AddAnimation(TEXT("Monster/ShotgunKin2/Death/ShotgunKin2_Death_L.sqc"), "ShotgunKin2_Death", ANIMATION_PATH, false, 0.4f);
+	AddAnimation(TEXT("Monster/ShotgunKin2/Death/ShotgunKin2_Death.sqc"), "ShotgunKin2_Death", ANIMATION_PATH, false, 0.6f);
 
 	SetCurrentAnimation("ShotgunKin2_Idle_L");
 

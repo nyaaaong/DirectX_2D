@@ -41,6 +41,8 @@ CPlayer2D::CPlayer2D() :
 	m_BottomOffsetY = 0.2f;
 
 	m_HP = 10000.f;
+
+	m_UsePaperburn = false;
 }
 
 CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
@@ -77,6 +79,8 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_WeaponSlot = Weapon_Slot::None;
 
 	m_Type = Character_Type::Player;
+
+	m_UsePaperburn = false;
 }
 
 CPlayer2D::~CPlayer2D()
@@ -490,6 +494,19 @@ void CPlayer2D::Attack(float DeltaTime)
 	Bullet->SetCharacterType(Character_Type::Player);
 	Bullet->SetWeaponSlot(m_WeaponSlot);
 	Bullet->Pierce(m_PierceBullet);
+
+	switch (m_WeaponSlot)
+	{
+	case Weapon_Slot::Pistol:
+		m_Scene->GetResource()->SoundPlay("Pistol");
+		break;
+	case Weapon_Slot::Rifle:
+		m_Scene->GetResource()->SoundPlay("Rifle");
+		break;
+	case Weapon_Slot::Sniper:
+		m_Scene->GetResource()->SoundPlay("Sniper");
+		break;
+	}
 }
 
 void CPlayer2D::UpdateAttackCoolDown(float DeltaTime)

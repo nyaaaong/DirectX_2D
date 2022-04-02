@@ -5,7 +5,9 @@
 #include "Scene/SceneManager.h"
 #include "Scene/Scene.h"
 
-CShotgunKin1::CShotgunKin1()
+CShotgunKin1::CShotgunKin1() :
+	m_arrAngle{},
+	m_BulletAngle(10.f)
 {
 	SetTypeID<CShotgunKin1>();
 }
@@ -21,6 +23,10 @@ CShotgunKin1::CShotgunKin1(const CShotgunKin1& obj) :
 	m_WeaponL = (CSpriteComponent*)FindComponent("WeaponLSprite");
 
 	m_CurWeapon = nullptr;
+
+	memset(m_arrAngle, 0, sizeof(float) * 4);
+
+	m_BulletAngle = obj.m_BulletAngle;
 }
 
 CShotgunKin1::~CShotgunKin1()
@@ -52,11 +58,11 @@ bool CShotgunKin1::Init()
 	m_Weapon = CreateComponent<CSpriteComponent>("WeaponSprite");
 	m_WeaponL = CreateComponent<CSpriteComponent>("WeaponLSprite");
 
-	m_Weapon->SetRelativeScale(69.f, 15.f, 1.f);
-	m_WeaponL->SetRelativeScale(69.f, 15.f, 1.f);
+	m_Weapon->SetRelativeScale(72.f, 15.f, 1.f);
+	m_WeaponL->SetRelativeScale(72.f, 15.f, 1.f);
 
-	m_Weapon->SetRelativePos(10.f, -26.f, 0.f);
-	m_WeaponL->SetRelativePos(-10.f, 0.f, 0.f);
+	m_Weapon->SetRelativePos(10.f, -36.f, 0.f);
+	m_WeaponL->SetRelativePos(-10.f, -10.f, 0.f);
 
 	m_Weapon->SetPivotX(-1.f);
 	m_WeaponL->SetPivotX(-1.f);
@@ -69,7 +75,9 @@ bool CShotgunKin1::Init()
 
 	HideAllWeapon();
 
-	m_AttackTimerMax = 0.7f;
+	m_AttackTimerMax = 1.4f;
+
+	m_UsePaperburn = false;
 
 	return true;
 }
@@ -82,6 +90,26 @@ void CShotgunKin1::Update(float DeltaTime)
 CShotgunKin1* CShotgunKin1::Clone()
 {
 	return DBG_NEW CShotgunKin1(*this);
+}
+
+void CShotgunKin1::Calc(float DeltaTime)
+{
+	CMonster::Calc(DeltaTime);
+
+	m_arrAngle[0] = m_PlayerAngle + m_BulletAngle;
+	m_arrAngle[1] = m_arrAngle[0] + m_BulletAngle;
+
+	m_arrAngle[2] = m_PlayerAngle - m_BulletAngle;
+	m_arrAngle[3] = m_arrAngle[2] - m_BulletAngle;
+
+	for (int i = 0; i < 4; ++i)
+	{
+		m_arrDir[i] = Vector3::ConvertDir(m_arrAngle[i]);
+	}
+}
+
+void CShotgunKin1::DestroyBefore()
+{
 }
 
 void CShotgunKin1::PlaySoundDie()
@@ -99,10 +127,11 @@ void CShotgunKin1::Attack(float DeltaTime)
 	if (!m_InsideLimit || m_AttackCoolDown || m_IsDied)
 		return;
 
+	m_Scene->GetResource()->SoundPlay("Shotgun");
+
 	m_AttackCoolDown = true;
 
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
-
 	Bullet->SetOwner(this);
 	Bullet->SetBulletDir(m_PlayerDir);
 	Bullet->SetWorldPos(GetWorldPos());
@@ -110,4 +139,16 @@ void CShotgunKin1::Attack(float DeltaTime)
 	Bullet->SetCollisionProfile("MonsterAttack");
 	Bullet->SetCharacterType(Character_Type::Monster);
 	Bullet->SetBulletType(Bullet_Type::Shotgun);
+
+	for (int i = 0; i < 4; ++i)
+	{
+		Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
+		Bullet->SetOwner(this);
+		Bullet->SetBulletDir(m_arrDir[i]);
+		Bullet->SetWorldPos(GetWorldPos());
+		Bullet->SetWorldRotation(m_CurWeapon->GetWorldRot());
+		Bullet->SetCollisionProfile("MonsterAttack");
+		Bullet->SetCharacterType(Character_Type::Monster);
+		Bullet->SetBulletType(Bullet_Type::Shotgun);
+	}
 }

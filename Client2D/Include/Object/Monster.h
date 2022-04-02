@@ -37,6 +37,7 @@ protected:
 	bool	m_FollowFirst;	// Follow가 처음 진행됐는지
 	bool	m_InsideLimit;
 	bool	m_OutsideLimit;
+	bool	m_StartDestroyBefore;
 
 public:
 	virtual void Start();
@@ -72,6 +73,7 @@ protected:
 
 protected:
 	virtual void PlaySoundDie();
+	virtual void DestroyBefore();
 
 protected:
 	virtual void HideAllWeapon();

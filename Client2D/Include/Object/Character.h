@@ -30,6 +30,7 @@ protected:
 	bool	m_IsPaperBurn;
 	bool	m_Hit;
 	bool	m_IsPlayedHitSound;
+	bool	m_UsePaperburn;
 	Character_Type	m_Type;
 
 public:
