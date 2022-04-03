@@ -10,22 +10,20 @@ CMonster::CMonster() :
 	m_BurnStartDelay(0.f),
 	m_BurnStartDelayMax(0.4f),
 	m_State(Monster_State::Idle),
-	m_MoveTimer(0.f),
-	m_MoveTimerMax(0.5f),
-	m_Follow(false),
 	m_Player(nullptr),
-	m_FollowFirst(true),
-	m_InsideLimit(false),
 	m_AttackTimer(0.f),
 	m_AttackTimerMax(1.f),
 	m_AttackCoolDown(false),
 	m_CurWeapon(nullptr),
 	m_PlayerAngle(0.f),
 	m_PlayerDist(0.f),
-	m_PlayerDistMin(1200.f),
-	m_PlayerDistMax(2200.f),
-	m_OutsideLimit(false),
-	m_StartDestroyBefore(false)
+	m_UpdateSight(1580.f),
+	m_PatternTimer(0.f),
+	m_PatternTimerMax(2.f),
+	m_StartDestroyBefore(false),
+	m_ChangePattern(false),
+	m_Move(false),
+	m_CanUpdate(false)
 {
 	SetTypeID<CMonster>();
 
@@ -37,7 +35,7 @@ CMonster::CMonster() :
 CMonster::CMonster(const CMonster& obj) :
 	CCharacter(obj),
 	m_BurnStartDelay(0.f),
-	m_MoveTimer(0.f)
+	m_PatternTimer(0.f)
 {
 	SetTypeID<CMonster>();
 
@@ -47,19 +45,13 @@ CMonster::CMonster(const CMonster& obj) :
 	m_BurnStartDelay = 0.f;
 	m_BurnStartDelayMax = obj.m_BurnStartDelayMax;
 
-	m_MoveTimerMax = obj.m_MoveTimerMax;
-
 	m_Type = Character_Type::Monster;
 
 	m_State = Monster_State::Idle;
 
-	m_Follow = obj.m_Follow;
-
 	m_HP = obj.m_HP;
 
 	m_Player = nullptr;
-	m_FollowFirst = true;
-	m_InsideLimit = false;
 
 	m_AttackTimer = 0.f;
 	m_AttackTimerMax = obj.m_AttackTimerMax;
@@ -68,11 +60,11 @@ CMonster::CMonster(const CMonster& obj) :
 
 	m_PlayerAngle = 0.f;
 	m_PlayerDist = 0.f;
-	m_PlayerDistMin = obj.m_PlayerDistMin;
-	m_PlayerDistMax = obj.m_PlayerDistMax;
+	m_PatternTimerMax = obj.m_PatternTimerMax;
 
-	m_OutsideLimit = false;
 	m_StartDestroyBefore = false;
+	m_ChangePattern = false;
+	m_Move = false;
 }
 
 CMonster::~CMonster()
@@ -115,6 +107,8 @@ bool CMonster::Init()
 
 	m_NavAgent = CreateComponent<CNavAgent>("NavAgent");
 
+	SetCurrentPattern(&CMonster::Attack);
+
 	return true;
 }
 
@@ -122,16 +116,12 @@ void CMonster::Update(float DeltaTime)
 {
 	CCharacter::Update(DeltaTime);
 
-	if (!m_OutsideLimit)
+	if (!m_CanUpdate)
 		return;
 	
-	int Randi = rand() % 2;
+	ChangePattern(DeltaTime);
 
-	if (Randi)
-		Move(DeltaTime);
-
-	else
-		Attack(DeltaTime);
+	m_CurPattern(DeltaTime);
 }
 
 void CMonster::Destroy()
@@ -142,7 +132,10 @@ void CMonster::Destroy()
 void CMonster::OnCollisionBegin(const CollisionResult& result)
 {
 	if (result.Dest->GetCollisionProfile()->Name == "Player")
+	{
+		((CPlayer2D*)result.Dest->GetGameObject())->AddDamage(m_Damage);
 		return;
+	}
 
 	CCharacter::OnCollisionBegin(result);
 }
@@ -171,12 +164,12 @@ void CMonster::Calc(float DeltaTime)
 
 	m_PlayerDist = GetWorldPos().Distance(m_PlayerWorldPos);
 
-	if (m_PlayerDist <= m_PlayerDistMax)
-		m_OutsideLimit = true;
+	if (m_PlayerDist <= m_UpdateSight)
+		m_CanUpdate = true;
 
 	else
 	{
-		m_OutsideLimit = false;
+		m_CanUpdate = false;
 		return;
 	}
 
@@ -186,20 +179,20 @@ void CMonster::Calc(float DeltaTime)
 
 	m_PlayerDir = Vector3::ConvertDir(m_PlayerAngle);
 
-	if (m_PlayerDist <= m_PlayerDistMin)
-		m_InsideLimit = true;
-
-	else
-		m_InsideLimit = false;
-
-	if (m_IsDied || m_InsideLimit)
-		m_MoveTimer = m_MoveTimerMax;
-	
-	else
-		m_MoveTimer += DeltaTime;
-
 	if (!m_IsDied)
 		m_State = Monster_State::Idle;
+
+	if (!m_ChangePattern)
+	{
+		m_PatternTimer += DeltaTime;
+
+		if (m_PatternTimer >= m_PatternTimerMax)
+		{
+			m_PatternTimer = 0.f;
+
+			m_ChangePattern = true;
+		}
+	}
 
 	UpdateGun();
 	UpdateAttackCoolDown(DeltaTime);
@@ -274,15 +267,12 @@ void CMonster::Hit(float DeltaTime)
 
 void CMonster::Move(float DeltaTime)
 {
-	if (m_IsDied || m_InsideLimit)
+	if (m_IsDied || m_Move)
 		return;
 
-	else if (m_MoveTimer < m_MoveTimerMax)
-		return;
+	m_Move = true;
 
 	m_State = Monster_State::Walk;
-
-	m_MoveTimer = 0.f;
 
 	Vector3	WorldPos = GetWorldPos();
 	WorldPos.z = 0.f;
@@ -417,4 +407,29 @@ Vector3 CMonster::RandomPos() const
 	}
 
 	return RandPos;
+}
+
+void CMonster::ChangePattern(float DeltaTime)
+{
+	if (m_ChangePattern)
+	{
+		m_ChangePattern = false;
+
+		float RandF = rand() % 10000 / 100.f;
+
+		if (RandF < 50.f)
+		{
+			SetCurrentPattern(&CMonster::Move);
+
+			m_Move = false;
+		}
+
+		else
+			SetCurrentPattern(&CMonster::Attack);
+	}
+}
+
+void CMonster::SetCurrentPattern(void(CMonster::*Func)(float))
+{
+	m_CurPattern = std::bind(Func, this, std::placeholders::_1);
 }

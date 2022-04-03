@@ -8,8 +8,7 @@ template <typename T, int SIZE = 200>
 class CThreadQueue
 {
 public:
-	CThreadQueue()	:
-		m_Queue{}
+	CThreadQueue()
 	{
 		m_Size = 0;
 		m_Head = 0;

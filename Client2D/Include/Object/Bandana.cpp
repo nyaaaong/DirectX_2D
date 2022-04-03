@@ -93,7 +93,7 @@ void CBandana::Calc(float DeltaTime)
 {
 	CMonster::Calc(DeltaTime);
 
-	if (m_OutsideLimit)
+	if (m_CanUpdate)
 	{
 		m_BurstTimer += DeltaTime;
 
@@ -129,7 +129,7 @@ void CBandana::PlaySoundDie()
 
 void CBandana::Attack(float DeltaTime)
 {
-	if (!m_InsideLimit || m_AttackCoolDown || m_IsDied || m_BurstCooldown)
+	if (m_AttackCoolDown || m_IsDied || m_BurstCooldown)
 		return;
 
 	m_Scene->GetResource()->SoundPlay("Rifle");

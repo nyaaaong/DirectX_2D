@@ -24,20 +24,19 @@ protected:
 	Monster_State	m_State;
 	float	m_BurnStartDelay;
 	float	m_BurnStartDelayMax;
-	float	m_MoveTimer;
-	float	m_MoveTimerMax;
 	float	m_AttackTimer;
 	float	m_AttackTimerMax;
 	float	m_PlayerAngle;
 	float	m_PlayerDist;	// 플레이어와 자신의 사이 거리
-	float	m_PlayerDistMin;	// 플레이어와 자신의 사이가 이거보다 작거나 같으면 몬스터를 멈춘다
-	float	m_PlayerDistMax;	// 플레이어와 자신의 사이가 이거보다 작거나 같을때만 몬스터를 움직이게 한다
+	float	m_UpdateSight;
+	float	m_PatternTimer;
+	float	m_PatternTimerMax;
 	bool	m_AttackCoolDown;
-	bool	m_Follow;	// 플레이어를 따라간다
-	bool	m_FollowFirst;	// Follow가 처음 진행됐는지
-	bool	m_InsideLimit;
-	bool	m_OutsideLimit;
 	bool	m_StartDestroyBefore;
+	bool	m_ChangePattern;
+	bool	m_Move;
+	bool	m_CanUpdate;
+	std::function<void(float)>	m_CurPattern;
 
 public:
 	virtual void Start();
@@ -83,5 +82,7 @@ protected:
 
 private:
 	Vector3 RandomPos()	const;
+	void ChangePattern(float DeltaTime);
+	void SetCurrentPattern(void(CMonster::*Func)(float));
 };
 

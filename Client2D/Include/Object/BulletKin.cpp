@@ -96,7 +96,7 @@ void CBulletKin::PlaySoundDie()
 
 void CBulletKin::Attack(float DeltaTime)
 {
-	if (!m_InsideLimit || m_AttackCoolDown || m_IsDied)
+	if (m_AttackCoolDown || m_IsDied)
 		return;
 
 	m_Scene->GetResource()->SoundPlay("Pistol");

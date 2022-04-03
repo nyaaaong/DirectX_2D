@@ -124,7 +124,7 @@ void CShotgunKin1::PlaySoundDie()
 
 void CShotgunKin1::Attack(float DeltaTime)
 {
-	if (!m_InsideLimit || m_AttackCoolDown || m_IsDied)
+	if (m_AttackCoolDown || m_IsDied)
 		return;
 
 	m_Scene->GetResource()->SoundPlay("Shotgun");
