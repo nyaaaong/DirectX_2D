@@ -144,7 +144,7 @@ void CCharacter::Hit(float DeltaTime)
 	}
 }
 
-bool CCharacter::IsWallTile(const Vector3& NextWorldPos)
+bool CCharacter::IsWallTile(const Vector3& NextWorldPos)	const
 {
 	CSceneMode* SceneMode = CSceneManager::GetInst()->GetSceneMode();
 	CMainScene* Scene = dynamic_cast<CMainScene*>(SceneMode);

@@ -14,9 +14,9 @@ protected:
 
 private:
 	float	m_BurstTimer;	// 연사 공격이 지속될 시간
-	float	m_BurstTimerMax;
+	float	m_BurstTimerMax;// 연사 공격이 지속될 시간
 	float	m_BurstCoolDownTimer;	// 연사 공격 쿨타임
-	float	m_BurstCoolDownTimerMax;
+	float	m_BurstCoolDownTimerMax;// 연사 공격 쿨타임
 	bool	m_BurstCooldown;
 
 public:
@@ -29,5 +29,6 @@ protected:
 	virtual void Calc(float DeltaTime);
 	virtual void PlaySoundDie();
 	virtual void Attack(float DeltaTime);
+	virtual void ChangePatternStartFunc(float DeltaTime);
 };
 

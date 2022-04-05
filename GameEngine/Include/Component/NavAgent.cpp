@@ -46,6 +46,8 @@ void CNavAgent::Clear()
 
 void CNavAgent::Start()
 {
+	CObjectComponent::Start();
+
 	if (!m_UpdateComponent)
 		m_UpdateComponent = m_Object->GetRootComponent();
 }

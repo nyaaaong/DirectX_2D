@@ -13,7 +13,7 @@
 
 CPlayer2D::CPlayer2D() :
 	m_EnableInput(true),
-	m_AttackTimer(0.f),
+	m_AttackDelay(0.f),
 	m_DodgeTimer(0.f),
 	m_DodgeTimerMax(0.5f),
 	m_AttackCoolDown(false),
@@ -21,17 +21,18 @@ CPlayer2D::CPlayer2D() :
 	m_Move(false),
 	m_SetCameraInfo(false),
 	m_PierceBullet(false),
-	m_DodgeSpeed(800.f),
 	m_Dir(0),
 	m_MoveDir(0),
 	m_MouseAngle(0.f),
 	m_WeaponSlot(Weapon_Slot::None),
-	m_CurWeapon(nullptr)
+	m_CurWeapon(nullptr),
+	m_HasRifle(false),
+	m_HasSniper(false)
 {
 	SetTypeID<CPlayer2D>();
 	m_Opacity = 1.f;
 
-	m_AttackTimerMax = 0.6f;
+	m_AttackDelayMax = 0.6f;
 
 	m_Type = Character_Type::Player;
 
@@ -39,8 +40,6 @@ CPlayer2D::CPlayer2D() :
 
 	m_TopOffsetY = 1.4f;
 	m_BottomOffsetY = 0.2f;
-
-	m_HP = 10000.f;
 
 	m_UsePaperburn = false;
 }
@@ -60,11 +59,9 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_Move = false;
 	m_PierceBullet = false;
 
-	m_AttackTimer = 0.f;
-	m_AttackTimerMax = obj.m_AttackTimerMax;
+	m_AttackDelay = 0.f;
+	m_AttackDelayMax = obj.m_AttackDelayMax;
 	m_AttackCoolDown = false;
-
-	m_DodgeSpeed = obj.m_DodgeSpeed;
 
 	m_DodgeTimer = 0.f;
 	m_DodgeTimerMax = obj.m_DodgeTimerMax;
@@ -81,6 +78,9 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_Type = Character_Type::Player;
 
 	m_UsePaperburn = false;
+
+	m_HasRifle = false;
+	m_HasSniper = false;
 }
 
 CPlayer2D::~CPlayer2D()
@@ -209,12 +209,12 @@ void CPlayer2D::SetMoveDir(Character_Direction Dir)
 	m_MoveDir |= (int)Dir;
 }
 
-void CPlayer2D::ClearDir(Character_Direction Dir)
+void CPlayer2D::DeleteDir(Character_Direction Dir)
 {
 	m_Dir &= ~(int)Dir;
 }
 
-void CPlayer2D::ClearMoveDir(Character_Direction Dir)
+void CPlayer2D::DeleteMoveDir(Character_Direction Dir)
 {
 	m_MoveDir &= ~(int)Dir;
 }
@@ -234,6 +234,8 @@ void CPlayer2D::Start()
 	m_HPMax = PlayerInfo.HP;
 	m_MoveSpeed = PlayerInfo.MoveSpeed;
 	m_Damage = PlayerInfo.Damage;
+
+	m_DodgeSpeed = m_MoveSpeed * 2.f;
 }
 
 void CPlayer2D::Update(float DeltaTime)
@@ -400,10 +402,12 @@ void CPlayer2D::DodgeStart(float DeltaTime)
 		return;
 
 	m_Move = true;
-
+	
 	m_EnableInput = false;
 
 	m_DodgeCoolDown = true;
+
+	m_Scene->GetResource()->SoundPlay("Dodge");
 }
 
 void CPlayer2D::Dodge(float DeltaTime)
@@ -440,7 +444,7 @@ void CPlayer2D::NoWeapon(float DeltaTime)
 void CPlayer2D::Weapon1(float DeltaTime)
 {
 	m_WeaponSlot = Weapon_Slot::Pistol;
-	m_AttackTimerMax = 0.6f;
+	m_AttackDelayMax = 0.6f;
 	m_Damage = 3.f;
 
 	m_PierceBullet = false;
@@ -448,18 +452,24 @@ void CPlayer2D::Weapon1(float DeltaTime)
 
 void CPlayer2D::Weapon2(float DeltaTime)
 {
+	if (!m_HasRifle)
+		return;
+
 	m_WeaponSlot = Weapon_Slot::Rifle;
-	m_AttackTimerMax = 0.08f;
-	m_Damage = 5.f;
+	m_AttackDelayMax = 0.1f;
+	m_Damage = 3.f;
 
 	m_PierceBullet = false;
 }
 
 void CPlayer2D::Weapon3(float DeltaTime)
 {
+	if (!m_HasSniper)
+		return;
+
 	m_WeaponSlot = Weapon_Slot::Sniper;
-	m_AttackTimerMax = 1.3f;
-	m_Damage = 50.f;
+	m_AttackDelayMax = 1.3f;
+	m_Damage = 20.f;
 
 	m_PierceBullet = true;
 }
@@ -495,7 +505,7 @@ void CPlayer2D::Attack(float DeltaTime)
 	Bullet->SetWeaponSlot(m_WeaponSlot);
 	Bullet->Pierce(m_PierceBullet);
 
-	switch (m_WeaponSlot)
+	/*switch (m_WeaponSlot)
 	{
 	case Weapon_Slot::Pistol:
 		m_Scene->GetResource()->SoundPlay("Pistol");
@@ -506,18 +516,18 @@ void CPlayer2D::Attack(float DeltaTime)
 	case Weapon_Slot::Sniper:
 		m_Scene->GetResource()->SoundPlay("Sniper");
 		break;
-	}
+	}*/
 }
 
 void CPlayer2D::UpdateAttackCoolDown(float DeltaTime)
 {
 	if (m_AttackCoolDown)
 	{
-		m_AttackTimer += DeltaTime;
+		m_AttackDelay += DeltaTime;
 
-		if (m_AttackTimer >= m_AttackTimerMax)
+		if (m_AttackDelay >= m_AttackDelayMax)
 		{
-			m_AttackTimer = 0.f;
+			m_AttackDelay = 0.f;
 			m_AttackCoolDown = false;
 		}
 	}
@@ -546,7 +556,7 @@ void CPlayer2D::UpdateMousePos()
 	if (m_WeaponSlot == Weapon_Slot::None)
 		return;
 
-	ClearDir(Character_Direction::All);
+	DeleteDir(Character_Direction::All);
 
 	Vector3	PlayerPos = GetWorldPos();
 	Vector3	MousePos = CInput::GetInst()->GetMouseWorldPos();
@@ -669,38 +679,38 @@ void CPlayer2D::UpdateAnimDir()
 			if (CInput::GetInst()->IsKeyDown("MoveUp") || CInput::GetInst()->IsKeyDown("MoveDown"))
 			{
 				if (!CInput::GetInst()->IsKeyDown("MoveLeft") && IsDir(Character_Direction::Left))
-					ClearDir(Character_Direction::Left);
+					DeleteDir(Character_Direction::Left);
 
 				if (!CInput::GetInst()->IsKeyDown("MoveRight") && IsDir(Character_Direction::Right))
-					ClearDir(Character_Direction::Right);
+					DeleteDir(Character_Direction::Right);
 			}
 
 			else if (CInput::GetInst()->IsKeyDown("MoveLeft") || CInput::GetInst()->IsKeyDown("MoveRight"))
 			{
 				if (!CInput::GetInst()->IsKeyDown("MoveUp") && IsDir(Character_Direction::Up))
-					ClearDir(Character_Direction::Up);
+					DeleteDir(Character_Direction::Up);
 
 				if (!CInput::GetInst()->IsKeyDown("MoveDown") && IsDir(Character_Direction::Down))
-					ClearDir(Character_Direction::Down);
+					DeleteDir(Character_Direction::Down);
 			}
 		}
 
 		if (CInput::GetInst()->IsKeyDown("MoveUp") || CInput::GetInst()->IsKeyDown("MoveDown"))
 		{
 			if (!CInput::GetInst()->IsKeyDown("MoveLeft") && IsMoveDir(Character_Direction::Left))
-				ClearMoveDir(Character_Direction::Left);
+				DeleteMoveDir(Character_Direction::Left);
 
 			if (!CInput::GetInst()->IsKeyDown("MoveRight") && IsMoveDir(Character_Direction::Right))
-				ClearMoveDir(Character_Direction::Right);
+				DeleteMoveDir(Character_Direction::Right);
 		}
 
 		else if (CInput::GetInst()->IsKeyDown("MoveLeft") || CInput::GetInst()->IsKeyDown("MoveRight"))
 		{
 			if (!CInput::GetInst()->IsKeyDown("MoveUp") && IsMoveDir(Character_Direction::Up))
-				ClearMoveDir(Character_Direction::Up);
+				DeleteMoveDir(Character_Direction::Up);
 
 			if (!CInput::GetInst()->IsKeyDown("MoveDown") && IsMoveDir(Character_Direction::Down))
-				ClearMoveDir(Character_Direction::Down);
+				DeleteMoveDir(Character_Direction::Down);
 		}
 	}
 

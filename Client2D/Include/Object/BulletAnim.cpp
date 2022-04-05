@@ -43,7 +43,7 @@ void CBulletAnim::First()
 {
 	CAnimationSequence2DInstance::First();
 
-	if (!m_GrayEffect)
+	if (m_GrayEffect)
 		SetCurrentAnimation("Bullet_Impact_2");
 }
 

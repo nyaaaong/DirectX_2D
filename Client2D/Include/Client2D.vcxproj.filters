@@ -57,6 +57,18 @@
     <Filter Include="01. Object\00. Character\01. Enemy\00. Monster\03. ShotgunKin2">
       <UniqueIdentifier>{20babb3d-9660-4a4a-9d18-798c4f5c26ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Object\03. Item">
+      <UniqueIdentifier>{4e5293ed-a0e7-45ac-882e-e875267486a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Object\03. Item\00. Weapon">
+      <UniqueIdentifier>{6186e055-6103-47c8-941b-73ae98ef82f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Object\03. Item\00. Weapon\00. Rifle">
+      <UniqueIdentifier>{edd61ce2-fa3d-4d0b-8b88-421b89681d8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Object\03. Item\00. Weapon\01. Sniper">
+      <UniqueIdentifier>{ddf95bf5-ed03-497e-87d6-b3be94f32a91}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -142,6 +154,18 @@
     </ClCompile>
     <ClCompile Include="Object\MonsterAnim.cpp">
       <Filter>01. Object\00. Character\01. Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Item.cpp">
+      <Filter>01. Object\03. Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\ItemRifle.cpp">
+      <Filter>01. Object\03. Item\00. Weapon\00. Rifle</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\ItemSniper.cpp">
+      <Filter>01. Object\03. Item\00. Weapon\01. Sniper</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\ItemAnim.cpp">
+      <Filter>01. Object\03. Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -231,6 +255,18 @@
     </ClInclude>
     <ClInclude Include="Object\MonsterAnim.h">
       <Filter>01. Object\00. Character\01. Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Item.h">
+      <Filter>01. Object\03. Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\ItemRifle.h">
+      <Filter>01. Object\03. Item\00. Weapon\00. Rifle</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\ItemSniper.h">
+      <Filter>01. Object\03. Item\00. Weapon\01. Sniper</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\ItemAnim.h">
+      <Filter>01. Object\03. Item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

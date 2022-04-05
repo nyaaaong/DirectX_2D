@@ -83,6 +83,6 @@ protected:
 	virtual void Hit(float DeltaTime);
 
 protected:
-	bool IsWallTile(const Vector3& NextWorldPos);
+	bool IsWallTile(const Vector3& NextWorldPos)	const;
 };
 

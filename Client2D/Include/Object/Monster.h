@@ -24,18 +24,21 @@ protected:
 	Monster_State	m_State;
 	float	m_BurnStartDelay;
 	float	m_BurnStartDelayMax;
-	float	m_AttackTimer;
-	float	m_AttackTimerMax;
+	float	m_AttackDelay;
+	float	m_AttackDelayMax;
+	float	m_MoveDelay;
+	float	m_MoveDelayMax;
 	float	m_PlayerAngle;
 	float	m_PlayerDist;	// 플레이어와 자신의 사이 거리
 	float	m_UpdateSight;
 	float	m_PatternTimer;
 	float	m_PatternTimerMax;
-	bool	m_AttackCoolDown;
 	bool	m_StartDestroyBefore;
 	bool	m_ChangePattern;
 	bool	m_Move;
 	bool	m_CanUpdate;
+	bool	m_UseDropItem;
+	int		m_DropItemType;
 	std::function<void(float)>	m_CurPattern;
 
 public:
@@ -50,6 +53,16 @@ protected:
 	virtual void OnCollisionEnd(const CollisionResult& result);
 
 public:
+	bool IsDropItemType(DropItem_Type Type)
+	{
+		return m_DropItemType & (int)Type;
+	}
+
+	bool IsDropItemType(int Type)
+	{
+		return m_DropItemType & Type;
+	}
+
 	Monster_State GetState()	const
 	{
 		return m_State;
@@ -58,6 +71,44 @@ public:
 	const Vector3& GetPlayerDir()	const
 	{
 		return m_PlayerDir;
+	}
+
+public:
+	void SetDropItemType(DropItem_Type Type)
+	{
+		switch (Type)
+		{
+		case DropItem_Type::None:
+			m_DropItemType = 0;
+			break;
+		case DropItem_Type::Rifle:
+		case DropItem_Type::Sniper:
+		case DropItem_Type::Life:
+		case DropItem_Type::All:
+			m_DropItemType |= (int)Type;
+			break;
+		}
+	}
+
+	void DeleteDropItemType(DropItem_Type Type)
+	{
+		switch (Type)
+		{
+		case DropItem_Type::None:
+			return;
+		case DropItem_Type::Rifle:
+			m_DropItemType &= ~(int)DropItem_Type::Rifle;
+			break;
+		case DropItem_Type::Sniper:
+			m_DropItemType &= ~(int)DropItem_Type::Sniper;
+			break;
+		case DropItem_Type::Life:
+			m_DropItemType &= ~(int)DropItem_Type::Life;
+			break;
+		case DropItem_Type::All:
+			m_DropItemType = 0;
+			break;
+		}
 	}
 
 protected:
@@ -76,13 +127,19 @@ protected:
 
 protected:
 	virtual void HideAllWeapon();
-	virtual void UpdateAttackCoolDown(float DeltaTime);
 	virtual void UpdateGun();
 	virtual void UpdateGunDir(CSpriteComponent* Weapon);
+	virtual void UpdateDropItemType();
+	virtual void DropItem();
+	virtual void CreateItem(DropItem_Type Type);
+	// 패턴이 바뀔 때 실행되는 함수
+	virtual void ChangePatternStartFunc(float DeltaTime);
 
 private:
 	Vector3 RandomPos()	const;
 	void ChangePattern(float DeltaTime);
 	void SetCurrentPattern(void(CMonster::*Func)(float));
+	void UpdateAttack(float DeltaTime);
+	void UpdateMove(float DeltaTime);
 };
 

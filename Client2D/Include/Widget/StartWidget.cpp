@@ -21,6 +21,7 @@ CStartWidget::~CStartWidget()
 
 void CStartWidget::Start()
 {
+	CWidgetWindow::Start();
 }
 
 bool CStartWidget::Init()

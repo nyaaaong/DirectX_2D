@@ -5,23 +5,29 @@
 #include "../Resource/Texture/Texture.h"
 
 class CPaperBurnComponent :
-    public CObjectComponent
+	public CObjectComponent
 {
-    friend class CGameObject;
+	friend class CGameObject;
 
 protected:
-    CPaperBurnComponent();
-    CPaperBurnComponent(const CPaperBurnComponent& com);
-    virtual ~CPaperBurnComponent();
+	CPaperBurnComponent();
+	CPaperBurnComponent(const CPaperBurnComponent& com);
+	virtual ~CPaperBurnComponent();
 
 private:
-    CPaperBurnConstantBuffer* m_CBuffer;
+	CPaperBurnConstantBuffer* m_CBuffer;
 	std::function<void()>   m_FinishCallback;
 	float					m_FinishTime;
 	CSharedPtr<class CMaterial>		m_Material;
 	CSharedPtr<CTexture>			m_BurnTexture;
 	bool					m_StartPaperBurn;
 	float					m_Filter;
+
+public:
+	bool IsStartPaperBurn()	const
+	{
+		return m_StartPaperBurn;
+	}
 
 public:
 	void StartPaperBurn();
@@ -45,14 +51,14 @@ public:
 	void SetCenterFilter(float Filter);
 
 public:
-    virtual void Start();
-    virtual bool Init();
-    virtual void Update(float DeltaTime);
-    virtual void PostUpdate(float DeltaTime);
-    virtual void PrevRender();
-    virtual void Render();
-    virtual void PostRender();
-    virtual CPaperBurnComponent* Clone();
+	virtual void Start();
+	virtual bool Init();
+	virtual void Update(float DeltaTime);
+	virtual void PostUpdate(float DeltaTime);
+	virtual void PrevRender();
+	virtual void Render();
+	virtual void PostRender();
+	virtual CPaperBurnComponent* Clone();
 
 public:
 	void SetShader();

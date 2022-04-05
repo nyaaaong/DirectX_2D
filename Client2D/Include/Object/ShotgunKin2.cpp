@@ -19,8 +19,8 @@ CShotgunKin2::CShotgunKin2(const CShotgunKin2& obj) :
 
 	m_Sprite->CreateAnimationInstance<CShotgunKin2Anim>();
 
-	m_Weapon = (CSpriteComponent*)FindComponent("WeaponSprite");
-	m_WeaponL = (CSpriteComponent*)FindComponent("WeaponLSprite");
+	m_Weapon = (CSpriteComponent*)FindComponent("M_Weapon3Sprite");
+	m_WeaponL = (CSpriteComponent*)FindComponent("M_Weapon3LSprite");
 
 	m_CurWeapon = nullptr;
 
@@ -39,7 +39,7 @@ void CShotgunKin2::Start()
 
 	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
 
-	CharacterInfo	Info = SceneMode->GetPlayerInfo();
+	CharacterInfo	Info = SceneMode->GetMonsterInfo(Object_Type::ShotgunKin2);
 	m_HP = Info.HP;
 	m_HPMax = Info.HP;
 	m_MoveSpeed = Info.MoveSpeed;
@@ -55,8 +55,8 @@ bool CShotgunKin2::Init()
 
 	m_Body->SetExtent(18.f, 33.f);
 
-	m_Weapon = CreateComponent<CSpriteComponent>("WeaponSprite");
-	m_WeaponL = CreateComponent<CSpriteComponent>("WeaponLSprite");
+	m_Weapon = CreateComponent<CSpriteComponent>("M_Weapon3Sprite");
+	m_WeaponL = CreateComponent<CSpriteComponent>("M_Weapon3LSprite");
 
 	m_Weapon->SetRelativeScale(72.f, 15.f, 1.f);
 	m_WeaponL->SetRelativeScale(72.f, 15.f, 1.f);
@@ -70,12 +70,12 @@ bool CShotgunKin2::Init()
 	m_Sprite->AddChild(m_Weapon);
 	m_Sprite->AddChild(m_WeaponL);
 
-	m_Weapon->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "Weapon", TEXT("Weapon/Monster/Weapon3.png"));
-	m_WeaponL->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "WeaponL", TEXT("Weapon/Monster/Weapon3L.png"));
+	m_Weapon->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "M_Weapon3", TEXT("Weapon/Monster/Weapon3.png"));
+	m_WeaponL->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "M_Weapon3L", TEXT("Weapon/Monster/Weapon3L.png"));
 
 	HideAllWeapon();
 
-	m_AttackTimerMax = 1.4f;
+	m_AttackDelayMax = 1.4f;
 
 	m_UsePaperburn = false;
 
@@ -117,8 +117,6 @@ void CShotgunKin2::DestroyBefore()
 {
 	CMonster::DestroyBefore();
 
-	m_Scene->GetResource()->SoundPlay("Shotgun");
-
 	for (int i = 0; i < 8; ++i)
 	{
 		CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
@@ -145,12 +143,7 @@ void CShotgunKin2::PlaySoundDie()
 
 void CShotgunKin2::Attack(float DeltaTime)
 {
-	if (m_AttackCoolDown || m_IsDied)
-		return;
-
 	m_Scene->GetResource()->SoundPlay("Shotgun");
-
-	m_AttackCoolDown = true;
 
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
 	Bullet->SetOwner(this);

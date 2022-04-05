@@ -23,6 +23,7 @@ CLoadingWidget::~CLoadingWidget()
 
 void CLoadingWidget::Start()
 {
+	CWidgetWindow::Start();
 }
 
 bool CLoadingWidget::Init()

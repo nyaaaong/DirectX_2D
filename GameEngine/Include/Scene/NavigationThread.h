@@ -44,7 +44,6 @@ public:
 		Data.Callback = std::bind(Func, Obj, std::placeholders::_1);
 		Data.Start = Start;
 		Data.End = End;
-		Data.TypeID = Obj->GetTypeID();
 
 		m_WorkQueue.push(Data);
 	}

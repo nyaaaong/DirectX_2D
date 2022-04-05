@@ -116,7 +116,7 @@ enum class Collision_Channel
 	AttackCheck,
 	PlayerAttack,
 	MonsterAttack,
-	Custom2,
+	Item,
 	Custom3,
 	Custom4,
 	Custom5,
@@ -330,4 +330,13 @@ enum class Monster_State
 	Walk,
 	Die,
 	Max
+};
+
+enum class DropItem_Type
+{
+	None = 0,
+	Rifle = 0x1,
+	Sniper = 0x2,
+	Life = 0x10,
+	All = Rifle | Sniper | Life
 };

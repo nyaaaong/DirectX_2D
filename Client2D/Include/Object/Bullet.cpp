@@ -121,17 +121,20 @@ void CBullet::First()
 					m_BulletSpeed = 1000.f;
 				m_Distance = 800.f;
 				m_StartDistance = 100.f;
+				m_Scene->GetResource()->SoundPlay("Pistol");
 				break;
 			case Weapon_Slot::Rifle:
 				if (!m_SetBulletSpeed)
 					m_BulletSpeed = 1000.f;
 				m_Distance = 800.f;
 				m_StartDistance = 100.f;
+				m_Scene->GetResource()->SoundPlay("Rifle");
 				break;
 			case Weapon_Slot::Sniper:
 				if (!m_SetBulletSpeed)
 					m_BulletSpeed = 5000.f;
 				m_Distance = 2000.f;
+				m_Scene->GetResource()->SoundPlay("Sniper");
 				break;
 			}
 			break;
@@ -146,18 +149,21 @@ void CBullet::First()
 				if (!m_SetBulletSpeed)
 					m_BulletSpeed = 1000.f;
 				m_Distance = 800.f;
+				m_Scene->GetResource()->SoundPlay("Pistol");
 				break;
 			case Bullet_Type::Rifle:
 				if (!m_SetBulletSpeed)
 					m_BulletSpeed = 1000.f;
 				m_Distance = 800.f;
 				m_StartDistance = 100.f;
+				m_Scene->GetResource()->SoundPlay("Rifle");
 				break;
 			case Bullet_Type::Shotgun:
 				if (!m_SetBulletSpeed)
 					m_BulletSpeed = 1000.f;
 				m_Distance = 400.f;
 				m_StartDistance = 200.f;
+				m_Scene->GetResource()->SoundPlay("Shotgun");
 				break;
 			}
 			break;
@@ -208,7 +214,12 @@ void CBullet::OnCollisionBegin(const CollisionResult& result)
 	{
 		m_Hit = true;
 
-		CharacterObj->AddHP(-m_Damage);
+		CharacterObj->AddDamage(m_Damage);
+	}
+
+	else
+	{
+		int a = 0;
 	}
 
 	CreateHitEffect();
@@ -323,8 +334,11 @@ void CBullet::BulletUpdater(float Dist)
 	if (!m_Check)
 		return;
 
-	if (m_Distance <= 0.f || IsWallTile(m_BulletDir * Dist))
-		CreateHitEffect();
+	if (!m_Hit)
+	{
+		if (m_Distance <= 0.f || IsWallTile(m_BulletDir * Dist))
+			CreateHitEffect();
+	}
 
 	m_Distance -= Dist;
 

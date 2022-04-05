@@ -116,6 +116,12 @@ void CMainScene::CreateSound()
 	m_Scene->GetResource()->LoadSound("Effect", false, "Sniper", "Weapon/Shot/Sniper.wav");
 	m_Scene->GetResource()->LoadSound("Effect", false, "Shotgun", "Weapon/Shot/Shotgun.wav");
 
+	m_Scene->GetResource()->LoadSound("Effect", false, "Dodge", "Player/Dodge.wav");
+
+	m_Scene->GetResource()->LoadSound("Effect", false, "WeaponPickup", "Item/WeaponPickup.wav");
+	m_Scene->GetResource()->LoadSound("Effect", false, "ItemPickup", "Item/ItemPickup.wav");
+	m_Scene->GetResource()->LoadSound("Effect", false, "Spawn", "Item/Spawn.wav");
+
 	m_Scene->GetResource()->LoadSound("Effect", false, "Monster_Hit", "Monster/Effect/Hit.wav");
 	m_Scene->GetResource()->LoadSound("Effect", false, "Monster_Die", "Monster/Effect/Die.wav");
 

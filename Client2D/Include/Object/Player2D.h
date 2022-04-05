@@ -33,9 +33,11 @@ private:
 	bool	m_SetCameraInfo;
 	bool	m_DodgeCoolDown;
 	bool	m_PierceBullet;
+	bool	m_HasRifle;
+	bool	m_HasSniper;
 	float   m_Opacity;
-	float	m_AttackTimer;
-	float	m_AttackTimerMax;
+	float	m_AttackDelay;
+	float	m_AttackDelayMax;
 	float	m_DodgeSpeed;
 	float	m_DodgeTimer;
 	float	m_DodgeTimerMax;
@@ -44,6 +46,16 @@ private:
 	int		m_MoveDir;
 
 public:
+	bool HasWeaponRifle()	const
+	{
+		return m_HasRifle;
+	}
+
+	bool HasWeaponSniper()	const
+	{
+		return m_HasSniper;
+	}
+
 	float GetMouseAngle()	const
 	{
 		return m_MouseAngle;
@@ -75,6 +87,28 @@ public:
 	}
 
 public:
+	void AddWeaponRifle()
+	{
+		m_HasRifle = true;
+
+		m_WeaponSlot = Weapon_Slot::Rifle;
+		m_AttackDelayMax = 0.08f;
+		m_Damage = 5.f;
+
+		m_PierceBullet = false;
+	}
+
+	void AddWeaponSniper()
+	{
+		m_HasSniper = true;
+
+		m_WeaponSlot = Weapon_Slot::Sniper;
+		m_AttackDelayMax = 1.3f;
+		m_Damage = 50.f;
+
+		m_PierceBullet = true;
+	}
+
 	void SetEnableInput(bool Enable)
 	{
 		m_EnableInput = Enable;
@@ -106,8 +140,8 @@ private:
 public:
 	void SetDir(Character_Direction Dir);
 	void SetMoveDir(Character_Direction Dir);
-	void ClearDir(Character_Direction Dir);
-	void ClearMoveDir(Character_Direction Dir);
+	void DeleteDir(Character_Direction Dir);
+	void DeleteMoveDir(Character_Direction Dir);
 
 private:
 	void UpdateAttackCoolDown(float DeltaTime);

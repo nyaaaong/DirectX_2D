@@ -17,8 +17,8 @@ CBulletKin::CBulletKin(const CBulletKin& obj)	:
 
 	m_Sprite->CreateAnimationInstance<CBulletKinAnim>();
 
-	m_Weapon = (CSpriteComponent*)FindComponent("WeaponSprite");
-	m_WeaponL = (CSpriteComponent*)FindComponent("WeaponLSprite");
+	m_Weapon = (CSpriteComponent*)FindComponent("M_Weapon1Sprite");
+	m_WeaponL = (CSpriteComponent*)FindComponent("M_Weapon1LSprite");
 
 	m_CurWeapon = nullptr;
 }
@@ -33,7 +33,7 @@ void CBulletKin::Start()
 
 	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
 
-	CharacterInfo	Info = SceneMode->GetPlayerInfo();
+	CharacterInfo	Info = SceneMode->GetMonsterInfo(Object_Type::BulletKin);
 	m_HP = Info.HP;
 	m_HPMax = Info.HP;
 	m_MoveSpeed = Info.MoveSpeed;
@@ -49,8 +49,8 @@ bool CBulletKin::Init()
 
 	m_Body->SetExtent(18.f, 33.f);
 
-	m_Weapon = CreateComponent<CSpriteComponent>("WeaponSprite");
-	m_WeaponL = CreateComponent<CSpriteComponent>("WeaponLSprite");
+	m_Weapon = CreateComponent<CSpriteComponent>("M_Weapon1Sprite");
+	m_WeaponL = CreateComponent<CSpriteComponent>("M_Weapon1LSprite");
 
 	m_Weapon->SetRelativeScale(51.f, 39.f, 1.f);
 	m_WeaponL->SetRelativeScale(51.f, 39.f, 1.f);
@@ -64,12 +64,12 @@ bool CBulletKin::Init()
 	m_Sprite->AddChild(m_Weapon);
 	m_Sprite->AddChild(m_WeaponL);
 
-	m_Weapon->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "Weapon", TEXT("Weapon/Monster/Weapon1.png"));
-	m_WeaponL->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "WeaponL", TEXT("Weapon/Monster/Weapon1L.png"));
+	m_Weapon->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "M_Weapon1", TEXT("Weapon/Monster/Weapon1.png"));
+	m_WeaponL->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "M_Weapon1L", TEXT("Weapon/Monster/Weapon1L.png"));
 
 	HideAllWeapon();
 
-	m_AttackTimerMax = 1000.f;
+	m_AttackDelayMax = 1.f;
 
 	return true;
 }
@@ -96,13 +96,6 @@ void CBulletKin::PlaySoundDie()
 
 void CBulletKin::Attack(float DeltaTime)
 {
-	if (m_AttackCoolDown || m_IsDied)
-		return;
-
-	m_Scene->GetResource()->SoundPlay("Pistol");
-
-	m_AttackCoolDown = true;
-
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
 
 	Bullet->SetOwner(this);

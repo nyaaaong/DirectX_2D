@@ -7,9 +7,9 @@
 
 CBandana::CBandana()	:
 	m_BurstTimer(0.f),
-	m_BurstTimerMax(1.3f),
+	m_BurstTimerMax(2.f),
 	m_BurstCoolDownTimer(0.f),
-	m_BurstCoolDownTimerMax(2.f),
+	m_BurstCoolDownTimerMax(1.f),
 	m_BurstCooldown(false)
 {
 	SetTypeID<CBandana>();
@@ -22,8 +22,8 @@ CBandana::CBandana(const CBandana& obj) :
 
 	m_Sprite->CreateAnimationInstance<CBandanaAnim>();
 
-	m_Weapon = (CSpriteComponent*)FindComponent("WeaponSprite");
-	m_WeaponL = (CSpriteComponent*)FindComponent("WeaponLSprite");
+	m_Weapon = (CSpriteComponent*)FindComponent("M_Weapon2Sprite");
+	m_WeaponL = (CSpriteComponent*)FindComponent("M_Weapon2LSprite");
 
 	m_CurWeapon = nullptr;
 }
@@ -38,7 +38,7 @@ void CBandana::Start()
 
 	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
 
-	CharacterInfo	Info = SceneMode->GetPlayerInfo();
+	CharacterInfo	Info = SceneMode->GetMonsterInfo(Object_Type::Bandana);
 	m_HP = Info.HP;
 	m_HPMax = Info.HP;
 	m_MoveSpeed = Info.MoveSpeed;
@@ -54,8 +54,8 @@ bool CBandana::Init()
 
 	m_Body->SetExtent(18.f, 33.f);
 
-	m_Weapon = CreateComponent<CSpriteComponent>("WeaponSprite");
-	m_WeaponL = CreateComponent<CSpriteComponent>("WeaponLSprite");
+	m_Weapon = CreateComponent<CSpriteComponent>("M_Weapon2Sprite");
+	m_WeaponL = CreateComponent<CSpriteComponent>("M_Weapon2LSprite");
 
 	m_Weapon->SetRelativeScale(78.f, 21.f, 1.f);
 	m_WeaponL->SetRelativeScale(78.f, 21.f, 1.f);
@@ -69,12 +69,12 @@ bool CBandana::Init()
 	m_Sprite->AddChild(m_Weapon);
 	m_Sprite->AddChild(m_WeaponL);
 
-	m_Weapon->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "Weapon", TEXT("Weapon/Monster/Weapon2.png"));
-	m_WeaponL->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "WeaponL", TEXT("Weapon/Monster/Weapon2L.png"));
+	m_Weapon->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "M_Weapon2", TEXT("Weapon/Monster/Weapon2.png"));
+	m_WeaponL->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "M_Weapon2L", TEXT("Weapon/Monster/Weapon2L.png"));
 
 	HideAllWeapon();
 
-	m_AttackTimerMax = 0.12f;
+	m_AttackDelayMax = 0.12f;
 
 	return true;
 }
@@ -129,12 +129,8 @@ void CBandana::PlaySoundDie()
 
 void CBandana::Attack(float DeltaTime)
 {
-	if (m_AttackCoolDown || m_IsDied || m_BurstCooldown)
+	if (m_BurstCooldown)
 		return;
-
-	m_Scene->GetResource()->SoundPlay("Rifle");
-
-	m_AttackCoolDown = true;
 
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
 
@@ -144,4 +140,10 @@ void CBandana::Attack(float DeltaTime)
 	Bullet->SetWorldRotation(m_CurWeapon->GetWorldRot());
 	Bullet->SetCharacterType(Character_Type::Monster);
 	Bullet->SetBulletType(Bullet_Type::Rifle);
+}
+
+void CBandana::ChangePatternStartFunc(float DeltaTime)
+{
+	m_BurstCooldown = false;
+	m_BurstCoolDownTimer = 0.f;
 }

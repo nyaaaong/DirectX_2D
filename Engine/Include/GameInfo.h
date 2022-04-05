@@ -387,7 +387,6 @@ struct NavWorkData
 	std::function<void(const std::list<Vector3>&)>	Callback;
 	Vector3		Start;
 	Vector3		End;
-	size_t		TypeID;
 };
 
 struct NavResultData

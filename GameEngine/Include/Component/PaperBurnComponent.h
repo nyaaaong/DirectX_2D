@@ -24,6 +24,12 @@ private:
 	float					m_Filter;
 
 public:
+	bool IsStartPaperBurn()	const
+	{
+		return m_StartPaperBurn;
+	}
+
+public:
 	void StartPaperBurn();
 	void SetMaterial(class CMaterial* Material);
 	void SetInverse(bool Enable);

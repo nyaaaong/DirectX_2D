@@ -32,6 +32,7 @@ void CSimpleHUD::SetHPDir(ProgressBar_Dir Dir)
 
 void CSimpleHUD::Start()
 {
+	CWidgetWindow::Start();
 }
 
 bool CSimpleHUD::Init()

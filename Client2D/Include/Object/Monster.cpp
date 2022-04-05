@@ -1,6 +1,8 @@
 
 #include "Monster.h"
 #include "Player2D.h"
+#include "ItemRifle.h"
+#include "ItemSniper.h"
 #include "Scene/Scene.h"
 #include "Component/NavAgent.h"
 #include "Animation/AnimationSequence2DInstance.h"
@@ -11,25 +13,26 @@ CMonster::CMonster() :
 	m_BurnStartDelayMax(0.4f),
 	m_State(Monster_State::Idle),
 	m_Player(nullptr),
-	m_AttackTimer(0.f),
-	m_AttackTimerMax(1.f),
-	m_AttackCoolDown(false),
 	m_CurWeapon(nullptr),
 	m_PlayerAngle(0.f),
 	m_PlayerDist(0.f),
-	m_UpdateSight(1580.f),
+	m_UpdateSight(1280.f),
+	m_AttackDelay(0.f),
+	m_AttackDelayMax(1.f),
+	m_MoveDelay(3.f),
+	m_MoveDelayMax(3.f),
 	m_PatternTimer(0.f),
-	m_PatternTimerMax(2.f),
+	m_PatternTimerMax(1.f),
 	m_StartDestroyBefore(false),
 	m_ChangePattern(false),
 	m_Move(false),
-	m_CanUpdate(false)
+	m_CanUpdate(false),
+	m_UseDropItem(true),
+	m_DropItemType((int)DropItem_Type::All)
 {
 	SetTypeID<CMonster>();
 
 	m_Type = Character_Type::Monster;
-
-	m_HP = 20.f;
 }
 
 CMonster::CMonster(const CMonster& obj) :
@@ -53,9 +56,10 @@ CMonster::CMonster(const CMonster& obj) :
 
 	m_Player = nullptr;
 
-	m_AttackTimer = 0.f;
-	m_AttackTimerMax = obj.m_AttackTimerMax;
-	m_AttackCoolDown = false;
+	m_AttackDelay = 0.f;
+	m_AttackDelayMax = obj.m_AttackDelayMax;
+	m_MoveDelay = obj.m_MoveDelay;
+	m_MoveDelayMax = obj.m_MoveDelayMax;
 	m_CurWeapon = nullptr;
 
 	m_PlayerAngle = 0.f;
@@ -65,6 +69,11 @@ CMonster::CMonster(const CMonster& obj) :
 	m_StartDestroyBefore = false;
 	m_ChangePattern = false;
 	m_Move = false;
+
+	m_UseDropItem = obj.m_UseDropItem;
+	m_DropItemType = obj.m_DropItemType;
+
+	m_UpdateSight = obj.m_UpdateSight;
 }
 
 CMonster::~CMonster()
@@ -109,6 +118,8 @@ bool CMonster::Init()
 
 	SetCurrentPattern(&CMonster::Attack);
 
+	m_BottomOffsetY = 1.2f;
+
 	return true;
 }
 
@@ -118,15 +129,21 @@ void CMonster::Update(float DeltaTime)
 
 	if (!m_CanUpdate)
 		return;
-	
-	ChangePattern(DeltaTime);
 
-	m_CurPattern(DeltaTime);
+	if (!m_IsDied && !m_IsPaperBurn)
+	{
+		UpdateAttack(DeltaTime);
+		UpdateMove(DeltaTime);
+		//ChangePattern(DeltaTime);
+		//m_CurPattern(DeltaTime);
+	}
 }
 
 void CMonster::Destroy()
 {
 	CCharacter::Destroy();
+
+	DropItem();
 }
 
 void CMonster::OnCollisionBegin(const CollisionResult& result)
@@ -134,7 +151,7 @@ void CMonster::OnCollisionBegin(const CollisionResult& result)
 	if (result.Dest->GetCollisionProfile()->Name == "Player")
 	{
 		((CPlayer2D*)result.Dest->GetGameObject())->AddDamage(m_Damage);
-		return;
+		return;	
 	}
 
 	CCharacter::OnCollisionBegin(result);
@@ -182,7 +199,7 @@ void CMonster::Calc(float DeltaTime)
 	if (!m_IsDied)
 		m_State = Monster_State::Idle;
 
-	if (!m_ChangePattern)
+	/*if (!m_ChangePattern)
 	{
 		m_PatternTimer += DeltaTime;
 
@@ -191,11 +208,13 @@ void CMonster::Calc(float DeltaTime)
 			m_PatternTimer = 0.f;
 
 			m_ChangePattern = true;
-		}
-	}
 
+			ChangePatternStartFunc(DeltaTime);
+		}
+	}*/
+
+	UpdateDropItemType();
 	UpdateGun();
-	UpdateAttackCoolDown(DeltaTime);
 }
 
 void CMonster::PaperBurnEnd()
@@ -267,11 +286,6 @@ void CMonster::Hit(float DeltaTime)
 
 void CMonster::Move(float DeltaTime)
 {
-	if (m_IsDied || m_Move)
-		return;
-
-	m_Move = true;
-
 	m_State = Monster_State::Walk;
 
 	Vector3	WorldPos = GetWorldPos();
@@ -299,20 +313,6 @@ void CMonster::HideAllWeapon()
 	m_WeaponL->SetRender(false);
 
 	m_CurWeapon = nullptr;
-}
-
-void CMonster::UpdateAttackCoolDown(float DeltaTime)
-{
-	if (m_AttackCoolDown)
-	{
-		m_AttackTimer += DeltaTime;
-
-		if (m_AttackTimer >= m_AttackTimerMax)
-		{
-			m_AttackTimer = 0.f;
-			m_AttackCoolDown = false;
-		}
-	}
 }
 
 void CMonster::UpdateGun()
@@ -343,12 +343,109 @@ void CMonster::UpdateGunDir(CSpriteComponent* Weapon)
 	Weapon->SetRelativeRotationZ(m_PlayerAngle);
 }
 
+void CMonster::UpdateDropItemType()
+{
+	if (m_Player->HasWeaponRifle())
+		SetDropItemType(DropItem_Type::Rifle);
+
+	else
+		DeleteDropItemType(DropItem_Type::Rifle);
+
+	if (m_Player->HasWeaponSniper())
+		SetDropItemType(DropItem_Type::Sniper);
+
+	else
+		DeleteDropItemType(DropItem_Type::Sniper);
+}
+
+void CMonster::UpdateAttack(float DeltaTime)
+{
+	m_AttackDelay += DeltaTime;
+
+	if (m_AttackDelay >= m_AttackDelayMax)
+	{
+		m_AttackDelay = 0.f;
+
+		Attack(DeltaTime);
+	}
+}
+
+void CMonster::UpdateMove(float DeltaTime)
+{
+	// 플레이어의 공격에 맞고 죽을때 움직이는 것을 방지하기 위함
+	if (m_Player->GetDamage() * 3.f >= m_HP)
+		return;
+
+	m_MoveDelay += DeltaTime;
+
+	if (m_MoveDelay >= m_MoveDelayMax)
+	{
+		m_MoveDelay = 0.f;
+
+		Move(DeltaTime);
+	}
+}
+
+void CMonster::DropItem()
+{
+	if (!m_UseDropItem)
+		return;
+
+	int Count = 0;
+
+	for (int i = (int)DropItem_Type::Rifle; i < (int)DropItem_Type::All; ++i)
+	{
+		if (IsDropItemType(i))
+			++Count;
+	}
+
+	if (!Count)
+		return;
+
+	float	RandF = rand() % 10000 / 100.f;
+	float	Percent = 0.f;
+	int		RandomItem = 0;
+
+	for (int i = 1; i <= Count; ++i)
+	{
+		Percent = RandF / (Count * i);
+
+		if (RandF <= Percent)
+		{
+
+		}
+	}
+}
+
+void CMonster::CreateItem(DropItem_Type Type)
+{
+	switch (Type)
+	{
+	case DropItem_Type::None:
+		break;
+	case DropItem_Type::Rifle:
+		break;
+	case DropItem_Type::Sniper:
+		break;
+	case DropItem_Type::Life:
+		break;
+	case DropItem_Type::All:
+		break;
+	}
+}
+
+void CMonster::ChangePatternStartFunc(float DeltaTime)
+{
+}
+
 Vector3 CMonster::RandomPos() const
 {
 	Vector3	RandPos;
 
 	float	Rand1 = rand() % 10000 / 100.f;
-	float	Rand2 = rand() % 10000 / 300.f + 300.f;
+
+	RandPos = m_PlayerDir * Rand1;
+	/*float	Rand2 = rand() % 10000 / 200.f + 150.f;
 	float	Rand4 = rand() % 10000 / 200.f;
 	float	Rand3 = rand() % 10000 / 100.f;
 
@@ -404,13 +501,16 @@ Vector3 CMonster::RandomPos() const
 	{
 		RandPos.x = RandPos.x > 0.f ? RandPos.x : RandPos.x *= -1.f;
 		RandPos.y = RandPos.y > 0.f ? RandPos.y : RandPos.y *= -1.f;
-	}
+	}*/
 
 	return RandPos;
 }
 
 void CMonster::ChangePattern(float DeltaTime)
 {
+	if (m_IsDied)
+		return;
+
 	if (m_ChangePattern)
 	{
 		m_ChangePattern = false;
