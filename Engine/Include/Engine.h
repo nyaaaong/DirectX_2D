@@ -24,8 +24,14 @@ private:
 	float		m_GlobalAccTime;
 	int			m_ShowCursorCount;
 	bool		m_IsFocusClient;
+	bool		m_ToggleCollider; // 충돌체 토글
 
 public:
+	bool GetToggleCollider()	const
+	{
+		return m_ToggleCollider;
+	}
+
 	bool IsFocusClient()	const
 	{
 		return m_IsFocusClient;
@@ -72,6 +78,11 @@ public:
 	}
 
 public:
+	void SetToggleCollider()
+	{
+		m_ToggleCollider = !m_ToggleCollider;
+	}
+
 	void SetMouseOnClient(bool IsOn)
 	{
 		m_IsFocusClient = IsOn;

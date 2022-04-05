@@ -33,7 +33,8 @@ CEngine::CEngine()	:
 	m_GlobalCBuffer(nullptr),
 	m_RandomBuffer(nullptr),
 	m_GlobalAccTime(0.f),
-	m_MouseWindowOut(false)
+	m_MouseWindowOut(false),
+	m_ToggleCollider(true)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(172854);

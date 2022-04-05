@@ -87,6 +87,20 @@ CPlayer2D::~CPlayer2D()
 {
 }
 
+void CPlayer2D::AddWeaponRifle()
+{
+	m_HasRifle = true;
+
+	Weapon2(CEngine::GetInst()->GetDeltaTime());
+}
+
+void CPlayer2D::AddWeaponSniper()
+{
+	m_HasSniper = true;
+
+	Weapon3(CEngine::GetInst()->GetDeltaTime());
+}
+
 bool CPlayer2D::Init()
 {
 	if (!CCharacter::Init())

@@ -340,3 +340,11 @@ enum class DropItem_Type
 	Life = 0x10,
 	All = Rifle | Sniper | Life
 };
+
+enum class Item_Type
+{
+	None,
+	Rifle,
+	Sniper,
+	Life
+};

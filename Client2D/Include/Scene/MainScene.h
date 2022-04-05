@@ -35,6 +35,7 @@ public:
 
 private:
 	void CreateSound();
+	void ToggleCollider(float DeltaTime);
 
 public:
 	template <typename T>

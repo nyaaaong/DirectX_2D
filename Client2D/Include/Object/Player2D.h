@@ -87,27 +87,8 @@ public:
 	}
 
 public:
-	void AddWeaponRifle()
-	{
-		m_HasRifle = true;
-
-		m_WeaponSlot = Weapon_Slot::Rifle;
-		m_AttackDelayMax = 0.08f;
-		m_Damage = 5.f;
-
-		m_PierceBullet = false;
-	}
-
-	void AddWeaponSniper()
-	{
-		m_HasSniper = true;
-
-		m_WeaponSlot = Weapon_Slot::Sniper;
-		m_AttackDelayMax = 1.3f;
-		m_Damage = 50.f;
-
-		m_PierceBullet = true;
-	}
+	void AddWeaponRifle();
+	void AddWeaponSniper();
 
 	void SetEnableInput(bool Enable)
 	{

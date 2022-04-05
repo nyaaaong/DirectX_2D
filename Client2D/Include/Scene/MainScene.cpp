@@ -2,6 +2,7 @@
 #include "MainScene.h"
 #include "Device.h"
 #include "Public.h"
+#include "Input.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneResource.h"
 #include "Scene/Viewport.h"
@@ -99,6 +100,8 @@ bool CMainScene::Init()
 	if (m_LoadingFunction)
 		m_LoadingFunction(false, 0.7f);
 
+	CInput::GetInst()->SetKeyCallback<CMainScene>("ToggleCollider", KeyState_Down, this, &CMainScene::ToggleCollider);
+
 	return true;
 }
 
@@ -129,4 +132,9 @@ void CMainScene::CreateSound()
 	m_Scene->GetResource()->LoadSound("Effect", false, "BulletKin_Die2", "Monster/BulletKin/Die2.wav");
 	m_Scene->GetResource()->LoadSound("Effect", false, "BulletKin_Die3", "Monster/BulletKin/Die3.wav");
 	m_Scene->GetResource()->LoadSound("Effect", false, "BulletKin_Die4", "Monster/BulletKin/Die4.wav");
+}
+
+void CMainScene::ToggleCollider(float DeltaTime)
+{
+	CEngine::GetInst()->SetToggleCollider();
 }

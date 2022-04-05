@@ -5,7 +5,7 @@
 
 CMonsterAnim::CMonsterAnim()	:
 	m_OwnerObject(nullptr),
-	m_PlayEnd(false)
+	m_PlayDieAnim(false)
 {
 	SetTypeID<CMonsterAnim>();
 }
@@ -16,7 +16,7 @@ CMonsterAnim::CMonsterAnim(const CMonsterAnim& Anim) :
 	SetTypeID<CMonsterAnim>();
 
 	m_OwnerObject = nullptr;
-	m_PlayEnd = false;
+	m_PlayDieAnim = false;
 }
 
 CMonsterAnim::~CMonsterAnim()
@@ -56,7 +56,7 @@ void CMonsterAnim::Update(float DeltaTime)
 void CMonsterAnim::ChangeAnimDir()
 {
 	// 죽는 애니메이션이 실행됐었다면 방향을 바꾸지 않게 한다.
-	if (m_PlayEnd)
+	if (m_PlayDieAnim)
 		return;
 
 	if (m_OwnerObject->GetPlayerDir().x < 0.f)
@@ -75,7 +75,7 @@ void CMonsterAnim::ChangeAnimLeft()
 	case Monster_State::Walk:
 		break;
 	case Monster_State::Die:
-		m_PlayEnd = true;
+		m_PlayDieAnim = true;
 		break;
 	}
 }
@@ -89,7 +89,7 @@ void CMonsterAnim::ChangeAnimRight()
 	case Monster_State::Walk:
 		break;
 	case Monster_State::Die:
-		m_PlayEnd = true;
+		m_PlayDieAnim = true;
 		break;
 	}
 }

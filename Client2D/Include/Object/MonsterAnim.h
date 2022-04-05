@@ -12,7 +12,7 @@ public:
 
 protected:
 	class CMonster*	m_OwnerObject;
-	bool	m_PlayEnd;	// 한번 애니메이션이 실행 됐는지
+	bool	m_PlayDieAnim;	// 한번 애니메이션이 실행 됐는지
 
 public:
 	virtual void Start();

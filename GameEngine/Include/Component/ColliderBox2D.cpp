@@ -119,6 +119,9 @@ void CColliderBox2D::Render()
 {
 	CColliderComponent::Render();
 
+	if (!CEngine::GetInst()->GetToggleCollider())
+		return;
+
 	CCameraComponent* Camera = m_Scene->GetCameraManager()->GetCurrentCamera();
 
 	Matrix	matWorld, matView, matProj, matWVP;

@@ -176,9 +176,11 @@
     <ClCompile Include="Object\BulletKinAnim.cpp" />
     <ClCompile Include="Object\Character.cpp" />
     <ClCompile Include="Object\Item.cpp" />
-    <ClCompile Include="Object\ItemAnim.cpp" />
+    <ClCompile Include="Object\ItemPickup.cpp" />
+    <ClCompile Include="Object\ItemPickupAnim.cpp" />
     <ClCompile Include="Object\ItemRifle.cpp" />
     <ClCompile Include="Object\ItemSniper.cpp" />
+    <ClCompile Include="Object\ItemLife.cpp" />
     <ClCompile Include="Object\Monster.cpp" />
     <ClCompile Include="Object\MonsterAnim.cpp" />
     <ClCompile Include="Object\Player2D.cpp" />
@@ -210,9 +212,11 @@
     <ClInclude Include="Object\BulletKinAnim.h" />
     <ClInclude Include="Object\Character.h" />
     <ClInclude Include="Object\Item.h" />
-    <ClInclude Include="Object\ItemAnim.h" />
+    <ClInclude Include="Object\ItemPickup.h" />
+    <ClInclude Include="Object\ItemPickupAnim.h" />
     <ClInclude Include="Object\ItemRifle.h" />
     <ClInclude Include="Object\ItemSniper.h" />
+    <ClInclude Include="Object\ItemLife.h" />
     <ClInclude Include="Object\Monster.h" />
     <ClInclude Include="Object\MonsterAnim.h" />
     <ClInclude Include="Object\Player2D.h" />

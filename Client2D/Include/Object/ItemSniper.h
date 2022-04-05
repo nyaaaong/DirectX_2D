@@ -3,7 +3,7 @@
 #include "Item.h"
 
 class CItemSniper :
-    public CItem
+	public CItem
 {
 	friend class CScene;
 
@@ -15,8 +15,5 @@ protected:
 public:
 	virtual bool Init();
 	virtual CItemSniper* Clone();
-
-public:
-	virtual void OnCollisionBegin(const CollisionResult& result);
 };
 

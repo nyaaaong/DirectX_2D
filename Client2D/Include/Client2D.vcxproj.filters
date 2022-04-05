@@ -60,14 +60,20 @@
     <Filter Include="01. Object\03. Item">
       <UniqueIdentifier>{4e5293ed-a0e7-45ac-882e-e875267486a0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Object\03. Item\00. Weapon">
+    <Filter Include="01. Object\03. Item\01. Weapon">
       <UniqueIdentifier>{6186e055-6103-47c8-941b-73ae98ef82f9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Object\03. Item\00. Weapon\00. Rifle">
+    <Filter Include="01. Object\03. Item\01. Weapon\00. Rifle">
       <UniqueIdentifier>{edd61ce2-fa3d-4d0b-8b88-421b89681d8f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Object\03. Item\00. Weapon\01. Sniper">
+    <Filter Include="01. Object\03. Item\01. Weapon\01. Sniper">
       <UniqueIdentifier>{ddf95bf5-ed03-497e-87d6-b3be94f32a91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Object\03. Item\00. Pickup">
+      <UniqueIdentifier>{35b8b514-f5fc-42fe-ac4b-44fc6d4c2b1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Object\03. Item\02. Life">
+      <UniqueIdentifier>{f5d2828b-a784-4b9b-b181-d9219d1d4ddd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -159,13 +165,19 @@
       <Filter>01. Object\03. Item</Filter>
     </ClCompile>
     <ClCompile Include="Object\ItemRifle.cpp">
-      <Filter>01. Object\03. Item\00. Weapon\00. Rifle</Filter>
+      <Filter>01. Object\03. Item\01. Weapon\00. Rifle</Filter>
     </ClCompile>
     <ClCompile Include="Object\ItemSniper.cpp">
-      <Filter>01. Object\03. Item\00. Weapon\01. Sniper</Filter>
+      <Filter>01. Object\03. Item\01. Weapon\01. Sniper</Filter>
     </ClCompile>
-    <ClCompile Include="Object\ItemAnim.cpp">
-      <Filter>01. Object\03. Item</Filter>
+    <ClCompile Include="Object\ItemPickupAnim.cpp">
+      <Filter>01. Object\03. Item\00. Pickup</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\ItemPickup.cpp">
+      <Filter>01. Object\03. Item\00. Pickup</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\ItemLife.cpp">
+      <Filter>01. Object\03. Item\02. Life</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -260,13 +272,19 @@
       <Filter>01. Object\03. Item</Filter>
     </ClInclude>
     <ClInclude Include="Object\ItemRifle.h">
-      <Filter>01. Object\03. Item\00. Weapon\00. Rifle</Filter>
+      <Filter>01. Object\03. Item\01. Weapon\00. Rifle</Filter>
     </ClInclude>
     <ClInclude Include="Object\ItemSniper.h">
-      <Filter>01. Object\03. Item\00. Weapon\01. Sniper</Filter>
+      <Filter>01. Object\03. Item\01. Weapon\01. Sniper</Filter>
     </ClInclude>
-    <ClInclude Include="Object\ItemAnim.h">
-      <Filter>01. Object\03. Item</Filter>
+    <ClInclude Include="Object\ItemPickupAnim.h">
+      <Filter>01. Object\03. Item\00. Pickup</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\ItemPickup.h">
+      <Filter>01. Object\03. Item\00. Pickup</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\ItemLife.h">
+      <Filter>01. Object\03. Item\02. Life</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

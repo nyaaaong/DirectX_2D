@@ -3,6 +3,7 @@
 #include "Player2D.h"
 #include "ItemRifle.h"
 #include "ItemSniper.h"
+#include "ItemLife.h"
 #include "Scene/Scene.h"
 #include "Component/NavAgent.h"
 #include "Animation/AnimationSequence2DInstance.h"
@@ -78,7 +79,6 @@ CMonster::CMonster(const CMonster& obj) :
 
 CMonster::~CMonster()
 {
-
 }
 
 void CMonster::Start()
@@ -120,6 +120,8 @@ bool CMonster::Init()
 
 	m_BottomOffsetY = 1.2f;
 
+	m_PaperBurn->SetFinishCallback(this, &CMonster::Destroy);
+
 	return true;
 }
 
@@ -142,8 +144,6 @@ void CMonster::Update(float DeltaTime)
 void CMonster::Destroy()
 {
 	CCharacter::Destroy();
-
-	DropItem();
 }
 
 void CMonster::OnCollisionBegin(const CollisionResult& result)
@@ -256,6 +256,8 @@ void CMonster::Dead(float DeltaTime)
 				m_PaperBurn->StartPaperBurn();
 
 				m_Sprite->SetOpacity(0.5f);
+
+				DropItem();
 			}
 		}
 	}
@@ -271,6 +273,8 @@ void CMonster::Dead(float DeltaTime)
 				m_Sprite->GetAnimationInstance()->Stop();
 
 				Destroy();
+
+				DropItem();
 			}
 
 			else if (!m_StartDestroyBefore)
@@ -402,34 +406,35 @@ void CMonster::DropItem()
 	if (!Count)
 		return;
 
-	float	RandF = rand() % 10000 / 100.f;
-	float	Percent = 0.f;
-	int		RandomItem = 0;
+	float	Randf = rand() % 10000 / 100.f;
+	int		Randi = rand() % Count + 1;
 
-	for (int i = 1; i <= Count; ++i)
-	{
-		Percent = RandF / (Count * i);
-
-		if (RandF <= Percent)
-		{
-
-		}
-	}
+	//if (Randf <= 40.f)
+		CreateItem((DropItem_Type)Randi);
 }
 
 void CMonster::CreateItem(DropItem_Type Type)
 {
 	switch (Type)
 	{
-	case DropItem_Type::None:
-		break;
 	case DropItem_Type::Rifle:
+	{
+		CItemRifle* NewItem = m_Scene->CreateGameObject<CItemRifle>("Rifle");
+		NewItem->SetWorldPos(GetWorldPos());
+		NewItem->AddWorldPos(0.f, -3.f, 0.f);
+	}
 		break;
 	case DropItem_Type::Sniper:
+	{
+		CItemSniper* NewItem = m_Scene->CreateGameObject<CItemSniper>("Sniper");
+		NewItem->SetWorldPos(GetWorldPos());
+		NewItem->AddWorldPos(0.f, -3.f, 0.f);
+	}		
 		break;
 	case DropItem_Type::Life:
-		break;
-	case DropItem_Type::All:
+		CItemLife* NewItem = m_Scene->CreateGameObject<CItemLife>("Life");
+		NewItem->SetWorldPos(GetWorldPos());
+		NewItem->AddWorldPos(0.f, -3.f, 0.f);
 		break;
 	}
 }

@@ -1,6 +1,6 @@
 
 #include "ItemSniper.h"
-#include "Player2D.h"
+#include "Component/SpriteComponent.h"
 
 CItemSniper::CItemSniper()
 {
@@ -24,16 +24,19 @@ bool CItemSniper::Init()
 	if (!CItem::Init())
 		return false;
 
+	m_Type = Item_Type::Sniper;
+
 	m_Sprite = CreateComponent<CSpriteComponent>("Sniper");
+	m_Sprite->SetRelativeScale(90.f, 27.f, 1.f);
 	m_Sprite->SetPivot(0.5f, 0.5f, 0.f);
-	SetRootComponent(m_Sprite);
+	m_Sprite->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "Sniper", TEXT("Item/Sniper.png"));
+
+	m_Body->SetExtent(45.f, 13.5f);
+	m_Body->SetPivot(0.5f, 0.5f, 0.f);
 
 	m_Sprite->AddChild(m_Body);
 
-	m_Sprite->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "Sniper", TEXT("Item/Sniper.png"));
-
-	m_Body->SetRelativeScale(90.f, 27.f, 1.f);
-	m_Body->SetPivot(0.5f, 0.5f, 0.f);
+	SetRootComponent(m_Sprite);
 
 	return true;
 }
@@ -41,17 +44,4 @@ bool CItemSniper::Init()
 CItemSniper* CItemSniper::Clone()
 {
 	return DBG_NEW CItemSniper(*this);
-}
-
-void CItemSniper::OnCollisionBegin(const CollisionResult& result)
-{
-	CItem::OnCollisionBegin(result);
-
-	if (result.Dest->GetName() == "Player")
-	{
-		if (!m_Player->HasWeaponSniper())
-			m_Player->AddWeaponSniper();
-
-		m_Scene->GetResource()->SoundPlay("WeaponPickup");
-	}
 }

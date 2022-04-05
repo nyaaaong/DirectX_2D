@@ -16,6 +16,7 @@ protected:
 protected:
 	CSharedPtr<class CPlayer2D>		m_Player;
 	CSharedPtr<CColliderBox2D>		m_Body;
+	Item_Type		m_Type;
 
 public:
 	virtual void Start();
