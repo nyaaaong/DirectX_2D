@@ -394,6 +394,8 @@ void CSceneComponent::Load(FILE* File)
 void CSceneComponent::Destroy()
 {
 	CComponent::Destroy();
+	
+	CComponent::Enable(false);
 
 	size_t	Size = m_vecChild.size();
 
@@ -401,4 +403,11 @@ void CSceneComponent::Destroy()
 	{
 		m_vecChild[i]->Destroy();
 	}
+}
+
+void CSceneComponent::Enable(bool Enable)
+{
+	CComponent::Enable(Enable);
+
+	m_Render = Enable;
 }

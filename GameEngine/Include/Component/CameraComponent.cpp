@@ -98,7 +98,7 @@ void CCameraComponent::SetWorldPos(float x, float y, float z)
 void CCameraComponent::SetWorldPosX(float x)
 {
 	CSceneComponent::SetWorldPosX(x);
-
+	
 	LimitCheck();
 }
 

@@ -50,6 +50,7 @@ public:
 	virtual void SetScene(class CScene* Scene);
 	virtual void SetGameObject(class CGameObject* Object);
 	virtual void Destroy();
+	virtual void Enable(bool Enable);
 
 public:
 	void AddChild(CSceneComponent* Child);

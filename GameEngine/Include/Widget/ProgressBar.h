@@ -14,12 +14,12 @@ protected:
 	virtual ~CProgressBar();
 
 protected:
-	WidgetImageInfo	m_Info;
+	WidgetImageInfo			m_Info;
 	std::function<void()>	m_MouseOnCallback;
-	float			m_Percent;
-	ProgressBar_Dir	m_Dir;
+	float					m_Percent;
+	ProgressBar_Dir			m_Dir;
 	CProgressBarConstantBuffer* m_ProgressCBuffer;
-	bool			m_StartMouseOn;
+	bool					m_StartMouseOn;
 
 public:
 	float GetPercent()	const
@@ -28,6 +28,19 @@ public:
 	}
 
 public:
+	void AddPercent(float Percent)
+	{
+		m_Percent += Percent;
+
+		if (m_Percent > 1.f)
+			m_Percent = 1.f;
+
+		else if (m_Percent < 0.f)
+			m_Percent = 0.f;
+
+		m_ProgressCBuffer->SetPercent(m_Percent);
+	}
+
 	void SetPercent(float Percent)
 	{		
 		m_Percent = Percent;
