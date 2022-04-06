@@ -404,7 +404,7 @@ void CMonster::DropItem()
 	float	Percent = rand() % 10000 / 100.f;
 	int		Index = rand() % Size;
 
-	//if (Percent <= 40.f)
+	if (Percent <= 20.f)
 		CreateItem(vecRandItem[Index]);
 }
 
