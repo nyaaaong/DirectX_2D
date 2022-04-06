@@ -207,4 +207,6 @@ bool CCharacter::IsWallTile(const Vector3& NextWorldPos)	const
 void CCharacter::Destroy()
 {
 	CGameObject::Destroy();
+
+	m_Body->Enable(false);
 }

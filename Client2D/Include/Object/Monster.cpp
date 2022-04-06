@@ -28,12 +28,13 @@ CMonster::CMonster() :
 	m_ChangePattern(false),
 	m_Move(false),
 	m_CanUpdate(false),
-	m_UseDropItem(true),
-	m_DropItemType((int)DropItem_Type::All)
+	m_UseDropItem(true)
 {
 	SetTypeID<CMonster>();
 
 	m_Type = Character_Type::Monster;
+
+	m_vecDropItemType.resize((size_t)DropItem_Type::Max);
 }
 
 CMonster::CMonster(const CMonster& obj) :
@@ -72,7 +73,8 @@ CMonster::CMonster(const CMonster& obj) :
 	m_Move = false;
 
 	m_UseDropItem = obj.m_UseDropItem;
-	m_DropItemType = obj.m_DropItemType;
+
+	m_vecDropItemType.resize((size_t)DropItem_Type::Max);
 
 	m_UpdateSight = obj.m_UpdateSight;
 }
@@ -122,6 +124,13 @@ bool CMonster::Init()
 
 	m_PaperBurn->SetFinishCallback(this, &CMonster::Destroy);
 
+	size_t Size = m_vecDropItemType.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		m_vecDropItemType[i] = true;
+	}
+
 	return true;
 }
 
@@ -136,8 +145,6 @@ void CMonster::Update(float DeltaTime)
 	{
 		UpdateAttack(DeltaTime);
 		UpdateMove(DeltaTime);
-		//ChangePattern(DeltaTime);
-		//m_CurPattern(DeltaTime);
 	}
 }
 
@@ -199,20 +206,6 @@ void CMonster::Calc(float DeltaTime)
 	if (!m_IsDied)
 		m_State = Monster_State::Idle;
 
-	/*if (!m_ChangePattern)
-	{
-		m_PatternTimer += DeltaTime;
-
-		if (m_PatternTimer >= m_PatternTimerMax)
-		{
-			m_PatternTimer = 0.f;
-
-			m_ChangePattern = true;
-
-			ChangePatternStartFunc(DeltaTime);
-		}
-	}*/
-
 	UpdateDropItemType();
 	UpdateGun();
 }
@@ -272,9 +265,9 @@ void CMonster::Dead(float DeltaTime)
 			{
 				m_Sprite->GetAnimationInstance()->Stop();
 
-				Destroy();
-
 				DropItem();
+
+				Destroy();
 			}
 
 			else if (!m_StartDestroyBefore)
@@ -349,13 +342,13 @@ void CMonster::UpdateGunDir(CSpriteComponent* Weapon)
 
 void CMonster::UpdateDropItemType()
 {
-	if (m_Player->HasWeaponRifle())
+	if (!m_Player->HasWeaponRifle())
 		SetDropItemType(DropItem_Type::Rifle);
 
 	else
 		DeleteDropItemType(DropItem_Type::Rifle);
 
-	if (m_Player->HasWeaponSniper())
+	if (!m_Player->HasWeaponSniper())
 		SetDropItemType(DropItem_Type::Sniper);
 
 	else
@@ -395,22 +388,24 @@ void CMonster::DropItem()
 	if (!m_UseDropItem)
 		return;
 
-	int Count = 0;
+	std::vector<DropItem_Type>	vecRandItem;
 
-	for (int i = (int)DropItem_Type::Rifle; i < (int)DropItem_Type::All; ++i)
+	for (int i = (int)DropItem_Type::Rifle; i < (int)DropItem_Type::Max; ++i)
 	{
 		if (IsDropItemType(i))
-			++Count;
+			vecRandItem.push_back((DropItem_Type)i);
 	}
 
-	if (!Count)
+	size_t Size = vecRandItem.size();
+
+	if (!Size)
 		return;
 
-	float	Randf = rand() % 10000 / 100.f;
-	int		Randi = rand() % Count + 1;
+	float	Percent = rand() % 10000 / 100.f;
+	int		Index = rand() % Size;
 
-	//if (Randf <= 40.f)
-		CreateItem((DropItem_Type)Randi);
+	//if (Percent <= 40.f)
+		CreateItem(vecRandItem[Index]);
 }
 
 void CMonster::CreateItem(DropItem_Type Type)
@@ -421,20 +416,19 @@ void CMonster::CreateItem(DropItem_Type Type)
 	{
 		CItemRifle* NewItem = m_Scene->CreateGameObject<CItemRifle>("Rifle");
 		NewItem->SetWorldPos(GetWorldPos());
-		NewItem->AddWorldPos(0.f, -3.f, 0.f);
 	}
 		break;
 	case DropItem_Type::Sniper:
 	{
 		CItemSniper* NewItem = m_Scene->CreateGameObject<CItemSniper>("Sniper");
 		NewItem->SetWorldPos(GetWorldPos());
-		NewItem->AddWorldPos(0.f, -3.f, 0.f);
 	}		
 		break;
 	case DropItem_Type::Life:
+	{
 		CItemLife* NewItem = m_Scene->CreateGameObject<CItemLife>("Life");
 		NewItem->SetWorldPos(GetWorldPos());
-		NewItem->AddWorldPos(0.f, -3.f, 0.f);
+	}
 		break;
 	}
 }
@@ -450,63 +444,6 @@ Vector3 CMonster::RandomPos() const
 	float	Rand1 = rand() % 10000 / 100.f;
 
 	RandPos = m_PlayerDir * Rand1;
-	/*float	Rand2 = rand() % 10000 / 200.f + 150.f;
-	float	Rand4 = rand() % 10000 / 200.f;
-	float	Rand3 = rand() % 10000 / 100.f;
-
-	if (Rand1 <= 25.f)
-		RandPos.x = Rand2;
-
-	else if (Rand1 <= 50.f)
-		RandPos.y = Rand2;
-
-	else if (Rand1 <= 75.f)
-	{
-		RandPos.x = Rand2;
-		RandPos.y = Rand4;
-	}
-
-	else
-	{
-		RandPos.x = Rand4;
-		RandPos.y = Rand2;
-	}
-
-	if (Rand3 <= 12.5f)
-		RandPos.x = RandPos.x > 0.f ? RandPos.x *= -1.f : RandPos.x;
-
-	else if (Rand3 <= 25.f)
-		RandPos.y = RandPos.y > 0.f ? RandPos.y *= -1.f : RandPos.y;
-
-	else if (Rand3 <= 37.5f)
-		RandPos.x = RandPos.x > 0.f ? RandPos.x : RandPos.x *= -1.f;
-
-	else if (Rand3 <= 50.f)
-		RandPos.y = RandPos.y > 0.f ? RandPos.y : RandPos.y *= -1.f;
-
-	else if (Rand3 <= 62.5f)
-	{
-		RandPos.x = RandPos.x > 0.f ? RandPos.x *= -1.f : RandPos.x;
-		RandPos.y = RandPos.y > 0.f ? RandPos.y *= -1.f : RandPos.y;
-	}
-
-	else if (Rand3 <= 75.f)
-	{
-		RandPos.x = RandPos.x > 0.f ? RandPos.x *= -1.f : RandPos.x;
-		RandPos.y = RandPos.y > 0.f ? RandPos.y : RandPos.y *= -1.f;
-	}
-
-	else if (Rand3 <= 87.5f)
-	{
-		RandPos.x = RandPos.x > 0.f ? RandPos.x : RandPos.x *= -1.f;
-		RandPos.y = RandPos.y > 0.f ? RandPos.y *= -1.f : RandPos.y;
-	}
-
-	else
-	{
-		RandPos.x = RandPos.x > 0.f ? RandPos.x : RandPos.x *= -1.f;
-		RandPos.y = RandPos.y > 0.f ? RandPos.y : RandPos.y *= -1.f;
-	}*/
 
 	return RandPos;
 }

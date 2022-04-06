@@ -23,7 +23,7 @@ bool CItemPickupAnim::Init()
 	if (!CAnimationSequence2DInstance::Init())
 		return false;
 
-	AddAnimation(TEXT("Item/Item_Pickup.sqc"), "Item_Pickup", ANIMATION_PATH, false, 0.5f);
+	AddAnimation(TEXT("Item/Item_Pickup.sqc"), "Item_Pickup", ANIMATION_PATH, false, 0.3f);
 
 	SetCurrentAnimation("Item_Pickup");
 

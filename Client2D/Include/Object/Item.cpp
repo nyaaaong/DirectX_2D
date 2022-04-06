@@ -6,7 +6,15 @@
 #include "Scene/SceneMode.h"
 
 CItem::CItem()	:
-	m_Type(Item_Type::None)
+	m_Type(Item_Type::None),
+	m_CompleteAnim(false),
+	m_MinCheck(false),
+	m_MaxCheck(false),
+	m_DirY(-1.f),
+	m_AnimSpeed(300.f),
+	m_Bottom(0.f),
+	m_BottomMin(0.f),
+	m_BottomMax(0.f)
 {
 	SetTypeID<CItem>();
 }
@@ -19,6 +27,14 @@ CItem::CItem(const CItem& obj)	:
 	m_Body = (CColliderBox2D*)FindComponent("Body");
 
 	m_Type = obj.m_Type;
+	m_CompleteAnim = false;
+	m_MinCheck = false;
+	m_MaxCheck = false;
+	m_DirY = obj.m_DirY;
+	m_AnimSpeed = obj.m_AnimSpeed;
+	m_Bottom = 0.f;
+	m_BottomMin = obj.m_BottomMin;
+	m_BottomMax = obj.m_BottomMax;
 }
 
 CItem::~CItem()
@@ -40,6 +56,14 @@ void CItem::Start()
 		ASSERT("if (!m_Player)");
 }
 
+void CItem::First()
+{
+	CGameObject::First();
+
+	m_BottomMin = GetWorldPos().y - 20.f;
+	m_BottomMax = GetWorldPos().y - 30.f;
+}
+
 bool CItem::Init()
 {
 	if (!CGameObject::Init())
@@ -54,6 +78,59 @@ bool CItem::Init()
 	return true;
 }
 
+void CItem::Update(float DeltaTime)
+{
+	CGameObject::Update(DeltaTime);
+
+	if (!m_CompleteAnim)
+	{
+		Vector3	Pos = GetWorldPos();
+
+		m_Bottom = m_DirY * m_AnimSpeed * DeltaTime;
+
+		AddWorldPos(0.f, m_Bottom, 0.f);
+
+		if (!m_MaxCheck)
+		{
+			if (Pos.y <= m_BottomMax)
+			{
+				m_MaxCheck = true;
+
+				SetWorldPos(Pos.x, m_BottomMax, Pos.z);
+
+				m_DirY = 1.f;
+			}
+		}
+
+		else
+		{
+			if (!m_MinCheck)
+			{
+				if (Pos.y >= m_BottomMin)
+				{
+					m_MinCheck = true;
+
+					SetWorldPos(Pos.x, m_BottomMin, Pos.z);
+
+					m_DirY = -1.f;
+				}
+			}
+
+			else
+			{
+				if (Pos.y <= m_BottomMax)
+				{
+					m_MaxCheck = true;
+
+					SetWorldPos(Pos.x, m_BottomMax, Pos.z);
+
+					m_CompleteAnim = true;
+				}
+			}
+		}
+	}
+}
+
 CItem* CItem::Clone()
 {
 	return DBG_NEW CItem(*this);
@@ -63,13 +140,18 @@ void CItem::Destroy()
 {
 	CGameObject::Destroy();
 
-	CItemPickup* Effect = m_Scene->CreateGameObject<CItemPickup>("PickupEffect");
+	m_Body->Enable(false);
 
+	CItemPickup* Effect = m_Scene->CreateGameObject<CItemPickup>("PickupEffect");
+	
 	Effect->SetWorldPos(GetWorldPos());
 }
 
 void CItem::OnCollisionBegin(const CollisionResult& result)
 {
+	if (!m_CompleteAnim)
+		return;
+
 	if (result.Dest->GetGameObject()->GetName() == "Player")
 	{
 		switch (m_Type)
@@ -90,6 +172,6 @@ void CItem::OnCollisionBegin(const CollisionResult& result)
 			break;
 		}
 
-		CGameObject::Destroy();
+		Destroy();
 	}
 }

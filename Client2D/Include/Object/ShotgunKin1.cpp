@@ -110,6 +110,7 @@ void CShotgunKin1::Calc(float DeltaTime)
 
 void CShotgunKin1::DestroyBefore()
 {
+	CMonster::DestroyBefore();
 }
 
 void CShotgunKin1::PlaySoundDie()

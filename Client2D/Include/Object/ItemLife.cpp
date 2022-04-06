@@ -41,6 +41,11 @@ bool CItemLife::Init()
 	return true;
 }
 
+void CItemLife::Update(float DeltaTime)
+{
+	CItem::Update(DeltaTime);
+}
+
 CItemLife* CItemLife::Clone()
 {
 	return DBG_NEW CItemLife(*this);
