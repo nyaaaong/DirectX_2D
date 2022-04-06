@@ -54,8 +54,6 @@ CMonster::CMonster(const CMonster& obj) :
 
 	m_State = Monster_State::Idle;
 
-	m_HP = obj.m_HP;
-
 	m_Player = nullptr;
 
 	m_AttackDelay = 0.f;

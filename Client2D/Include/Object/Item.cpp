@@ -152,7 +152,7 @@ void CItem::OnCollisionBegin(const CollisionResult& result)
 	if (!m_CompleteAnim)
 		return;
 
-	if (result.Dest->GetGameObject()->GetName() == "Player")
+	if (result.Dest->GetCollisionProfile()->Name == "Player")
 	{
 		switch (m_Type)
 		{

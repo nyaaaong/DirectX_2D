@@ -16,13 +16,14 @@ protected:
 
 private:
 	CSharedPtr<CCameraComponent>	m_Camera;
-	CSharedPtr<CWidgetComponent>	m_SimpleHUDWidget;
 	CSharedPtr<CSpriteComponent>	m_Weapon1;
 	CSharedPtr<CSpriteComponent>	m_Weapon1L;
 	CSharedPtr<CSpriteComponent>	m_Weapon2;
 	CSharedPtr<CSpriteComponent>	m_Weapon2L;
 	CSharedPtr<CSpriteComponent>	m_Weapon3;
 	CSharedPtr<CSpriteComponent>	m_Weapon3L;
+	CSharedPtr<CWidgetComponent>	m_PlayerWidget;
+	class CPlayerWidget*			m_PlayerUI;
 	CSpriteComponent*	m_CurWeapon;
 	Vector3	m_PrevPos;
 	Vector3	m_MouseDir;
@@ -35,6 +36,7 @@ private:
 	bool	m_PierceBullet;
 	bool	m_HasRifle;
 	bool	m_HasSniper;
+	bool	m_Invisible;
 	float   m_Opacity;
 	float	m_AttackDelay;
 	float	m_AttackDelayMax;
@@ -42,6 +44,10 @@ private:
 	float	m_DodgeTimer;
 	float	m_DodgeTimerMax;
 	float	m_MouseAngle;
+	float	m_NoHitTimer;
+	float	m_NoHitTimerMax;
+	float	m_BlinkTimer;
+	float	m_BlinkTimerMax;
 	int		m_Dir;
 	int		m_MoveDir;
 
@@ -97,10 +103,15 @@ public:
 
 public:
 	virtual void Start();
+	virtual void Calc(float DeltaTime);
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
 	virtual CPlayer2D* Clone();
+	virtual void Hit(float DeltaTime);
+
+public:
+	virtual void OnCollisionBegin(const CollisionResult& result);
 
 private:
 	void MoveUp(float DeltaTime);
@@ -125,12 +136,14 @@ public:
 	void DeleteMoveDir(Character_Direction Dir);
 
 private:
+	void UpdatePlayerLife(float DeltaTime);
 	void UpdateAttackCoolDown(float DeltaTime);
 	void UpdateDodgeCoolDown(float DeltaTime);
 	void UpdateMousePos();
 	void UpdateGun();
 	void UpdateGunDir(CSpriteComponent* Weapon);
 	void UpdateAnimDir();
+	void UpdateBlink(float DeltaTime);
 
 private:
 	void ChangeAnimIdle();

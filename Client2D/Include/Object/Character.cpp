@@ -7,6 +7,7 @@
 #include "../Scene/MainScene.h"
 
 CCharacter::CCharacter() :
+	m_PrevHP(50.f),
 	m_HP(50.f),
 	m_HPMax(50.f),
 	m_HitEffectTime(0.f),
@@ -30,6 +31,7 @@ CCharacter::CCharacter(const CCharacter& obj) :
 	m_Body = (CColliderBox2D*)FindComponent("Body");
 	m_PaperBurn = (CPaperBurnComponent*)FindComponent("PaperBurn");
 
+	m_PrevHP = obj.m_HP;
 	m_HP = obj.m_HP;
 	m_HPMax = obj.m_HPMax;
 	m_IsDied = false;
@@ -112,34 +114,30 @@ void CCharacter::Dead(float DeltaTime)
 
 void CCharacter::Hit(float DeltaTime)
 {
-	if (m_Hit)
+	if (m_Type == Character_Type::Monster)
 	{
-		m_HitEffectTime += DeltaTime;
-
-		m_Sprite->SetBaseColor(Vector4::Red);
-
-		// 히트 사운드 출력
-		if (!m_IsPlayedHitSound)
+		if (m_Hit)
 		{
-			switch (m_Type)
+			m_HitEffectTime += DeltaTime;
+
+			m_Sprite->SetBaseColor(Vector4::Red);
+
+			// 히트 사운드 출력
+			if (!m_IsPlayedHitSound)
 			{
-			case Character_Type::Player:
-				break;
-			case Character_Type::Monster:
+				m_IsPlayedHitSound = true;
+
 				m_Scene->GetResource()->SoundPlay("Monster_Hit");
-				break;
 			}
 
-			m_IsPlayedHitSound = true;
-		}
+			if (m_HitEffectTime >= m_HitEffectTimeMax)
+			{
+				m_Sprite->SetBaseColor(Vector4::White);
 
-		if (m_HitEffectTime >= m_HitEffectTimeMax)
-		{
-			m_Sprite->SetBaseColor(Vector4::White);
-
-			m_HitEffectTime = 0.f;
-			m_Hit = false;
-			m_IsPlayedHitSound = false;
+				m_HitEffectTime = 0.f;
+				m_Hit = false;
+				m_IsPlayedHitSound = false;
+			}
 		}
 	}
 }

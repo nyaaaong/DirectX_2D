@@ -197,8 +197,6 @@ CBullet* CBullet::Clone()
 void CBullet::Destroy()
 {
 	CGameObject::Destroy();
-
-	m_Body->Enable(false);
 }
 
 void CBullet::OnCollisionBegin(const CollisionResult& result)
@@ -219,7 +217,7 @@ void CBullet::OnCollisionBegin(const CollisionResult& result)
 
 	else
 	{
-		int a = 0;
+		
 	}
 
 	CreateHitEffect();

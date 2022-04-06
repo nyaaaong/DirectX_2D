@@ -197,7 +197,7 @@
     <ClCompile Include="Widget\LoadingWidget.cpp" />
     <ClCompile Include="Widget\MainWidget.cpp" />
     <ClCompile Include="Widget\MouseCursor.cpp" />
-    <ClCompile Include="Widget\SimpleHUD.cpp" />
+    <ClCompile Include="Widget\PlayerWidget.cpp" />
     <ClCompile Include="Widget\StartWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -234,7 +234,7 @@
     <ClInclude Include="Widget\LoadingWidget.h" />
     <ClInclude Include="Widget\MainWidget.h" />
     <ClInclude Include="Widget\MouseCursor.h" />
-    <ClInclude Include="Widget\SimpleHUD.h" />
+    <ClInclude Include="Widget\PlayerWidget.h" />
     <ClInclude Include="Widget\StartWidget.h" />
   </ItemGroup>
   <ItemGroup>

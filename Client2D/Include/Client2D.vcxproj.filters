@@ -75,6 +75,12 @@
     <Filter Include="01. Object\03. Item\02. Life">
       <UniqueIdentifier>{f5d2828b-a784-4b9b-b181-d9219d1d4ddd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. UI\01. Scene">
+      <UniqueIdentifier>{d4920a7d-1b21-477a-90fe-6010d075c19f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. UI\02. Player">
+      <UniqueIdentifier>{5e882a0d-3cc3-4944-9071-2e407809686b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -94,18 +100,6 @@
     </ClCompile>
     <ClCompile Include="Object\PlayerAnimation2D.cpp">
       <Filter>01. Object\00. Character\00. Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Widget\MainWidget.cpp">
-      <Filter>02. UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Widget\SimpleHUD.cpp">
-      <Filter>02. UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Widget\StartWidget.cpp">
-      <Filter>02. UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Widget\LoadingWidget.cpp">
-      <Filter>02. UI</Filter>
     </ClCompile>
     <ClCompile Include="Widget\MouseCursor.cpp">
       <Filter>02. UI\00. Mouse</Filter>
@@ -179,6 +173,18 @@
     <ClCompile Include="Object\ItemLife.cpp">
       <Filter>01. Object\03. Item\02. Life</Filter>
     </ClCompile>
+    <ClCompile Include="Widget\LoadingWidget.cpp">
+      <Filter>02. UI\01. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\MainWidget.cpp">
+      <Filter>02. UI\01. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\StartWidget.cpp">
+      <Filter>02. UI\01. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\PlayerWidget.cpp">
+      <Filter>02. UI\02. Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene\MainScene.h">
@@ -199,20 +205,8 @@
     <ClInclude Include="resource.h">
       <Filter>리소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Widget\MainWidget.h">
-      <Filter>02. UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Widget\SimpleHUD.h">
-      <Filter>02. UI</Filter>
-    </ClInclude>
     <ClInclude Include="Client.h">
       <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Widget\LoadingWidget.h">
-      <Filter>02. UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Widget\StartWidget.h">
-      <Filter>02. UI</Filter>
     </ClInclude>
     <ClInclude Include="Widget\MouseCursor.h">
       <Filter>02. UI\00. Mouse</Filter>
@@ -285,6 +279,18 @@
     </ClInclude>
     <ClInclude Include="Object\ItemLife.h">
       <Filter>01. Object\03. Item\02. Life</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\LoadingWidget.h">
+      <Filter>02. UI\01. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\MainWidget.h">
+      <Filter>02. UI\01. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\StartWidget.h">
+      <Filter>02. UI\01. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\PlayerWidget.h">
+      <Filter>02. UI\02. Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

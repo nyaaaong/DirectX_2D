@@ -8,7 +8,7 @@
 #include "Scene/SceneManager.h"
 #include "Resource/Material/Material.h"
 #include "Component/CameraComponent.h"
-#include "../Widget/SimpleHUD.h"
+#include "../Widget/PlayerWidget.h"
 #include "../Scene/MainScene.h"
 
 CPlayer2D::CPlayer2D() :
@@ -23,11 +23,18 @@ CPlayer2D::CPlayer2D() :
 	m_PierceBullet(false),
 	m_Dir(0),
 	m_MoveDir(0),
+	m_DodgeSpeed(0.f),
 	m_MouseAngle(0.f),
+	m_NoHitTimer(0.f),
+	m_NoHitTimerMax(3.f),
+	m_BlinkTimer(0.f),
+	m_BlinkTimerMax(0.3f),
 	m_WeaponSlot(Weapon_Slot::None),
 	m_CurWeapon(nullptr),
+	m_PlayerUI(nullptr),
 	m_HasRifle(false),
-	m_HasSniper(false)
+	m_HasSniper(false),
+	m_Invisible(false)
 {
 	SetTypeID<CPlayer2D>();
 	m_Opacity = 1.f;
@@ -53,7 +60,7 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 
 	m_Body = (CColliderBox2D*)FindComponent("Body");
 	m_Camera = (CCameraComponent*)FindComponent("Camera");
-	m_SimpleHUDWidget = (CWidgetComponent*)FindComponent("SimpleHUD");
+	m_PlayerWidget = (CWidgetComponent*)FindComponent("PlayerWidget");
 
 	m_Opacity = obj.m_Opacity;
 	m_Move = false;
@@ -63,6 +70,7 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_AttackDelayMax = obj.m_AttackDelayMax;
 	m_AttackCoolDown = false;
 
+	m_DodgeSpeed = 0.f;
 	m_DodgeTimer = 0.f;
 	m_DodgeTimerMax = obj.m_DodgeTimerMax;
 	m_DodgeCoolDown = false;
@@ -70,8 +78,13 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_Dir = 0;
 	m_MoveDir = 0;
 	m_MouseAngle = 0.f;
+	m_NoHitTimer = 0.f;
+	m_NoHitTimerMax = obj.m_BlinkTimerMax;
+	m_BlinkTimer = 0.f;
+	m_BlinkTimerMax = obj.m_BlinkTimerMax;
 
 	m_SetCameraInfo = false;
+	m_Invisible = false;
 
 	m_WeaponSlot = Weapon_Slot::None;
 
@@ -81,6 +94,8 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 
 	m_HasRifle = false;
 	m_HasSniper = false;
+
+	m_PlayerUI = nullptr;
 }
 
 CPlayer2D::~CPlayer2D()
@@ -117,6 +132,7 @@ bool CPlayer2D::Init()
 
 	m_Body->SetExtent(30.f, 30.f);
 	m_Body->SetCollisionProfile("Player");
+	m_Body->AddCollisionCallback(Collision_State::Begin, this, &CPlayer2D::OnCollisionBegin);
 
 	m_Sprite->AddChild(m_Body);
 
@@ -166,6 +182,14 @@ bool CPlayer2D::Init()
 	m_Camera->OnViewportCenter();
 
 	m_Sprite->AddChild(m_Camera);
+
+	m_PlayerWidget = CreateComponent<CWidgetComponent>("PlayerWidget");
+	m_PlayerWidget->SetRelativePos(-50.f, 50.f, 0.f);
+
+	m_PlayerUI = m_PlayerWidget->CreateWidgetWindow<CPlayerWidget>("PlayerUI");
+	m_PlayerUI->SetHPDir(ProgressBar_Dir::RightToLeft);
+
+	m_Sprite->AddChild(m_PlayerWidget);
 
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveUp", KeyState_Push, this, &CPlayer2D::MoveUp);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("MoveDown", KeyState_Push, this, &CPlayer2D::MoveDown);
@@ -244,6 +268,7 @@ void CPlayer2D::Start()
 	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
 
 	CharacterInfo	PlayerInfo = SceneMode->GetPlayerInfo();
+	m_PrevHP = PlayerInfo.HP;
 	m_HP = PlayerInfo.HP;
 	m_HPMax = PlayerInfo.HP;
 	m_MoveSpeed = PlayerInfo.MoveSpeed;
@@ -252,16 +277,32 @@ void CPlayer2D::Start()
 	m_DodgeSpeed = m_MoveSpeed * 2.f;
 }
 
+void CPlayer2D::Calc(float DeltaTime)
+{
+	CCharacter::Calc(DeltaTime);
+
+	if (!CEngine::GetInst()->IsFocusClient())
+		return;
+
+	UpdatePlayerLife(DeltaTime);
+	UpdateMousePos();
+	UpdateGun();
+
+	UpdateAttackCoolDown(DeltaTime);
+	UpdateDodgeCoolDown(DeltaTime);
+
+	UpdateAnimDir();
+
+	if (m_DodgeCoolDown)
+		Dodge(DeltaTime);
+}
+
 void CPlayer2D::Update(float DeltaTime)
 {
 	CCharacter::Update(DeltaTime);
 
 	if (!CEngine::GetInst()->IsFocusClient())
 		return;
-
-	UpdateMousePos();
-	UpdateGun();
-
 
 	if (!m_SetCameraInfo)
 	{
@@ -292,38 +333,58 @@ void CPlayer2D::Update(float DeltaTime)
 			!CInput::GetInst()->IsKeyDown("MoveLeft") && !CInput::GetInst()->IsKeyDown("MoveRight"))
 			m_Move = false;
 	}
-
-	UpdateAttackCoolDown(DeltaTime);
-	UpdateDodgeCoolDown(DeltaTime);
-
-	static bool	Hide = false;
-
-	if (Hide)
-	{
-		m_Opacity -= DeltaTime / 5.f;
-
-		if (m_Opacity < 0.f)
-			m_Opacity = 0.f;
-
-		m_Sprite->SetOpacity(m_Opacity);
-	}
-
-	UpdateAnimDir();
-
-	if (m_DodgeCoolDown)
-		Dodge(DeltaTime);
 }
 
 void CPlayer2D::PostUpdate(float DeltaTime)
 {
 	CCharacter::PostUpdate(DeltaTime);
 
-	Vector3 WorldPos = m_Sprite->GetWorldPos();
+	if (m_HP < 1.f)
+		m_HP = 1.f;
 }
 
 CPlayer2D* CPlayer2D::Clone()
 {
 	return DBG_NEW CPlayer2D(*this);
+}
+
+void CPlayer2D::Hit(float DeltaTime)
+{
+	if (m_Hit)
+	{
+		UpdateBlink(DeltaTime);
+
+		m_NoHitTimer += DeltaTime;
+
+		if (m_NoHitTimer >= m_NoHitTimerMax)
+		{
+			m_NoHitTimer = 0.f;
+			m_BlinkTimer = 0.f;
+
+			m_Sprite->SetRender(true);
+
+			if (m_CurWeapon)
+				m_CurWeapon->SetRender(true);
+
+			m_Body->Enable(true);
+
+			m_Hit = false;
+		}
+	}
+}
+
+void CPlayer2D::OnCollisionBegin(const CollisionResult& result)
+{
+	std::string	DestName = result.Dest->GetCollisionProfile()->Name;
+
+	if (DestName == "Monster" || DestName == "MonsterAttack")
+	{
+		CCharacter::OnCollisionBegin(result);
+
+		m_Body->Enable(false);
+
+		m_Scene->GetResource()->SoundPlay("Hit");
+	}
 }
 
 void CPlayer2D::MoveUp(float DeltaTime)
@@ -420,6 +481,8 @@ void CPlayer2D::DodgeStart(float DeltaTime)
 	m_EnableInput = false;
 
 	m_DodgeCoolDown = true;
+
+	m_Body->Enable(false);
 
 	m_Scene->GetResource()->SoundPlay("Dodge");
 }
@@ -518,19 +581,12 @@ void CPlayer2D::Attack(float DeltaTime)
 	Bullet->SetCharacterType(Character_Type::Player);
 	Bullet->SetWeaponSlot(m_WeaponSlot);
 	Bullet->Pierce(m_PierceBullet);
+}
 
-	/*switch (m_WeaponSlot)
-	{
-	case Weapon_Slot::Pistol:
-		m_Scene->GetResource()->SoundPlay("Pistol");
-		break;
-	case Weapon_Slot::Rifle:
-		m_Scene->GetResource()->SoundPlay("Rifle");
-		break;
-	case Weapon_Slot::Sniper:
-		m_Scene->GetResource()->SoundPlay("Sniper");
-		break;
-	}*/
+void CPlayer2D::UpdatePlayerLife(float DeltaTime)
+{
+	if (m_HP != m_PrevHP)
+		m_PlayerUI->SetHPPercent(m_HP / m_HPMax);
 }
 
 void CPlayer2D::UpdateAttackCoolDown(float DeltaTime)
@@ -561,6 +617,9 @@ void CPlayer2D::UpdateDodgeCoolDown(float DeltaTime)
 			m_EnableInput = true;
 
 			m_Move = false;
+
+			if (!m_Hit)
+				m_Body->Enable(true);
 		}
 	}
 }
@@ -659,7 +718,12 @@ void CPlayer2D::UpdateGun()
 	}
 
 	if (m_CurWeapon)
+	{
 		UpdateGunDir(m_CurWeapon);
+
+		if (!m_Hit && !m_CurWeapon->IsRender())
+			m_CurWeapon->SetRender(true);
+	}
 }
 
 void CPlayer2D::UpdateGunDir(CSpriteComponent* Weapon)
@@ -731,6 +795,23 @@ void CPlayer2D::UpdateAnimDir()
 	ChangeAnimIdle();
 	ChangeAnimWalk();
 	ChangeAnimDodge();
+}
+
+void CPlayer2D::UpdateBlink(float DeltaTime)
+{
+	m_BlinkTimer += DeltaTime;
+
+	m_Sprite->SetRender(m_Invisible);
+
+	if (m_CurWeapon)
+		m_CurWeapon->SetRender(m_Invisible);
+
+	if (m_BlinkTimer >= m_BlinkTimerMax)
+	{
+		m_BlinkTimer = 0.f;
+
+		m_Invisible = !m_Invisible;
+	}
 }
 
 void CPlayer2D::ChangeAnimIdle()

@@ -18,6 +18,7 @@ protected:
 protected:
 	CSharedPtr<CColliderBox2D>       m_Body;
 	CSharedPtr<CPaperBurnComponent>   m_PaperBurn;
+	float	m_PrevHP;
 	float	m_HP;
 	float	m_HPMax;
 	float	m_HitEffectTime;
@@ -58,22 +59,29 @@ public:
 public:
 	void AddDamage(float Damage)
 	{
+		m_PrevHP = m_HP;
 		m_HP -= Damage;
 
-		if (m_HP <= 0.f)
+		if (m_Type == Character_Type::Player)
 		{
-			m_HP = 0.f;
+			if (m_HP < 1.f)
+				m_HP = 1.f;
+		}
+
+		else
+		{
+			if (m_HP <= 0.f)
+				m_HP = 0.f;
 		}
 	}
 
 	void AddHP(float HP)
 	{
+		m_PrevHP = m_HP;
 		m_HP += HP;
 
-		if (m_HP <= 0.f)
-		{
-			m_HP = 0.f;
-		}
+		if (m_HP > m_HPMax)
+			m_HP = m_HPMax;
 	}
 
 protected:
