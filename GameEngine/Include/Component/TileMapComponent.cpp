@@ -36,7 +36,9 @@ CTileMapComponent::CTileMapComponent()	:
 	m_TileColor[(int)Tile_Type::M_BulletKin] = Vector4(1.f, 0.f, 1.f, 1.f);
 	m_TileColor[(int)Tile_Type::M_Bandana] = Vector4(0.0f, 1.f, 1.f, 1.f);
 	m_TileColor[(int)Tile_Type::M_ShotgunKin1] = Vector4(1.f, 0.7f, 0.f, 1.f);
-	m_TileColor[(int)Tile_Type::M_ShotgunKin2] = Vector4(0.f, 0.f, 1.f, 1.f);
+	m_TileColor[(int)Tile_Type::M_ShotgunKin2] = Vector4(1.f, 0.7f, 0.3f, 1.f);
+	m_TileColor[(int)Tile_Type::P_PlayerPos] = Vector4(0.f, 0.f, 0.f, 1.f);
+	m_TileColor[(int)Tile_Type::B_BulletKing] = Vector4(1.f, 0.f, 1.f, 1.f);
 
 	m_EditMode = false;
 
@@ -106,7 +108,7 @@ void CTileMapComponent::SetTileMaterial(CMaterial* Material)
 	m_TileMaterial->SetScene(m_Scene);
 
 	if (!m_TileMaterial->EmptyTexture())
-	m_CBuffer->SetImageSize(Vector2((float)m_TileMaterial->GetTextureWidth(), (float)m_TileMaterial->GetTextureHeight()));
+		m_CBuffer->SetImageSize(Vector2((float)m_TileMaterial->GetTextureWidth(), (float)m_TileMaterial->GetTextureHeight()));
 }
 
 void CTileMapComponent::SetBackBaseColor(const Vector4& Color)

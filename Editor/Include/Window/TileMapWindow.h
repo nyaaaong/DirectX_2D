@@ -61,6 +61,7 @@ private:
 	void LoadImageButton();
 	void SaveTileMapButton();
 	void LoadTileMapButton();
+	void SetCameraLimit();
 
 private:
 	void CreateTileEditControl();

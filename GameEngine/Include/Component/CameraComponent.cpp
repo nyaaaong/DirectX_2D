@@ -109,6 +109,13 @@ void CCameraComponent::SetWorldPosY(float y)
 	LimitCheck();
 }
 
+void CCameraComponent::AddWorldPos(const Vector3& Pos)
+{
+	CSceneComponent::AddWorldPos(Pos);
+
+	LimitCheck();
+}
+
 void CCameraComponent::CreateProjectionMatrix()
 {
 	switch (m_CameraType)

@@ -4,12 +4,12 @@
 
 enum class CreateObject_Type
 {
-	BulletKin,
-	Bandana,
-	ShotgunKin1,
-	ShotgunKin2,
-	Test1,
-	Test2,
+	M_BulletKin,
+	M_Bandana,
+	M_ShotgunKin1,
+	M_ShotgunKin2,
+	P_PlayerPos,
+	B_BulletKing,
 	Test3,
 	Test4,
 	Test5,

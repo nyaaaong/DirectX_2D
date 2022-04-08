@@ -62,9 +62,6 @@
     <ClCompile Include="EditorManager.cpp">
       <Filter>00. Manager</Filter>
     </ClCompile>
-    <ClCompile Include="EditorPublic.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene\DefaultScene.h">

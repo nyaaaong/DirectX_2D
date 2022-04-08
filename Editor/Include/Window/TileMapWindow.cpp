@@ -156,6 +156,8 @@ void CTileMapWindow::CreateTileEditControl()
 	m_TypeCombo->AddItem("M_Bandana");
 	m_TypeCombo->AddItem("M_ShotgunKin1");
 	m_TypeCombo->AddItem("M_ShotgunKin2");
+	m_TypeCombo->AddItem("P_PlayerPos");
+	m_TypeCombo->AddItem("B_BulletKing");
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 
@@ -289,7 +291,7 @@ void CTileMapWindow::Update(float DeltaTime)
 							return;
 
 						else if ((int)PrevTileType >= (int)Tile_Type::M_BulletKin ||
-								 (int)PrevTileType <= (int)Tile_Type::M_ShotgunKin2)
+								 (int)PrevTileType <= (int)Tile_Type::B_BulletKing)
 						{
 							CPublic::GetInst()->DeleteObjectWorldPos(Tile->GetWorldPos());
 							Tile->SetObjectType(Object_Type::Max);
@@ -300,7 +302,7 @@ void CTileMapWindow::Update(float DeltaTime)
 					}
 
 					else if ((int)Type >= (int)Tile_Type::M_BulletKin ||
-							 (int)Type <= (int)Tile_Type::M_ShotgunKin2)
+							 (int)Type <= (int)Tile_Type::B_BulletKing)
 					{
 						if (Type == PrevTileType)
 							return;
@@ -309,6 +311,23 @@ void CTileMapWindow::Update(float DeltaTime)
 
 						if ((int)Type != (int)ObjectType + 2)
 							return;
+
+						// 플레이어 위치는 1개만 있어야 하므로 기존에 있던 위치는 제거해준다.
+						else if (ObjectType == Object_Type::P_PlayerPos)
+						{
+							Vector3	PlayerPos;
+
+							// false 일 경우 이전에 플레이어 위치 정보가 들어있지 않았다는 것이다.
+							if (CPublic::GetInst()->GetPlayerPos(PlayerPos))
+							{
+								CTile* PrevPlayerTile = m_TileMap->GetTile(Vector3(PlayerPos));
+
+								PrevPlayerTile->SetTileType(Tile_Type::T_Normal);
+								PrevPlayerTile->SetObjectType(Object_Type::Max);
+
+								CPublic::GetInst()->ClearPlayerWorldPos();
+							}
+						}
 
 						Tile->SetTileType(Type);
 						Tile->SetObjectType(ObjectType);
@@ -451,6 +470,8 @@ void CTileMapWindow::DefaultFrameButton()
 	EndY = m_FrameEndY->GetValueFloat();
 
 	m_TileMap->SetTileDefaultFrame(StartX, StartY, EndX, EndY);
+
+	SetCameraLimit();
 }
 
 void CTileMapWindow::SaveTileMapButton()
@@ -572,5 +593,22 @@ void CTileMapWindow::LoadTileMapButton()
 
 		CEditorManager::GetInst()->LoadSceneObject();
 		CEditorManager::GetInst()->SetEditMode(EditMode::TileMap);
+
+		m_CountX->SetInt(CPublic::GetInst()->GetTileCountX());
+		m_CountY->SetInt(CPublic::GetInst()->GetTileCountY());
+		m_SizeX->SetFloat(CPublic::GetInst()->GetTileSizeX());
+		m_SizeY->SetFloat(CPublic::GetInst()->GetTileSizeY());
+
+		SetCameraLimit();
 	}
+}
+
+void CTileMapWindow::SetCameraLimit()
+{
+	Vector3	Start, End;
+
+	End.x = m_CountX->GetValueInt() * m_SizeX->GetValueFloat();
+	End.y = m_CountY->GetValueInt() * m_SizeX->GetValueFloat();
+
+	CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera()->SetCameraLimit(Start, End);
 }

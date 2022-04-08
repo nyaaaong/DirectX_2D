@@ -36,6 +36,8 @@ bool CEditorMenu::Init()
 	m_ObjectCombo->AddItem("Monster : Bandana");
 	m_ObjectCombo->AddItem("Monster : ShotgunKin1");
 	m_ObjectCombo->AddItem("Monster : ShotgunKin2");
+	m_ObjectCombo->AddItem("Player : PlayerPos");
+	m_ObjectCombo->AddItem("Boss : BulletKing");
 
 	CIMGUISameLine* Line = AddWidget<CIMGUISameLine>("Line");
 
@@ -69,41 +71,57 @@ void CEditorMenu::ObjectCreateButton()
 
 	switch ((CreateObject_Type)SelectIndex)
 	{
-	case CreateObject_Type::BulletKin:
-		if (Hierarchy->FindObjectList("BulletKin"))
+	case CreateObject_Type::M_BulletKin:
+		if (Hierarchy->FindObjectList("M_BulletKin"))
 			return;
-		CPublic::GetInst()->CreateObjectType(Object_Type::BulletKin);
+		CPublic::GetInst()->CreateObjectType(Object_Type::M_BulletKin);
 		break;
-	case CreateObject_Type::Bandana:
-		if (Hierarchy->FindObjectList("Bandana"))
+	case CreateObject_Type::M_Bandana:
+		if (Hierarchy->FindObjectList("M_Bandana"))
 			return;
-		CPublic::GetInst()->CreateObjectType(Object_Type::Bandana);
+		CPublic::GetInst()->CreateObjectType(Object_Type::M_Bandana);
 		break;
-	case CreateObject_Type::ShotgunKin1:
-		if (Hierarchy->FindObjectList("ShotgunKin1"))
+	case CreateObject_Type::M_ShotgunKin1:
+		if (Hierarchy->FindObjectList("M_ShotgunKin1"))
 			return;
-		CPublic::GetInst()->CreateObjectType(Object_Type::ShotgunKin1);
+		CPublic::GetInst()->CreateObjectType(Object_Type::M_ShotgunKin1);
 		break;
-	case CreateObject_Type::ShotgunKin2:
-		if (Hierarchy->FindObjectList("ShotgunKin2"))
+	case CreateObject_Type::M_ShotgunKin2:
+		if (Hierarchy->FindObjectList("M_ShotgunKin2"))
 			return;
-		CPublic::GetInst()->CreateObjectType(Object_Type::ShotgunKin2);
+		CPublic::GetInst()->CreateObjectType(Object_Type::M_ShotgunKin2);
+		break;
+	case CreateObject_Type::P_PlayerPos:
+		if (Hierarchy->FindObjectList("P_PlayerPos"))
+			return;
+		CPublic::GetInst()->CreateObjectType(Object_Type::P_PlayerPos);
+		break;
+	case CreateObject_Type::B_BulletKing:
+		if (Hierarchy->FindObjectList("B_BulletKing"))
+			return;
+		CPublic::GetInst()->CreateObjectType(Object_Type::B_BulletKing);
 		break;
 	}
 
 	switch ((CreateObject_Type)SelectIndex)
 	{
-	case CreateObject_Type::BulletKin:
-		Hierarchy->AddObjectList("BulletKin");
+	case CreateObject_Type::M_BulletKin:
+		Hierarchy->AddObjectList("M_BulletKin");
 		break;
-	case CreateObject_Type::Bandana:
-		Hierarchy->AddObjectList("Bandana");
+	case CreateObject_Type::M_Bandana:
+		Hierarchy->AddObjectList("M_Bandana");
 		break;
-	case CreateObject_Type::ShotgunKin1:
-		Hierarchy->AddObjectList("ShotgunKin1");
+	case CreateObject_Type::M_ShotgunKin1:
+		Hierarchy->AddObjectList("M_ShotgunKin1");
 		break;
-	case CreateObject_Type::ShotgunKin2:
-		Hierarchy->AddObjectList("ShotgunKin2");
+	case CreateObject_Type::M_ShotgunKin2:
+		Hierarchy->AddObjectList("M_ShotgunKin2");
+		break;
+	case CreateObject_Type::P_PlayerPos:
+		Hierarchy->AddObjectList("P_PlayerPos");
+		break;
+	case CreateObject_Type::B_BulletKing:
+		Hierarchy->AddObjectList("B_BulletKing");
 		break;
 	}
 }
@@ -121,17 +139,23 @@ void CEditorMenu::ObjectDeleteButton()
 
 	switch (SelectType)
 	{
-	case Object_Type::BulletKin:
-		Name = "BulletKin";
+	case Object_Type::M_BulletKin:
+		Name = "M_BulletKin";
 		break;
-	case Object_Type::Bandana:
-		Name = "Bandana";
+	case Object_Type::M_Bandana:
+		Name = "M_Bandana";
 		break;
-	case Object_Type::ShotgunKin1:
-		Name = "ShotgunKin1";
+	case Object_Type::M_ShotgunKin1:
+		Name = "M_ShotgunKin1";
 		break;
-	case Object_Type::ShotgunKin2:
-		Name = "ShotgunKin2";
+	case Object_Type::M_ShotgunKin2:
+		Name = "M_ShotgunKin2";
+		break;
+	case Object_Type::P_PlayerPos:
+		Name = "P_PlayerPos";
+		break;
+	case Object_Type::B_BulletKing:
+		Name = "B_BulletKing";
 		break;
 	}
 

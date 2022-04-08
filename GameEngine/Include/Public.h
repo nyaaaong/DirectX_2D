@@ -8,8 +8,32 @@ class CPublic
 
 private:
 	std::unordered_map<Object_Type, std::list<Vector3>*>	m_mapObject;
+	int		m_TileCountX;
+	int		m_TileCountY;
+	float	m_TileSizeX;
+	float	m_TileSizeY;
 
 public:
+	float GetTileSizeX()	const
+	{
+		return m_TileSizeX;
+	}
+
+	float GetTileSizeY()	const
+	{
+		return m_TileSizeY;
+	}
+
+	int GetTileCountX()	const
+	{
+		return m_TileCountX;
+	}
+
+	int GetTileCountY()	const
+	{
+		return m_TileCountY;
+	}
+
 	int ObjectSize(Object_Type Type)	const
 	{
 		auto	iter = m_mapObject.find(Type);
@@ -26,9 +50,11 @@ public:
 public:
 	void GetObjectName(std::vector<std::string>& vecName);
 	void GetObjectPos(Object_Type Type, std::vector<Vector3>& vecPos);
+	bool GetPlayerPos(Vector3& PlayerPos);
 	void AddObjectWorldPos(Object_Type Type, const Vector3& WorldPos);
 	void DeleteObjectWorldPos(const Vector3& WorldPos);
 	void ClearObjectWorldPos(Object_Type Type);
+	void ClearPlayerWorldPos();
 	void ClearAllObjectWorldPos();
 
 public:

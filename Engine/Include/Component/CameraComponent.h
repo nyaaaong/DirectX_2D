@@ -37,6 +37,7 @@ public:
 	virtual void SetWorldPos(float x, float y, float z);
 	virtual void SetWorldPosX(float x);
 	virtual void SetWorldPosY(float y);
+	virtual void AddWorldPos(const Vector3& Pos);
 
 public:
 	Vector3	GetResolutionVector3()	const

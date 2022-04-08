@@ -5,7 +5,11 @@
 
 DEFINITION_SINGLE(CPublic)
 
-CPublic::CPublic()
+CPublic::CPublic()	:
+	m_TileCountX(0),
+	m_TileCountY(0),
+	m_TileSizeX(0.f),
+	m_TileSizeY(0.f)
 {
 }
 
@@ -22,17 +26,23 @@ CPublic::~CPublic()
 
 Object_Type CPublic::GetMultibyteToType(const char* Multibyte)
 {
-	if (!strcmp(Multibyte, "BulletKin"))
-		return Object_Type::BulletKin;
+	if (!strcmp(Multibyte, "M_BulletKin"))
+		return Object_Type::M_BulletKin;
 
-	else if (!strcmp(Multibyte, "Bandana"))
-		return Object_Type::Bandana;
+	else if (!strcmp(Multibyte, "M_Bandana"))
+		return Object_Type::M_Bandana;
 
-	else if (!strcmp(Multibyte, "ShotgunKin1"))
-		return Object_Type::ShotgunKin1;
+	else if (!strcmp(Multibyte, "M_ShotgunKin1"))
+		return Object_Type::M_ShotgunKin1;
 
-	else if (!strcmp(Multibyte, "ShotgunKin2"))
-		return Object_Type::ShotgunKin2;
+	else if (!strcmp(Multibyte, "M_ShotgunKin2"))
+		return Object_Type::M_ShotgunKin2;
+
+	else if (!strcmp(Multibyte, "P_PlayerPos"))
+		return Object_Type::P_PlayerPos;
+
+	else if (!strcmp(Multibyte, "B_BulletKing"))
+		return Object_Type::B_BulletKing;
 
 	return Object_Type::Max;
 }
@@ -50,17 +60,23 @@ void CPublic::GetObjectName(std::vector<std::string>& vecName)
 	{
 		switch (iter->first)
 		{
-		case Object_Type::BulletKin:
-			vecName.push_back("BulletKin");
+		case Object_Type::M_BulletKin:
+			vecName.push_back("M_BulletKin");
 			break;
-		case Object_Type::Bandana:
-			vecName.push_back("Bandana");
+		case Object_Type::M_Bandana:
+			vecName.push_back("M_Bandana");
 			break;
-		case Object_Type::ShotgunKin1:
-			vecName.push_back("ShotgunKin1");
+		case Object_Type::M_ShotgunKin1:
+			vecName.push_back("M_ShotgunKin1");
 			break;
-		case Object_Type::ShotgunKin2:
-			vecName.push_back("ShotgunKin2");
+		case Object_Type::M_ShotgunKin2:
+			vecName.push_back("M_ShotgunKin2");
+			break;
+		case Object_Type::P_PlayerPos:
+			vecName.push_back("P_PlayerPos");
+			break;
+		case Object_Type::B_BulletKing:
+			vecName.push_back("B_BulletKing");
 			break;
 		}
 	}
@@ -90,6 +106,21 @@ void CPublic::GetObjectPos(Object_Type Type, std::vector<Vector3>& vecPos)
 			++j;
 		}
 	}
+}
+
+bool CPublic::GetPlayerPos(Vector3& PlayerPos)
+{
+	auto	iter = m_mapObject.find(Object_Type::P_PlayerPos);
+
+	if (iter == m_mapObject.end())
+		ASSERT("if (iter == m_mapObject.end())");
+
+	if (iter->second->empty())
+		return false;
+
+	PlayerPos = iter->second->front();
+	
+	return true;
 }
 
 void CPublic::AddObjectWorldPos(Object_Type Type, const Vector3& WorldPos)
@@ -138,6 +169,11 @@ void CPublic::ClearObjectWorldPos(Object_Type Type)
 	iter->second->clear();
 }
 
+void CPublic::ClearPlayerWorldPos()
+{
+	ClearObjectWorldPos(Object_Type::P_PlayerPos);
+}
+
 void CPublic::ClearAllObjectWorldPos()
 {
 	auto	iter = m_mapObject.begin();
@@ -168,10 +204,7 @@ bool CPublic::CreateObjectType(Object_Type Type)
 	if (FindObjectType(Type))
 		return true;
 
-	else if (Type == Object_Type::BulletKin ||
-			 Type == Object_Type::Bandana ||
-			 Type == Object_Type::ShotgunKin1 ||
-			 Type == Object_Type::ShotgunKin2)
+	else if (Type < Object_Type::Test3)
 	{
 		std::list<Vector3>* NewObjPosList = DBG_NEW std::list<Vector3>;
 
@@ -186,10 +219,7 @@ void CPublic::DeleteObjectType(Object_Type Type)
 	if (!FindObjectType(Type))
 		return;
 
-	else if (Type == Object_Type::BulletKin ||
-			 Type == Object_Type::Bandana ||
-			 Type == Object_Type::ShotgunKin1 ||
-			 Type == Object_Type::ShotgunKin2)
+	else if (Type < Object_Type::Test3)
 	{
 		auto	iter = m_mapObject.find(Type);
 
@@ -316,6 +346,11 @@ void CPublic::LoadObjPos(CGameObject* TileMapObj)
 
 	if (!TileMapComponent)
 		ASSERT("if (!TileMapComponent)");
+
+	m_TileCountX = TileMapComponent->GetTileCountX();
+	m_TileCountY = TileMapComponent->GetTileCountY();
+	m_TileSizeX = TileMapComponent->GetTileSize().x;
+	m_TileSizeY = TileMapComponent->GetTileSize().y;
 	
 	auto	iter = m_mapObject.begin();
 	std::vector<CTile*>	vecTypeTile;
@@ -330,7 +365,7 @@ void CPublic::LoadObjPos(CGameObject* TileMapObj)
 
 		TileMapComponent->GetSameTypeTile((Tile_Type)i, vecTypeTile);
 
-		if (vecTypeTile.empty() || (Tile_Type)i <= Tile_Type::T_Wall || (Tile_Type)i > Tile_Type::M_ShotgunKin2)
+		if (vecTypeTile.empty() || (Tile_Type)i <= Tile_Type::T_Wall || (Tile_Type)i > Tile_Type::B_BulletKing)
 			continue;
 
 		int Size = (int)vecTypeTile.size();
@@ -340,60 +375,62 @@ void CPublic::LoadObjPos(CGameObject* TileMapObj)
 			switch ((Tile_Type)i)
 			{
 			case Tile_Type::M_BulletKin:
-				iter = m_mapObject.find(Object_Type::BulletKin);
+				iter = m_mapObject.find(Object_Type::M_BulletKin);
 
 				if (iter == m_mapObject.end())
 				{
-					CreateObjectType(Object_Type::BulletKin);
-					iter = m_mapObject.find(Object_Type::BulletKin);
+					CreateObjectType(Object_Type::M_BulletKin);
+					iter = m_mapObject.find(Object_Type::M_BulletKin);
 				}
 				break;
 			case Tile_Type::M_Bandana:
-				iter = m_mapObject.find(Object_Type::Bandana);
+				iter = m_mapObject.find(Object_Type::M_Bandana);
 
 				if (iter == m_mapObject.end())
 				{
-					CreateObjectType(Object_Type::Bandana);
-					iter = m_mapObject.find(Object_Type::Bandana);
+					CreateObjectType(Object_Type::M_Bandana);
+					iter = m_mapObject.find(Object_Type::M_Bandana);
 				}
 				break;
 			case Tile_Type::M_ShotgunKin1:
-				iter = m_mapObject.find(Object_Type::ShotgunKin1);
+				iter = m_mapObject.find(Object_Type::M_ShotgunKin1);
 
 				if (iter == m_mapObject.end())
 				{
-					CreateObjectType(Object_Type::ShotgunKin1);
-					iter = m_mapObject.find(Object_Type::ShotgunKin1);
+					CreateObjectType(Object_Type::M_ShotgunKin1);
+					iter = m_mapObject.find(Object_Type::M_ShotgunKin1);
 				}
 				break;
 			case Tile_Type::M_ShotgunKin2:
-				iter = m_mapObject.find(Object_Type::ShotgunKin2);
+				iter = m_mapObject.find(Object_Type::M_ShotgunKin2);
 
 				if (iter == m_mapObject.end())
 				{
-					CreateObjectType(Object_Type::ShotgunKin2);
-					iter = m_mapObject.find(Object_Type::ShotgunKin2);
+					CreateObjectType(Object_Type::M_ShotgunKin2);
+					iter = m_mapObject.find(Object_Type::M_ShotgunKin2);
+				}
+				break;
+			case Tile_Type::P_PlayerPos:
+				iter = m_mapObject.find(Object_Type::P_PlayerPos);
+
+				if (iter == m_mapObject.end())
+				{
+					CreateObjectType(Object_Type::P_PlayerPos);
+					iter = m_mapObject.find(Object_Type::P_PlayerPos);
+				}
+				break;
+			case Tile_Type::B_BulletKing:
+				iter = m_mapObject.find(Object_Type::B_BulletKing);
+
+				if (iter == m_mapObject.end())
+				{
+					CreateObjectType(Object_Type::B_BulletKing);
+					iter = m_mapObject.find(Object_Type::B_BulletKing);
 				}
 				break;
 			}
 
 			iter->second->push_back(vecTypeTile[j]->GetWorldPos());
 		}
-
-		/*int Size = (int)m_mapObject.size();
-
-		for (int j = 0; j < Size; ++j)
-		{
-			vecObjTypeTile.clear();
-
-			TileMapComponent->GetSameObjectTypeTile(iter->first, vecTypeTile, vecObjTypeTile);
-
-			int ObjTypeSize = (int)vecObjTypeTile.size();
-
-			for (int k = 0; k < ObjTypeSize; ++k)
-			{
-				iter->second->push_back(vecObjTypeTile[k]->GetWorldPos());
-			}
-		}*/
 	}
 }
