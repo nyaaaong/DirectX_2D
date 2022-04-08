@@ -12,6 +12,8 @@
 #include "../Object/Bandana.h"
 #include "../Object/ShotgunKin1.h"
 #include "../Object/ShotgunKin2.h"
+#include "../Object/BulletKing.h"
+#include "../Object/Dummy.h"
 
 CMainScene::CMainScene()	:
 	m_TileMap(nullptr)
@@ -59,7 +61,7 @@ bool CMainScene::Init()
 
 	std::vector<Vector3>	vecObjectPos;
 
-	for (int i = (int)Object_Type::M_BulletKin; i <= (int)Object_Type::B_BulletKing; ++i)
+	for (int i = (int)Object_Type::M_BulletKin; i <= (int)Object_Type::S_NextScene; ++i)
 	{
 		vecObjectPos.clear();
 
@@ -88,9 +90,18 @@ bool CMainScene::Init()
 			case Object_Type::P_PlayerPos:
 				Player->SetWorldPos(vecObjectPos[j] + TileCenterSize);
 				break;
-			//case Object_Type::B_BulletKing:
-			//	//Obj = m_Scene->CreateGameObject<CBulletKing>("B_BulletKing");
-			//	break;
+			case Object_Type::B_BulletKing:
+				Obj = m_Scene->CreateGameObject<CBulletKing>("B_BulletKing");
+				break;
+			case Object_Type::S_NextScene:
+				Obj = m_Scene->CreateGameObject<CDummy>("S_NextScene");
+				{
+					CDummy* NextScene = (CDummy*)Obj;
+					NextScene->SetExtent(TileCenterSize.x, TileCenterSize.y);
+					NextScene->SetCollisionProfile("NextScene");
+					NextScene->SetPivot(0.5f, 0.5f, 0.f);
+				}
+				break;
 			}
 
 			if ((Object_Type)i != Object_Type::P_PlayerPos)

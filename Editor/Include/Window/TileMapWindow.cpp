@@ -158,6 +158,7 @@ void CTileMapWindow::CreateTileEditControl()
 	m_TypeCombo->AddItem("M_ShotgunKin2");
 	m_TypeCombo->AddItem("P_PlayerPos");
 	m_TypeCombo->AddItem("B_BulletKing");
+	m_TypeCombo->AddItem("S_NextScene");
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 
@@ -291,7 +292,7 @@ void CTileMapWindow::Update(float DeltaTime)
 							return;
 
 						else if ((int)PrevTileType >= (int)Tile_Type::M_BulletKin ||
-								 (int)PrevTileType <= (int)Tile_Type::B_BulletKing)
+								 (int)PrevTileType <= (int)Tile_Type::S_NextScene)
 						{
 							CPublic::GetInst()->DeleteObjectWorldPos(Tile->GetWorldPos());
 							Tile->SetObjectType(Object_Type::Max);
@@ -302,7 +303,7 @@ void CTileMapWindow::Update(float DeltaTime)
 					}
 
 					else if ((int)Type >= (int)Tile_Type::M_BulletKin ||
-							 (int)Type <= (int)Tile_Type::B_BulletKing)
+							 (int)Type <= (int)Tile_Type::S_NextScene)
 					{
 						if (Type == PrevTileType)
 							return;

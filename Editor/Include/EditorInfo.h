@@ -10,7 +10,7 @@ enum class CreateObject_Type
 	M_ShotgunKin2,
 	P_PlayerPos,
 	B_BulletKing,
-	Test3,
+	S_NextScene,
 	Test4,
 	Test5,
 	Test6,

@@ -81,6 +81,9 @@
     <Filter Include="02. UI\02. Player">
       <UniqueIdentifier>{5e882a0d-3cc3-4944-9071-2e407809686b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Object\04. Dummy">
+      <UniqueIdentifier>{474ac1ff-41cc-49d8-8047-b7a49f51730e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -184,6 +187,12 @@
     </ClCompile>
     <ClCompile Include="Widget\PlayerWidget.cpp">
       <Filter>02. UI\02. Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\BulletKing.cpp">
+      <Filter>01. Object\00. Character\01. Enemy\01. Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Dummy.cpp">
+      <Filter>01. Object\04. Dummy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -291,6 +300,12 @@
     </ClInclude>
     <ClInclude Include="Widget\PlayerWidget.h">
       <Filter>02. UI\02. Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\BulletKing.h">
+      <Filter>01. Object\00. Character\01. Enemy\01. Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Dummy.h">
+      <Filter>01. Object\04. Dummy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

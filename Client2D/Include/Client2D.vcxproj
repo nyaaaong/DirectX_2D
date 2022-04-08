@@ -174,7 +174,9 @@
     <ClCompile Include="Object\BulletDummy.cpp" />
     <ClCompile Include="Object\BulletKin.cpp" />
     <ClCompile Include="Object\BulletKinAnim.cpp" />
+    <ClCompile Include="Object\BulletKing.cpp" />
     <ClCompile Include="Object\Character.cpp" />
+    <ClCompile Include="Object\Dummy.cpp" />
     <ClCompile Include="Object\Item.cpp" />
     <ClCompile Include="Object\ItemPickup.cpp" />
     <ClCompile Include="Object\ItemPickupAnim.cpp" />
@@ -210,7 +212,9 @@
     <ClInclude Include="Object\BulletDummy.h" />
     <ClInclude Include="Object\BulletKin.h" />
     <ClInclude Include="Object\BulletKinAnim.h" />
+    <ClInclude Include="Object\BulletKing.h" />
     <ClInclude Include="Object\Character.h" />
+    <ClInclude Include="Object\Dummy.h" />
     <ClInclude Include="Object\Item.h" />
     <ClInclude Include="Object\ItemPickup.h" />
     <ClInclude Include="Object\ItemPickupAnim.h" />
