@@ -44,6 +44,9 @@ Object_Type CPublic::GetMultibyteToType(const char* Multibyte)
 	else if (!strcmp(Multibyte, "B_BulletKing"))
 		return Object_Type::B_BulletKing;
 
+	else if (!strcmp(Multibyte, "S_NextScene"))
+		return Object_Type::S_NextScene;
+
 	return Object_Type::Max;
 }
 
@@ -77,6 +80,9 @@ void CPublic::GetObjectName(std::vector<std::string>& vecName)
 			break;
 		case Object_Type::B_BulletKing:
 			vecName.push_back("B_BulletKing");
+			break;
+		case Object_Type::S_NextScene:
+			vecName.push_back("S_NextScene");
 			break;
 		}
 	}
@@ -204,7 +210,7 @@ bool CPublic::CreateObjectType(Object_Type Type)
 	if (FindObjectType(Type))
 		return true;
 
-	else if (Type < Object_Type::Test3)
+	else if (Type <= Object_Type::S_NextScene)
 	{
 		std::list<Vector3>* NewObjPosList = DBG_NEW std::list<Vector3>;
 
@@ -219,7 +225,7 @@ void CPublic::DeleteObjectType(Object_Type Type)
 	if (!FindObjectType(Type))
 		return;
 
-	else if (Type < Object_Type::Test3)
+	else if (Type <= Object_Type::S_NextScene)
 	{
 		auto	iter = m_mapObject.find(Type);
 
@@ -365,7 +371,7 @@ void CPublic::LoadObjPos(CGameObject* TileMapObj)
 
 		TileMapComponent->GetSameTypeTile((Tile_Type)i, vecTypeTile);
 
-		if (vecTypeTile.empty() || (Tile_Type)i <= Tile_Type::T_Wall || (Tile_Type)i > Tile_Type::B_BulletKing)
+		if (vecTypeTile.empty() || (Tile_Type)i <= Tile_Type::T_Wall || (Tile_Type)i > Tile_Type::S_NextScene)
 			continue;
 
 		int Size = (int)vecTypeTile.size();
@@ -426,6 +432,15 @@ void CPublic::LoadObjPos(CGameObject* TileMapObj)
 				{
 					CreateObjectType(Object_Type::B_BulletKing);
 					iter = m_mapObject.find(Object_Type::B_BulletKing);
+				}
+				break;
+			case Tile_Type::S_NextScene:
+				iter = m_mapObject.find(Object_Type::S_NextScene);
+
+				if (iter == m_mapObject.end())
+				{
+					CreateObjectType(Object_Type::S_NextScene);
+					iter = m_mapObject.find(Object_Type::S_NextScene);
 				}
 				break;
 			}

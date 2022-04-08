@@ -438,7 +438,6 @@ void CInput::UpdateKeyInfo(float DeltaTime)
 			}
 		}
 
-
 		if (m_vecKeyState[Key].State[KeyState_Push] &&
 			iter->second->Ctrl == m_Ctrl &&
 			iter->second->Alt == m_Alt &&

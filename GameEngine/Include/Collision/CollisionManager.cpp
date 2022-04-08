@@ -27,11 +27,13 @@ bool CCollisionManager::Init()
 	CreateProfile("PlayerAttack", Collision_Channel::PlayerAttack, true);
 	CreateProfile("MonsterAttack", Collision_Channel::MonsterAttack, true);
 	CreateProfile("Item", Collision_Channel::Item, true);
+	CreateProfile("NextScene", Collision_Channel::NextScene, true);
 
 	SetCollisionState("Object", Collision_Channel::Object, Collision_Interaction::Ignore);
 	SetCollisionState("Object", Collision_Channel::PlayerAttack, Collision_Interaction::Ignore);
 	SetCollisionState("Object", Collision_Channel::AttackCheck, Collision_Interaction::Ignore);
 	SetCollisionState("Object", Collision_Channel::Item, Collision_Interaction::Ignore);
+	SetCollisionState("Object", Collision_Channel::NextScene, Collision_Interaction::Ignore);
 
 	SetCollisionState("Player", Collision_Channel::Player, Collision_Interaction::Ignore);
 	SetCollisionState("Player", Collision_Channel::PlayerAttack, Collision_Interaction::Ignore);
@@ -43,6 +45,7 @@ bool CCollisionManager::Init()
 	SetCollisionState("Monster", Collision_Channel::Object, Collision_Interaction::Ignore);
 	SetCollisionState("Monster", Collision_Channel::AttackCheck, Collision_Interaction::Ignore);
 	SetCollisionState("Monster", Collision_Channel::Item, Collision_Interaction::Ignore);
+	SetCollisionState("Monster", Collision_Channel::NextScene, Collision_Interaction::Ignore);
 
 	SetCollisionState("AttackCheck", Collision_Channel::Object, Collision_Interaction::Ignore);
 	SetCollisionState("AttackCheck", Collision_Channel::Player, Collision_Interaction::Ignore);
@@ -51,18 +54,21 @@ bool CCollisionManager::Init()
 	SetCollisionState("AttackCheck", Collision_Channel::PlayerAttack, Collision_Interaction::Ignore);
 	SetCollisionState("AttackCheck", Collision_Channel::MonsterAttack, Collision_Interaction::Ignore);
 	SetCollisionState("AttackCheck", Collision_Channel::Item, Collision_Interaction::Ignore);
+	SetCollisionState("AttackCheck", Collision_Channel::NextScene, Collision_Interaction::Ignore);
 
 	SetCollisionState("PlayerAttack", Collision_Channel::Player, Collision_Interaction::Ignore);
 	SetCollisionState("PlayerAttack", Collision_Channel::PlayerAttack, Collision_Interaction::Ignore);
 	SetCollisionState("PlayerAttack", Collision_Channel::MonsterAttack, Collision_Interaction::Ignore);
 	SetCollisionState("PlayerAttack", Collision_Channel::AttackCheck, Collision_Interaction::Ignore);
 	SetCollisionState("PlayerAttack", Collision_Channel::Item, Collision_Interaction::Ignore);
+	SetCollisionState("PlayerAttack", Collision_Channel::NextScene, Collision_Interaction::Ignore);
 
 	SetCollisionState("MonsterAttack", Collision_Channel::Monster, Collision_Interaction::Ignore);
 	SetCollisionState("MonsterAttack", Collision_Channel::PlayerAttack, Collision_Interaction::Ignore);
 	SetCollisionState("MonsterAttack", Collision_Channel::MonsterAttack, Collision_Interaction::Ignore);
 	SetCollisionState("MonsterAttack", Collision_Channel::AttackCheck, Collision_Interaction::Ignore);
 	SetCollisionState("MonsterAttack", Collision_Channel::Item, Collision_Interaction::Ignore);
+	SetCollisionState("MonsterAttack", Collision_Channel::NextScene, Collision_Interaction::Ignore);
 
 	SetCollisionState("Item", Collision_Channel::Object, Collision_Interaction::Ignore);
 	SetCollisionState("Item", Collision_Channel::Monster, Collision_Interaction::Ignore);
@@ -70,6 +76,15 @@ bool CCollisionManager::Init()
 	SetCollisionState("Item", Collision_Channel::PlayerAttack, Collision_Interaction::Ignore);
 	SetCollisionState("Item", Collision_Channel::MonsterAttack, Collision_Interaction::Ignore);
 	SetCollisionState("Item", Collision_Channel::Item, Collision_Interaction::Ignore);
+	SetCollisionState("Item", Collision_Channel::NextScene, Collision_Interaction::Ignore);
+
+	SetCollisionState("NextScene", Collision_Channel::Object, Collision_Interaction::Ignore);
+	SetCollisionState("NextScene", Collision_Channel::Monster, Collision_Interaction::Ignore);
+	SetCollisionState("NextScene", Collision_Channel::AttackCheck, Collision_Interaction::Ignore);
+	SetCollisionState("NextScene", Collision_Channel::PlayerAttack, Collision_Interaction::Ignore);
+	SetCollisionState("NextScene", Collision_Channel::MonsterAttack, Collision_Interaction::Ignore);
+	SetCollisionState("NextScene", Collision_Channel::Item, Collision_Interaction::Ignore);
+	SetCollisionState("NextScene", Collision_Channel::NextScene, Collision_Interaction::Ignore);
 
 	return true;
 }
