@@ -33,7 +33,7 @@ void CBulletKin::Start()
 
 	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
 
-	CharacterInfo	Info = SceneMode->GetMonsterInfo(Object_Type::BulletKin);
+	CharacterInfo	Info = SceneMode->GetMonsterInfo(Object_Type::M_BulletKin);
 	m_PrevHP = Info.HP;
 	m_HP = Info.HP;
 	m_HPMax = Info.HP;

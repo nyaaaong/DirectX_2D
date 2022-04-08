@@ -34,7 +34,8 @@ CPlayer2D::CPlayer2D() :
 	m_PlayerUI(nullptr),
 	m_HasRifle(false),
 	m_HasSniper(false),
-	m_Invisible(false)
+	m_Invisible(false),
+	m_Invincibility(false)
 {
 	SetTypeID<CPlayer2D>();
 	m_Opacity = 1.f;
@@ -85,6 +86,7 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 
 	m_SetCameraInfo = false;
 	m_Invisible = false;
+	m_Invincibility = false;
 
 	m_WeaponSlot = Weapon_Slot::None;
 
@@ -284,6 +286,7 @@ void CPlayer2D::Calc(float DeltaTime)
 	if (!CEngine::GetInst()->IsFocusClient())
 		return;
 
+	UpdateMouseAngle();
 	UpdatePlayerLife(DeltaTime);
 	UpdateMousePos();
 	UpdateGun();
@@ -366,7 +369,7 @@ void CPlayer2D::Hit(float DeltaTime)
 			if (m_CurWeapon)
 				m_CurWeapon->SetRender(true);
 
-			m_Body->Enable(true);
+			m_Invincibility = false;
 
 			m_Hit = false;
 		}
@@ -375,13 +378,16 @@ void CPlayer2D::Hit(float DeltaTime)
 
 void CPlayer2D::OnCollisionBegin(const CollisionResult& result)
 {
+	if (m_Invincibility)
+		return;
+
 	std::string	DestName = result.Dest->GetCollisionProfile()->Name;
 
 	if (DestName == "Monster" || DestName == "MonsterAttack")
 	{
 		CCharacter::OnCollisionBegin(result);
 
-		m_Body->Enable(false);
+		m_Invincibility = true;
 
 		m_Scene->GetResource()->SoundPlay("Hit");
 	}
@@ -482,7 +488,7 @@ void CPlayer2D::DodgeStart(float DeltaTime)
 
 	m_DodgeCoolDown = true;
 
-	m_Body->Enable(false);
+	m_Invincibility = true;
 
 	m_Scene->GetResource()->SoundPlay("Dodge");
 }
@@ -575,7 +581,7 @@ void CPlayer2D::Attack(float DeltaTime)
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
 
 	Bullet->SetOwner(this);
-	Bullet->SetBulletDir(m_MouseDir);
+	Bullet->SetBulletDir(Vector3::ConvertDir(m_MouseAngle));
 	Bullet->SetWorldPos(GetWorldPos());
 	Bullet->SetWorldRotation(m_CurWeapon->GetWorldRot());
 	Bullet->SetCharacterType(Character_Type::Player);
@@ -619,9 +625,20 @@ void CPlayer2D::UpdateDodgeCoolDown(float DeltaTime)
 			m_Move = false;
 
 			if (!m_Hit)
-				m_Body->Enable(true);
+				m_Invincibility = false;
 		}
 	}
+}
+
+void CPlayer2D::UpdateMouseAngle()
+{
+	Vector2	CamLeftButtom = m_Scene->GetCameraManager()->GetCurrentCamera()->GetLeftBottom();
+	Vector3	PlayerPos = GetWorldPos() - Vector3(CamLeftButtom.x, CamLeftButtom.y, 0.f);
+
+	Vector3	MousePos = CInput::GetInst()->GetMousePos3D();
+
+	// 마우스를 향해서 앵글 변경
+	m_MouseAngle = atan2(MousePos.y - PlayerPos.y, MousePos.x - PlayerPos.x) * (180.f / PI);
 }
 
 void CPlayer2D::UpdateMousePos()
@@ -631,38 +648,25 @@ void CPlayer2D::UpdateMousePos()
 
 	DeleteDir(Character_Direction::All);
 
-	Vector3	PlayerPos = GetWorldPos();
-	Vector3	MousePos = CInput::GetInst()->GetMouseWorldPos();
+	if (105.f >= m_MouseAngle && m_MouseAngle > 75.f)
+		SetDir(Character_Direction::Up);
 
-	m_MouseDir = MousePos - PlayerPos;
-	m_MouseDir.Normalize();
+	else if (-105.f <= m_MouseAngle && m_MouseAngle < -75.f)
+		SetDir(Character_Direction::Down);
 
-	if (m_MouseDir.x <= 0.5f && m_MouseDir.x >= -0.5f)
-	{
-		if (m_MouseDir.y <= 1.f && m_MouseDir.y > 0.f)
-			SetDir(Character_Direction::Up);
+	else if (180.f >= m_MouseAngle && m_MouseAngle > 105.f)
+		SetDir(Character_Direction::UpLeft);
 
-		else if (m_MouseDir.y >= -1.f && m_MouseDir.y < 0.f)
-			SetDir(Character_Direction::Down);
-	}
+	else if (-180.f <= m_MouseAngle && m_MouseAngle < -105.f)
+		SetDir(Character_Direction::DownLeft);
 
-	else if (m_MouseDir.x <= 1.f && m_MouseDir.x > 0.f)
-	{
-		if (m_MouseDir.y < 1.f && m_MouseDir.y >= 0.f)
-			SetDir(Character_Direction::UpRight);
+	else if ((75.f >= m_MouseAngle && m_MouseAngle > 0.f) ||
+			(75.f > m_MouseAngle && m_MouseAngle >= 0.f))
+		SetDir(Character_Direction::UpRight);
 
-		else if (m_MouseDir.y > -1.f && m_MouseDir.y <= 0.f)
-			SetDir(Character_Direction::DownRight);
-	}
-
-	else if (m_MouseDir.x >= -1.f && m_MouseDir.x < 0.f)
-	{
-		if (m_MouseDir.y < 1.f && m_MouseDir.y >= 0.f)
-			SetDir(Character_Direction::UpLeft);
-
-		else if (m_MouseDir.y > -1.f && m_MouseDir.y <= 0.f)
-			SetDir(Character_Direction::DownLeft);
-	}
+	else if ((-75.f <= m_MouseAngle && m_MouseAngle < 0.f) ||
+		(-75.f < m_MouseAngle && m_MouseAngle <= 0.f))
+		SetDir(Character_Direction::DownRight);
 }
 
 void CPlayer2D::UpdateGun()
@@ -728,15 +732,6 @@ void CPlayer2D::UpdateGun()
 
 void CPlayer2D::UpdateGunDir(CSpriteComponent* Weapon)
 {
-	Vector2	CamLeftButtom = m_Scene->GetCameraManager()->GetCurrentCamera()->GetLeftBottom();
-	Vector3	PlayerPos = GetWorldPos() - Vector3(CamLeftButtom.x, CamLeftButtom.y, 0.f);
-
-	Vector3	MousePos = CInput::GetInst()->GetMousePos3D();
-	Vector3	Scale = Weapon->GetRelativeScale();
-
-	// 마우스를 향해서 앵글 변경
-	m_MouseAngle = atan2(MousePos.y - PlayerPos.y, MousePos.x - PlayerPos.x) * (180.f / PI);
-	
 	Weapon->SetRelativeRotationZ(m_MouseAngle);
 
 	if (IsDir(Character_Direction::Up))

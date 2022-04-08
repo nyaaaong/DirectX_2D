@@ -1,11 +1,12 @@
 
 #include "Bullet.h"
+#include "Player2D.h"
 #include "BulletAnim.h"
 #include "BulletDummy.h"
+#include "Character.h"
 #include "../Scene/MainScene.h"
 #include "Scene/SceneManager.h"
 #include "Component/SpriteComponent.h"
-#include "Character.h"
 
 CBullet::CBullet() :
 	m_StartDistance(50.f),
@@ -210,6 +211,14 @@ void CBullet::OnCollisionBegin(const CollisionResult& result)
 
 	if (CharacterObj)
 	{
+		if (CharacterObj->GetName() == "Player")
+		{
+			CPlayer2D* Player = dynamic_cast<CPlayer2D*>(CharacterObj);
+
+			if (Player->IsInvincibility())
+				return;
+		}
+
 		m_Hit = true;
 
 		CharacterObj->AddDamage(m_Damage);

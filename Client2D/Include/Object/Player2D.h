@@ -26,7 +26,6 @@ private:
 	class CPlayerWidget*			m_PlayerUI;
 	CSpriteComponent*	m_CurWeapon;
 	Vector3	m_PrevPos;
-	Vector3	m_MouseDir;
 	Weapon_Slot	m_WeaponSlot;
 	bool	m_EnableInput;
 	bool	m_Move;
@@ -37,6 +36,7 @@ private:
 	bool	m_HasRifle;
 	bool	m_HasSniper;
 	bool	m_Invisible;
+	bool	m_Invincibility;
 	float   m_Opacity;
 	float	m_AttackDelay;
 	float	m_AttackDelayMax;
@@ -52,6 +52,11 @@ private:
 	int		m_MoveDir;
 
 public:
+	bool IsInvincibility()	const
+	{
+		return m_Invincibility;
+	}
+
 	bool HasWeaponRifle()	const
 	{
 		return m_HasRifle;
@@ -65,11 +70,6 @@ public:
 	float GetMouseAngle()	const
 	{
 		return m_MouseAngle;
-	}
-
-	const Vector3& GetMouseDir()	const
-	{
-		return m_MouseDir;
 	}
 
 	CSharedPtr<CCameraComponent> GetCameraComponent()	const
@@ -139,6 +139,7 @@ private:
 	void UpdatePlayerLife(float DeltaTime);
 	void UpdateAttackCoolDown(float DeltaTime);
 	void UpdateDodgeCoolDown(float DeltaTime);
+	void UpdateMouseAngle();
 	void UpdateMousePos();
 	void UpdateGun();
 	void UpdateGunDir(CSpriteComponent* Weapon);

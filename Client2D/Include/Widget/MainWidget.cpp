@@ -217,11 +217,24 @@ void CMainWidget::Update(float DeltaTime)
 
 	CGameObject* Obj = m_Viewport->GetScene()->GetPlayerObject();
 	CPlayer2D* Player = dynamic_cast<CPlayer2D*>(Obj);
+	float		MouseAngle = Player->GetMouseAngle();
+
+	memset(Text, 0, sizeof(char) * 256);
+	sprintf_s(Text, "MouseAngle : %.2f", MouseAngle);
+
+	memset(ConvertText, 0, sizeof(TCHAR) * 256);
+
+	Length = MultiByteToWideChar(CP_ACP, 0, Text, -1, 0, 0);
+	MultiByteToWideChar(CP_ACP, 0, Text, -1, ConvertText, Length);
+
+	m_MouseAngleText->SetText(ConvertText);
+
+	//
 
 	if (!Player)
 		return;
 
-	Vector3	Dir = Player->GetMouseDir();
+	Vector3	Dir = Vector3::ConvertDir(MouseAngle);
 
 	memset(Text, 0, sizeof(char) * 256);
 	sprintf_s(Text, "MouseDirX : %.2f", Dir.x);
@@ -244,18 +257,6 @@ void CMainWidget::Update(float DeltaTime)
 	MultiByteToWideChar(CP_ACP, 0, Text, -1, ConvertText, Length);
 
 	m_MouseDirYText->SetText(ConvertText);
-
-	//
-
-	memset(Text, 0, sizeof(char) * 256);
-	sprintf_s(Text, "MouseAngle : %.2f", Player->GetMouseAngle());
-
-	memset(ConvertText, 0, sizeof(TCHAR) * 256);
-
-	Length = MultiByteToWideChar(CP_ACP, 0, Text, -1, 0, 0);
-	MultiByteToWideChar(CP_ACP, 0, Text, -1, ConvertText, Length);
-
-	m_MouseAngleText->SetText(ConvertText);
 
 	//
 

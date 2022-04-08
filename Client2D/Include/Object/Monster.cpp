@@ -34,7 +34,7 @@ CMonster::CMonster() :
 
 	m_Type = Character_Type::Monster;
 
-	m_vecDropItemType.resize((size_t)DropItem_Type::Max);
+	m_vecDropItemType.resize((size_t)DropItem_Type::All);
 }
 
 CMonster::CMonster(const CMonster& obj) :
@@ -72,7 +72,7 @@ CMonster::CMonster(const CMonster& obj) :
 
 	m_UseDropItem = obj.m_UseDropItem;
 
-	m_vecDropItemType.resize((size_t)DropItem_Type::Max);
+	m_vecDropItemType.resize((size_t)DropItem_Type::All);
 
 	m_UpdateSight = obj.m_UpdateSight;
 }
@@ -155,6 +155,11 @@ void CMonster::OnCollisionBegin(const CollisionResult& result)
 {
 	if (result.Dest->GetCollisionProfile()->Name == "Player")
 	{
+		CPlayer2D* Player = (CPlayer2D*)result.Dest->GetGameObject();
+
+		if (Player->IsInvincibility())
+			return;
+
 		((CPlayer2D*)result.Dest->GetGameObject())->AddDamage(m_Damage);
 		return;	
 	}
@@ -388,7 +393,7 @@ void CMonster::DropItem()
 
 	std::vector<DropItem_Type>	vecRandItem;
 
-	for (int i = (int)DropItem_Type::Rifle; i < (int)DropItem_Type::Max; ++i)
+	for (int i = (int)DropItem_Type::Rifle; i < (int)DropItem_Type::All; ++i)
 	{
 		if (IsDropItemType(i))
 			vecRandItem.push_back((DropItem_Type)i);

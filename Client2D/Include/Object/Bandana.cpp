@@ -38,7 +38,7 @@ void CBandana::Start()
 
 	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
 
-	CharacterInfo	Info = SceneMode->GetMonsterInfo(Object_Type::Bandana);
+	CharacterInfo	Info = SceneMode->GetMonsterInfo(Object_Type::M_Bandana);
 	m_PrevHP = Info.HP;
 	m_HP = Info.HP;
 	m_HPMax = Info.HP;

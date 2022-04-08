@@ -83,7 +83,7 @@ public:
 		case DropItem_Type::Life:
 			m_vecDropItemType[(int)Type] = true;
 			break;
-		case DropItem_Type::Max:
+		case DropItem_Type::All:
 		{
 			size_t Size = m_vecDropItemType.size();
 
@@ -105,7 +105,7 @@ public:
 		case DropItem_Type::Life:
 			m_vecDropItemType[(int)Type] = false;
 			break;
-		case DropItem_Type::Max:
+		case DropItem_Type::All:
 		{
 			size_t Size = m_vecDropItemType.size();
 

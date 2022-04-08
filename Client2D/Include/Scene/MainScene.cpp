@@ -44,8 +44,6 @@ bool CMainScene::Init()
 
 	CPlayer2D* Player = m_Scene->CreateGameObject<CPlayer2D>("Player");
 
-	Player->SetWorldPos(400.f, 300.f, 0.f);
-
 	SetPlayerObject(Player);
 
 	m_TileMap = m_Scene->LoadGameObject<CTileMap>();
@@ -61,7 +59,7 @@ bool CMainScene::Init()
 
 	std::vector<Vector3>	vecObjectPos;
 
-	for (int i = (int)Object_Type::BulletKin; i <= (int)Object_Type::ShotgunKin2; ++i)
+	for (int i = (int)Object_Type::M_BulletKin; i <= (int)Object_Type::B_BulletKing; ++i)
 	{
 		vecObjectPos.clear();
 
@@ -75,21 +73,28 @@ bool CMainScene::Init()
 
 			switch ((Object_Type)i)
 			{
-			case Object_Type::BulletKin:
-				Obj = m_Scene->CreateGameObject<CBulletKin>("BulletKin");
+			case Object_Type::M_BulletKin:
+				Obj = m_Scene->CreateGameObject<CBulletKin>("M_BulletKin");
 				break;
-			case Object_Type::Bandana:
-				Obj = m_Scene->CreateGameObject<CBandana>("Bandana");
+			case Object_Type::M_Bandana:
+				Obj = m_Scene->CreateGameObject<CBandana>("M_Bandana");
 				break;
-			case Object_Type::ShotgunKin1:
-				Obj = m_Scene->CreateGameObject<CShotgunKin1>("ShotgunKin1");
+			case Object_Type::M_ShotgunKin1:
+				Obj = m_Scene->CreateGameObject<CShotgunKin1>("M_ShotgunKin1");
 				break;
-			case Object_Type::ShotgunKin2:
-				Obj = m_Scene->CreateGameObject<CShotgunKin2>("ShotgunKin2");
+			case Object_Type::M_ShotgunKin2:
+				Obj = m_Scene->CreateGameObject<CShotgunKin2>("M_ShotgunKin2");
 				break;
+			case Object_Type::P_PlayerPos:
+				Player->SetWorldPos(vecObjectPos[j] + TileCenterSize);
+				break;
+			//case Object_Type::B_BulletKing:
+			//	//Obj = m_Scene->CreateGameObject<CBulletKing>("B_BulletKing");
+			//	break;
 			}
 
-			Obj->SetWorldPos(vecObjectPos[j] + TileCenterSize); // 타일 중앙으로 위치하게 한다.
+			if ((Object_Type)i != Object_Type::P_PlayerPos)
+				Obj->SetWorldPos(vecObjectPos[j] + TileCenterSize); // 타일 중앙으로 위치하게 한다.
 		}
 	}
 
