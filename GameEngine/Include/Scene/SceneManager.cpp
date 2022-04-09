@@ -7,7 +7,8 @@ DEFINITION_SINGLE(CSceneManager)
 
 CSceneManager::CSceneManager()	:
 	m_Scene(nullptr),
-	m_NextScene(nullptr)
+	m_NextScene(nullptr),
+	m_SceneModeType(SceneMode_Type::Max)
 {
 	InitializeCriticalSection(&m_Crt);
 }

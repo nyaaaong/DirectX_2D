@@ -23,11 +23,34 @@ void CLoadingThread::Run()
 {
 	// ·Îµù
 	CSceneManager::GetInst()->CreateNextScene(false);
-	CMainScene* MainScene = CSceneManager::GetInst()->CreateSceneModeEmpty<CMainScene>(false);
 
-	MainScene->SetLoadingFunction<CLoadingThread>(this, &CLoadingThread::AddMessage);
+	switch (CSceneManager::GetInst()->GetSceneModeType())
+	{
+	case SceneMode_Type::Main:
+	{
+		CMainScene* MainScene = CSceneManager::GetInst()->CreateSceneModeEmpty<CMainScene>(false);
 
-	MainScene->Init();
+		MainScene->SetLoadingFunction<CLoadingThread>(this, &CLoadingThread::AddMessage);
+		MainScene->Init();
+	}
+		break;
+	case SceneMode_Type::Boss:
+	{
+		/*CMainScene* MainScene = CSceneManager::GetInst()->CreateSceneModeEmpty<CMainScene>(false);
+
+		MainScene->SetLoadingFunction<CLoadingThread>(this, &CLoadingThread::AddMessage);
+		MainScene->Init();*/
+	}
+		break;
+	case SceneMode_Type::Ending:
+	{
+		/*CMainScene* MainScene = CSceneManager::GetInst()->CreateSceneModeEmpty<CMainScene>(false);
+
+		MainScene->SetLoadingFunction<CLoadingThread>(this, &CLoadingThread::AddMessage);
+		MainScene->Init();*/
+	}
+		break;
+	}
 
 	AddMessage(true, 1.f);
 }

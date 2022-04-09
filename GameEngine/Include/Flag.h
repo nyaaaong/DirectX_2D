@@ -347,3 +347,11 @@ enum class Item_Type
 	Sniper,
 	Life
 };
+
+enum class SceneMode_Type
+{
+	Main,
+	Boss,
+	Ending,
+	Max
+};

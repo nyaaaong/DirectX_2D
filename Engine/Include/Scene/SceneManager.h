@@ -12,11 +12,23 @@ private:
 	std::function<CGameObject* (CScene*, size_t)>	m_CreateObjectCallback;
 	std::function<class CComponent* (CGameObject* Obj, size_t Type)>	m_CreateComponentCallback;
 	std::function<void(class CSpriteComponent* Sprite, size_t Type)>	m_CreateAnimInstanceCallback;
+	SceneMode_Type		m_SceneModeType;
 
 public:
+	SceneMode_Type GetSceneModeType()	const
+	{
+		return m_SceneModeType;
+	}
+
 	CScene* GetScene()	const
 	{
 		return m_Scene;
+	}
+
+public:
+	void SetSceneModeType(SceneMode_Type Type)
+	{
+		m_SceneModeType = Type;
 	}
 
 	void CallCreateSceneMode(CScene* Scene, size_t Type)

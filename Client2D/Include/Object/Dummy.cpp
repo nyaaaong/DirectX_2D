@@ -24,7 +24,7 @@ bool CDummy::Init()
 	if (!CGameObject::Init())
 		return false;
 
-	m_Body = CreateComponent<CColliderBox2D>("Dummy");
+	m_Body = CreateComponent<CColliderBox2D>(GetName());
 
 	SetRootComponent(m_Body);
 

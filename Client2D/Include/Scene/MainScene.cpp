@@ -49,7 +49,6 @@ bool CMainScene::Init()
 	SetPlayerObject(Player);
 
 	m_TileMap = m_Scene->LoadGameObject<CTileMap>();
-	//m_TileMap->Load("test.dat", SCENE_PATH);
 	m_TileMap->Load("TileMap.dat", SCENE_PATH);
 
 	CPublic::GetInst()->LoadObjPos(m_TileMap);

@@ -10,6 +10,7 @@
 #include "Component/CameraComponent.h"
 #include "../Widget/PlayerWidget.h"
 #include "../Scene/MainScene.h"
+#include "../Scene/LoadingScene.h"
 
 CPlayer2D::CPlayer2D() :
 	m_EnableInput(true),
@@ -378,18 +379,30 @@ void CPlayer2D::Hit(float DeltaTime)
 
 void CPlayer2D::OnCollisionBegin(const CollisionResult& result)
 {
-	if (m_Invincibility)
-		return;
-
 	std::string	DestName = result.Dest->GetCollisionProfile()->Name;
 
-	if (DestName == "Monster" || DestName == "MonsterAttack")
+	if (DestName == "NextScene")
 	{
-		CCharacter::OnCollisionBegin(result);
+		m_EnableInput = false;
 
-		m_Invincibility = true;
+		CSceneManager::GetInst()->SetSceneModeType(SceneMode_Type::Boss);
+		CSceneManager::GetInst()->CreateNextScene();
+		CSceneManager::GetInst()->CreateSceneMode<CLoadingScene>(false);
+	}
 
-		m_Scene->GetResource()->SoundPlay("Hit");
+	else
+	{
+		if (m_Invincibility)
+			return;
+
+		if (DestName == "Monster" || DestName == "MonsterAttack")
+		{
+			CCharacter::OnCollisionBegin(result);
+
+			m_Invincibility = true;
+
+			m_Scene->GetResource()->SoundPlay("Hit");
+		}
 	}
 }
 

@@ -88,6 +88,7 @@ CStartWidget* CStartWidget::Clone()
 
 void CStartWidget::StartButtonClick()
 {
+	CSceneManager::GetInst()->SetSceneModeType(SceneMode_Type::Main);
 	CSceneManager::GetInst()->CreateNextScene();
 	CSceneManager::GetInst()->CreateSceneMode<CLoadingScene>(false);
 }
