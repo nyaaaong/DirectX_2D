@@ -445,7 +445,10 @@ void CPublic::LoadObjPos(CGameObject* TileMapObj)
 				break;
 			}
 
-			iter->second->push_back(vecTypeTile[j]->GetWorldPos());
+			Vector3	Pos = vecTypeTile[j]->GetWorldPos();
+			Pos.z = 0.f;
+
+			iter->second->push_back(Pos);
 		}
 	}
 }

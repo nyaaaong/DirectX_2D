@@ -21,7 +21,6 @@ CSceneComponent::CSceneComponent()	:
 {
 	SetTypeID<CSceneComponent>();
 	m_ComponentType = Component_Type::SceneComponent;
-	m_Render = false;
 
 	m_Transform = DBG_NEW CTransform;
 

@@ -96,7 +96,7 @@ void CItem::Update(float DeltaTime)
 			{
 				m_MaxCheck = true;
 
-				SetWorldPos(Pos.x, m_BottomMax, Pos.z);
+				SetWorldPos(Pos.x, m_BottomMax, 0.f);
 
 				m_DirY = 1.f;
 			}
@@ -110,7 +110,7 @@ void CItem::Update(float DeltaTime)
 				{
 					m_MinCheck = true;
 
-					SetWorldPos(Pos.x, m_BottomMin, Pos.z);
+					SetWorldPos(Pos.x, m_BottomMin, 0.f);
 
 					m_DirY = -1.f;
 				}
@@ -122,7 +122,7 @@ void CItem::Update(float DeltaTime)
 				{
 					m_MaxCheck = true;
 
-					SetWorldPos(Pos.x, m_BottomMax, Pos.z);
+					SetWorldPos(Pos.x, m_BottomMax, 0.f);
 
 					m_CompleteAnim = true;
 				}

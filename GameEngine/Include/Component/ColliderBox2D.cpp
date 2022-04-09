@@ -29,7 +29,6 @@ CColliderBox2D::CColliderBox2D(const CColliderBox2D& com) :
 
 CColliderBox2D::~CColliderBox2D()
 {
-	int a = 0;
 }
 
 void CColliderBox2D::Start()

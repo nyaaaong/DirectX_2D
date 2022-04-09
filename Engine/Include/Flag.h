@@ -334,11 +334,10 @@ enum class Monster_State
 
 enum class DropItem_Type
 {
-	None = 0,
-	Rifle = 0x1,
-	Sniper = 0x2,
-	Life = 0x10,
-	All = Rifle | Sniper | Life
+	Rifle,
+	Sniper,
+	Life,
+	Max
 };
 
 enum class Item_Type

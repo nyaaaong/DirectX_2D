@@ -38,7 +38,7 @@ protected:
 	bool	m_Move;
 	bool	m_CanUpdate;
 	bool	m_UseDropItem;
-	std::vector<bool>	m_vecDropItemType;
+	bool	m_arrDropItem[(int)DropItem_Type::Max];
 	std::function<void(float)>	m_CurPattern;
 
 public:
@@ -55,12 +55,12 @@ protected:
 public:
 	bool IsDropItemType(DropItem_Type Type)
 	{
-		return m_vecDropItemType[(int)Type];
+		return m_arrDropItem[(int)Type];
 	}
 
 	bool IsDropItemType(int Type)
 	{
-		return m_vecDropItemType[Type];
+		return m_arrDropItem[Type];
 	}
 
 	Monster_State GetState()	const
@@ -81,17 +81,7 @@ public:
 		case DropItem_Type::Rifle:
 		case DropItem_Type::Sniper:
 		case DropItem_Type::Life:
-			m_vecDropItemType[(int)Type] = true;
-			break;
-		case DropItem_Type::All:
-		{
-			size_t Size = m_vecDropItemType.size();
-
-			for (size_t i = 0; i < Size; ++i)
-			{
-				m_vecDropItemType[i] = true;
-			}
-		}
+			m_arrDropItem[(int)Type] = true;
 			break;
 		}
 	}
@@ -103,17 +93,8 @@ public:
 		case DropItem_Type::Rifle:
 		case DropItem_Type::Sniper:
 		case DropItem_Type::Life:
-			m_vecDropItemType[(int)Type] = false;
+			m_arrDropItem[(int)Type] = false;
 			break;
-		case DropItem_Type::All:
-		{
-			size_t Size = m_vecDropItemType.size();
-
-			for (size_t i = 0; i < Size; ++i)
-			{
-				m_vecDropItemType[i] = false;
-			}
-		}
 		break;
 		}
 	}

@@ -13,14 +13,14 @@ protected:
 	virtual ~CBulletKing();
 
 private:
-	float	m_BulletAngle;
-	float	m_arrAngle[4];
-	Vector3	m_arrDir[4];
-	float	m_BurstTimer;	// 연사 공격이 지속될 시간
-	float	m_BurstTimerMax;// 연사 공격이 지속될 시간
-	float	m_BurstCoolDownTimer;	// 연사 공격 쿨타임
-	float	m_BurstCoolDownTimerMax;// 연사 공격 쿨타임
-	bool	m_BurstCooldown;
+	//float	m_BulletAngle;
+	//float	m_arrAngle[4];
+	//Vector3	m_arrDir[4];
+	//float	m_BurstTimer;	// 연사 공격이 지속될 시간
+	//float	m_BurstTimerMax;// 연사 공격이 지속될 시간
+	//float	m_BurstCoolDownTimer;	// 연사 공격 쿨타임
+	//float	m_BurstCoolDownTimerMax;// 연사 공격 쿨타임
+	//bool	m_BurstCooldown;
 
 public:
 	virtual void Start();

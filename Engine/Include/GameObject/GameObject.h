@@ -204,10 +204,15 @@ public:
 
 	Vector3 GetRelativePos()	const
 	{
-		if (!m_RootComponent)
-			return Vector3();
+		Vector3	RelativePos;
 
-		return m_RootComponent->GetRelativePos();
+		if (m_RootComponent)
+		{
+			RelativePos = m_RootComponent->GetRelativePos();
+			RelativePos.z = 0.f;
+		}
+
+		return RelativePos;
 	}
 
 	Vector3 GetRelativeAxis(AXIS Axis)
@@ -390,10 +395,15 @@ public:
 
 	Vector3 GetWorldPos()	const
 	{
-		if (!m_RootComponent)
-			return Vector3();
+		Vector3	WorldPos;
 
-		return m_RootComponent->GetWorldPos();
+		if (m_RootComponent)
+		{
+			WorldPos = m_RootComponent->GetWorldPos();
+			WorldPos.z = 0.f;
+		}
+
+		return WorldPos;
 	}
 
 	Vector3 GetPivot()	const

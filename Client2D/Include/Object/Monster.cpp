@@ -17,7 +17,7 @@ CMonster::CMonster() :
 	m_CurWeapon(nullptr),
 	m_PlayerAngle(0.f),
 	m_PlayerDist(0.f),
-	m_UpdateSight(1280.f),
+	m_UpdateSight(700.f),
 	m_AttackDelay(0.f),
 	m_AttackDelayMax(1.f),
 	m_MoveDelay(3.f),
@@ -28,19 +28,19 @@ CMonster::CMonster() :
 	m_ChangePattern(false),
 	m_Move(false),
 	m_CanUpdate(false),
-	m_UseDropItem(true)
+	m_UseDropItem(true),
+	m_arrDropItem{true}
 {
 	SetTypeID<CMonster>();
 
 	m_Type = Character_Type::Monster;
-
-	m_vecDropItemType.resize((size_t)DropItem_Type::All);
 }
 
 CMonster::CMonster(const CMonster& obj) :
 	CCharacter(obj),
 	m_BurnStartDelay(0.f),
-	m_PatternTimer(0.f)
+	m_PatternTimer(0.f),
+	m_arrDropItem{ true }
 {
 	SetTypeID<CMonster>();
 
@@ -71,8 +71,6 @@ CMonster::CMonster(const CMonster& obj) :
 	m_Move = false;
 
 	m_UseDropItem = obj.m_UseDropItem;
-
-	m_vecDropItemType.resize((size_t)DropItem_Type::All);
 
 	m_UpdateSight = obj.m_UpdateSight;
 }
@@ -121,13 +119,6 @@ bool CMonster::Init()
 	m_BottomOffsetY = 1.2f;
 
 	m_PaperBurn->SetFinishCallback(this, &CMonster::Destroy);
-
-	size_t Size = m_vecDropItemType.size();
-
-	for (size_t i = 0; i < Size; ++i)
-	{
-		m_vecDropItemType[i] = true;
-	}
 
 	return true;
 }
@@ -393,7 +384,7 @@ void CMonster::DropItem()
 
 	std::vector<DropItem_Type>	vecRandItem;
 
-	for (int i = (int)DropItem_Type::Rifle; i < (int)DropItem_Type::All; ++i)
+	for (int i = 0; i < (int)DropItem_Type::Max; ++i)
 	{
 		if (IsDropItemType(i))
 			vecRandItem.push_back((DropItem_Type)i);
