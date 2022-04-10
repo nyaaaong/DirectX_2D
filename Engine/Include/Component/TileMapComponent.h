@@ -29,7 +29,7 @@ protected:
 	int     m_Count;
 	int     m_RenderCount;
 	Vector3 m_TileSize;
-	Vector4 m_TileColor[(int)Tile_Type::End];
+	Vector4 m_TileColor[(int)Tile_Type::Max];
 	bool    m_EditMode;
 	float   m_DeltaTime;
 	bool    m_SortDisable;
@@ -37,7 +37,7 @@ protected:
 public:
 	void SetTileColorWhite()
 	{
-		for (int i = 0; i < (int)Tile_Type::End; ++i)
+		for (int i = 0; i < (int)Tile_Type::Max; ++i)
 		{
 			m_TileColor[i] = Vector4(1.f, 1.f, 1.f, 1.f);
 		}

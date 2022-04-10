@@ -15,8 +15,9 @@ protected:
 	class CScene* m_Scene;
 	CSharedPtr<class CGameObject> m_PlayerObject;
 	bool		m_UseCamera;
-	CharacterInfo		m_PlayerInfo;
-	CharacterInfo		m_MonsterInfo[(int)Object_Type::Max];
+	PlayerInfo		m_PlayerInfo;
+	MonsterInfo		m_MonsterInfo[(int)Object_Type::Max];
+	BossInfo		m_BulletKingInfo;
 
 public:
 	void UseCamera(bool UseCamera = true)
@@ -25,12 +26,17 @@ public:
 	}
 
 public:
-	const CharacterInfo& GetPlayerInfo()	const
+	const BossInfo& GetBulletKingInfo()	const
+	{
+		return m_BulletKingInfo;
+	}
+
+	const PlayerInfo& GetPlayerInfo()	const
 	{
 		return m_PlayerInfo;
 	}
 
-	const CharacterInfo& GetMonsterInfo(Object_Type MonsterType)	const
+	const MonsterInfo& GetMonsterInfo(Object_Type MonsterType)	const
 	{
 		return m_MonsterInfo[(int)MonsterType];
 	}

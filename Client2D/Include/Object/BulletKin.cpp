@@ -33,12 +33,13 @@ void CBulletKin::Start()
 
 	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
 
-	CharacterInfo	Info = SceneMode->GetMonsterInfo(Object_Type::M_BulletKin);
+	MonsterInfo	Info = SceneMode->GetMonsterInfo(Object_Type::M_BulletKin);
 	m_PrevHP = Info.HP;
 	m_HP = Info.HP;
 	m_HPMax = Info.HP;
 	m_MoveSpeed = Info.MoveSpeed;
 	m_Damage = Info.Damage;
+	m_AttackDelayMax = Info.AttackDelayMax;
 }
 
 bool CBulletKin::Init()
@@ -69,8 +70,6 @@ bool CBulletKin::Init()
 	m_WeaponL->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "M_Weapon1L", TEXT("Weapon/Monster/Weapon1L.png"));
 
 	HideAllWeapon();
-
-	m_AttackDelayMax = 1.f;
 
 	return true;
 }

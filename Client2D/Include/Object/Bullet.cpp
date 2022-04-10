@@ -166,6 +166,11 @@ void CBullet::First()
 				m_StartDistance = 200.f;
 				m_Scene->GetResource()->SoundPlay("Shotgun");
 				break;
+			case Bullet_Type::ShotgunKin2Die:
+				if (!m_SetBulletSpeed)
+					m_BulletSpeed = 1000.f;
+				m_Distance = 800.f;
+				break;
 			}
 			break;
 		}
@@ -202,31 +207,20 @@ void CBullet::Destroy()
 
 void CBullet::OnCollisionBegin(const CollisionResult& result)
 {
-	if (!m_Check || m_Hit)
+	if (!m_Check)
 		return;
 
-	CGameObject* DestObj = result.Dest->GetGameObject();
+	Collision_Channel	DestChannel = result.Dest->GetCollisionProfile()->Channel;
 
-	CCharacter* CharacterObj = dynamic_cast<CCharacter*>(DestObj);
-
-	if (CharacterObj)
+	if (DestChannel == Collision_Channel::Player || 
+		DestChannel == Collision_Channel::Monster)
 	{
-		if (CharacterObj->GetName() == "Player")
-		{
-			CPlayer2D* Player = dynamic_cast<CPlayer2D*>(CharacterObj);
+		CCharacter* Character = dynamic_cast<CCharacter*>(result.Dest->GetGameObject());
 
-			if (Player->IsInvincibility())
-				return;
-		}
+		if (!Character->AddDamage(m_Damage))
+			return;
 
 		m_Hit = true;
-
-		CharacterObj->AddDamage(m_Damage);
-	}
-
-	else
-	{
-		
 	}
 
 	CreateHitEffect();
@@ -314,6 +308,9 @@ void CBullet::CreateHitEffect()
 			m_Body->Enable(false);
 			m_NeedDestroyCollider = true;
 		}
+
+		else
+			m_Hit = false;
 	}
 }
 

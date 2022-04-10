@@ -31,4 +31,3 @@ public:
 	void StartButtonClick();
 	void ExitButtonClick();
 };
-

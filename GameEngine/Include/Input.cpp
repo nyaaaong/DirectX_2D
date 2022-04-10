@@ -307,12 +307,12 @@ void CInput::UpdateKeyState()
 			m_Shift = false;
 
 
-		/* 
+		/*
 		rgbButtons[0] = 좌클릭
 		rgbButtons[1] = 우클릭
 		rgbButtons[2] = 휠클릭
 		rgbButtons[3] = 확장버튼
-		* 
+		*
 		*/
 		if (m_MouseState.rgbButtons[0] & 0x80)
 			m_LButtonClick = true;
@@ -653,8 +653,8 @@ unsigned char CInput::ConvertKey(unsigned char Key)
 			return DIK_DECIMAL;
 		case VK_DIVIDE:
 			return DIK_DIVIDE;
-		//case VK_RETURN:
-		//	return DIK_NUMPADENTER;
+			//case VK_RETURN:
+			//	return DIK_NUMPADENTER;
 		case VK_F1:
 			return DIK_F1;
 		case VK_F2:

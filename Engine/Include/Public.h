@@ -50,11 +50,13 @@ public:
 public:
 	void GetObjectName(std::vector<std::string>& vecName);
 	void GetObjectPos(Object_Type Type, std::vector<Vector3>& vecPos);
-	bool GetPlayerPos(Vector3& PlayerPos);
+	bool GetPlayerPos(Vector3& OutputPos);
+	bool GetBossRoomEndPos(Vector3& OutputPos);
 	void AddObjectWorldPos(Object_Type Type, const Vector3& WorldPos);
 	void DeleteObjectWorldPos(const Vector3& WorldPos);
 	void ClearObjectWorldPos(Object_Type Type);
 	void ClearPlayerWorldPos();
+	void ClearBossRoomEndWorldPos();
 	void ClearAllObjectWorldPos();
 
 public:

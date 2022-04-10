@@ -39,12 +39,13 @@ void CShotgunKin2::Start()
 
 	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
 
-	CharacterInfo	Info = SceneMode->GetMonsterInfo(Object_Type::M_ShotgunKin2);
+	MonsterInfo	Info = SceneMode->GetMonsterInfo(Object_Type::M_ShotgunKin2);
 	m_PrevHP = Info.HP;
 	m_HP = Info.HP;
 	m_HPMax = Info.HP;
 	m_MoveSpeed = Info.MoveSpeed;
 	m_Damage = Info.Damage;
+	m_AttackDelayMax = Info.AttackDelayMax;
 }
 
 bool CShotgunKin2::Init()
@@ -75,8 +76,6 @@ bool CShotgunKin2::Init()
 	m_WeaponL->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "M_Weapon3L", TEXT("Weapon/Monster/Weapon3L.png"));
 
 	HideAllWeapon();
-
-	m_AttackDelayMax = 1.4f;
 
 	m_UsePaperburn = false;
 
@@ -118,6 +117,8 @@ void CShotgunKin2::DestroyBefore()
 {
 	CMonster::DestroyBefore();
 
+	m_Scene->GetResource()->SoundPlay("Shotgun");
+
 	for (int i = 0; i < 8; ++i)
 	{
 		CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
@@ -126,7 +127,7 @@ void CShotgunKin2::DestroyBefore()
 		Bullet->SetWorldPos(GetWorldPos());
 		Bullet->SetCollisionProfile("MonsterAttack");
 		Bullet->SetCharacterType(Character_Type::Monster);
-		Bullet->SetBulletType(Bullet_Type::Pistol);
+		Bullet->SetBulletType(Bullet_Type::ShotgunKin2Die);
 		Bullet->SetBulletSpeed(500.f);
 	}
 
@@ -144,8 +145,6 @@ void CShotgunKin2::PlaySoundDie()
 
 void CShotgunKin2::Attack(float DeltaTime)
 {
-	m_Scene->GetResource()->SoundPlay("Shotgun");
-
 	CBullet* Bullet = m_Scene->CreateGameObject<CBullet>("Bullet");
 	Bullet->SetOwner(this);
 	Bullet->SetBulletDir(m_PlayerDir);

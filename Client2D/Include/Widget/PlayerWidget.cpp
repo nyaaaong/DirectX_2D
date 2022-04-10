@@ -31,6 +31,7 @@ bool CPlayerWidget::Init()
 
 	Vector2	RenderPos = m_HPBar->GetRenderPos();
 	m_HPBar->SetPos(RenderPos.x, RenderPos.y - 10.f);
+	m_HPBar->SetDir(ProgressBar_Dir::RightToLeft);
 
 	return true;
 }
@@ -55,17 +56,12 @@ CPlayerWidget* CPlayerWidget::Clone()
 	return DBG_NEW CPlayerWidget(*this);
 }
 
-void CPlayerWidget::AddHPPercent(float Percent)
+void CPlayerWidget::AddPercent(float Percent)
 {
 	m_HPBar->AddPercent(Percent);
 }
 
-void CPlayerWidget::SetHPPercent(float Percent)
+void CPlayerWidget::SetPercent(float Percent)
 {
 	m_HPBar->SetPercent(Percent);
-}
-
-void CPlayerWidget::SetHPDir(ProgressBar_Dir Dir)
-{
-	m_HPBar->SetDir(Dir);
 }

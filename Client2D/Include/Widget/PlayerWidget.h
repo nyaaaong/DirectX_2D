@@ -26,8 +26,7 @@ public:
 	virtual CPlayerWidget* Clone();
 
 public:
-	void AddHPPercent(float Percent);
-	void SetHPPercent(float Percent);
-	void SetHPDir(ProgressBar_Dir Dir);
+	void AddPercent(float Percent);
+	void SetPercent(float Percent);
 };
 

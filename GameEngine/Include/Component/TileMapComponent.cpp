@@ -27,7 +27,7 @@ CTileMapComponent::CTileMapComponent()	:
 
 	m_DeltaTime = 0.f;
 
-	for (int i = 0; i < (int)Tile_Type::End; ++i)
+	for (int i = 0; i < (int)Tile_Type::Max; ++i)
 	{
 		m_TileColor[i] = Vector4(1.f, 1.f, 1.f, 1.f);
 	}
@@ -35,11 +35,12 @@ CTileMapComponent::CTileMapComponent()	:
 	m_TileColor[(int)Tile_Type::T_Wall] = Vector4(1.f, 0.f, 0.f, 1.f);
 	m_TileColor[(int)Tile_Type::M_BulletKin] = Vector4(1.f, 0.f, 1.f, 1.f);
 	m_TileColor[(int)Tile_Type::M_Bandana] = Vector4(0.0f, 1.f, 1.f, 1.f);
-	m_TileColor[(int)Tile_Type::M_ShotgunKin1] = Vector4(1.f, 0.7f, 0.f, 1.f);
-	m_TileColor[(int)Tile_Type::M_ShotgunKin2] = Vector4(1.f, 0.7f, 0.7f, 1.f);
+	m_TileColor[(int)Tile_Type::M_ShotgunKin1] = Vector4(0.f, 0.7f, 0.3f, 1.f);
+	m_TileColor[(int)Tile_Type::M_ShotgunKin2] = Vector4(0.f, 0.3f, 0.7f, 1.f);
 	m_TileColor[(int)Tile_Type::P_PlayerPos] = Vector4(0.f, 0.f, 0.f, 1.f);
 	m_TileColor[(int)Tile_Type::B_BulletKing] = Vector4(1.f, 0.f, 1.f, 1.f);
-	m_TileColor[(int)Tile_Type::S_NextScene] = Vector4(1.f, 1.f, 0.f, 1.f);
+	m_TileColor[(int)Tile_Type::TP_BossRoomStart] = Vector4(1.f, 1.f, 0.f, 1.f);
+	m_TileColor[(int)Tile_Type::TP_BossRoomEnd] = Vector4(1.f, 1.f, 0.f, 1.f);
 
 	m_EditMode = false;
 
@@ -70,7 +71,7 @@ CTileMapComponent::CTileMapComponent(const CTileMapComponent& com) :
 	if (com.m_TileInfoBuffer)
 		m_TileInfoBuffer = com.m_TileInfoBuffer->Clone();
 
-	for (int i = 0; i < (int)Tile_Type::End; ++i)
+	for (int i = 0; i < (int)Tile_Type::Max; ++i)
 	{
 		m_TileColor[i] = com.m_TileColor[i];
 	}
@@ -631,7 +632,7 @@ void CTileMapComponent::Save(FILE* File)
 	fwrite(&m_CountY, sizeof(int), 1, File);
 	fwrite(&m_Count, sizeof(int), 1, File);
 	fwrite(&m_TileSize, sizeof(Vector3), 1, File);
-	fwrite(m_TileColor, sizeof(Vector4), (int)Tile_Type::End, File);
+	fwrite(m_TileColor, sizeof(Vector4), (int)Tile_Type::Max, File);
 
 	for (int i = 0; i < m_Count; ++i)
 	{
@@ -679,7 +680,7 @@ void CTileMapComponent::Load(FILE* File)
 	fread(&m_CountY, sizeof(int), 1, File);
 	fread(&m_Count, sizeof(int), 1, File);
 	fread(&m_TileSize, sizeof(Vector3), 1, File);
-	fread(m_TileColor, sizeof(Vector4), (int)Tile_Type::End, File);
+	fread(m_TileColor, sizeof(Vector4), (int)Tile_Type::Max, File);
 
 	size_t	Size = m_vecTile.size();
 

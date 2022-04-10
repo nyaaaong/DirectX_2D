@@ -158,7 +158,8 @@ void CTileMapWindow::CreateTileEditControl()
 	m_TypeCombo->AddItem("M_ShotgunKin2");
 	m_TypeCombo->AddItem("P_PlayerPos");
 	m_TypeCombo->AddItem("B_BulletKing");
-	m_TypeCombo->AddItem("S_NextScene");
+	m_TypeCombo->AddItem("TP_BossRoomStart");
+	m_TypeCombo->AddItem("TP_BossRoomEnd");
 
 	Line = AddWidget<CIMGUISameLine>("Line");
 
@@ -285,14 +286,12 @@ void CTileMapWindow::Update(float DeltaTime)
 					Tile_Type	Type = (Tile_Type)TileType;
 					Tile_Type	PrevTileType = Tile->GetTileType();
 
-					if (Type == Tile_Type::T_Normal ||
-						Type == Tile_Type::T_Wall)
+					if (Type == Tile_Type::T_Normal || Type == Tile_Type::T_Wall)
 					{
 						if (Type == PrevTileType)
 							return;
 
-						else if ((int)PrevTileType >= (int)Tile_Type::M_BulletKin ||
-								 (int)PrevTileType <= (int)Tile_Type::S_NextScene)
+						else if ((int)PrevTileType >= (int)Tile_Type::M_BulletKin || (int)PrevTileType < (int)Tile_Type::Max)
 						{
 							CPublic::GetInst()->DeleteObjectWorldPos(Tile->GetWorldPos());
 							Tile->SetObjectType(Object_Type::Max);
@@ -302,8 +301,7 @@ void CTileMapWindow::Update(float DeltaTime)
 						break;
 					}
 
-					else if ((int)Type >= (int)Tile_Type::M_BulletKin ||
-							 (int)Type <= (int)Tile_Type::S_NextScene)
+					else if ((int)Type >= (int)Tile_Type::M_BulletKin || (int)Type < (int)Tile_Type::Max)
 					{
 						if (Type == PrevTileType)
 							return;
@@ -327,6 +325,23 @@ void CTileMapWindow::Update(float DeltaTime)
 								PrevPlayerTile->SetObjectType(Object_Type::Max);
 
 								CPublic::GetInst()->ClearPlayerWorldPos();
+							}
+						}
+
+						// BossRoomEnd 위치는 1개만 있어야 하므로 기존에 있던 위치는 제거해준다.
+						else if (ObjectType == Object_Type::TP_BossRoomEnd)
+						{
+							Vector3	BossRoomEnd;
+
+							// false 일 경우 이전에 플레이어 위치 정보가 들어있지 않았다는 것이다.
+							if (CPublic::GetInst()->GetBossRoomEndPos(BossRoomEnd))
+							{
+								CTile* PrevPlayerTile = m_TileMap->GetTile(Vector3(BossRoomEnd));
+
+								PrevPlayerTile->SetTileType(Tile_Type::T_Normal);
+								PrevPlayerTile->SetObjectType(Object_Type::Max);
+
+								CPublic::GetInst()->ClearBossRoomEndWorldPos();
 							}
 						}
 
@@ -434,7 +449,7 @@ void CTileMapWindow::LoadImageButton()
 	OpenFile.lpstrFilter = TEXT("그림파일 (*.dds, *.tga, *.png, *.jpg, *.jpeg, *.bmp)\0*.dds;*.tga;*.png;*.jpg;*.jpeg;*.bmp\0DDS (*.dds)\0*.dds\0TGA (*.tga)\0*.tga\0PNG (*.png)\0*.png\0JPG (*.jpg)\0*.jpg\0JPEG (*.jpeg)\0*.jpeg\0BMP (*.bmp)\0*.bmp");
 	OpenFile.lpstrFile = m_TileMapFullPath;
 	OpenFile.nMaxFile = MAX_PATH;
-	OpenFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(TEXTURE_PATH)->Path;
+	OpenFile.lpstrInitialDir = CPathManager::GetInst()->FindPath(MAP_PATH)->Path;
 
 	if (GetOpenFileName(&OpenFile) != 0)
 	{

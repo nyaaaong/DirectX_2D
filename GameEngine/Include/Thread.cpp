@@ -20,8 +20,7 @@ bool CThread::Init()
 {
 	m_StartEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 
-	m_Thread = (HANDLE)_beginthreadex(nullptr, 0, CThread::ThreadFunction,
-		this, 0, nullptr);
+	m_Thread = (HANDLE)_beginthreadex(nullptr, 0, CThread::ThreadFunction, this, 0, nullptr);
 
 	return true;
 }

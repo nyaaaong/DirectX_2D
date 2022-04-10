@@ -2,6 +2,7 @@
 
 #include "Scene/SceneMode.h"
 #include "../Widget/MainWidget.h"
+#include "../Widget/BossWidget.h"
 #include "../Object/TileMap.h"
 
 class CMainScene :
@@ -13,14 +14,14 @@ public:
 
 private:
 	CSharedPtr<CMainWidget> m_MainWidget;
+	CSharedPtr<CBossWidget> m_BossWidget;
+	CSharedPtr<CTileMap>	m_TileMap;
+	class CGameObject*		m_BossMonster;
 	std::function<void(bool, float)> m_LoadingFunction;
-	CSharedPtr<CTileMap> m_TileMap;
-
-public:
-	void SetWidgetText(const char* Text)
-	{
-		m_MainWidget->SetText(Text);
-	}
+	bool					m_IsBossRoom;
+	bool					m_BossClear;
+	bool					m_NeedUpdateSound;
+	Vector3					m_BossRoomEndWorldPos;
 
 public:
 	CSharedPtr<CTileMap> GetTileMap()	const
@@ -29,13 +30,29 @@ public:
 	}
 
 public:
+	void SetDebugText(const char* Text)
+	{
+		m_MainWidget->SetDebugText(Text);
+	}
+
+public:
 	virtual void Start();
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
 
+public:
+	void SetBossRoom();
+
 private:
 	void CreateSound();
+
+private:
+	void UpdateSound(float DeltaTime);
+	void UpdateBoss(float DeltaTime);
+
+private:
 	void ToggleCollider(float DeltaTime);
+	void CheatMoveBossRoom(float DeltaTime);
 
 public:
 	template <typename T>

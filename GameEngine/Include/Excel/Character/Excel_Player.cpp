@@ -19,7 +19,7 @@ bool CExcel_Player::Init()
 	if (!sheet)
 		return false;
 
-	float	Number[3] = {};
+	float	Number[2] = {};
 	int		NumberIndex = 0;
 
 	for (int row = sheet->firstRow(); row < sheet->lastRow(); ++row)
@@ -43,8 +43,8 @@ bool CExcel_Player::Init()
 				}
 				case libxl::CELLTYPE_STRING:
 				{
-					const wchar_t* s = sheet->readStr(row, col);
-					break; 
+					//sheet->readStr(row, col);
+					break;
 				}
 				case libxl::CELLTYPE_BOOLEAN:
 				{
@@ -65,7 +65,6 @@ bool CExcel_Player::Init()
 
 	m_PlayerInfo.HP = Number[0];
 	m_PlayerInfo.MoveSpeed = Number[1];
-	m_PlayerInfo.Damage = Number[2];
 
 	return true;
 }

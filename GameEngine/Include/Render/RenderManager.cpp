@@ -129,7 +129,7 @@ bool CRenderManager::Init()
 
 	Layer = DBG_NEW RenderLayer;
 	Layer->Name = "ScreenWidgetComponent";
-	Layer->LayerPriority = 4;
+	Layer->LayerPriority = 5;
 
 	m_RenderLayerList.push_back(Layer);
 	m_DepthDisable = m_RenderStateManager->FindRenderState("DepthDisable");

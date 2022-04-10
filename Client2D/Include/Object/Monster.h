@@ -37,20 +37,11 @@ protected:
 	bool	m_ChangePattern;
 	bool	m_Move;
 	bool	m_CanUpdate;
+	bool	m_UseGun;
 	bool	m_UseDropItem;
+	bool	m_UsePattern;
 	bool	m_arrDropItem[(int)DropItem_Type::Max];
 	std::function<void(float)>	m_CurPattern;
-
-public:
-	virtual void Start();
-	virtual bool Init();
-	virtual void Update(float DeltaTime);
-	virtual CMonster* Clone() = 0;
-	virtual void Destroy();
-
-protected:
-	virtual void OnCollisionBegin(const CollisionResult& result);
-	virtual void OnCollisionEnd(const CollisionResult& result);
 
 public:
 	bool IsDropItemType(DropItem_Type Type)
@@ -95,9 +86,20 @@ public:
 		case DropItem_Type::Life:
 			m_arrDropItem[(int)Type] = false;
 			break;
-		break;
+			break;
 		}
 	}
+
+public:
+	virtual void Start();
+	virtual bool Init();
+	virtual void Update(float DeltaTime);
+	virtual CMonster* Clone() = 0;
+	virtual void Destroy();
+
+protected:
+	virtual void OnCollisionBegin(const CollisionResult& result);
+	virtual void OnCollisionEnd(const CollisionResult& result);
 
 protected:
 	virtual void Calc(float DeltaTime);

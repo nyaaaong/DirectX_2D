@@ -7,9 +7,9 @@
 
 CBandana::CBandana()	:
 	m_BurstTimer(0.f),
-	m_BurstTimerMax(2.f),
+	m_BurstTimerMax(1.f),
 	m_BurstCoolDownTimer(0.f),
-	m_BurstCoolDownTimerMax(1.f),
+	m_BurstCoolDownTimerMax(1.5f),
 	m_BurstCooldown(false)
 {
 	SetTypeID<CBandana>();
@@ -38,12 +38,13 @@ void CBandana::Start()
 
 	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
 
-	CharacterInfo	Info = SceneMode->GetMonsterInfo(Object_Type::M_Bandana);
+	MonsterInfo	Info = SceneMode->GetMonsterInfo(Object_Type::M_Bandana);
 	m_PrevHP = Info.HP;
 	m_HP = Info.HP;
 	m_HPMax = Info.HP;
 	m_MoveSpeed = Info.MoveSpeed;
 	m_Damage = Info.Damage;
+	m_AttackDelayMax = Info.AttackDelayMax;
 }
 
 bool CBandana::Init()
@@ -74,8 +75,6 @@ bool CBandana::Init()
 	m_WeaponL->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "M_Weapon2L", TEXT("Weapon/Monster/Weapon2L.png"));
 
 	HideAllWeapon();
-
-	m_AttackDelayMax = 0.12f;
 
 	return true;
 }

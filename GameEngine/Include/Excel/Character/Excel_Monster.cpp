@@ -21,7 +21,7 @@ bool CExcel_Monster::Init()
 	if (!sheet)
 		return false;
 
-	float	Info[3] = {};
+	float	Info[4] = {};
 	int		NumberIndex = 0;
 
 	for (int row = sheet->firstRow(); row < sheet->lastRow(); ++row)
@@ -42,14 +42,16 @@ bool CExcel_Monster::Init()
 					Info[NumberIndex] = static_cast<float>(sheet->readNum(row, col));
 					++NumberIndex;
 
-					if (NumberIndex == 3)
+					// 총 4번 입력 후 인덱스 초기화
+					if (NumberIndex == 4)
 					{
 						NumberIndex = 0;
 
-						CharacterInfo	NewInfo;
+						MonsterInfo	NewInfo;
 						NewInfo.HP = Info[0];
 						NewInfo.MoveSpeed = Info[1];
 						NewInfo.Damage = Info[2];
+						NewInfo.AttackDelayMax = Info[3];
 
 						m_vecMonsterInfo.push_back(NewInfo);
 						++m_MonsterSize;

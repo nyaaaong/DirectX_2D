@@ -39,12 +39,13 @@ void CShotgunKin1::Start()
 
 	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
 
-	CharacterInfo	Info = SceneMode->GetMonsterInfo(Object_Type::M_ShotgunKin1);
+	MonsterInfo	Info = SceneMode->GetMonsterInfo(Object_Type::M_ShotgunKin1);
 	m_PrevHP = Info.HP;
 	m_HP = Info.HP;
 	m_HPMax = Info.HP;
 	m_MoveSpeed = Info.MoveSpeed;
 	m_Damage = Info.Damage;
+	m_AttackDelayMax = Info.AttackDelayMax;
 }
 
 bool CShotgunKin1::Init()
@@ -75,8 +76,6 @@ bool CShotgunKin1::Init()
 	m_WeaponL->SetTexture(0, 0, (int)Buffer_Shader_Type::Pixel, "M_Weapon3L", TEXT("Weapon/Monster/Weapon3L.png"));
 
 	HideAllWeapon();
-
-	m_AttackDelayMax = 1.4f;
 
 	m_UsePaperburn = false;
 

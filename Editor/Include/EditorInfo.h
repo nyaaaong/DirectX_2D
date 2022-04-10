@@ -10,8 +10,8 @@ enum class CreateObject_Type
 	M_ShotgunKin2,
 	P_PlayerPos,
 	B_BulletKing,
-	S_NextScene,
-	Test4,
+	TP_BossRoomStart,
+	TP_BossRoomEnd,
 	Test5,
 	Test6,
 	Test7,
@@ -19,7 +19,7 @@ enum class CreateObject_Type
 	Test9,
 	Test10,
 	Test11,
-	Test12
+	Max
 };
 
 enum class TileEdit_Mode

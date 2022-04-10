@@ -8,7 +8,7 @@ class CExcel_Monster :
 	friend class CExcelManager;
 
 private:
-	std::vector<CharacterInfo>	m_vecMonsterInfo;
+	std::vector<MonsterInfo>	m_vecMonsterInfo;
 	int	m_MonsterSize;
 
 protected:
@@ -21,12 +21,12 @@ public:
 		return m_MonsterSize;
 	}
 
-	const CharacterInfo& GetMonsterInfo(Object_Type MonsterType)	const
+	const MonsterInfo& GetMonsterInfo(Object_Type MonsterType)	const
 	{
 		return m_vecMonsterInfo[(int)MonsterType];
 	}
 
-	const CharacterInfo& GetMonsterInfo(int Index)	const
+	const MonsterInfo& GetMonsterInfo(int Index)	const
 	{
 		return m_vecMonsterInfo[Index];
 	}

@@ -1,6 +1,7 @@
 
 #include "LoadingThread.h"
 #include "MainScene.h"
+#include "EndingScene.h"
 #include "Scene/SceneManager.h"
 
 CLoadingThread::CLoadingThread()
@@ -33,23 +34,14 @@ void CLoadingThread::Run()
 		MainScene->SetLoadingFunction<CLoadingThread>(this, &CLoadingThread::AddMessage);
 		MainScene->Init();
 	}
-		break;
-	case SceneMode_Type::Boss:
-	{
-		/*CMainScene* MainScene = CSceneManager::GetInst()->CreateSceneModeEmpty<CMainScene>(false);
-
-		MainScene->SetLoadingFunction<CLoadingThread>(this, &CLoadingThread::AddMessage);
-		MainScene->Init();*/
-	}
-		break;
+	break;
 	case SceneMode_Type::Ending:
 	{
-		/*CMainScene* MainScene = CSceneManager::GetInst()->CreateSceneModeEmpty<CMainScene>(false);
+		CEndingScene* EndingScene = CSceneManager::GetInst()->CreateSceneModeEmpty<CEndingScene>(false);
 
-		MainScene->SetLoadingFunction<CLoadingThread>(this, &CLoadingThread::AddMessage);
-		MainScene->Init();*/
+		EndingScene->Init();
 	}
-		break;
+	return;
 	}
 
 	AddMessage(true, 1.f);

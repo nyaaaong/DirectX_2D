@@ -27,16 +27,16 @@ CPlayer2D::CPlayer2D() :
 	m_DodgeSpeed(0.f),
 	m_MouseAngle(0.f),
 	m_NoHitTimer(0.f),
-	m_NoHitTimerMax(3.f),
+	m_NoHitTimerMax(1.f),
 	m_BlinkTimer(0.f),
-	m_BlinkTimerMax(0.3f),
+	m_BlinkTimerMax(0.15f),
 	m_WeaponSlot(Weapon_Slot::None),
 	m_CurWeapon(nullptr),
 	m_PlayerUI(nullptr),
+	m_MainScene(nullptr),
 	m_HasRifle(false),
 	m_HasSniper(false),
-	m_Invisible(false),
-	m_Invincibility(false)
+	m_Invisible(false)
 {
 	SetTypeID<CPlayer2D>();
 	m_Opacity = 1.f;
@@ -87,7 +87,6 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 
 	m_SetCameraInfo = false;
 	m_Invisible = false;
-	m_Invincibility = false;
 
 	m_WeaponSlot = Weapon_Slot::None;
 
@@ -99,6 +98,7 @@ CPlayer2D::CPlayer2D(const CPlayer2D& obj) :
 	m_HasSniper = false;
 
 	m_PlayerUI = nullptr;
+	m_MainScene = nullptr;
 }
 
 CPlayer2D::~CPlayer2D()
@@ -190,7 +190,6 @@ bool CPlayer2D::Init()
 	m_PlayerWidget->SetRelativePos(-50.f, 50.f, 0.f);
 
 	m_PlayerUI = m_PlayerWidget->CreateWidgetWindow<CPlayerWidget>("PlayerUI");
-	m_PlayerUI->SetHPDir(ProgressBar_Dir::RightToLeft);
 
 	m_Sprite->AddChild(m_PlayerWidget);
 
@@ -204,6 +203,12 @@ bool CPlayer2D::Init()
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Weapon1", KeyState_Down, this, &CPlayer2D::Weapon1);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Weapon2", KeyState_Down, this, &CPlayer2D::Weapon2);
 	CInput::GetInst()->SetKeyCallback<CPlayer2D>("Weapon3", KeyState_Down, this, &CPlayer2D::Weapon3);
+
+	CSceneMode* SceneMode = m_Scene->GetSceneMode();
+	m_MainScene = dynamic_cast<CMainScene*>(SceneMode);
+
+	if (!m_MainScene)
+		ASSERT("if (!m_MainScene)");
 
 	return true;
 }
@@ -270,14 +275,13 @@ void CPlayer2D::Start()
 
 	CSharedPtr<CSceneMode> SceneMode = CSceneManager::GetInst()->GetSceneMode();
 
-	CharacterInfo	PlayerInfo = SceneMode->GetPlayerInfo();
+	PlayerInfo	PlayerInfo = SceneMode->GetPlayerInfo();
 	m_PrevHP = PlayerInfo.HP;
 	m_HP = PlayerInfo.HP;
 	m_HPMax = PlayerInfo.HP;
 	m_MoveSpeed = PlayerInfo.MoveSpeed;
-	m_Damage = PlayerInfo.Damage;
 
-	m_DodgeSpeed = m_MoveSpeed * 2.f;
+	m_DodgeSpeed = m_MoveSpeed * 1.5f;
 }
 
 void CPlayer2D::Calc(float DeltaTime)
@@ -288,7 +292,7 @@ void CPlayer2D::Calc(float DeltaTime)
 		return;
 
 	UpdateMouseAngle();
-	UpdatePlayerLife(DeltaTime);
+	UpdatePlayerLife();
 	UpdateMousePos();
 	UpdateGun();
 
@@ -310,13 +314,7 @@ void CPlayer2D::Update(float DeltaTime)
 
 	if (!m_SetCameraInfo)
 	{
-		CSceneMode* SceneMode = m_Scene->GetSceneMode();
-		CMainScene* Scene = dynamic_cast<CMainScene*>(SceneMode);
-
-		if (!Scene)
-			return;
-
-		CTileMap* TileMap = Scene->GetTileMap();
+		CTileMap* TileMap = m_MainScene->GetTileMap();
 
 		if (TileMap)
 		{
@@ -370,40 +368,32 @@ void CPlayer2D::Hit(float DeltaTime)
 			if (m_CurWeapon)
 				m_CurWeapon->SetRender(true);
 
-			m_Invincibility = false;
-
 			m_Hit = false;
+			m_Invincibility = false;
 		}
 	}
 }
 
 void CPlayer2D::OnCollisionBegin(const CollisionResult& result)
 {
-	std::string	DestName = result.Dest->GetCollisionProfile()->Name;
+	if (result.Dest->GetCollisionProfile()->Channel == Collision_Channel::BossRoomStart)
+		m_MainScene->SetBossRoom();
+}
 
-	if (DestName == "NextScene")
-	{
-		m_EnableInput = false;
+bool CPlayer2D::AddDamage(float Damage)
+{
+	if (m_Invincibility)
+		return false;
 
-		CSceneManager::GetInst()->SetSceneModeType(SceneMode_Type::Boss);
-		CSceneManager::GetInst()->CreateNextScene();
-		CSceneManager::GetInst()->CreateSceneMode<CLoadingScene>(false);
-	}
+	CCharacter::AddDamage(Damage);
 
-	else
-	{
-		if (m_Invincibility)
-			return;
+	m_Hit = true;
 
-		if (DestName == "Monster" || DestName == "MonsterAttack")
-		{
-			CCharacter::OnCollisionBegin(result);
+	m_Invincibility = true;
 
-			m_Invincibility = true;
+	m_Scene->GetResource()->SoundPlay("Hit");
 
-			m_Scene->GetResource()->SoundPlay("Hit");
-		}
-	}
+	return true;
 }
 
 void CPlayer2D::MoveUp(float DeltaTime)
@@ -541,7 +531,7 @@ void CPlayer2D::Weapon1(float DeltaTime)
 {
 	m_WeaponSlot = Weapon_Slot::Pistol;
 	m_AttackDelayMax = 0.6f;
-	m_Damage = 3.f;
+	m_Damage = 5.f;
 
 	m_PierceBullet = false;
 }
@@ -553,7 +543,7 @@ void CPlayer2D::Weapon2(float DeltaTime)
 
 	m_WeaponSlot = Weapon_Slot::Rifle;
 	m_AttackDelayMax = 0.1f;
-	m_Damage = 3.f;
+	m_Damage = 5.f;
 
 	m_PierceBullet = false;
 }
@@ -565,7 +555,7 @@ void CPlayer2D::Weapon3(float DeltaTime)
 
 	m_WeaponSlot = Weapon_Slot::Sniper;
 	m_AttackDelayMax = 1.3f;
-	m_Damage = 20.f;
+	m_Damage = 50.f;
 
 	m_PierceBullet = true;
 }
@@ -602,10 +592,10 @@ void CPlayer2D::Attack(float DeltaTime)
 	Bullet->Pierce(m_PierceBullet);
 }
 
-void CPlayer2D::UpdatePlayerLife(float DeltaTime)
+void CPlayer2D::UpdatePlayerLife()
 {
 	if (m_HP != m_PrevHP)
-		m_PlayerUI->SetHPPercent(m_HP / m_HPMax);
+		m_PlayerUI->SetPercent(m_HP / m_HPMax);
 }
 
 void CPlayer2D::UpdateAttackCoolDown(float DeltaTime)
@@ -692,7 +682,7 @@ void CPlayer2D::UpdateGun()
 	switch (m_WeaponSlot)
 	{
 	case Weapon_Slot::Pistol:
-		
+
 		if ((180.999f >= m_MouseAngle && m_MouseAngle > 90.999f) ||
 			(-180.999f <= m_MouseAngle && m_MouseAngle < -90.999f))
 		{
@@ -704,7 +694,7 @@ void CPlayer2D::UpdateGun()
 			m_Weapon1->SetRender(true);
 			m_CurWeapon = m_Weapon1;
 		}
-		
+
 		break;
 	case Weapon_Slot::Rifle:
 		if ((180.999f >= m_MouseAngle && m_MouseAngle > 90.999f) ||

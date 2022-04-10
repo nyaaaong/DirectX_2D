@@ -285,7 +285,7 @@ public:
 		if (!m_RootComponent)
 			return;
 
-		m_RootComponent->SetRelativePos(Pos);
+		m_RootComponent->SetRelativePos(Pos.x, Pos.y, 0.f);
 	}
 
 	void SetRelativePos(float x, float y, float z)
@@ -357,7 +357,7 @@ public:
 		if (!m_RootComponent)
 			return;
 
-		m_RootComponent->AddRelativePos(Pos);
+		m_RootComponent->AddRelativePos(Pos.x, Pos.y, 0.f);
 	}
 
 	void AddRelativePos(float x, float y, float z)
@@ -533,7 +533,7 @@ public:
 		if (!m_RootComponent)
 			return;
 
-		m_RootComponent->SetWorldPos(Pos);
+		m_RootComponent->SetWorldPos(Pos.x, Pos.y, 0.f);
 	}
 
 	void SetWorldPos(float x, float y, float z)
@@ -605,7 +605,7 @@ public:
 		if (!m_RootComponent)
 			return;
 
-		m_RootComponent->AddWorldPos(Pos);
+		m_RootComponent->AddWorldPos(Pos.x, Pos.y, 0.f);
 	}
 
 	void AddWorldPos(float x, float y, float z)

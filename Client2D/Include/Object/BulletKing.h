@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Monster.h"
+#include "Component/WidgetComponent.h"
 
 class CBulletKing :
-    public CMonster
+	public CMonster
 {
 	friend class CScene;
 
@@ -13,6 +14,8 @@ protected:
 	virtual ~CBulletKing();
 
 private:
+	CSharedPtr<CWidgetComponent>	m_BossWidget;
+	class CBossWidget*				m_BossUI;
 	//float	m_BulletAngle;
 	//float	m_arrAngle[4];
 	//Vector3	m_arrDir[4];
@@ -34,5 +37,8 @@ protected:
 	virtual void DestroyBefore();
 	virtual void PlaySoundDie();
 	virtual void Attack(float DeltaTime);
+
+private:
+	void UpdateStatus();
 };
 

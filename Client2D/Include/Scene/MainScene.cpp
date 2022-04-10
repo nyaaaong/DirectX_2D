@@ -1,12 +1,12 @@
 
 #include "MainScene.h"
-#include "Device.h"
+#include "LoadingScene.h"
 #include "Public.h"
 #include "Input.h"
 #include "Scene/Scene.h"
+#include "Scene/SceneManager.h"
 #include "Scene/SceneResource.h"
 #include "Scene/Viewport.h"
-#include "Resource/Particle/Particle.h"
 #include "../Object/Player2D.h"
 #include "../Object/BulletKin.h"
 #include "../Object/Bandana.h"
@@ -16,7 +16,10 @@
 #include "../Object/Dummy.h"
 
 CMainScene::CMainScene()	:
-	m_TileMap(nullptr)
+	m_BossMonster(nullptr),
+	m_IsBossRoom(false),
+	m_BossClear(false),
+	m_NeedUpdateSound(false)
 {
 	SetTypeID<CMainScene>();
 }
@@ -24,6 +27,8 @@ CMainScene::CMainScene()	:
 CMainScene::~CMainScene()
 {
 	m_Scene->GetResource()->SoundStop("Main");
+	m_Scene->GetResource()->SoundStop("Boss");
+	m_Scene->GetResource()->SoundStop("BossClear");
 }
 
 void CMainScene::Start()
@@ -61,7 +66,7 @@ bool CMainScene::Init()
 
 	std::vector<Vector3>	vecObjectPos;
 
-	for (int i = (int)Object_Type::M_BulletKin; i <= (int)Object_Type::S_NextScene; ++i)
+	for (int i = 0; i < (int)Object_Type::Max; ++i)
 	{
 		vecObjectPos.clear();
 
@@ -88,24 +93,40 @@ bool CMainScene::Init()
 				Obj = m_Scene->CreateGameObject<CShotgunKin2>("M_ShotgunKin2");
 				break;
 			case Object_Type::P_PlayerPos:
-				Player->SetWorldPos(vecObjectPos[j] + TileCenterSize);
+				Obj = Player;
 				break;
 			case Object_Type::B_BulletKing:
-				Obj = m_Scene->CreateGameObject<CBulletKing>("B_BulletKing");
+				m_BossMonster = m_Scene->CreateGameObject<CBulletKing>("B_BulletKing");
+				m_BossMonster->Disable();
+				Obj = m_BossMonster;
 				break;
-			case Object_Type::S_NextScene:
-				Obj = m_Scene->CreateGameObject<CDummy>("S_NextScene");
+			case Object_Type::TP_BossRoomStart:
+				Obj = m_Scene->CreateGameObject<CDummy>("TP_BossRoomStart");
 				{
-					CDummy* NextScene = (CDummy*)Obj;
-					NextScene->SetExtent(TileCenterSize.x, TileCenterSize.y);
-					NextScene->SetCollisionProfile("NextScene");
-					NextScene->SetPivot(0.5f, 0.5f, 0.f);
+					CDummy* BossRoomStart = (CDummy*)Obj;
+					BossRoomStart->SetExtent(TileCenterSize.x, TileCenterSize.y);
+					BossRoomStart->SetCollisionProfile("BossRoomStart");
+					BossRoomStart->SetPivot(0.5f, 0.5f, 0.f);
+				}
+				break;
+			case Object_Type::TP_BossRoomEnd:
+				Obj = m_Scene->CreateGameObject<CDummy>("TP_BossRoomEnd");
+				{
+					CDummy* BossRoomEnd = (CDummy*)Obj;
+					BossRoomEnd->SetExtent(TileCenterSize.x, TileCenterSize.y);
+					BossRoomEnd->SetCollisionProfile("BossRoomEnd");
+					BossRoomEnd->SetPivot(0.5f, 0.5f, 0.f);
 				}
 				break;
 			}
 
-			if ((Object_Type)i != Object_Type::P_PlayerPos)
+			if (Obj)
+			{
 				Obj->SetWorldPos(vecObjectPos[j] + TileCenterSize); // 타일 중앙으로 위치하게 한다.
+
+				if (i == (int)Object_Type::TP_BossRoomEnd)
+					m_BossRoomEndWorldPos = Obj->GetWorldPos();
+			}
 		}
 	}
 
@@ -117,18 +138,34 @@ bool CMainScene::Init()
 		m_LoadingFunction(false, 0.7f);
 
 	CInput::GetInst()->SetKeyCallback<CMainScene>("ToggleCollider", KeyState_Down, this, &CMainScene::ToggleCollider);
+	CInput::GetInst()->SetKeyCallback<CMainScene>("CheatMoveBossRoom", KeyState_Down, this, &CMainScene::CheatMoveBossRoom);
 
 	return true;
 }
 
 void CMainScene::Update(float DeltaTime)
 {
-	CSceneMode::Update(DeltaTime);
+	UpdateSound(DeltaTime);
+	UpdateBoss(DeltaTime);
+}
+
+void CMainScene::SetBossRoom()
+{
+	m_IsBossRoom = true;
+
+	m_NeedUpdateSound = true;
+
+	if (m_BossRoomEndWorldPos.x == 0.f && m_BossRoomEndWorldPos.y == 0.f)
+		ASSERT("if (m_BossRoomEndWorldPos.x == 0.f && m_BossRoomEndWorldPos.y == 0.f)");
+
+	m_Scene->GetPlayerObject()->SetWorldPos(m_BossRoomEndWorldPos);
 }
 
 void CMainScene::CreateSound()
 {
 	m_Scene->GetResource()->LoadSound("BGM", true, "Main", "BGM/Main.mp3");
+	m_Scene->GetResource()->LoadSound("BGM", true, "Boss", "BGM/Boss.mp3");
+	m_Scene->GetResource()->LoadSound("BGM", true, "BossClear", "BGM/BossClear.mp3");
 
 	m_Scene->GetResource()->LoadSound("Effect", false, "Pistol", "Weapon/Shot/Pistol.wav");
 	m_Scene->GetResource()->LoadSound("Effect", false, "Rifle", "Weapon/Shot/Rifle.wav");
@@ -151,7 +188,59 @@ void CMainScene::CreateSound()
 	m_Scene->GetResource()->LoadSound("Effect", false, "BulletKin_Die4", "Monster/BulletKin/Die4.wav");
 }
 
+void CMainScene::UpdateSound(float DeltaTime)
+{
+	if (!m_NeedUpdateSound)
+		return;
+
+	else
+	{
+		if (m_IsBossRoom)
+		{
+			m_Scene->GetResource()->SoundStop("Main");
+
+			if (!m_BossClear)
+				m_Scene->GetResource()->SoundPlay("Boss");
+
+			else
+			{
+				m_Scene->GetResource()->SoundStop("Boss");
+				m_Scene->GetResource()->SoundPlay("BossClear");
+			}
+
+			m_NeedUpdateSound = false;
+		}
+	}
+}
+
+void CMainScene::UpdateBoss(float DeltaTime)
+{
+	if (m_IsBossRoom)
+	{
+		if (m_BossMonster)
+		{
+			if (!m_BossMonster->IsEnable())
+				m_BossMonster->Enable(true);
+		}
+
+		else
+		{
+			if (!m_BossClear)
+			{
+				m_BossClear = true;
+
+				m_NeedUpdateSound = true;
+			}
+		}
+	}
+}
+
 void CMainScene::ToggleCollider(float DeltaTime)
 {
 	CEngine::GetInst()->SetToggleCollider();
+}
+
+void CMainScene::CheatMoveBossRoom(float DeltaTime)
+{
+	SetBossRoom();
 }

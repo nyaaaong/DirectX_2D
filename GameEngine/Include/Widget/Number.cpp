@@ -214,6 +214,7 @@ void CNumber::Render()
 		if (m_Info.Texture)
 		{
 			int	Frame = 0;
+
 			switch (m_Info.Texture->GetImageType())
 			{
 			case Image_Type::Atlas:
@@ -232,7 +233,7 @@ void CNumber::Render()
 				m_CBuffer->SetStartUV(StartUV);
 				m_CBuffer->SetEndUV(EndUV);
 			}
-				break;
+			break;
 			case Image_Type::Frame:
 				Frame = m_vecNumber[i];
 

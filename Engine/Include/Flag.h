@@ -117,8 +117,8 @@ enum class Collision_Channel
 	PlayerAttack,
 	MonsterAttack,
 	Item,
-	NextScene,
-	Custom4,
+	BossRoomStart,
+	BossRoomEnd,
 	Custom5,
 	Custom6,
 	Custom7,
@@ -225,15 +225,15 @@ enum class Tile_Type
 	M_ShotgunKin2,
 	P_PlayerPos,
 	B_BulletKing,
-	S_NextScene,
-	Test4,
+	TP_BossRoomStart,
+	TP_BossRoomEnd,
 	Test5,
 	Test6,
 	Test7,
 	Test8,
 	Test9,
 	Test10,
-	End
+	Max
 };
 
 enum class Nav_Node_Type
@@ -302,6 +302,7 @@ enum class Bullet_Type
 	Pistol,
 	Rifle,
 	Shotgun,
+	ShotgunKin2Die,
 	Max
 };
 
@@ -313,8 +314,8 @@ enum class Object_Type
 	M_ShotgunKin2,
 	P_PlayerPos,
 	B_BulletKing,
-	S_NextScene,
-	Test4,
+	TP_BossRoomStart,
+	TP_BossRoomEnd,
 	Test5,
 	Test6,
 	Test7,
@@ -351,7 +352,6 @@ enum class Item_Type
 enum class SceneMode_Type
 {
 	Main,
-	Boss,
 	Ending,
 	Max
 };

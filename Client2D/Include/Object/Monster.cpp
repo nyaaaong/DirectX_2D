@@ -29,18 +29,20 @@ CMonster::CMonster() :
 	m_Move(false),
 	m_CanUpdate(false),
 	m_UseDropItem(true),
-	m_arrDropItem{true}
+	m_UseGun(true),
+	m_UsePattern(false)
 {
 	SetTypeID<CMonster>();
 
 	m_Type = Character_Type::Monster;
+
+	memset(m_arrDropItem, 1, sizeof(bool) * (size_t)DropItem_Type::Max);
 }
 
 CMonster::CMonster(const CMonster& obj) :
 	CCharacter(obj),
 	m_BurnStartDelay(0.f),
-	m_PatternTimer(0.f),
-	m_arrDropItem{ true }
+	m_PatternTimer(0.f)
 {
 	SetTypeID<CMonster>();
 
@@ -71,8 +73,12 @@ CMonster::CMonster(const CMonster& obj) :
 	m_Move = false;
 
 	m_UseDropItem = obj.m_UseDropItem;
+	m_UseGun = obj.m_UseGun;
+	m_UsePattern = obj.m_UsePattern;
 
 	m_UpdateSight = obj.m_UpdateSight;
+
+	memset(m_arrDropItem, 1, sizeof(bool) * (size_t)DropItem_Type::Max);
 }
 
 CMonster::~CMonster()
@@ -120,6 +126,8 @@ bool CMonster::Init()
 
 	m_PaperBurn->SetFinishCallback(this, &CMonster::Destroy);
 
+	m_AttackDelay = m_AttackDelayMax;
+
 	return true;
 }
 
@@ -144,7 +152,7 @@ void CMonster::Destroy()
 
 void CMonster::OnCollisionBegin(const CollisionResult& result)
 {
-	if (result.Dest->GetCollisionProfile()->Name == "Player")
+	if (result.Dest->GetCollisionProfile()->Channel == Collision_Channel::Player)
 	{
 		CPlayer2D* Player = (CPlayer2D*)result.Dest->GetGameObject();
 
@@ -168,15 +176,6 @@ void CMonster::Calc(float DeltaTime)
 	CCharacter::Calc(DeltaTime);
 
 	CSceneMode* SceneMode = m_Scene->GetSceneMode();
-	CMainScene* MainScene = dynamic_cast<CMainScene*>(SceneMode);
-
-	if (!MainScene)
-		ASSERT("if (!MainScene)");
-
-	char	Text[256] = {};
-	sprintf_s(Text, "m_PlayerDir : %.1f, %.1f", m_PlayerDir.x, m_PlayerDir.y);
-
-	MainScene->SetWidgetText(Text);
 
 	m_PlayerWorldPos = m_Player->GetWorldPos();
 
@@ -200,8 +199,11 @@ void CMonster::Calc(float DeltaTime)
 	if (!m_IsDied)
 		m_State = Monster_State::Idle;
 
-	UpdateDropItemType();
-	UpdateGun();
+	if (m_UseDropItem)
+		UpdateDropItemType();
+
+	if (m_UseGun)
+		UpdateGun();
 }
 
 void CMonster::PaperBurnEnd()
@@ -220,10 +222,13 @@ void CMonster::Dead(float DeltaTime)
 		m_IsDied = true;
 
 		m_HP = 0.f;
+
 		m_Body->Enable(false);
-		m_Body->SetRender(false);
 		
 		m_State = Monster_State::Die;
+
+		if (m_UseGun)
+			HideAllWeapon();
 	}
 
 	if (m_UsePaperburn)
@@ -244,7 +249,8 @@ void CMonster::Dead(float DeltaTime)
 
 				m_Sprite->SetOpacity(0.5f);
 
-				DropItem();
+				if (m_UseDropItem)
+					DropItem();
 			}
 		}
 	}
@@ -259,7 +265,8 @@ void CMonster::Dead(float DeltaTime)
 			{
 				m_Sprite->GetAnimationInstance()->Stop();
 
-				DropItem();
+				if (m_UseDropItem)
+					DropItem();
 
 				Destroy();
 			}
@@ -300,14 +307,20 @@ void CMonster::DestroyBefore()
 
 void CMonster::HideAllWeapon()
 {
-	m_Weapon->SetRender(false);
-	m_WeaponL->SetRender(false);
+	if (m_Weapon)
+		m_Weapon->Enable(false);
+
+	if (m_WeaponL)
+		m_WeaponL->Enable(false);
 
 	m_CurWeapon = nullptr;
 }
 
 void CMonster::UpdateGun()
 {
+	if (!m_UseGun)
+		return;
+
 	HideAllWeapon();
 
 	if (m_IsDied)
@@ -379,9 +392,6 @@ void CMonster::UpdateMove(float DeltaTime)
 
 void CMonster::DropItem()
 {
-	if (!m_UseDropItem)
-		return;
-
 	std::vector<DropItem_Type>	vecRandItem;
 
 	for (int i = 0; i < (int)DropItem_Type::Max; ++i)
@@ -411,19 +421,19 @@ void CMonster::CreateItem(DropItem_Type Type)
 		CItemRifle* NewItem = m_Scene->CreateGameObject<CItemRifle>("Rifle");
 		NewItem->SetWorldPos(GetWorldPos());
 	}
-		break;
+	break;
 	case DropItem_Type::Sniper:
 	{
 		CItemSniper* NewItem = m_Scene->CreateGameObject<CItemSniper>("Sniper");
 		NewItem->SetWorldPos(GetWorldPos());
-	}		
-		break;
+	}
+	break;
 	case DropItem_Type::Life:
 	{
 		CItemLife* NewItem = m_Scene->CreateGameObject<CItemLife>("Life");
 		NewItem->SetWorldPos(GetWorldPos());
 	}
-		break;
+	break;
 	}
 }
 

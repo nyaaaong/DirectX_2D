@@ -32,6 +32,7 @@ protected:
 	bool	m_Hit;
 	bool	m_IsPlayedHitSound;
 	bool	m_UsePaperburn;
+	bool	m_Invincibility;
 	Character_Type	m_Type;
 
 public:
@@ -46,6 +47,16 @@ public:
 	virtual void OnCollisionEnd(const CollisionResult& result);
 
 public:
+	bool IsInvincibility()	const
+	{
+		return m_Invincibility;
+	}
+
+	bool IsHit()	const
+	{
+		return m_Hit;
+	}
+
 	Character_Type GetType()	const
 	{
 		return m_Type;
@@ -57,7 +68,7 @@ public:
 	}
 
 public:
-	void AddDamage(float Damage)
+	virtual bool AddDamage(float Damage)
 	{
 		m_PrevHP = m_HP;
 		m_HP -= Damage;
@@ -73,6 +84,8 @@ public:
 			if (m_HP <= 0.f)
 				m_HP = 0.f;
 		}
+
+		return true;
 	}
 
 	void AddHP(float HP)

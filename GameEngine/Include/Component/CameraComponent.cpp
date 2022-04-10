@@ -131,7 +131,6 @@ void CCameraComponent::CreateProjectionMatrix()
 		m_matProj = XMMatrixOrthographicOffCenterLH(0.f, (float)m_RS.Width, 0.f, (float)m_RS.Height, 0.f, 1000.f);
 		break;
 	}
-
 }
 
 void CCameraComponent::LimitCheck()

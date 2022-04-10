@@ -8,14 +8,14 @@ class CExcel_Player :
 	friend class CExcelManager;
 
 private:
-	CharacterInfo	m_PlayerInfo;
+	PlayerInfo	m_PlayerInfo;
 
 protected:
 	CExcel_Player();
 	virtual ~CExcel_Player();
 
 public:
-	const CharacterInfo&	GetPlayerInfo()	const
+	const PlayerInfo&	GetPlayerInfo()	const
 	{
 		return m_PlayerInfo;
 	}

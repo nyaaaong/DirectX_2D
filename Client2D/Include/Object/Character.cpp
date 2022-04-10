@@ -21,7 +21,8 @@ CCharacter::CCharacter() :
 	m_MoveSpeed(300.f),
 	m_Type(Character_Type::Max),
 	m_TopOffsetY(1.f),
-	m_BottomOffsetY(1.f)
+	m_BottomOffsetY(1.f),
+	m_Invincibility(false)
 {
 }
 
@@ -46,6 +47,8 @@ CCharacter::CCharacter(const CCharacter& obj) :
 
 	m_TopOffsetY = obj.m_TopOffsetY;
 	m_BottomOffsetY = obj.m_BottomOffsetY;
+
+	m_Invincibility = obj.m_Invincibility;
 }
 
 CCharacter::~CCharacter()

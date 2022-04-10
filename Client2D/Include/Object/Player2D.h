@@ -24,6 +24,7 @@ private:
 	CSharedPtr<CSpriteComponent>	m_Weapon3L;
 	CSharedPtr<CWidgetComponent>	m_PlayerWidget;
 	class CPlayerWidget*			m_PlayerUI;
+	class CMainScene*				m_MainScene;
 	CSpriteComponent*	m_CurWeapon;
 	Vector3	m_PrevPos;
 	Weapon_Slot	m_WeaponSlot;
@@ -36,7 +37,6 @@ private:
 	bool	m_HasRifle;
 	bool	m_HasSniper;
 	bool	m_Invisible;
-	bool	m_Invincibility;
 	float   m_Opacity;
 	float	m_AttackDelay;
 	float	m_AttackDelayMax;
@@ -52,11 +52,12 @@ private:
 	int		m_MoveDir;
 
 public:
-	bool IsInvincibility()	const
+	void SetEnableInput(bool Enable)
 	{
-		return m_Invincibility;
+		m_EnableInput = Enable;
 	}
 
+public:
 	bool HasWeaponRifle()	const
 	{
 		return m_HasRifle;
@@ -96,11 +97,6 @@ public:
 	void AddWeaponRifle();
 	void AddWeaponSniper();
 
-	void SetEnableInput(bool Enable)
-	{
-		m_EnableInput = Enable;
-	}
-
 public:
 	virtual void Start();
 	virtual void Calc(float DeltaTime);
@@ -112,6 +108,9 @@ public:
 
 public:
 	virtual void OnCollisionBegin(const CollisionResult& result);
+
+public:
+	virtual bool AddDamage(float Damage);
 
 private:
 	void MoveUp(float DeltaTime);
@@ -136,7 +135,7 @@ public:
 	void DeleteMoveDir(Character_Direction Dir);
 
 private:
-	void UpdatePlayerLife(float DeltaTime);
+	void UpdatePlayerLife();
 	void UpdateAttackCoolDown(float DeltaTime);
 	void UpdateDodgeCoolDown(float DeltaTime);
 	void UpdateMouseAngle();

@@ -198,18 +198,18 @@ void CEditorManager::MouseLButtonDown(float DeltaTime)
 
 	switch (m_SpriteWindow->GetCaptureMode())
 	{
-		case EM_CAPTURE:
-		{
-			m_DragObj->SetStartPos(MousePos);
-			break;
-		}
-		case EM_DRAG:
-		{
-			m_CurMousePos = Vector3(MousePos.x, MousePos.y, 0.f);
-			m_PrevMousePos = m_CurMousePos;
-			break;
-		}
-	}	
+	case EM_CAPTURE:
+	{
+		m_DragObj->SetStartPos(MousePos);
+		break;
+	}
+	case EM_DRAG:
+	{
+		m_CurMousePos = Vector3(MousePos.x, MousePos.y, 0.f);
+		m_PrevMousePos = m_CurMousePos;
+		break;
+	}
+	}
 }
 
 void CEditorManager::MouseLButtonPush(float DeltaTime)

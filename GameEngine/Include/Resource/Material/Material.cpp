@@ -470,13 +470,9 @@ void CMaterial::Load(FILE* File)
 		}
 
 		if (m_Scene)
-		{
 			m_TextureInfo[i].Texture = m_Scene->GetResource()->FindTexture(TexName);
-		}
 
 		else
-		{
 			m_TextureInfo[i].Texture = CResourceManager::GetInst()->FindTexture(TexName);
-		}
 	}
 }

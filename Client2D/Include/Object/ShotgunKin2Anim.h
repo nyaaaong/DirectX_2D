@@ -3,7 +3,7 @@
 #include "MonsterAnim.h"
 
 class CShotgunKin2Anim :
-    public CMonsterAnim
+	public CMonsterAnim
 {
 public:
 	CShotgunKin2Anim();

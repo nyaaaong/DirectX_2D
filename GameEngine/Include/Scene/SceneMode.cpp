@@ -34,6 +34,8 @@ bool CSceneMode::Init()
 		m_MonsterInfo[i] = CExcelManager::GetInst()->GetMonsterInfo(i);
 	}
 
+	m_BulletKingInfo = CExcelManager::GetInst()->GetBulletKingInfo();
+
 	return true;
 }
 

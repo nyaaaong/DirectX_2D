@@ -38,7 +38,8 @@ bool CEditorMenu::Init()
 	m_ObjectCombo->AddItem("Monster : ShotgunKin2");
 	m_ObjectCombo->AddItem("Player : PlayerPos");
 	m_ObjectCombo->AddItem("Boss : BulletKing");
-	m_ObjectCombo->AddItem("Scene : NextScene");
+	m_ObjectCombo->AddItem("Teleport : BossRoomStart");
+	m_ObjectCombo->AddItem("Teleport : BossRoomEnd");
 
 	CIMGUISameLine* Line = AddWidget<CIMGUISameLine>("Line");
 
@@ -99,9 +100,13 @@ void CEditorMenu::ObjectCreateButton()
 		Name = "B_BulletKing";
 		Type = Object_Type::B_BulletKing;
 		break;
-	case CreateObject_Type::S_NextScene:
-		Name = "S_NextScene";
-		Type = Object_Type::S_NextScene;
+	case CreateObject_Type::TP_BossRoomStart:
+		Name = "TP_BossRoomStart";
+		Type = Object_Type::TP_BossRoomStart;
+		break;
+	case CreateObject_Type::TP_BossRoomEnd:
+		Name = "TP_BossRoomEnd";
+		Type = Object_Type::TP_BossRoomEnd;
 		break;
 	}
 
@@ -144,8 +149,11 @@ void CEditorMenu::ObjectDeleteButton()
 	case Object_Type::B_BulletKing:
 		Name = "B_BulletKing";
 		break;
-	case Object_Type::S_NextScene:
-		Name = "S_NextScene";
+	case Object_Type::TP_BossRoomStart:
+		Name = "TP_BossRoomStart";
+		break;
+	case Object_Type::TP_BossRoomEnd:
+		Name = "TP_BossRoomEnd";
 		break;
 	}
 

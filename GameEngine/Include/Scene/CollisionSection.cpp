@@ -54,6 +54,11 @@ void CCollisionSection::Collision(float DeltaTime)
 	{
 		CColliderComponent* Src = m_vecCollider[i];
 
+		CollisionProfile* SrcProfile = Src->GetCollisionProfile();
+
+		if (SrcProfile->Channel == Collision_Channel::PlayerAttack)
+			int a = 0;
+
 		for (size_t j = i + 1; j < Count; ++j)
 		{
 			CColliderComponent* Dest = m_vecCollider[j];
@@ -61,8 +66,11 @@ void CCollisionSection::Collision(float DeltaTime)
 			if (Src->CheckCurrentFrameCollision(Dest))
 				continue;
 
-			CollisionProfile* SrcProfile = Src->GetCollisionProfile();
 			CollisionProfile* DestProfile = Dest->GetCollisionProfile();
+
+			if ((SrcProfile->Channel == Collision_Channel::PlayerAttack && DestProfile->Channel == Collision_Channel::Monster) ||
+				(SrcProfile->Channel == Collision_Channel::Monster && DestProfile->Channel == Collision_Channel::PlayerAttack))
+				int a = 0;
 
 			if (SrcProfile->vecInteraction[(int)DestProfile->Channel] == Collision_Interaction::Ignore &&
 				DestProfile->vecInteraction[(int)SrcProfile->Channel] == Collision_Interaction::Ignore)
@@ -70,6 +78,10 @@ void CCollisionSection::Collision(float DeltaTime)
 
 			if (Src->Collision(Dest))
 			{
+				if ((SrcProfile->Channel == Collision_Channel::PlayerAttack && DestProfile->Channel == Collision_Channel::Monster) ||
+					(SrcProfile->Channel == Collision_Channel::Monster && DestProfile->Channel == Collision_Channel::PlayerAttack))
+					int a = 0;
+
 				// 지금 충돌이 된건지를 판단한다.
 				// 즉, 이전 프레임에 충돌된 목록에 없다면 지금 막 충돌이 시작된 것이다.
 				if (!Src->CheckPrevCollision(Dest))

@@ -61,6 +61,7 @@ bool CClientManager::Init(HINSTANCE hInst)
 	CInput::GetInst()->CreateKey("Weapon2", '3');
 	CInput::GetInst()->CreateKey("Weapon3", '4');
 	CInput::GetInst()->CreateKey("ToggleCollider", VK_F8);
+	CInput::GetInst()->CreateKey("CheatMoveBossRoom", VK_F9);
 
 	CResourceManager::GetInst()->CreateSoundChannelGroup("UI");
 	CResourceManager::GetInst()->SetVolume("UI", 10);

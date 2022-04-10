@@ -60,6 +60,7 @@ bool CPathManager::Init()
 
 	AddPath(SHADER_PATH, TEXT("Shader\\"));
 	AddPath(TEXTURE_PATH, TEXT("Texture\\"));
+	AddPath(MAP_PATH, TEXT("Texture\\Map\\"));
 	AddPath(EXCEL_PATH, TEXT("Excel\\"));
 	AddPath(FONT_PATH, TEXT("Font\\"));
 	AddPath(ANIMATION_PATH, TEXT("Animation\\"));

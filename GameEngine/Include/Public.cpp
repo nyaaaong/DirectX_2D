@@ -44,8 +44,11 @@ Object_Type CPublic::GetMultibyteToType(const char* Multibyte)
 	else if (!strcmp(Multibyte, "B_BulletKing"))
 		return Object_Type::B_BulletKing;
 
-	else if (!strcmp(Multibyte, "S_NextScene"))
-		return Object_Type::S_NextScene;
+	else if (!strcmp(Multibyte, "TP_BossRoomStart"))
+		return Object_Type::TP_BossRoomStart;
+
+	else if (!strcmp(Multibyte, "TP_BossRoomEnd"))
+		return Object_Type::TP_BossRoomEnd;
 
 	return Object_Type::Max;
 }
@@ -81,8 +84,11 @@ void CPublic::GetObjectName(std::vector<std::string>& vecName)
 		case Object_Type::B_BulletKing:
 			vecName.push_back("B_BulletKing");
 			break;
-		case Object_Type::S_NextScene:
-			vecName.push_back("S_NextScene");
+		case Object_Type::TP_BossRoomStart:
+			vecName.push_back("TP_BossRoomStart");
+			break;
+		case Object_Type::TP_BossRoomEnd:
+			vecName.push_back("TP_BossRoomEnd");
 			break;
 		}
 	}
@@ -114,7 +120,7 @@ void CPublic::GetObjectPos(Object_Type Type, std::vector<Vector3>& vecPos)
 	}
 }
 
-bool CPublic::GetPlayerPos(Vector3& PlayerPos)
+bool CPublic::GetPlayerPos(Vector3& OutputPos)
 {
 	auto	iter = m_mapObject.find(Object_Type::P_PlayerPos);
 
@@ -124,8 +130,23 @@ bool CPublic::GetPlayerPos(Vector3& PlayerPos)
 	if (iter->second->empty())
 		return false;
 
-	PlayerPos = iter->second->front();
+	OutputPos = iter->second->front();
 	
+	return true;
+}
+
+bool CPublic::GetBossRoomEndPos(Vector3& OutputPos)
+{
+	auto	iter = m_mapObject.find(Object_Type::TP_BossRoomEnd);
+
+	if (iter == m_mapObject.end())
+		ASSERT("if (iter == m_mapObject.end())");
+
+	if (iter->second->empty())
+		return false;
+
+	OutputPos = iter->second->front();
+
 	return true;
 }
 
@@ -180,6 +201,11 @@ void CPublic::ClearPlayerWorldPos()
 	ClearObjectWorldPos(Object_Type::P_PlayerPos);
 }
 
+void CPublic::ClearBossRoomEndWorldPos()
+{
+	ClearObjectWorldPos(Object_Type::TP_BossRoomEnd);
+}
+
 void CPublic::ClearAllObjectWorldPos()
 {
 	auto	iter = m_mapObject.begin();
@@ -210,7 +236,7 @@ bool CPublic::CreateObjectType(Object_Type Type)
 	if (FindObjectType(Type))
 		return true;
 
-	else if (Type <= Object_Type::S_NextScene)
+	else if (Type < Object_Type::Max)
 	{
 		std::list<Vector3>* NewObjPosList = DBG_NEW std::list<Vector3>;
 
@@ -225,7 +251,7 @@ void CPublic::DeleteObjectType(Object_Type Type)
 	if (!FindObjectType(Type))
 		return;
 
-	else if (Type <= Object_Type::S_NextScene)
+	else if (Type < Object_Type::Max)
 	{
 		auto	iter = m_mapObject.find(Type);
 
@@ -362,7 +388,7 @@ void CPublic::LoadObjPos(CGameObject* TileMapObj)
 	std::vector<CTile*>	vecTypeTile;
 	std::vector<CTile*> vecObjTypeTile;
 
-	int TypeSize = (int)Tile_Type::End;
+	int TypeSize = (int)Tile_Type::Max;
 
 	for (int i = 0; i < TypeSize; ++i)
 	{
@@ -371,7 +397,7 @@ void CPublic::LoadObjPos(CGameObject* TileMapObj)
 
 		TileMapComponent->GetSameTypeTile((Tile_Type)i, vecTypeTile);
 
-		if (vecTypeTile.empty() || (Tile_Type)i <= Tile_Type::T_Wall || (Tile_Type)i > Tile_Type::S_NextScene)
+		if (vecTypeTile.empty() || (Tile_Type)i <= Tile_Type::T_Wall || (Tile_Type)i >= Tile_Type::Max)
 			continue;
 
 		int Size = (int)vecTypeTile.size();
@@ -434,13 +460,22 @@ void CPublic::LoadObjPos(CGameObject* TileMapObj)
 					iter = m_mapObject.find(Object_Type::B_BulletKing);
 				}
 				break;
-			case Tile_Type::S_NextScene:
-				iter = m_mapObject.find(Object_Type::S_NextScene);
+			case Tile_Type::TP_BossRoomStart:
+				iter = m_mapObject.find(Object_Type::TP_BossRoomStart);
 
 				if (iter == m_mapObject.end())
 				{
-					CreateObjectType(Object_Type::S_NextScene);
-					iter = m_mapObject.find(Object_Type::S_NextScene);
+					CreateObjectType(Object_Type::TP_BossRoomStart);
+					iter = m_mapObject.find(Object_Type::TP_BossRoomStart);
+				}
+				break;
+			case Tile_Type::TP_BossRoomEnd:
+				iter = m_mapObject.find(Object_Type::TP_BossRoomEnd);
+
+				if (iter == m_mapObject.end())
+				{
+					CreateObjectType(Object_Type::TP_BossRoomEnd);
+					iter = m_mapObject.find(Object_Type::TP_BossRoomEnd);
 				}
 				break;
 			}

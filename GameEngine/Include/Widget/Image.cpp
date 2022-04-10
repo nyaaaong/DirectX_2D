@@ -230,7 +230,6 @@ void CImage::Render()
 		case Image_Type::Array:
 			break;
 		}
-
 	}
 
 	else

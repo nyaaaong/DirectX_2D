@@ -149,12 +149,12 @@ CTile* CTileMap::GetTile(int Index) const
 Tile_Type CTileMap::GetTileType(const Vector3& Pos) const
 {
 	if (!m_TileMapComponent)
-		return Tile_Type::End;
+		return Tile_Type::Max;
 
 	CTile* Tile = m_TileMapComponent->GetTile(Pos);
 
 	if (!Tile)
-		return Tile_Type::End;
+		return Tile_Type::Max;
 
 	return Tile->GetTileType();
 }
@@ -167,12 +167,12 @@ Tile_Type CTileMap::GetTileType(const Vector2& Pos) const
 Tile_Type CTileMap::GetTileType(int x, int y) const
 {
 	if (!m_TileMapComponent)
-		return Tile_Type::End;
+		return Tile_Type::Max;
 
 	CTile* Tile = m_TileMapComponent->GetTile(x, y);
 
 	if (!Tile)
-		return Tile_Type::End;
+		return Tile_Type::Max;
 
 	return Tile->GetTileType();
 }
@@ -180,12 +180,12 @@ Tile_Type CTileMap::GetTileType(int x, int y) const
 Tile_Type CTileMap::GetTileType(int Index) const
 {
 	if (!m_TileMapComponent)
-		return Tile_Type::End;
+		return Tile_Type::Max;
 
 	CTile* Tile = m_TileMapComponent->GetTile(Index);
 
 	if (!Tile)
-		return Tile_Type::End;
+		return Tile_Type::Max;
 
 	return Tile->GetTileType();
 }

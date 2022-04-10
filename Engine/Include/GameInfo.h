@@ -76,6 +76,7 @@
 #define	ROOT_PATH	"Root"
 #define	SHADER_PATH	"Shader"
 #define	TEXTURE_PATH	"Texture"
+#define	MAP_PATH	"Map"
 #define	EXCEL_PATH	"Excel"
 #define	FONT_PATH		"Font"
 #define	ANIMATION_PATH	"Animation"
@@ -395,16 +396,44 @@ struct NavResultData
 	std::list<Vector3>	vecPath;
 };
 
-struct CharacterInfo
+struct PlayerInfo
+{
+	float	HP;
+	float	MoveSpeed;
+
+	PlayerInfo()	:
+		HP(10.f),
+		MoveSpeed(100.f)
+	{
+	}
+};
+
+struct MonsterInfo
+{
+	float	HP;
+	float	MoveSpeed;
+	float	Damage;
+	float	AttackDelayMax;
+
+	MonsterInfo() :
+		HP(10.f),
+		MoveSpeed(100.f),
+		Damage(1.f),
+		AttackDelayMax(1.f)
+	{
+	}
+};
+
+struct BossInfo
 {
 	float	HP;
 	float	MoveSpeed;
 	float	Damage;
 
-	CharacterInfo()	:
-		HP(30.f),
-		MoveSpeed(300.f),
-		Damage(3.f)
+	BossInfo() :
+		HP(100.f),
+		MoveSpeed(100.f),
+		Damage(1.f)
 	{
 	}
 };
