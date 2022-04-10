@@ -736,6 +736,9 @@
     <ClInclude Include="Excel\Character\Excel_Monster.h">
       <Filter>06. Excel\01. Character\01. Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="Excel\Character\Excel_BulletKing.h">
+      <Filter>06. Excel\01. Character\01. Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -1126,6 +1129,9 @@
       <Filter>00. Engine\09. Public</Filter>
     </ClCompile>
     <ClCompile Include="Excel\Character\Excel_Monster.cpp">
+      <Filter>06. Excel\01. Character\01. Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Excel\Character\Excel_BulletKing.cpp">
       <Filter>06. Excel\01. Character\01. Enemy</Filter>
     </ClCompile>
   </ItemGroup>

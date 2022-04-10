@@ -175,6 +175,7 @@
     <ClCompile Include="Object\BulletKin.cpp" />
     <ClCompile Include="Object\BulletKinAnim.cpp" />
     <ClCompile Include="Object\BulletKing.cpp" />
+    <ClCompile Include="Object\BulletKingAnim.cpp" />
     <ClCompile Include="Object\Character.cpp" />
     <ClCompile Include="Object\Dummy.cpp" />
     <ClCompile Include="Object\Item.cpp" />
@@ -192,10 +193,12 @@
     <ClCompile Include="Object\ShotgunKin2.cpp" />
     <ClCompile Include="Object\ShotgunKin2Anim.cpp" />
     <ClCompile Include="Object\TileMap.cpp" />
+    <ClCompile Include="Scene\EndingScene.cpp" />
     <ClCompile Include="Scene\LoadingScene.cpp" />
     <ClCompile Include="Scene\LoadingThread.cpp" />
     <ClCompile Include="Scene\MainScene.cpp" />
     <ClCompile Include="Scene\StartScene.cpp" />
+    <ClCompile Include="Widget\BossWidget.cpp" />
     <ClCompile Include="Widget\LoadingWidget.cpp" />
     <ClCompile Include="Widget\MainWidget.cpp" />
     <ClCompile Include="Widget\MouseCursor.cpp" />
@@ -213,6 +216,7 @@
     <ClInclude Include="Object\BulletKin.h" />
     <ClInclude Include="Object\BulletKinAnim.h" />
     <ClInclude Include="Object\BulletKing.h" />
+    <ClInclude Include="Object\BulletKingAnim.h" />
     <ClInclude Include="Object\Character.h" />
     <ClInclude Include="Object\Dummy.h" />
     <ClInclude Include="Object\Item.h" />
@@ -231,10 +235,12 @@
     <ClInclude Include="Object\ShotgunKin2Anim.h" />
     <ClInclude Include="Object\TileMap.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Scene\EndingScene.h" />
     <ClInclude Include="Scene\LoadingScene.h" />
     <ClInclude Include="Scene\LoadingThread.h" />
     <ClInclude Include="Scene\MainScene.h" />
     <ClInclude Include="Scene\StartScene.h" />
+    <ClInclude Include="Widget\BossWidget.h" />
     <ClInclude Include="Widget\LoadingWidget.h" />
     <ClInclude Include="Widget\MainWidget.h" />
     <ClInclude Include="Widget\MouseCursor.h" />
