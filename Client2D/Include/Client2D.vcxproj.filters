@@ -224,6 +224,9 @@
     <ClCompile Include="Object\BulletKingAnim.cpp">
       <Filter>01. Object\00. Character\01. Enemy\01. Boss</Filter>
     </ClCompile>
+    <ClCompile Include="Object\BulletKingChairAnim.cpp">
+      <Filter>01. Object\00. Character\01. Enemy\01. Boss</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object\Bullet.h">
@@ -344,6 +347,9 @@
       <Filter>02. UI\01. Scene\03. Loading</Filter>
     </ClInclude>
     <ClInclude Include="Object\BulletKingAnim.h">
+      <Filter>01. Object\00. Character\01. Enemy\01. Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\BulletKingChairAnim.h">
       <Filter>01. Object\00. Character\01. Enemy\01. Boss</Filter>
     </ClInclude>
   </ItemGroup>

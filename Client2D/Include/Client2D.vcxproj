@@ -176,6 +176,7 @@
     <ClCompile Include="Object\BulletKinAnim.cpp" />
     <ClCompile Include="Object\BulletKing.cpp" />
     <ClCompile Include="Object\BulletKingAnim.cpp" />
+    <ClCompile Include="Object\BulletKingChairAnim.cpp" />
     <ClCompile Include="Object\Character.cpp" />
     <ClCompile Include="Object\Dummy.cpp" />
     <ClCompile Include="Object\Item.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="Object\BulletKinAnim.h" />
     <ClInclude Include="Object\BulletKing.h" />
     <ClInclude Include="Object\BulletKingAnim.h" />
+    <ClInclude Include="Object\BulletKingChairAnim.h" />
     <ClInclude Include="Object\Character.h" />
     <ClInclude Include="Object\Dummy.h" />
     <ClInclude Include="Object\Item.h" />
