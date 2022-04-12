@@ -409,4 +409,11 @@ void CSceneComponent::Enable(bool Enable)
 	CComponent::Enable(Enable);
 
 	m_Render = Enable;
+
+	size_t	Size = m_vecChild.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		m_vecChild[i]->Enable(Enable);
+	}
 }

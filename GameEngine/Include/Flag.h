@@ -303,6 +303,10 @@ enum class Bullet_Type
 	Rifle,
 	Shotgun,
 	ShotgunKin2Die,
+	BulletKing_Pattern1,
+	BulletKing_Pattern2,
+	BulletKing_Pattern3,
+	BulletKing_Pattern4,
 	Max
 };
 
@@ -353,5 +357,19 @@ enum class SceneMode_Type
 {
 	Main,
 	Ending,
+	Max
+};
+
+enum class BulletKing_State
+{
+	Idle,
+	Die,
+	Die_End,
+	Pattern1,
+	Pattern2,
+	Pattern3_Start,
+	Pattern3_Progress,
+	Pattern3_End,
+	Pattern4,
 	Max
 };

@@ -20,7 +20,7 @@ CBulletDummy::~CBulletDummy()
 
 bool CBulletDummy::IsAnimEnd() const
 {
-	return m_Sprite->GetAnimationInstance()->IsEnd();
+	return m_Sprite->IsEnd();
 }
 
 bool CBulletDummy::Init()
@@ -59,7 +59,7 @@ void CBulletDummy::PostUpdate(float DeltaTime)
 {
 	CGameObject::PostUpdate(DeltaTime);
 
-	if (m_Sprite->GetAnimationInstance()->IsEnd())
+	if (m_Sprite->IsEnd())
 		Destroy();
 }
 

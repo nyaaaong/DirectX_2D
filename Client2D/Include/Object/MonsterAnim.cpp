@@ -5,7 +5,8 @@
 
 CMonsterAnim::CMonsterAnim()	:
 	m_OwnerObject(nullptr),
-	m_PlayDieAnim(false)
+	m_PlayDieAnim(false),
+	m_UseChangeDir(true)
 {
 	SetTypeID<CMonsterAnim>();
 }
@@ -17,6 +18,7 @@ CMonsterAnim::CMonsterAnim(const CMonsterAnim& Anim) :
 
 	m_OwnerObject = nullptr;
 	m_PlayDieAnim = false;
+	m_UseChangeDir = true;
 }
 
 CMonsterAnim::~CMonsterAnim()
@@ -50,7 +52,8 @@ void CMonsterAnim::Update(float DeltaTime)
 {
 	CAnimationSequence2DInstance::Update(DeltaTime);
 
-	ChangeAnimDir();
+	if (m_UseChangeDir)
+		ChangeAnimDir();
 }
 
 void CMonsterAnim::ChangeAnimDir()

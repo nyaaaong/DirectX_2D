@@ -33,6 +33,11 @@ private:
 	TCHAR	m_TileMapFullPath[MAX_PATH];
 
 public:
+	bool HasTileMapSprite()	const
+	{
+		return m_TileMapSprite;
+	}
+
 	CSharedPtr<CTileMapSprite> GetTileMapSprite()	const
 	{
 		return m_TileMapSprite;

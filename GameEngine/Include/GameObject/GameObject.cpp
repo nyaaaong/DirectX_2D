@@ -263,9 +263,12 @@ void CGameObject::Update(float DeltaTime)
 		{
 			CAnimationSequence2DData* Anim = m_AnimationInstance->GetCurrentAnimation();
 
+			if (!Anim)
+				ASSERT("if (!Anim)");
+
 			int Index = Anim->GetCurrentFrame();
 
-			m_AnimationSize = m_AnimationInstance->GetCurrentAnimation()->GetAnimationSequence()->GetFrameData(Index).Size;
+			m_AnimationSize = Anim->GetAnimationSequence()->GetFrameData(Index).Size;
 
 			m_Sprite->SetRelativeScale(m_AnimationSize.x, m_AnimationSize.y, 1.f);
 		}

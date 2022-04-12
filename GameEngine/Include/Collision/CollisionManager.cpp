@@ -40,6 +40,7 @@ bool CCollisionManager::Init()
 	SetCollisionState("Player", Collision_Channel::Player, Collision_Interaction::Ignore);
 	SetCollisionState("Player", Collision_Channel::PlayerAttack, Collision_Interaction::Ignore);
 	SetCollisionState("Player", Collision_Channel::AttackCheck, Collision_Interaction::Ignore);
+	SetCollisionState("Player", Collision_Channel::BossRoomEnd, Collision_Interaction::Ignore);
 
 	SetCollisionState("Monster", Collision_Channel::Player, Collision_Interaction::Ignore);
 	SetCollisionState("Monster", Collision_Channel::Monster, Collision_Interaction::Ignore);
@@ -95,6 +96,7 @@ bool CCollisionManager::Init()
 	SetCollisionState("BossRoomStart", Collision_Channel::BossRoomEnd, Collision_Interaction::Ignore);
 
 	SetCollisionState("BossRoomEnd", Collision_Channel::Object, Collision_Interaction::Ignore);
+	SetCollisionState("BossRoomEnd", Collision_Channel::Player, Collision_Interaction::Ignore);
 	SetCollisionState("BossRoomEnd", Collision_Channel::Monster, Collision_Interaction::Ignore);
 	SetCollisionState("BossRoomEnd", Collision_Channel::AttackCheck, Collision_Interaction::Ignore);
 	SetCollisionState("BossRoomEnd", Collision_Channel::PlayerAttack, Collision_Interaction::Ignore);

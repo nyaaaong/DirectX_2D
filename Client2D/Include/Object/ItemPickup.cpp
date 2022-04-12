@@ -36,7 +36,7 @@ void CItemPickup::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
 
-	if (m_Sprite->GetAnimationInstance()->IsEnd())
+	if (m_Sprite->IsEnd())
 	{
 		m_Sprite->SetRender(false);
 

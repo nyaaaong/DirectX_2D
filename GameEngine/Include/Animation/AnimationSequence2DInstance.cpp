@@ -241,6 +241,8 @@ bool CAnimationSequence2DInstance::SetCurrentAnimation(const std::string& Name)
 	if (!m_CurrentAnimation)
 		return false;
 
+	m_AnimEnd = false;
+
 	m_CurrentAnimation->m_Frame = 0;
 	m_CurrentAnimation->m_Time = 0.f;
 
@@ -259,6 +261,8 @@ void CAnimationSequence2DInstance::ChangeAnimation(const std::string& Name)
 {
 	if (m_CurrentAnimation->m_Name == Name)
 		return;
+
+	m_AnimEnd = false;
 
 	m_CurrentAnimation->m_Frame = 0;
 	m_CurrentAnimation->m_Time = 0.f;
@@ -319,6 +323,9 @@ void CAnimationSequence2DInstance::Update(float DeltaTime)
 
 	if (!m_First)
 		First();
+
+	if (m_CurrentAnimation->GetName() == "BulletKing_Pattern3_End")
+		int a = 0;
 
 	m_CurrentAnimation->m_Time += DeltaTime * m_CurrentAnimation->m_PlayScale;
 

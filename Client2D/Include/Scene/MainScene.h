@@ -21,6 +21,7 @@ private:
 	bool					m_IsBossRoom;
 	bool					m_BossClear;
 	bool					m_NeedUpdateSound;
+	bool					m_BossClearSoundPlayComplete;
 	Vector3					m_BossRoomEndWorldPos;
 
 public:
@@ -30,6 +31,16 @@ public:
 	}
 
 public:
+	void FadeOut()
+	{
+		m_MainWidget->FadeOut();
+	}
+
+	void SetBossClear()
+	{
+		m_BossClear = true;
+	}
+
 	void SetDebugText(const char* Text)
 	{
 		m_MainWidget->SetDebugText(Text);
@@ -42,6 +53,7 @@ public:
 
 public:
 	void SetBossRoom();
+	void SetPercent(float Percent);
 
 private:
 	void CreateSound();
@@ -53,6 +65,7 @@ private:
 private:
 	void ToggleCollider(float DeltaTime);
 	void CheatMoveBossRoom(float DeltaTime);
+	void CheatBossHP(float DeltaTime);
 
 public:
 	template <typename T>

@@ -37,7 +37,7 @@ bool CClientManager::Init(HINSTANCE hInst)
 #ifdef _DEBUG
 	lstrcpy(Title, TEXT("Enter The Gungeon (Debug Mode)"));
 #else
-	lstrcpy(Title, TEXT("Enter The Gungeon Editor"));
+	lstrcpy(Title, TEXT("Enter The Gungeon"));
 #endif // _DEBUG
 
 	if (!CEngine::GetInst()->Init(hInst, Title, 1280, 720, IDI_ICON1))
@@ -62,6 +62,7 @@ bool CClientManager::Init(HINSTANCE hInst)
 	CInput::GetInst()->CreateKey("Weapon3", '4');
 	CInput::GetInst()->CreateKey("ToggleCollider", VK_F8);
 	CInput::GetInst()->CreateKey("CheatMoveBossRoom", VK_F9);
+	CInput::GetInst()->CreateKey("CheatBossHP", VK_F10);
 
 	CResourceManager::GetInst()->CreateSoundChannelGroup("UI");
 	CResourceManager::GetInst()->SetVolume("UI", 10);

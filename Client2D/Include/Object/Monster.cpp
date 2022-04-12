@@ -13,24 +13,41 @@ CMonster::CMonster() :
 	m_BurnStartDelay(0.f),
 	m_BurnStartDelayMax(0.4f),
 	m_State(Monster_State::Idle),
+	m_BulletKingState(BulletKing_State::Idle),
+	m_BulletKingPrevState(BulletKing_State::Max),
 	m_Player(nullptr),
 	m_CurWeapon(nullptr),
 	m_PlayerAngle(0.f),
 	m_PlayerDist(0.f),
-	m_UpdateSight(700.f),
+	m_UpdateSight(800.f),
 	m_AttackDelay(0.f),
 	m_AttackDelayMax(1.f),
 	m_MoveDelay(3.f),
 	m_MoveDelayMax(3.f),
 	m_PatternTimer(0.f),
 	m_PatternTimerMax(1.f),
+	m_PlayerDistMin(300.f),
 	m_StartDestroyBefore(false),
 	m_ChangePattern(false),
 	m_Move(false),
 	m_CanUpdate(false),
 	m_UseDropItem(true),
 	m_UseGun(true),
-	m_UsePattern(false)
+	m_UsePattern(false),
+	m_IsBulletKing(false),
+	m_NeedPatternChange(true),
+	m_NeedPatternChangeIdle(false),
+	m_NeedConnectPatternChange(false),
+	m_CurPattern(nullptr),
+	m_PatternTime{},
+	m_DieProgress(false),
+	m_DieFinish(false),
+	m_CurBossAnimComplete(false),
+	m_CurBossChairAnimComplete(false),
+	m_AttackOncePattern1(false),
+	m_AttackOncePattern2(false),
+	m_AttackOncePattern3(false),
+	m_AttackOncePattern4(false)
 {
 	SetTypeID<CMonster>();
 
@@ -42,7 +59,8 @@ CMonster::CMonster() :
 CMonster::CMonster(const CMonster& obj) :
 	CCharacter(obj),
 	m_BurnStartDelay(0.f),
-	m_PatternTimer(0.f)
+	m_PatternTimer(0.f),
+	m_PatternTime{}
 {
 	SetTypeID<CMonster>();
 
@@ -55,6 +73,8 @@ CMonster::CMonster(const CMonster& obj) :
 	m_Type = Character_Type::Monster;
 
 	m_State = Monster_State::Idle;
+	m_BulletKingState = BulletKing_State::Idle;
+	m_BulletKingPrevState = BulletKing_State::Max;
 
 	m_Player = nullptr;
 
@@ -71,14 +91,30 @@ CMonster::CMonster(const CMonster& obj) :
 	m_StartDestroyBefore = false;
 	m_ChangePattern = false;
 	m_Move = false;
+	m_NeedPatternChange = true;
+	m_NeedPatternChangeIdle = true;
+	m_NeedConnectPatternChange = false;
 
 	m_UseDropItem = obj.m_UseDropItem;
 	m_UseGun = obj.m_UseGun;
 	m_UsePattern = obj.m_UsePattern;
+	m_IsBulletKing = obj.m_IsBulletKing;
 
 	m_UpdateSight = obj.m_UpdateSight;
+	m_PlayerDistMin = obj.m_PlayerDistMin;
 
 	memset(m_arrDropItem, 1, sizeof(bool) * (size_t)DropItem_Type::Max);
+
+	m_CurPattern = nullptr;
+
+	m_DieProgress = false;
+	m_DieFinish = false;
+	m_CurBossAnimComplete = false;
+	m_CurBossChairAnimComplete = false;
+	m_AttackOncePattern1 = false;
+	m_AttackOncePattern2 = false;
+	m_AttackOncePattern3 = false;
+	m_AttackOncePattern4 = false;
 }
 
 CMonster::~CMonster()
@@ -120,8 +156,6 @@ bool CMonster::Init()
 
 	m_NavAgent = CreateComponent<CNavAgent>("NavAgent");
 
-	SetCurrentPattern(&CMonster::Attack);
-
 	m_BottomOffsetY = 1.2f;
 
 	m_PaperBurn->SetFinishCallback(this, &CMonster::Destroy);
@@ -138,10 +172,21 @@ void CMonster::Update(float DeltaTime)
 	if (!m_CanUpdate)
 		return;
 
-	if (!m_IsDied && !m_IsPaperBurn)
+	if (!m_UsePattern)
 	{
-		UpdateAttack(DeltaTime);
-		UpdateMove(DeltaTime);
+		if (!m_IsDied && !m_IsPaperBurn)
+		{
+			UpdateAttack(DeltaTime);
+			UpdateMove(DeltaTime);
+		}
+	}
+	
+	else
+	{
+		if (!m_IsDied && !m_IsPaperBurn)
+		{
+			UpdatePattern(DeltaTime);
+		}
 	}
 }
 
@@ -197,7 +242,10 @@ void CMonster::Calc(float DeltaTime)
 	m_PlayerDir = Vector3::ConvertDir(m_PlayerAngle);
 
 	if (!m_IsDied)
-		m_State = Monster_State::Idle;
+	{
+		if (!m_IsBulletKing)
+			m_State = Monster_State::Idle;
+	}
 
 	if (m_UseDropItem)
 		UpdateDropItemType();
@@ -224,8 +272,9 @@ void CMonster::Dead(float DeltaTime)
 		m_HP = 0.f;
 
 		m_Body->Enable(false);
-		
-		m_State = Monster_State::Die;
+
+		if (!m_IsBulletKing)
+			m_State = Monster_State::Die;
 
 		if (m_UseGun)
 			HideAllWeapon();
@@ -233,13 +282,42 @@ void CMonster::Dead(float DeltaTime)
 
 	if (m_UsePaperburn)
 	{
-		if (m_BurnStartDelay < m_BurnStartDelayMax)
-			m_BurnStartDelay += DeltaTime;
-
-		else if (m_IsDied && !m_IsPaperBurn && m_BurnStartDelay >= m_BurnStartDelayMax)
+		if (!m_IsBulletKing)
 		{
-			// 죽는 애니메이션이 실행중이며 만약 애니메이션이 끝났다면 페이퍼번을 실행시킨다.
-			if (m_Sprite->GetAnimationInstance()->IsEnd())
+			if (m_BurnStartDelay < m_BurnStartDelayMax)
+				m_BurnStartDelay += DeltaTime;
+
+			else if (m_IsDied && !m_IsPaperBurn && m_BurnStartDelay >= m_BurnStartDelayMax)
+			{
+				// 죽는 애니메이션이 실행중이며 만약 애니메이션이 끝났다면 페이퍼번을 실행시킨다.
+				if (m_Sprite->IsEnd())
+				{
+					m_Sprite->GetAnimationInstance()->Stop();
+
+					m_IsPaperBurn = true;
+
+					m_PaperBurn->StartPaperBurn();
+
+					m_Sprite->SetOpacity(0.5f);
+
+					if (m_UseDropItem)
+						DropItem();
+				}
+			}
+		}
+
+		else
+		{
+			if (!m_IsDied)
+				return;
+
+			if (!m_DieFinish)
+				DieAnim(DeltaTime);
+
+			else if (!m_DieEndFinish)
+				DieAnim_End(DeltaTime);
+
+			else
 			{
 				m_Sprite->GetAnimationInstance()->Stop();
 
@@ -248,9 +326,6 @@ void CMonster::Dead(float DeltaTime)
 				m_PaperBurn->StartPaperBurn();
 
 				m_Sprite->SetOpacity(0.5f);
-
-				if (m_UseDropItem)
-					DropItem();
 			}
 		}
 	}
@@ -261,7 +336,7 @@ void CMonster::Dead(float DeltaTime)
 		if (m_IsDied)
 		{
 			// 죽는 애니메이션이 실행중이며 만약 애니메이션이 끝났다면
-			if (m_Sprite->GetAnimationInstance()->IsEnd())
+			if (m_Sprite->IsEnd())
 			{
 				m_Sprite->GetAnimationInstance()->Stop();
 
@@ -277,6 +352,53 @@ void CMonster::Dead(float DeltaTime)
 	}
 }
 
+void CMonster::DieAnim(float DeltaTime)
+{
+	CSceneMode* SceneMode = m_Scene->GetSceneMode();
+	CMainScene* MainScene = dynamic_cast<CMainScene*>(SceneMode);
+
+	if (MainScene)
+	{
+		MainScene->SetBossClear();
+	}
+
+	m_BulletKingPrevState = m_BulletKingState;
+
+	m_BulletKingState = BulletKing_State::Die;
+
+	m_Scene->GetResource()->SoundStop("BulletKing_Pattern1");
+	m_Scene->GetResource()->SoundStop("BulletKing_Pattern2");
+	m_Scene->GetResource()->SoundStop("BulletKing_Pattern3");
+	m_Scene->GetResource()->SoundStop("BulletKing_Pattern4");
+
+	m_PatternTime[(int)BulletKing_State::Die] += DeltaTime;
+
+	m_DieProgress = true;
+
+	if (m_PatternTime[(int)BulletKing_State::Die] >= m_PatternTimeMax[(int)BulletKing_State::Die])
+	{
+		m_PatternTime[(int)BulletKing_State::Die] = 0.f;
+
+		m_DieFinish = true;
+	}
+}
+
+void CMonster::DieAnim_End(float DeltaTime)
+{
+	m_BulletKingPrevState = m_BulletKingState;
+
+	m_BulletKingState = BulletKing_State::Die_End;
+
+	m_PatternTime[(int)BulletKing_State::Die_End] += DeltaTime;
+
+	if (m_PatternTime[(int)BulletKing_State::Die_End] >= m_PatternTimeMax[(int)BulletKing_State::Die_End])
+	{
+		m_PatternTime[(int)BulletKing_State::Die_End] = 0.f;
+
+		m_DieEndFinish = true;
+	}
+}
+
 void CMonster::Hit(float DeltaTime)
 {
 	CCharacter::Hit(DeltaTime);
@@ -284,12 +406,18 @@ void CMonster::Hit(float DeltaTime)
 
 void CMonster::Move(float DeltaTime)
 {
-	m_State = Monster_State::Walk;
+	Vector3	RandPos = RandomPos();
+
+	if (RandPos == Vector3())
+		return;
+
+	if (!m_IsBulletKing)
+		m_State = Monster_State::Walk;
 
 	Vector3	WorldPos = GetWorldPos();
 	WorldPos.z = 0.f;
 
-	CCharacter::Move(WorldPos + RandomPos());
+	CCharacter::Move(WorldPos + RandPos);
 }
 
 void CMonster::Attack(float DeltaTime)
@@ -390,6 +518,75 @@ void CMonster::UpdateMove(float DeltaTime)
 	}
 }
 
+int CMonster::CreateRandomIndex()
+{
+	if (m_vecPattern.empty())
+		ASSERT("if (m_vecPattern.empty())");
+
+	int Index = rand() % (int)m_vecPattern.size();
+
+	return Index;
+}
+
+void CMonster::UpdatePattern(float DeltaTime)
+{
+	if (m_NeedPatternChangeIdle)
+	{
+		if (m_CurBossAnimComplete)
+		{
+			m_PatternTime[(int)BulletKing_State::Idle] += DeltaTime;
+
+			m_BulletKingPrevState = m_BulletKingState;
+
+			m_BulletKingState = BulletKing_State::Idle;
+		}
+
+		if (m_CurBossChairAnimComplete)
+		{
+			if (m_PatternTime[(int)BulletKing_State::Idle] >= m_PatternTimeMax[(int)BulletKing_State::Idle])
+			{
+				m_PatternTime[(int)BulletKing_State::Idle] = 0.f;
+
+				m_NeedPatternChangeIdle = false;
+				m_NeedPatternChange = true;
+
+				m_AttackOncePattern1 = false;
+				m_AttackOncePattern2 = false;
+				m_AttackOncePattern3 = false;
+				m_AttackOncePattern4 = false;
+			}
+		}
+	}
+
+	else
+	{
+		if (m_NeedPatternChange)
+		{
+			m_NeedPatternChange = false;
+
+			m_CurPattern = m_vecPattern[CreateRandomIndex()];
+		}
+
+		else if (m_NeedConnectPatternChange)
+		{
+			m_NeedConnectPatternChange = false;
+
+			auto	iter = m_mapConnectPattern.find(m_BulletKingState);
+
+			if (iter == m_mapConnectPattern.end())
+				ASSERT("if (iter == m_mapConnectPattern.end())");
+
+			m_CurPattern = iter->second;
+		}
+
+		m_CurPattern(DeltaTime);
+	}
+}
+
+void CMonster::Idle(float DeltaTime)
+{
+}
+
 void CMonster::DropItem()
 {
 	std::vector<DropItem_Type>	vecRandItem;
@@ -437,45 +634,16 @@ void CMonster::CreateItem(DropItem_Type Type)
 	}
 }
 
-void CMonster::ChangePatternStartFunc(float DeltaTime)
-{
-}
-
 Vector3 CMonster::RandomPos() const
 {
 	Vector3	RandPos;
 
-	float	Rand1 = rand() % 10000 / 100.f;
+	if (m_PlayerDist > m_PlayerDistMin)
+		return RandPos;
 
-	RandPos = m_PlayerDir * Rand1;
+	float	RandOffset = rand() % 10000 / 300.f;
+
+	RandPos = m_PlayerDir * RandOffset;
 
 	return RandPos;
-}
-
-void CMonster::ChangePattern(float DeltaTime)
-{
-	if (m_IsDied)
-		return;
-
-	if (m_ChangePattern)
-	{
-		m_ChangePattern = false;
-
-		float RandF = rand() % 10000 / 100.f;
-
-		if (RandF < 50.f)
-		{
-			SetCurrentPattern(&CMonster::Move);
-
-			m_Move = false;
-		}
-
-		else
-			SetCurrentPattern(&CMonster::Attack);
-	}
-}
-
-void CMonster::SetCurrentPattern(void(CMonster::*Func)(float))
-{
-	m_CurPattern = std::bind(Func, this, std::placeholders::_1);
 }

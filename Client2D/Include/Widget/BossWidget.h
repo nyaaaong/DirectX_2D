@@ -17,28 +17,19 @@ protected:
 	virtual ~CBossWidget();
 
 private:
-	CSharedPtr<CText>			m_FPSText;
-	CSharedPtr<CText>			m_DebugText;
 	CSharedPtr<CImage>			m_HPBarBack;
 	CSharedPtr<CProgressBar>	m_HPBar;
-	float	m_Percent;
 	char	m_Text[256];
 
 public:
 	void SetPercent(float Percent)
 	{
-		m_Percent = Percent;
+		m_HPBar->SetPercent(Percent);
 	}
 
 	void AddPercent(float Percent)
 	{
-		m_Percent += Percent;
-
-		if (m_Percent < 0.f)
-			m_Percent = 0.f;
-
-		else if (m_Percent > 1.f)
-			m_Percent = 1.f;
+		m_HPBar->AddPercent(Percent);
 	}
 
 	void SetText(const char* Text)
@@ -50,4 +41,5 @@ public:
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
 	virtual CBossWidget* Clone();
+	virtual void Enable(bool Enable);
 };

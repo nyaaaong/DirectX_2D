@@ -33,6 +33,22 @@ CSpriteComponent::~CSpriteComponent()
 	SAFE_DELETE(m_Animation);
 }
 
+bool CSpriteComponent::IsEnd()	const
+{
+	if (!m_Animation)
+		return false;
+
+    return m_Animation->IsEnd();
+}
+
+CAnimationSequence2DData* CSpriteComponent::GetCurrentAnimation() const
+{
+	if (!m_Animation)
+		return nullptr;
+
+	return m_Animation->GetCurrentAnimation();
+}
+
 void CSpriteComponent::SetMaterial(CMaterial* Material)
 {
 	m_Material = Material->Clone();

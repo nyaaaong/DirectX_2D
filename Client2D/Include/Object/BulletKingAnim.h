@@ -14,9 +14,5 @@ public:
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
 	virtual CBulletKingAnim* Clone();
-
-protected:
-	virtual void ChangeAnimLeft();
-	virtual void ChangeAnimRight();
 };
 

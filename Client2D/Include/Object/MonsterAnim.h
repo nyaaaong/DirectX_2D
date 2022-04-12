@@ -12,6 +12,7 @@ public:
 
 protected:
 	class CMonster*	m_OwnerObject;
+	bool	m_UseChangeDir;	// 방향 전환 애니메이션을 사용할지
 	bool	m_PlayDieAnim;	// 한번 애니메이션이 실행 됐는지
 
 public:

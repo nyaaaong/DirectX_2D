@@ -68,6 +68,17 @@ public:
 	}
 
 public:
+	void SetHP(float HP)
+	{
+		m_HP = HP;
+
+		if (m_HP < 0.f)
+			m_HP = 0.f;
+
+		else if (m_HP >= m_HPMax)
+			m_HP = m_HPMax;
+	}
+
 	virtual bool AddDamage(float Damage)
 	{
 		m_PrevHP = m_HP;

@@ -31,6 +31,10 @@ public:
     }
 
 public:
+	bool IsEnd()	const;
+	class CAnimationSequence2DData* GetCurrentAnimation()	const;
+
+public:
     void SetMaterial(CMaterial* Material);
 
 public:

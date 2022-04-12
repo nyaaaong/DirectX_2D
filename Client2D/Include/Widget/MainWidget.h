@@ -2,6 +2,7 @@
 
 #include "Widget/WidgetWindow.h"
 #include "Widget/Text.h"
+#include "Widget/Image.h"
 
 class CMainWidget :
     public CWidgetWindow
@@ -15,17 +16,40 @@ protected:
 
 private:
 	CSharedPtr<CText>	m_FPSText;
-	/*CSharedPtr<CText>	m_MouseXText;
-	CSharedPtr<CText>	m_MouseYText;
-	CSharedPtr<CText>	m_WorldMouseXText;
-	CSharedPtr<CText>	m_WorldMouseYText;
-	CSharedPtr<CText>	m_MouseDirXText;
-	CSharedPtr<CText>	m_MouseDirYText;
-	CSharedPtr<CText>	m_MouseAngleText;*/
 	CSharedPtr<CText>	m_DebugText;
+	CSharedPtr<CImage>	m_Fade;
 	char	m_Text[256];
+	float	m_FadeAlpha;
+	float	m_FadeSpeed;
+	bool	m_FadeIn;
+	bool	m_FadeOut;
 
 public:
+	bool IsFadeIn()	const
+	{
+		return m_FadeIn;
+	}
+
+	bool IsFadeOut()	const
+	{
+		return m_FadeOut;
+	}
+
+public:
+	void FadeOut()
+	{
+		m_FadeAlpha = 0.f;
+
+		m_FadeOut = true;
+	}
+
+	void FadeIn()
+	{
+		m_FadeAlpha = 1.f;
+
+		m_FadeIn = true;
+	}
+
 	void SetDebugText(const char* Text)
 	{
 		strcpy_s(m_Text, Text);

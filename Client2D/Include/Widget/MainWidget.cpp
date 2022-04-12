@@ -3,7 +3,11 @@
 #include "Engine.h"
 
 CMainWidget::CMainWidget()	:
-	m_Text{}
+	m_Text{},
+	m_FadeAlpha(0.f),
+	m_FadeSpeed(1.f),
+	m_FadeIn(false),
+	m_FadeOut(false)
 {
 }
 
@@ -12,8 +16,14 @@ CMainWidget::CMainWidget(const CMainWidget& window) :
 {
 	m_FPSText = FindWidget<CText>("FPSText");
 	m_DebugText = FindWidget<CText>("DebugText");
+	m_Fade = FindWidget<CImage>("Fade");
 	
 	memset(m_Text, 0, sizeof(char) * 256);
+
+	m_FadeAlpha = 0.f;
+	m_FadeSpeed = 0.7f;
+	m_FadeIn = false;
+	m_FadeOut = false;
 }
 
 
@@ -54,6 +64,11 @@ bool CMainWidget::Init()
 
 #endif // _DEBUG
 
+	m_Fade = CreateWidget<CImage>("Fade");
+	m_Fade->SetTexture("Fade", TEXT("UI/Fade.bmp"));
+	m_Fade->SetSize(1280.f, 720.f);
+	m_Fade->SetZOrder(10000);
+
 	return true;
 }
 
@@ -73,8 +88,6 @@ void CMainWidget::Update(float DeltaTime)
 
 #ifdef _DEBUG
 
-	//
-
 	memset(Text, 0, sizeof(char) * 256);
 	sprintf_s(Text, "%s", m_Text);
 
@@ -85,6 +98,42 @@ void CMainWidget::Update(float DeltaTime)
 
 	m_DebugText->SetText(ConvertText);
 #endif // _DEBUG
+
+	if (m_FadeIn)
+	{
+		if (!m_Fade->IsEnable())
+			m_Fade->Enable(true);
+
+		m_FadeAlpha -= DeltaTime;
+
+		if (m_FadeAlpha <= 0.f)
+		{
+			m_FadeAlpha = 0.f;
+
+			m_FadeIn = false;
+
+			m_Fade->Disable();
+		}
+
+		m_Fade->SetOpacity(m_FadeAlpha * m_FadeSpeed);
+	}
+
+	else if (m_FadeOut)
+	{
+		if (!m_Fade->IsEnable())
+			m_Fade->Enable(true);
+
+		m_FadeAlpha += DeltaTime;
+
+		if (m_FadeAlpha >= 1.f)
+		{
+			m_FadeAlpha = 1.f;
+
+			m_FadeOut = false;
+		}
+
+		m_Fade->SetOpacity(m_FadeAlpha * m_FadeSpeed);
+	}
 }
 
 CMainWidget* CMainWidget::Clone()

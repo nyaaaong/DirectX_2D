@@ -171,6 +171,30 @@ void CBullet::First()
 					m_BulletSpeed = 1000.f;
 				m_Distance = 800.f;
 				break;
+			case Bullet_Type::BulletKing_Pattern1:
+				if (!m_SetBulletSpeed)
+					m_BulletSpeed = 1000.f;
+				m_Distance = 3000.f;
+				m_StartDistance = 400.f;
+				break;
+			case Bullet_Type::BulletKing_Pattern2:
+				if (!m_SetBulletSpeed)
+					m_BulletSpeed = 1000.f;
+				m_Distance = 3000.f;
+				m_StartDistance = 400.f;
+				break;
+			case Bullet_Type::BulletKing_Pattern3:
+				if (!m_SetBulletSpeed)
+					m_BulletSpeed = 400.f;
+				m_Distance = 3000.f;
+				m_StartDistance = 400.f;
+				break;
+			case Bullet_Type::BulletKing_Pattern4:
+				if (!m_SetBulletSpeed)
+					m_BulletSpeed = 1000.f;
+				m_Distance = 3000.f;
+				m_StartDistance = 400.f;
+				break;
 			}
 			break;
 		}

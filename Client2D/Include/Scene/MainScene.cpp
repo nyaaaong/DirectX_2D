@@ -19,7 +19,8 @@ CMainScene::CMainScene()	:
 	m_BossMonster(nullptr),
 	m_IsBossRoom(false),
 	m_BossClear(false),
-	m_NeedUpdateSound(false)
+	m_NeedUpdateSound(false),
+	m_BossClearSoundPlayComplete(false)
 {
 	SetTypeID<CMainScene>();
 }
@@ -36,6 +37,8 @@ void CMainScene::Start()
 	CSceneMode::Start();
 
 	m_Scene->GetResource()->SoundPlay("Main");
+
+	m_MainWidget->FadeIn();
 }
 
 bool CMainScene::Init()
@@ -131,6 +134,12 @@ bool CMainScene::Init()
 	}
 
 	m_MainWidget = m_Scene->GetViewport()->CreateWidgetWindow<CMainWidget>("MainWidget");
+	m_BossWidget = m_Scene->GetViewport()->CreateWidgetWindow<CBossWidget>("BossWidget");
+	
+	Vector2	BossHUDPos = m_BossWidget->GetWindowPos();
+
+	m_BossWidget->SetPos(BossHUDPos.x + 400.f, BossHUDPos.y + 50.f);
+	m_BossWidget->Enable(false);
 
 	CreateSound();
 
@@ -139,6 +148,7 @@ bool CMainScene::Init()
 
 	CInput::GetInst()->SetKeyCallback<CMainScene>("ToggleCollider", KeyState_Down, this, &CMainScene::ToggleCollider);
 	CInput::GetInst()->SetKeyCallback<CMainScene>("CheatMoveBossRoom", KeyState_Down, this, &CMainScene::CheatMoveBossRoom);
+	CInput::GetInst()->SetKeyCallback<CMainScene>("CheatBossHP", KeyState_Down, this, &CMainScene::CheatBossHP);
 
 	return true;
 }
@@ -159,6 +169,12 @@ void CMainScene::SetBossRoom()
 		ASSERT("if (m_BossRoomEndWorldPos.x == 0.f && m_BossRoomEndWorldPos.y == 0.f)");
 
 	m_Scene->GetPlayerObject()->SetWorldPos(m_BossRoomEndWorldPos);
+}
+
+void CMainScene::SetPercent(float Percent)
+{
+	if (m_BossWidget)
+		m_BossWidget->SetPercent(Percent);
 }
 
 void CMainScene::CreateSound()
@@ -186,6 +202,11 @@ void CMainScene::CreateSound()
 	m_Scene->GetResource()->LoadSound("Effect", false, "BulletKin_Die2", "Monster/BulletKin/Die2.wav");
 	m_Scene->GetResource()->LoadSound("Effect", false, "BulletKin_Die3", "Monster/BulletKin/Die3.wav");
 	m_Scene->GetResource()->LoadSound("Effect", false, "BulletKin_Die4", "Monster/BulletKin/Die4.wav");
+
+	m_Scene->GetResource()->LoadSound("Effect", false, "BulletKing_Pattern1", "Monster/Boss/BulletKing/BulletKing_Pattern1.wav");
+	m_Scene->GetResource()->LoadSound("Effect", false, "BulletKing_Pattern2", "Monster/Boss/BulletKing/BulletKing_Pattern2.wav");
+	m_Scene->GetResource()->LoadSound("Effect", false, "BulletKing_Pattern3", "Monster/Boss/BulletKing/BulletKing_Pattern3.wav");
+	m_Scene->GetResource()->LoadSound("Effect", false, "BulletKing_Pattern4", "Monster/Boss/BulletKing/BulletKing_Pattern4.wav");
 }
 
 void CMainScene::UpdateSound(float DeltaTime)
@@ -202,10 +223,12 @@ void CMainScene::UpdateSound(float DeltaTime)
 			if (!m_BossClear)
 				m_Scene->GetResource()->SoundPlay("Boss");
 
-			else
+			else if (!m_BossClearSoundPlayComplete)
 			{
 				m_Scene->GetResource()->SoundStop("Boss");
 				m_Scene->GetResource()->SoundPlay("BossClear");
+
+				m_BossClearSoundPlayComplete = true;
 			}
 
 			m_NeedUpdateSound = false;
@@ -217,20 +240,20 @@ void CMainScene::UpdateBoss(float DeltaTime)
 {
 	if (m_IsBossRoom)
 	{
-		if (m_BossMonster)
+		if (!m_BossClear)
 		{
 			if (!m_BossMonster->IsEnable())
+			{
 				m_BossMonster->Enable(true);
+				m_BossWidget->Enable(true);
+			}
 		}
 
 		else
 		{
-			if (!m_BossClear)
-			{
-				m_BossClear = true;
+			m_BossWidget->Disable();
 
-				m_NeedUpdateSound = true;
-			}
+			m_NeedUpdateSound = true;
 		}
 	}
 }
@@ -243,4 +266,18 @@ void CMainScene::ToggleCollider(float DeltaTime)
 void CMainScene::CheatMoveBossRoom(float DeltaTime)
 {
 	SetBossRoom();
+}
+
+void CMainScene::CheatBossHP(float DeltaTime)
+{
+	if (m_BossMonster)
+	{
+		if (m_BossMonster->IsEnable())
+		{
+			CBulletKing* BulletKing = dynamic_cast<CBulletKing*>(m_BossMonster);
+			
+			if (BulletKing)
+				BulletKing->SetHP(1.f);
+		}
+	}
 }
