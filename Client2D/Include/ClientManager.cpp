@@ -34,11 +34,12 @@ bool CClientManager::Init(HINSTANCE hInst)
 {
 	TCHAR	Title[256] = {};
 
-#ifdef _DEBUG
-	lstrcpy(Title, TEXT("Enter The Gungeon (Debug Mode)"));
-#else
 	lstrcpy(Title, TEXT("Enter The Gungeon"));
-#endif // _DEBUG
+//#ifdef _DEBUG
+//	lstrcpy(Title, TEXT("Enter The Gungeon (Debug Mode)"));
+//#else
+//	lstrcpy(Title, TEXT("Enter The Gungeon"));
+//#endif // _DEBUG
 
 	if (!CEngine::GetInst()->Init(hInst, Title, 1280, 720, IDI_ICON1))
 	{

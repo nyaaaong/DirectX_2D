@@ -41,10 +41,10 @@ public:
 		m_BossClear = true;
 	}
 
-	void SetDebugText(const char* Text)
+	/*void SetDebugText(const char* Text)
 	{
 		m_MainWidget->SetDebugText(Text);
-	}
+	}*/
 
 public:
 	virtual void Start();

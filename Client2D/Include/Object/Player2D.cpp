@@ -409,7 +409,6 @@ void CPlayer2D::MoveUp(float DeltaTime)
 	SetMoveDir(Character_Direction::Up);
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_Y) * m_MoveSpeed * DeltaTime;
-	//Result.Ceil();
 
 	if (IsWallTile(Result))
 		return;
@@ -430,7 +429,6 @@ void CPlayer2D::MoveDown(float DeltaTime)
 	SetMoveDir(Character_Direction::Down);
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_Y) * -m_MoveSpeed * DeltaTime;
-	//Result.Ceil();
 
 	if (IsWallTile(Result))
 		return;
@@ -451,7 +449,6 @@ void CPlayer2D::MoveLeft(float DeltaTime)
 	SetMoveDir(Character_Direction::Left);
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_X) * -m_MoveSpeed * DeltaTime;
-	//Result.Ceil();
 
 	if (IsWallTile(Result))
 		return;
@@ -472,7 +469,6 @@ void CPlayer2D::MoveRight(float DeltaTime)
 	SetMoveDir(Character_Direction::Right);
 
 	Vector3	Result = m_Sprite->GetWorldAxis(AXIS_X) * m_MoveSpeed * DeltaTime;
-	//Result.Ceil();
 
 	if (IsWallTile(Result))
 		return;
@@ -511,8 +507,6 @@ void CPlayer2D::Dodge(float DeltaTime)
 
 	else if (IsMoveDir(Character_Direction::Right))
 		Result += (m_Sprite->GetWorldAxis(AXIS_X) * m_DodgeSpeed * DeltaTime);
-
-	//Result.Ceil();
 
 	if (IsWallTile(Result))
 		return;

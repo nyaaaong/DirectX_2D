@@ -15,10 +15,10 @@ protected:
 	virtual ~CMainWidget();
 
 private:
-	CSharedPtr<CText>	m_FPSText;
-	CSharedPtr<CText>	m_DebugText;
+	//CSharedPtr<CText>	m_FPSText;
+	//CSharedPtr<CText>	m_DebugText;
 	CSharedPtr<CImage>	m_Fade;
-	char	m_Text[256];
+	//char	m_Text[256];
 	float	m_FadeAlpha;
 	float	m_FadeSpeed;
 	bool	m_FadeIn;
@@ -50,10 +50,10 @@ public:
 		m_FadeIn = true;
 	}
 
-	void SetDebugText(const char* Text)
-	{
-		strcpy_s(m_Text, Text);
-	}
+	//void SetDebugText(const char* Text)
+	//{
+	//	strcpy_s(m_Text, Text);
+	//}
 
 public:
 	virtual bool Init();
