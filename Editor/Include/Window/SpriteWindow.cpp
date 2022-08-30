@@ -790,7 +790,7 @@ void CSpriteWindow::SaveSequence()
 
 			for (int i = 1; i < 5; ++i)
 			{
-				ANMPath[iPathLength - i] = 0;
+				ANMPath[Length - i] = 0;
 			}
 
 			lstrcat(ANMPath, TEXT(".anm"));

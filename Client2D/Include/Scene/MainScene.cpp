@@ -161,6 +161,9 @@ void CMainScene::Update(float DeltaTime)
 
 void CMainScene::SetBossRoom()
 {
+	if (m_IsBossRoom)
+		return;
+
 	m_IsBossRoom = true;
 
 	m_NeedUpdateSound = true;

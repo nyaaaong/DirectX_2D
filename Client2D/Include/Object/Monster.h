@@ -99,27 +99,12 @@ public:
 public:
 	void SetDropItemType(DropItem_Type Type)
 	{
-		switch (Type)
-		{
-		case DropItem_Type::Rifle:
-		case DropItem_Type::Sniper:
-		case DropItem_Type::Life:
-			m_arrDropItem[(int)Type] = true;
-			break;
-		}
+		m_arrDropItem[(int)Type] = true;
 	}
 
 	void DeleteDropItemType(DropItem_Type Type)
 	{
-		switch (Type)
-		{
-		case DropItem_Type::Rifle:
-		case DropItem_Type::Sniper:
-		case DropItem_Type::Life:
-			m_arrDropItem[(int)Type] = false;
-			break;
-			break;
-		}
+		m_arrDropItem[(int)Type] = false;
 	}
 
 public:

@@ -90,6 +90,7 @@ void CMouseCursor::CameraUpdater(float DeltaTime)
 		
 		Vector2		MouseUIPos = CInput::GetInst()->GetMousePos();
 
+		// 플레이어는 카메라 중앙에 위치하므로 센터를 구해준다.
 		const Vector3	Center = Vector3(RS.Width * 0.5f, RS.Height * 0.5f, 0.f);
 		
 		Vector3	MousePos = Vector3(MouseUIPos.x, MouseUIPos.y, 0.f);

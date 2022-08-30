@@ -13,7 +13,6 @@ public:
 private:
 	class CIMGUIListBox* m_ObjectListWidget;
 	Object_Type		m_SelectObjectType;
-	CSharedPtr<CSceneComponent>	m_SelectComponent;
 
 public:
 	class CIMGUIListBox* GetObjectList()	const
@@ -24,11 +23,6 @@ public:
 	Object_Type GetSelectObjectType()	const
 	{
 		return m_SelectObjectType;
-	}
-
-	CSharedPtr<CSceneComponent> GetSelectComponent()	const
-	{
-		return m_SelectComponent;
 	}
 
 public:
